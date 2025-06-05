@@ -173,3 +173,22 @@ select.input {
 .container {
   box-shadow: none;
 }
+
+
+.bg-art-background {
+  background-image: url('https://images.unsplash.com/photo-1518609878373-06d740f60d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+/* Slider arrow styles */
+button svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Ensure smooth transitions for slider */
+.transition-transform {
+  transition: transform 0.3s ease-in-out;
+}

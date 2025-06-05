@@ -1,5 +1,3 @@
-
-// //dniei34beibie
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
@@ -9,13 +7,14 @@ import backgroundImage from './Image/pexels-eberhardgross-31979793.jpg';
 import { FaUser, FaEnvelope, FaPhone, FaLock } from 'react-icons/fa';
 import { Client, Account, ID } from 'appwrite'; // Import Appwrite Client SDK
 
+
+
 // Initialize Appwrite Client
 const client = new Client()
   .setEndpoint(import.meta.env.VITE_APPWRITE_ENDPOINT) // e.g., 'https://cloud.appwrite.io/v1'
   .setProject(import.meta.env.VITE_APPWRITE_PROJECT_ID);
 
 const account = new Account(client);
-
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -139,7 +138,7 @@ const Signup = () => {
       await account.createEmailPasswordSession(formData.email, formData.password);
 
       toast.success('Account created successfully!', { autoClose: 3000 });
-      navigate('/Account/Dashboard'); // Redirect to dashboard after successful signup
+      navigate('/Account'); // Redirect to Profile after successful signup
     } catch (err) {
       console.error('Appwrite error:', err);
       const errorMessage =

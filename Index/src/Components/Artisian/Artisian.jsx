@@ -74,7 +74,7 @@ const Artisan = () => {
   };
 
   return (
-    <div className="py-16 bg-gray-100 dark:bg-[#040d1200] transition-colors duration-300">
+    <div className="py-4 bg-gray-100 dark:bg-[#040d1200] transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">

@@ -4,6 +4,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Client, Account } from 'appwrite';
 import { motion } from 'framer-motion';
 import { FaEnvelope, FaLock, FaPalette, FaBrush } from 'react-icons/fa';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // Initialize Appwrite client
 const client = new Client()
@@ -17,7 +19,10 @@ function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  });
   // Check for existing session on mount
   useEffect(() => {
     const checkSession = async () => {
@@ -36,12 +41,18 @@ function Login() {
     setIsLoading(true);
     setError('');
     try {
-      await account.createEmailPasswordSession(email, password);
+      const session = await account.createEmailPasswordSession(formData.email, formData.password);
+
+      console.log('Session created:', session); // Log the session
       const user = await account.get();
-      alert(`Login Successful! Welcome back, ${user.name || 'User'}`);
+      console.log('User data:', user); // Log the user data
+      toast.success(`Login Successful! Welcome back, ${user.name || 'User'}(ID: ${user.$id})`);
       navigate('/dashboard');
     } catch (err) {
-      console.error('Login error:', err);
+      console.error('Full error object:', err); // Log the entire error
+      console.error('Error type:', err.type);
+      console.error('Error code:', err.code);
+      console.error('Error message:', err.message);
       setError(
         err.code === 401
           ? 'Invalid Email or Password'
@@ -55,6 +66,7 @@ function Login() {
       setIsLoading(false);
     }
   };
+
 
   // Animation variants
   const containerVariants = {
@@ -130,10 +142,10 @@ function Login() {
               >
                 <FaPalette className="text-white text-3xl sm:text-5xl mx-auto mb-2 sm:mb-4" />
                 <h1 className="text-2xl sm:text-4xl font-bold text-center text-white font-Playfair tracking-wide">
-                  Welcome Back
+                  Welcome!
                 </h1>
                 <p className="text-sm sm:text-lg text-center text-white/80 mt-1 sm:mt-2 font-Quicksand">
-                  Continue your artistic journey with us
+                We are really exited to have you back.
                 </p>
               </motion.div>
 
@@ -320,6 +332,18 @@ function Login() {
           </motion.div>
         </motion.div>
       </motion.div>
+       <ToastContainer
+              position="top-right"
+              autoClose={3000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="colored"
+            />
     </div>
   );
 }

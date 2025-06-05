@@ -2233,3 +2233,325 @@ export default Signup;
           </div>
         </div>
       </motion.nav>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+         {/* <section ref={contentRef} className=' py-12 bg-gray-100 dark:bg-gray-900 w-full'>
+      
+        
+        {loading ? (
+          <div className="flex justify-center items-center h-64">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          </div>
+        ) : error ? (
+          <div className="text-center text-red-500 p-4">
+            Error loading images: {error}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-4">
+            {landscapeImages.map((image) => (
+              <motion.div 
+                key={image.$id}
+                className="overflow-hidden rounded-lg shadow-lg bg-white"
+                whileHover={{ scale: 1.03 }}
+                transition={{ type: "spring", stiffness: 400, damping: 10 }}
+              >
+                <img 
+                  src={image.url}
+                  key={image.$id}
+                  alt={image.title || 'Landscape image'} 
+                  className="w-full h-48 object-cover"
+                  loading="lazy"
+                />
+                <div className="p-4">
+                  <h3 className=" text-gray-800 truncate font-Quicksand font-semibold">{image.title}</h3>
+                  {image.description && (
+                    <p className="text-gray-600 text-sm mt-1 line-clamp-2">
+                      {image.description}
+                    </p>
+                  )}
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        )}
+      </section> 
+     */}
+
+
+     {/* slider section */}
+
+
+
+
+
+
+<div className="w-[90vw] sm:w-[80vw] md:w-[70vw] lg:w-[52vw] h-[250px] sm:h-[350px] flex items-center gap-4 sm:gap-6 px-4 mt-4 mx-auto border border-gray-800 overflow-x-scroll overflow-y-hidden scrollbar-hide">
+            {/* part 1 */}
+            <div
+              className="h-[200px] sm:h-[250px] md:h-[300px] w-[200px] sm:w-[250px] md:w-[300px] bg-black flex-shrink-0 bg-center bg-cover flex items-center px-6"
+              style={{ backgroundImage: `url(${bg_1})` }}
+            >
+              <div>
+                <p className="text-center font-Playfair text-sm sm:text-lg md:text-xl text-gray-800 leading-snug">
+                  Painting is just another way of keeping a diary.
+                </p>
+                <p className="text-right font-Carattere text-xs sm:text-base md:text-lg text-gray-600">
+                  —Pablo Picasso
+                </p>
+              </div>
+            </div>
+            {/* part 2 */}
+            <div
+              className="h-[200px] sm:h-[250px] md:h-[300px] w-[200px] sm:w-[250px] md:w-[300px] bg-black flex-shrink-0 bg-center bg-cover flex items-center px-4"
+              style={{ backgroundImage: `url(${bg_2})` }}
+            >
+              <div className="backdrop-blur-md px-2 sm:px-4 py-1 border border-gray-400">
+                <p className="text-left font-Lora text-sm sm:text-lg md:text-base lg:text-lg text-gray-800 leading-snug">
+                  If I could say it in words, there would be no reason to paint.
+                </p>
+                <p className="text-right font-Poppins text-xs sm:text-base md:text-lg text-gray-300">
+                  —Edward Hopper
+                </p>
+              </div>
+            </div>
+            {/* part 3 */}
+            <div
+              className="h-[200px] sm:h-[250px] md:h-[300px] w-[200px] sm:w-[250px] md:w-[300px] bg-black flex-shrink-0 bg-center bg-cover flex items-center px-4"
+              style={{ backgroundImage: `url(${bg_3})` }}
+            >
+              <div className="bg-white/60 px-2 sm:px-3 rounded-md shadow-md backdrop-blur-sm">
+                <p className="font-Quintessential text-sm sm:text-base lg:text-lg text-[#a56a6a] leading-relaxed text-left">
+                  The only time I feel alive is when I’m painting.
+                </p>
+                <p className="font-Poppins text-xs sm:text-sm md:text-base text-[#4B5563] text-right mt-2">
+                  — Vincent van Gogh
+                </p>
+              </div>
+            </div>
+            {/* part 4 */}
+            <div
+              className="h-[200px] sm:h-[250px] md:h-[300px] w-[200px] sm:w-[250px] md:w-[300px] bg-black flex-shrink-0 bg-center bg-cover flex items-center px-4"
+              style={{ backgroundImage: `url(${bg_4})` }}
+            >
+              <div>
+                <p className="font-Protest text-sm sm:text-lg lg:text-xl text-[#2C3E50] leading-relaxed text-left font-bold">
+                  Painting is self-discovery. Every good artist paints what he is.
+                </p>
+                <p className="font-Montserrat text-xs sm:text-sm md:text-base text-[#074044] text-right mt-2 font-semibold">
+                  — Jackson Pollock
+                </p>
+              </div>
+            </div>
+            {/* part 5 */}
+            <div
+              className="h-[200px] sm:h-[250px] md:h-[300px] w-[200px] sm:w-[250px] md:w-[300px] bg-black flex-shrink-0 bg-center bg-cover flex items-center px-4"
+              style={{ backgroundImage: `url(${bg_5})` }}
+            >
+              <div>
+                <p className="font-Lora text-sm sm:text-base lg:text-lg text-white leading-relaxed text-left">
+                  <span className="bg-black px-2">
+                    If I could say it in words, there would be no reason to paint.
+                  </span>
+                </p>
+                <p className="font-Quicksand text-xs sm:text-sm md:text-base text-[#ffffff8a] text-right mt-2 font-semibold">
+                  <span className="bg-black px-2 py-1">— Edward Hopper</span>
+                </p>
+              </div>
+            </div>
+            {/* part 6 */}
+            <div
+              className="h-[200px] sm:h-[250px] md:h-[300px] w-[200px] sm:w-[250px] md:w-[300px] bg-black flex-shrink-0 bg-center bg-cover flex items-center px-4"
+              style={{ backgroundImage: `url(${bg_6})` }}
+            >
+              <div>
+                <p className="font-Tapestary text-sm sm:text-lg md:text-base lg:text-lg text-[#041d18] leading-relaxed text-left">
+                  I dream of painting, and then I paint my dream.
+                </p>
+                <p className="font-Carattere font-bold text-xs sm:text-sm md:text-base lg:text-[18px] text-[#444546] text-right mt-2">
+                  — Vincent van Gogh
+                </p>
+              </div>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {uploads.map((upload, index) => (
+              <motion.div
+                key={upload.$id}
+                className="relative flex flex-col rounded-xl overflow-hidden bg-white dark:bg-gray-800 shadow-sm hover:shadow-xl border border-gray-200 dark:border-gray-700 transition-all duration-300"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                {/* Image/Video Container */}
+                <div
+                  className="relative w-full aspect-[4/3] overflow-hidden cursor-pointer"
+                  onClick={() => openLightbox(index)}
+                >
+                  {upload.mediaUrl && upload.isImage ? (
+                    <AppwriteImage
+                      fileId={upload.fileId}
+                      bucketId={config.bucketId}
+                      alt={upload.title || "Uploaded image"}
+                      className="w-full h-full object-cover rounded-t-xl transition-transform duration-300 group-hover:scale-105"
+                    />
+                  ) : upload.mediaUrl && upload.isVideo ? (
+                    <video
+                      src={upload.mediaUrl}
+                      className="w-full h-full object-cover rounded-t-xl"
+                      onError={(e) => console.warn(`Failed to load video ${upload.fileId}:`, e)}
+                    />
+                  ) : (
+                    <ImagePlaceholder type="error" />
+                  )}
+                  {/* Tag Badge */}
+                  {upload.tag && (
+                    <span className="absolute top-3 right-3 bg-violet-600 dark:bg-violet-500 text-white text-xs font-Quicksand px-2 py-1 rounded-full capitalize">
+                      {upload.tag}
+                    </span>
+                  )}
+                </div>
+                {/* Metadata Container */}
+                <div className="p-4 flex flex-col gap-2 bg-white dark:bg-gray-800">
+                    <div className="flex justify-between items-center">
+                      <div className="flex items-center gap-3">
+                        {/* For views functionality */}
+                        <motion.button
+                        className="text-gray-500 dark:text-gray-400 hover:text-violet-600 dark:hover:text-violet-400 transition-colors flex items-center gap-2"
+                        onClick={() => toast.info("Like functionality coming soon!")}
+                        aria-label="Like"
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                      >
+                        <FaRegEye size={16} />
+                       <span className=" text-gray-500 dark:text-gray-400 font-Quicksand">0</span>
+                      </motion.button>
+                        {/* For Like */}
+                      <motion.button
+                        className="text-gray-500 dark:text-gray-400 hover:text-violet-600 dark:hover:text-violet-400 transition-colors flex items-center gap-2"
+                        onClick={() => toast.info("Like functionality coming soon!")}
+                        aria-label="Like"
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                      >
+                        <FaRegThumbsUp size={16} />
+                        <span className=" text-gray-500 dark:text-gray-400 font-Quicksand">0</span>
+                      </motion.button>
+                      {/* For Comment section */}
+                      <motion.button
+                      className="text-gray-500 dark:text-gray-400 hover:text-violet-600 dark:hover:text-violet-400 transition-colors flex items-center gap-2"
+                        onClick={() => toast.info("Comment functionality coming soon!")}
+                        aria-label="Like"
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                      >
+                        <FaRegComment size={16} />
+                        <span className=" text-gray-500 dark:text-gray-400 font-Quicksand">0</span>
+                      </motion.button>
+                      
+                      {/* FOr Download section */}
+                      <motion.button
+                      className="text-gray-500 dark:text-gray-400 hover:text-violet-600 dark:hover:text-violet-400 transition-colors flex items-center gap-2"
+                        onClick={() => toast.info("Comment functionality coming soon!")}
+                        aria-label="Like"
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                      >
+                        <FiDownload size={16} />
+                        <span className=" text-gray-500 dark:text-gray-400 font-Quicksand">0</span>
+                      </motion.button>
+                      
+                      {/* For Favourite Section */}
+                       <motion.button
+                      className="text-gray-500 dark:text-gray-400 hover:text-violet-600 dark:hover:text-violet-400 transition-colors flex items-center gap-2"
+                        onClick={() => toast.info("Comment functionality coming soon!")}
+                        aria-label="Like"
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                      >
+                        <FaRegHeart size={16} />
+                        <span className=" text-gray-500 dark:text-gray-400 font-Quicksand">0</span>
+                      </motion.button>
+                      {/* For Share Functionality */}
+                      <motion.button
+                      className="text-gray-500 dark:text-gray-400 hover:text-violet-600 dark:hover:text-violet-400 transition-colors flex items-center gap-2"
+                        onClick={() => toast.info("Comment functionality coming soon!")}
+                        aria-label="Like"
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                      >
+                        <PiShareFatLight size={16} />
+                        <span className=" text-gray-500 dark:text-gray-400 font-Quicksand">0</span>
+                      </motion.button>
+                    </div>
+                   
+                  </div>
+
+                  <hr className="w-full mt-2" />
+                   <h3 className="text-lg font-semibold font-Quicksand text-gray-900 dark:text-gray-100 line-clamp-1">
+                      {upload.title || "Untitled"}
+                    </h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 font-Quicksand line-clamp-2">
+                    {upload.description || "No description provided"}
+                  </p>
+                  <div className="flex justify-between items-center mt-2">
+                    <span className="text-xs text-gray-500 dark:text-gray-400 font-Quicksand">
+                      {upload.formattedDate}
+                    </span>
+                  </div>
+                   <motion.button
+                      className="text-gray-500 dark:text-gray-400 hover:text-violet-600 dark:hover:text-violet-400 transition-colors absolute bottom-2 right-2"
+                      aria-label="More options"
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                    >
+                      <FaEllipsisV size={16} />
+                    </motion.button>
+                </div>
+              </motion.div>
+            ))}
+          </div>

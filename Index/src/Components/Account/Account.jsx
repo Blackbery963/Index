@@ -13,6 +13,11 @@ import { IoMdHelpCircleOutline } from 'react-icons/io';
 import { MdOutlineFeedback } from 'react-icons/md';
 import { FaHome, FaUsers, FaUser, FaImages, FaHandsHelping, } from "react-icons/fa";
 import { motion } from 'framer-motion';
+import { Query } from 'appwrite';
+import { account, databases } from '../../appwriteConfig';
+
+const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
+const USER_COLLECTION_ID = import.meta.env.VITE_APPWRITE_USERS_COLLECTION_ID
 
 function Account() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -20,6 +25,9 @@ function Account() {
   const [showButton, setShowButton] = useState(true);
   const [profileImage, setProfileImage] = useState(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [followerCount, setFollowerCount] = useState(null);
+  const [profileUserId, setProfileUserId] = useState('')
+  const [user, setUser] = useState (null)
   const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 1024);
   const [profile, setProfile] = useState({
     username: '',
@@ -28,28 +36,50 @@ function Account() {
     facebook: '',
     instagram: '',
     twitter: '',
-    linkedin: ''
+    linkedin: '',
   });
   const dropdownRef = useRef(null);
   const timeoutRef = useRef(null);
 
+  // storing userId in localhost
+  useEffect ( () => {
+    const getAndStoreUser = async () => {
+      try {
+        const userData = await account.get();
+        localStorage.setItem("userProfile", JSON.stringify(userData));
+        setUser(userData);
+      } catch (err) {
+        console.error("User not logged in", err);
+      }
+    };
+
+    getAndStoreUser();
+  }, []);
+
   // Load profile data, profile image, and cover image from localStorage on mount
   useEffect(() => {
-    const savedProfile = JSON.parse(localStorage.getItem('userProfile')) || {};
-    const savedProfileImage = localStorage.getItem('profileImage');
-    const savedCoverImage = localStorage.getItem('coverImage');
-    setProfile((prev) => ({
-      ...prev,
-      ...savedProfile
-    }));
-    if (savedProfileImage) {
-      setProfileImage(savedProfileImage);
-    }
-    if (savedCoverImage) {
-      setImage(savedCoverImage);
-      setShowButton(false);
-    }
-  }, []);
+  const savedProfile = JSON.parse(localStorage.getItem('userProfile')) || {};
+  const savedProfileImage = localStorage.getItem('profileImage');
+  const savedCoverImage = localStorage.getItem('coverImage');
+  
+  setProfile((prev) => ({
+    ...prev,
+    ...savedProfile
+  }));
+  
+  // Add this line to set the profile user ID
+  if (savedProfile?.$id) {
+    setProfileUserId(savedProfile.$id);
+  }
+  
+  if (savedProfileImage) {
+    setProfileImage(savedProfileImage);
+  }
+  if (savedCoverImage) {
+    setImage(savedCoverImage);
+    setShowButton(false);
+  }
+}, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -210,8 +240,32 @@ function Account() {
     visible: { opacity: 1, transition: { duration: 0.8 } },
   };
 
+  // getting followers
+const getFollowerCount = async () => {
+  if (!profileUserId) return; // Don't try if no user ID
+  
+  try {
+    const res = await databases.listDocuments(
+      DATABASE_ID, 
+      USER_COLLECTION_ID, 
+      [Query.equal("followingId", profileUserId)]
+    );
+    setFollowerCount(res.total); // or res.documents.length
+  } catch (error) {
+    console.error("Error fetching followers:", error);
+    setFollowerCount(0); // Default to 0 on error
+  }
+};
+// 
+useEffect(() => {
+  if (profileUserId) {
+    getFollowerCount();
+  }
+}, [profileUserId]); // This will run whenever profileUserId changes
+
+
   return (
-    <div className="w-full min-h-screen flex flex-col pb-6 overflow-x-hidden bg-slate-100 dark:bg-[#040d12f5]">
+    <div className="w-full min-h-screen flex flex-col pb-6 overflow-x-hidden bg-gray-100 dark:bg-[#040d12f5]">
       {/* Header */}
         <header className="w-full  h-[80px] bg-gradient-to-l from-[#0f172acc] via-[#1e293bcc] to-[#334155cc] dark:from-[#020617cc] dark:via-[#0f172acc] dark:to-[#1e293bcc] flex items-center justify-between px-6 z-50 fixed">
   <div
@@ -230,7 +284,7 @@ function Account() {
     onMouseLeave={handleMouseLeave}
   >
     <button
-      className="sm:px-2 px-1 md:px-3 sm:py-2 py-1 border border-gray-400 dark:border-gray-600 rounded-md flex items-center gap-2 transition-all duration-200 bg-slate-700/60 hover:bg-slate-600/80 dark:bg-slate-800/60 dark:hover:bg-slate-700/80 text-slate-100"
+      className="sm:px-2 px-1 md:px-3 sm:py-2 py-1 border border-gray-400 dark:border-gray-600 rounded-md flex items-center gap-2 transition-all duration-200 bg-slate-700/60 hover:bg-slate-600/80 dark:bg-slate-800/60 dark:hover:bg-slate-700/80 text-slate-100 "
       onClick={toggleDropdown}
     >
       <span className="text-sm md:text-base md:block hidden text-white font-Playfair">Settings</span>
@@ -238,7 +292,7 @@ function Account() {
     </button>
 
     <div
-      className={`absolute top-full right-0 mt-2 w-[180px] bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 rounded-md shadow-lg transition-all duration-200 z-50 sm:p-2
+      className={`absolute top-full right-0 mt-2 w-[180px] bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 rounded-md shadow-lg transition-all duration-200 z-50 sm:p-2 font-Playfair
         ${isDropdownOpen ? 'opacity-100 visible pointer-events-auto' : 'opacity-0 invisible pointer-events-none'}`}
     >
       <Link to={'/Account/Edit_Profile'}>
@@ -322,91 +376,94 @@ function Account() {
 </motion.div>
 
        {/* Cover Image Section */}
-      <motion.div
-        className="lg:w-[80%] w-[98%] mx-auto h-[400px] sm:h-[500px] relative mt-[85px] overflow-hidden rounded-b-xl"
-        variants={coverVariants}
-        initial="hidden"
-        animate="visible"
-      >
-        {showButton ? (
-          <label
-            htmlFor="file-upload"
-            className="w-full h-full flex items-center justify-center cursor-pointer bg-gradient-to-t from-slate-200 to-slate-700 dark:from-slate-700 dark:to-gray-800 text-lg font-playfair font-semibold hover:bg-rose-500 transition"
-          >
-            Add a Cover Image
-            <input
-              type="file"
-              id="file-upload"
-              accept="image/*"
-              className="hidden"
-              onChange={handleImage}
-            />
-          </label>
-        ) : (
-          <div className="relative w-full h-full">
-            <img className="h-full w-full object-cover" src={image} alt="Cover" loading="lazy" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
-            <motion.button
-              className="absolute bottom-4 right-4 bg-white/80 text-rose-700 p-2 rounded-full shadow hover:bg-white"
-              onClick={() => {
-                setImage(null);
-                localStorage.removeItem('coverImage');
-                setShowButton(true);
-              }}
-              variants={buttonVariants}
-              whileHover="hover"
-              whileTap="tap"
+     
+
+
+       <motion.div
+              className="lg:w-[80%] w-[98%] mx-auto h-[400px] md:h-[500px] relative mt-[85px] overflow-hidden rounded-b-xl"
+              variants={coverVariants}
+              initial="hidden"
+              animate="visible"
             >
-              <FiEdit className="text-lg" />
-            </motion.button>
-          </div>
-        )}
-      </motion.div>
-
-      {/* Profile Image and Username/Bio */}
-      <div className="relative w-full flex flex-col items-center justify-center mt-[100px]">
-        <div
-          className="absolute flex items-center justify-center"
-          style={{
-            width: "clamp(250px, 18vw, 280px)",
-            height: "clamp(250px, 18vw, 280px)",
-            top: "-90%",
-            left: "50%",
-            transform: "translateX(-50%)",
-          }}
-        >
-          <div className="rounded-full border-[5px] dark:border-white border-gray-900  flex items-center justify-center bg-black overflow-hidden w-full h-full">
-            {profileImage ? (
-              <img
-                src={profileImage}
-                alt="Uploaded"
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <span className="text-white font-serif">No Image</span>
-            )}
-          </div>
-          <label
-            htmlFor="upload"
-            className="absolute bottom-1 right-12 bg-[#0c080a70] text-white hover:text-[#ffffff] rounded-2xl cursor-pointer hover:bg-[#74626859] px-2 py-2"
-            style={{ backdropFilter: "blur(5px)", opacity: 1 }}
-          >
-            {profileImage ? <FaUserEdit size={22} /> : <MdOutlinePhotoCameraBack size={22} />}
-          </label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleProfileImageUpload}
-            className="hidden"
-            id="upload"
-          />
-        </div>
-
-        <div className="flex flex-col items-center mt-[110px]">
-          <p className="text-red-700 text-[35px] font-Playfair">{profile.username || 'Username'}</p>
-          <p className="text-red-700 text-[25px] mt-[-5px] font-Markazi">{profile.bio || 'Bio'}</p>
-        </div>
-      </div>
+              {showButton ? (
+                <label
+                  htmlFor="file-upload"
+                  className="w-full h-full flex items-center justify-center cursor-pointer bg-gradient-to-t from-slate-200 to-slate-700 dark:from-slate-700 dark:to-gray-800 text-lg font-playfair font-semibold hover:bg-rose-500 transition"
+                >
+                  Add a Cover Image
+                  <input
+                    type="file"
+                    id="file-upload"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleImage}
+                  />
+                </label>
+              ) : (
+                <div className="relative w-full h-full">
+                  <img className="h-full w-full object-cover" src={image} alt="Cover" loading="lazy" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                  <motion.button
+                    className="absolute bottom-4 right-4 bg-white/80 text-rose-700 p-2 rounded-full shadow hover:bg-white"
+                    onClick={() => {
+                      setImage(null);
+                      localStorage.removeItem('coverImage');
+                      setShowButton(true);
+                    }}
+                    variants={buttonVariants}
+                    whileHover="hover"
+                    whileTap="tap"
+                  >
+                    <FiEdit className="text-lg" />
+                  </motion.button>
+                </div>
+              )}
+            </motion.div>
+      
+            {/* Profile Image and Username/Bio */}
+            <div className="relative w-full flex flex-col items-center justify-center mt-[100px]">
+              <div
+                className="absolute flex items-start justify-center"
+                style={{
+                  width: "clamp(180px, 250px, 280px)",
+                  height: "clamp(180px, 250px, 280px)",
+                  top: "-90%",
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                }}
+              >
+                <div className="rounded-full border-[5px] dark:border-white border-gray-900  flex items-center justify-center bg-black overflow-hidden w-full h-full">
+                  {profileImage ? (
+                    <img
+                      src={profileImage}
+                      alt="Uploaded"
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <span className="text-white font-serif">No Image</span>
+                  )}
+                </div>
+                <label
+                  htmlFor="upload"
+                  className="absolute bottom-1 right-12 bg-[#0c080a70] text-white hover:text-[#ffffff] rounded-2xl cursor-pointer hover:bg-[#74626859] px-2 py-2"
+                  style={{ backdropFilter: "blur(5px)", opacity: 1 }}
+                >
+                  {profileImage ? <FaUserEdit size={22} /> : <MdOutlinePhotoCameraBack size={22} />}
+                </label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleProfileImageUpload}
+                  className="hidden"
+                  id="upload"
+                />
+              </div>
+      
+              <div className="flex flex-col items-center mt-[110px]">
+                <p className="text-red-700 text-[35px] font-Playfair">{profile.username || 'Username'}</p>
+                <p className="text-red-700 text-[25px] mt-[-5px] font-Markazi">{profile.bio || 'Bio'}</p>
+              </div>
+            </div>
 
       {/* Social Media Buttons */}
       <div className="flex gap-4 mx-auto mt-4">
@@ -449,8 +506,9 @@ function Account() {
   {/* Followers Button */}
   <button className="px-3 py-1.5 font-serif rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 shadow-sm hover:shadow-md transition-all flex items-center gap-2 text-sm sm:text-base font-medium text-gray-700 dark:text-gray-200">
     <span>Followers:</span>
-    <span className="font-semibold text-blue-600 dark:text-blue-400">1.2M</span>
-  </button>
+<span className="font-semibold text-blue-600 dark:text-blue-400">
+  {followerCount !== null ? followerCount : 'Loading...'}
+</span>  </button>
 
   {/* Following Button */}
   <button className="px-3 py-1.5 font-serif rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 shadow-sm hover:shadow-md transition-all flex items-center gap-2 text-sm sm:text-base font-medium text-gray-700 dark:text-gray-200">
@@ -476,5 +534,3 @@ function Account() {
 }
 
 export default Account;
-
-

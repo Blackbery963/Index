@@ -48,7 +48,7 @@ const CategoryCard = ({ name, image, to }) => {
       {/* Animated Gradient Border */}
       <div className="absolute inset-0 rounded-xl border-2 border-transparent group-hover:border-[length:2px] group-hover:border-gradient-to-r group-hover:from-[#FFDAB9] group-hover:to-[#A9B7A1] dark:group-hover:from-[#374151] dark:group-hover:to-[#1A2A3A] transition-all duration-500"></div>
       {/* Arrow Icon */}
-      <div className="absolute bottom-6 right-6 h-8 w-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center transition-all duration-300 group-hover:bg-white/40 group-hover:scale-110">
+      <div className="absolute bottom-6 right-6 h-8 w-8 rounded-full bg-white/20 backdrop-blur-sm hidden lg:flex items-center justify-center transition-all duration-300 group-hover:bg-white/40 group-hover:scale-110">
         <FiArrowRight className="text-white text-lg" />
       </div>
     </Link>
@@ -84,13 +84,13 @@ function Style() {
         <h2 className="text-4xl font-serif font-medium text-gray-800 dark:text-white mb-3 tracking-wide">
           Discover Art Categories
         </h2>
-        <p className="text-gray-600 dark:text-gray-400 max-w-md mx-auto font-sans text-sm">
+        <p className="text-gray-600 dark:text-gray-400 max-w-md mx-auto font-Quicksand text-[16px]">
           Dive into a world of creativity with our curated collection of artistic styles.
         </p>
       </div>
 
       {/* Grid of Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
         {categories.map((category, index) => (
           <CategoryCard
             key={index}

@@ -2,38 +2,31 @@ import { lazy, Suspense, useEffect } from 'react';
 import './App.css';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import { trackPageview } from '../Analytics.js';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './Components/Header/Header';
 import Footer from './Components/Footer/Footer';
-import { DarkModeProvider } from './Components/Header/Header.jsx';
 // Lazy load components
 const Style = lazy(() => import('./Components/Style/Style'));
 const Collection = lazy(() => import('./Components/Collections/Collection'));
 const Diarytemp = lazy(() => import('./Components/Diarytemp/Diarytemp'));
 const Connecting = lazy(() => import('./Components/Connecting/Connecting'));
 const Creativity = lazy(() => import('./Components/Creativity/Creativity'));
-const Age = lazy(() => import('./Components/Age/Age'));
 const Visual = lazy(() => import('./Components/Visual/Visual'));
-// const Recent = lazy(() => import('./Components/History/History.jsx'));
-// const Portal = lazy (() => import('/home/swarnadip/Documents/Index/Index/Index/src/Portal/Portal.jsx'));
 const Review = lazy(() => import('./Components/Review/Review'));
-
 // Other imports remain the same...
 import Account from './Components/Account/Account';
-import Upload from './Components/Account/Upload/Upload';
-// import Signup from './Components/Signup/Signup';
+import Upload from './Components/Upload/Upload.jsx';
 import Signup from './Components/Signup/Signup';
 import Login from './Components/Login/Login';
 import Gallery from './Components/Gallery/Gallery';
 import Category from './Components/Category/Category';
-import Landscape from './Sub-Components/Landscape/Landscape';
-import Portrait from './Sub-Components/Portrait/Portrait';
-import Still_life from './Sub-Components/Still-life/Still_life';
-import Oil_paint from './Sub-Components/Oil_paint/Oil_paint';
-import Water_color from './Sub-Components/Water-color/Water_color';
-import Abstract from './Sub-Components/Abstract/Abstract';
-import Historical from './Sub-Components/Historical/Histoirical';
-import Modern from './Sub-Components/Modern/Modern';
+import Landscape from './Sub-Components/Landscape';
+import Still_life from './Sub-Components/Still_life';
+import Oil_paint from './Sub-Components/Oil_paint';
+import Water_color from './Sub-Components/Water_color';
+import Abstract from './Sub-Components/Abstract';
+import Modern from './Sub-Components/Modern';
 import Beginner from './Age-Components/Beginner/Beginner';
 import Professional from './Age-Components/Professional/Professional';
 import Amatuer from './Age-Components/Amatuer/Amatuer';
@@ -52,10 +45,30 @@ import Journal from './Components/Journal/Journal';
 import Privacy_Policy from './Legal/Privacy_Policy/Privacy_Policy';
 import ResetPassword from './Components/Login/ResetPassword';
 import Cart from './Months/Cart';
-import History from './Components/History/History.jsx';
 import Help from './Resources/Help/Help.jsx';
 import Artisan from './Components/Artisian/Artisian.jsx';
 import Community from './Company/Community/Community.jsx';
+import Nature from './Sub-Components/Nature.jsx';
+import Traditional from './Sub-Components/Traditional.jsx';
+import Realism from './Sub-Components/Realism.jsx';
+import Minimalism from './Sub-Components/Minimalism.jsx';
+import Impression from './Sub-Components/Impression.jsx';
+import Surrealism from './Sub-Components/Surrealism.jsx';
+import Digital from './Sub-Components/Digital.jsx';
+import Pop from './Sub-Components/Pop.jsx';
+import Portrait from './Sub-Components/Portrait.jsx';
+import Historical from './Sub-Components/Histoirical';
+import Commerce from './Components/Commerce.jsx';
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -70,6 +83,12 @@ function App() {
     });
   }, []);
 
+
+    useEffect(() => {
+    trackPageview(window.location.pathname);
+  }, []);
+
+  
   return (
     <Router>
       <Routes>
@@ -91,11 +110,11 @@ function App() {
                 <div data-aos="fade-right" data-aos-delay="400" className="w-full will-change-transform will-change-opacity">
                   <Connecting />
                 </div>
-                <div data-aos="fade-left" data-aos-delay="500" className="w-full will-change-transform will-change-opacity">
+                <div data-aos="fade-left" data-aos-delay="400" className="w-full will-change-transform will-change-opacity">
                   <Creativity />
                 </div>
                 <div data-aos="fade-right" data-aos-delay="600" className="w-full will-change-transform will-change-opacity">
-                  <Age />
+                  <Commerce />
                 </div>
                 <div data-aos="fade-left" data-aos-delay="700" className="w-full will-change-transform will-change-opacity">
                   <Visual />
@@ -149,6 +168,14 @@ function App() {
         <Route path='/History' element={<History/>}/>
         <Route path='/Resources/Help' element={<Help/>}/>
         <Route path="/community" element={<Community />} />
+        <Route path='/Nature' element={<Nature/>}/>
+        <Route path='/Traditional' element={<Traditional/>}/>
+        <Route path='/Realism' element={<Realism/>}/>
+        <Route path='/Minimalism' element={<Minimalism/>}/>
+        <Route path='/Impressionism' element={<Impression/>}/>
+        <Route path='/Surrealism' element={<Surrealism/>}/>       
+        <Route path='/Digital' element={<Digital/>}/>
+        <Route path='/Pop-Art' element={<Pop/>}/>
       </Routes>
     </Router>
   );

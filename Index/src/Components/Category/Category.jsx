@@ -22,6 +22,7 @@ import Pic_14 from './Category-images/no-14.jpg';
 import Pic_15 from './Category-images/no-15.jpg';
 import Pic_16 from './Category-images/no-16.jpg';
 import Pic_17 from './Category-images/no-17.jpeg';
+import { FaHome } from 'react-icons/fa';
 
 function Category() {
   useEffect(() => {
@@ -55,7 +56,7 @@ function Category() {
       name: 'Oil Painting',
       para: 'Oil painting uses slow-drying pigments mixed with oil, creating rich textures, vibrant colors, and layered effects.',
       backImg: Pic_3,
-      link: '/OilPaint',
+      link: '/Oil_Paint',
     },
     {
       name: 'Abstract',
@@ -109,19 +110,19 @@ function Category() {
       name: 'Pop Art',
       para: 'Pop art incorporates popular culture imagery, using bright colors and bold patterns.',
       backImg: Pic_12,
-      link: '/PopArt',
+      link: '/Pop-Art',
     },
     {
       name: 'Fauvism',
       para: 'Fauvist paintings use vivid, non-naturalistic colors and fierce brushwork to evoke emotion.',
       backImg: Pic_13,
-      link: '/Fauvism',
+      link: '/Nature',
     },
     {
       name: 'Baroque',
       para: 'Baroque art emphasizes drama, movement, and rich details, often with religious or mythological themes.',
       backImg: Pic_14,
-      link: '/Baroque',
+      link: '/Traditional',
     },
     {
       name: 'Renaissance',
@@ -133,19 +134,23 @@ function Category() {
       name: 'Gothic',
       para: 'Gothic art features elongated figures and intricate details, often in religious contexts.',
       backImg: Pic_16,
-      link: '/Gothic',
+      link: '/Digital',
     },
     {
-      name: 'Modernism',
-      para: 'Modernist art experiments with new forms and techniques, breaking from traditional styles.',
+      name: 'Modern',
+      para: 'Modern art experiments with new forms and techniques, breaking from traditional styles.',
       backImg: Pic_17,
-      link: '/Modernism',
+      link: '/Modern',
     },
   ];
 
   return (
     <div className="min-h-screen max-w-screen bg-gradient-to-br from-[#2D0434] to-[#3A0B4F] flex items-center flex-col justify-center py-8 overflow-x-hidden">
-     <h1 className="text-2xl sm:text-3xl lg:text-4xl text-white font-semibold mb-6 text-center px-4 font-Playfair">
+     <button>
+      <Link to={"/"}>
+      </Link>
+     </button>
+     <h1 className="text-2xl sm:text-3xl lg:text-4xl text-white font-semibold mb-6 text-center px-4 font-Quicksand">
      Explore the Spectrum of Artistic Styles
     </h1>
       <div className="h-[90%] w-[85%] backdrop-blur-lg bg-[#ffffff23] rounded-2xl border border-gray-300 grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 p-4 sm:p-8 justify-items-center overflow-auto">

@@ -421,7 +421,7 @@ import { useState, useEffect, useRef, useContext, createContext } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   FaUserPlus, FaUser, FaHeart, FaCartPlus, FaSun, FaMoon, FaHome, 
-  FaImages, FaUsers, FaHandsHelping, FaCrown, FaSearch,FaBell
+  FaImages, FaUsers, FaHandsHelping, FaCrown, FaSearch,FaBell, FaBullhorn
 } from "react-icons/fa";
 import { MdGroups3, MdClose, MdOutlineFeedback, MdBook, MdHistory } from "react-icons/md";
 import { IoMdHelpCircleOutline } from "react-icons/io";
@@ -471,10 +471,11 @@ export const DarkModeProvider = ({ children }) => {
 
 const Header = () => {
   const backgroundImages = [
+    'https://img.freepik.com/free-photo/warm-colors-vase-with-dark-flowers_23-2151843580.jpg?uid=R164504650&ga=GA1.1.955884625.1725872001&semt=ais_hybrid&w=740',
     'https://images.unsplash.com/photo-1541961017774-22349e4a1262?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+    'https://img.freepik.com/free-photo/nature-tranquil-scene-silhouette-pine-tree-generative-ai_188544-12777.jpg?uid=R164504650&ga=GA1.1.955884625.1725872001&semt=ais_hybrid&w=740',
     'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
     'https://images.unsplash.com/photo-1531913764164-f85c52e6e654?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-    'https://images.unsplash.com/photo-1578926375605-eaf7559b1458?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
   ];
 
   const routes = {
@@ -705,15 +706,16 @@ const Header = () => {
           className="flex flex-col items-center font-eagle hover:opacity-90 transition-opacity"
         >
           {/* Title - Better responsive sizing */}
-          <div className="text-xl sm:text-2xl md:text-3xl font-bold tracking-wide leading-tight">
+          <div className="text-xl sm:text-3xl font-bold tracking-wider leading-tight">
             <span className="text-yellow-500 drop-shadow-sm">Painters'</span>
             <span className={`ml-1 ${darkMode ? 'text-gray-100' : 'text-gray-800'}`}>Diary</span>
           </div>
           
           {/* Subtitle - Only shown on larger screens */}
-          <p className={`hidden md:block text-base lg:text-lg ${darkMode ? 'text-red-300' : 'text-red-700'} font-cookie italic tracking-wide`}>
+          <p className={`hidden md:block text-[16px] md:text-[21px]  ${darkMode ? 'text-red-300' : 'text-red-700'} font-cookie tracking-wide`}>
             The Diary of Every Artist
           </p>
+        
         </Link>
       </motion.div>
 
@@ -907,7 +909,7 @@ const Header = () => {
               </div>
 
               {/* Enhanced Menu Items */}
-              <div className="px-4 space-y-1">
+              <div className="px-2 space-y-1">
                 {Object.entries(routes).map(([name, { path, icon, color }], index) => (
                   <motion.div
                     key={name}
@@ -918,7 +920,7 @@ const Header = () => {
                   >
                     <Link
                       to={path}
-                      className={`flex items-center gap-4 px-4 py-3 text-lg font-medium font-Playfair rounded-lg transition-colors ${darkMode ? 'hover:bg-gray-700/50' : 'hover:bg-gray-200/50'}`}
+                      className={`flex items-center gap-2 px-4 py-3 text-[16px] font-medium font-Playfair rounded-lg transition-colors ${darkMode ? 'hover:bg-gray-700/50' : 'hover:bg-gray-200/50'}`}
                       onClick={() => setIsMenuOpen(false)}
                     >
                       <span className={`text-xl ${color}`}>{icon}</span>
@@ -991,8 +993,8 @@ const Header = () => {
               }}
               whileTap={{ scale: 0.95 }}
             >
-              <FaHandsHelping />
-              Commission Art
+              <FaBullhorn />
+              Commercial Art
             </motion.button>
           </Link>
         </motion.div>

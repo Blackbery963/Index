@@ -3,12 +3,12 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
 import { DarkModeProvider } from './Components/Header/Header.jsx'
-
+import { trackPageview } from '../Analytics.js'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-<DarkModeProvider>
+   <DarkModeProvider>
     <App />
-  </DarkModeProvider>
+   </DarkModeProvider>
   </StrictMode>,
 )

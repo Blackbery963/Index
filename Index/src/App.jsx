@@ -1,8 +1,8 @@
 import { lazy, Suspense, useEffect } from 'react';
 import './App.css';
+
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-// import { trackPageview, initGA } from '../Analytics.js';
 import { trackPageview, initGA } from '../../Analytics.js';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './Components/Header/Header';
@@ -60,12 +60,6 @@ import Pop from './Sub-Components/Pop.jsx';
 import Portrait from './Sub-Components/Portrait.jsx';
 import Historical from './Sub-Components/Histoirical';
 import Commerce from './Components/Commerce.jsx';
-
-
-
-
-
-
 
 
 

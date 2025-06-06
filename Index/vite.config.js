@@ -10,13 +10,8 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
-  build: {
-    rollupOptions: {
-      external: ['react-ga4'], // ✅ Optional but depends on your needs (see notes below)
-    },
-  },
   optimizeDeps: {
-    include: ['swiper'],        // ✅ Ensures Swiper is pre-bundled
+    include: ['swiper','aos', 'framer-motion'],        // ✅ Ensures Swiper is pre-bundled
     exclude: ['react-hot-toast'] // ✅ You exclude it from optimization
   },
   server: {

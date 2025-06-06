@@ -2,7 +2,7 @@ import { lazy, Suspense, useEffect } from 'react';
 import './App.css';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-import { trackPageview } from '../Analytics.js';
+// import { trackPageview, initGA } from '../Analytics.js';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './Components/Header/Header';
 import Footer from './Components/Footer/Footer';
@@ -84,9 +84,10 @@ function App() {
   }, []);
 
 
-    useEffect(() => {
-    trackPageview(window.location.pathname);
-  }, []);
+  //   useEffect(() => {
+  //     initGA();
+  //   trackPageview(window.location.pathname);
+  // }, []);
 
   
   return (

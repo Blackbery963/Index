@@ -41,7 +41,7 @@ function Review() {
       <div className="relative flex items-center w-full mt-4">
         {/* Left Arrow */}
         <button
-          className="absolute left-0 z-20 w-8 h-8 flex items-center justify-center rounded-md border-2 border-blue-900 text-blue-900 hover:bg-gradient-to-r hover:from-blue-900 hover:to-blue-600 hover:text-white transition-all duration-300 md:block hidden"
+          className="absolute left-0 z-20 w-8 h-8 flex items-center justify-center rounded-md border-2 border-blue-900 text-blue-900 hover:bg-gradient-to-r hover:from-blue-900 hover:to-blue-600 hover:text-white transition-all duration-300 md:block"
           onClick={() => scroll('left')}
         >
           <svg
@@ -73,7 +73,7 @@ function Review() {
 
         {/* Right Arrow */}
         <button
-          className="absolute right-2 z-20 w-8 h-8 flex items-center justify-center rounded-md border-2 border-blue-900 text-blue-900 hover:bg-gradient-to-r hover:from-blue-900 hover:to-blue-600 hover:text-white transition-all duration-300 md:block hidden"
+          className="absolute right-2 z-20 w-8 h-8 flex items-center justify-center rounded-md border-2 border-blue-900 text-blue-900 hover:bg-gradient-to-r hover:from-blue-900 hover:to-blue-600 hover:text-white transition-all duration-300 md:block"
           onClick={() => scroll('right')}
         >
           <svg

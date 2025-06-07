@@ -13,7 +13,6 @@
 //     },
 //   },
 // });
-
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
@@ -30,17 +29,19 @@ export default defineConfig({
       },
     },
   ],
+   base: '/', // Use relative paths for assets
   server: {
     proxy: {
       '/api': 'http://localhost:3000',
     },
   },
-  // build:{
-  //   rollupOptions:{
-  //     external:['react-ga4']
-  //   }
-
-  //},
+  build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
+    // rollupOptions: {
+    //   external: ['react-ga4']
+    // }
+  },
   optimizeDeps: {
     include: ['swiper'],
   },

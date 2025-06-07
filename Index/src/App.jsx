@@ -1,6 +1,5 @@
 import { lazy, Suspense, useEffect } from 'react';
 import './App.css';
-
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { trackPageview, initGA } from '../Analytics.js';

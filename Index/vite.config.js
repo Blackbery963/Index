@@ -35,6 +35,12 @@ export default defineConfig({
       '/api': 'http://localhost:3000',
     },
   },
+  // build:{
+  //   rollupOptions:{
+  //     external:['react-ga4']
+  //   }
+
+  //},
   optimizeDeps: {
     include: ['swiper'],
   },

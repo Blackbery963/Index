@@ -3,7 +3,7 @@ import './App.css';
 
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-import { trackPageview, initGA } from '../../Analytics.js';
+import { trackPageview, initGA } from '../Analytics.js';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './Components/Header/Header';
 import Footer from './Components/Footer/Footer';
@@ -28,11 +28,6 @@ import Oil_paint from './Sub-Components/Oil_paint';
 import Water_color from './Sub-Components/Water_color';
 import Abstract from './Sub-Components/Abstract';
 import Modern from './Sub-Components/Modern';
-import Beginner from './Age-Components/Beginner/Beginner';
-import Professional from './Age-Components/Professional/Professional';
-import Amatuer from './Age-Components/Amatuer/Amatuer';
-import Student from './Age-Components/Student/Student';
-import Mid_Carrier from './Age-Components/Mid-Carrier/Mid_Carrier';
 import Diaryland from './Components/Diaryland/Diaryland';
 import January from './Months/January/January';
 import About from './Company/About/About';
@@ -142,11 +137,6 @@ function App() {
         <Route path="/abstract" element={<Abstract />} />
         <Route path="/historical" element={<Historical />} />
         <Route path="/modern" element={<Modern />} />
-        <Route path="/beginner" element={<Beginner />} />
-        <Route path="/professional" element={<Professional />} />
-        <Route path="/amatuer" element={<Amatuer />} />
-        <Route path="/student" element={<Student />} />
-        <Route path="/Mid_Carrier" element={<Mid_Carrier />} />
         <Route path="/diaryland" element={<Diaryland />} />
         <Route path="/january" element={<January />} />
         <Route path="/about" element={<About />} />

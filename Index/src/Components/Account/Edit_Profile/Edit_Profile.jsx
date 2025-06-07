@@ -182,7 +182,7 @@ function Edit_Profile() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {socialLinks.map((social) => (
                   <div key={social.name}>
-                    <label className="block text-gray-700 dark:text-gray-300 font-Playfair mb-1 flex items-center gap-2">
+                    <label className=" text-gray-700 dark:text-gray-300 font-Playfair mb-1 flex items-center gap-2">
                       <social.icon className={`${social.color} text-xl`} />
                       {social.placeholder}
                     </label>

@@ -100,10 +100,10 @@
 // export default Diarytemp;
 
 import React, { useEffect } from 'react';
-import DiarytempBack from '/home/swarnadip/Documents/Index/Index/Index/src/Components/Diarytemp/Diarytemp-images/people-2587310.jpg';
-import mainCenter from '/home/swarnadip/Documents/Index/Index/Index/src/Components/Diarytemp/Diarytemp-images/pexels-veeterzy-39811.jpg';
-import topleft from '/home/swarnadip/Documents/Index/Index/Index/src/Components/Diarytemp/Diarytemp-images/zaki-ahmed-h0NsueWIdzw-unsplash.jpg';
-import leftBottom from '/home/swarnadip/Documents/Index/Index/Index/src/Components/Diarytemp/Diarytemp-images/medium-shot-senior-painter-indoors.jpg';
+import DiarytempBack from './Diarytemp-images/people-2587310.jpg';
+import mainCenter from './Diarytemp-images/pexels-veeterzy-39811.jpg';
+import topleft from './Diarytemp-images/zaki-ahmed-h0NsueWIdzw-unsplash.jpg';
+import leftBottom from './Diarytemp-images/medium-shot-senior-painter-indoors.jpg';
 import { Link } from 'react-router-dom';
 import AOS from 'aos';
 import 'aos/dist/aos.css';

@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import frontbackground from './Images-of-Review/1646895.jpg';
-import behindbackground from '/home/swarnadip/Documents/Index/Index/Index/src/Components/Review/Images-of-Review/1177739.jpg';
+// import behindbackground from '/home/swarnadip/Documents/Index/Index/Index/src/Components/Review/Images-of-Review/1177739.jpg';
 import { FaFacebookF, FaInstagram, FaStar } from "react-icons/fa";
 import {FaXTwitter} from 'react-icons/fa6'
 

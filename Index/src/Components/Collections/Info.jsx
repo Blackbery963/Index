@@ -1,9 +1,9 @@
 import { useState } from 'react'
 
-import Close from '/home/swarnadip/Documents/Index/Menu/Menu/src/Image/close_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg'
+import Close from './Image/close_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg'
 import { AiOutlineHeart, AiFillHeart, } from "react-icons/ai"; // Import heart icons
 import { FaDownload, FaShare, FaThumbsUp } from "react-icons/fa"; // Import download icon
-import img1 from '/home/swarnadip/Documents/Index/Menu/Menu/src/Image/freepik-export-20241117064007hmqY.png'
+// import img1 from '/home/swarnadip/Documents/Index/Menu/Menu/src/Image/freepik-export-20241117064007hmqY.png'
 
 function Info() {
   const images = [

@@ -1,6 +1,6 @@
 
 import React, { useRef, useState, useEffect } from 'react';
-import image1 from '/home/swarnadip/Documents/Index/Index/Index/src/Components/History/History-images/pexels-tiana-18128-2964117.jpg';
+import image1 from './History-images/pexels-tiana-18128-2964117.jpg';
 import Recentitem from './Hirtoryitem';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 

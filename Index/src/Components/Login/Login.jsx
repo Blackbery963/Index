@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Background from '/home/swarnadip/Documents/Index/Index/Index/src/Components/Login/Image/background.jpg';
+import Background from './Image/background.jpg';
 import { Link, useNavigate } from 'react-router-dom';
 import { Client, Account } from 'appwrite';
 import { motion } from 'framer-motion';

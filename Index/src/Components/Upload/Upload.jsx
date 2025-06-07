@@ -7,8 +7,11 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { account, storage, databases, config, ID, Permission, Role, Query } from '/home/swarnadip/Documents/Index/Index/Index/src/appwriteConfig.js';
+import {account, storage, databases, config, ID, Permission, Role, Query } from "../../appwriteConfig"
 
+
+
+ //account, storage, databases, config, ID, Permission, Role, Query 
 const UploadEntry = ({ index, entry, updateEntry, removeEntry, handleFileChange, handleEntryUpload, uploading }) => {
   const [isDragging, setIsDragging] = useState(false);
 

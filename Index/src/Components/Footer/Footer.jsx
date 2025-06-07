@@ -1,7 +1,7 @@
 
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import footer from '/home/swarnadip/Documents/Index/Index/Index/src/Components/Footer/Footer-images/freepik-export-20240930073049yijq.png'
+import footer from './Footer-images/freepik-export-20240930073049yijq.png'
 import palette from '/home/swarnadip/Documents/Index/Index/Index/src/Components/Footer/Footer-images/pallete.jpg'
 import { FaFacebook, FaInstagram, FaTwitter, FaYoutube, FaLinkedin } from 'react-icons/fa';
 import { FaXTwitter } from 'react-icons/fa6';

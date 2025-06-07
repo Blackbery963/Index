@@ -199,7 +199,7 @@
 import React, { useState } from 'react';
 import { Functions, Account } from 'appwrite';
 // import { client } from '/home/swarnadip/Documents/Index/Index/Index/src/appwriteService/auth.js'; // Reuse your client
-import {client } from '/home/swarnadip/Documents/Index/Index/Index/src/appwriteConfig.js'
+import {client } from "../../appwriteConfig"
 import { useNavigate } from 'react-router-dom';
 
 function ResetPassword() {

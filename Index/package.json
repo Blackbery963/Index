@@ -13,12 +13,18 @@
   "dependencies": {
     "aos": "^2.3.4",
     "appwrite": "^18.0.0",
+    "chart.js": "^4.4.9",
     "framer-motion": "^12.16.0",
     "node-appwrite": "^15.0.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-ga4": "^2.1.0",
+    "react-hot-toast": "^2.5.2",
+    "react-icons": "^5.5.0",
     "react-router-dom": "^7.1.1",
+    "react-slick": "^0.30.3",
+    "react-toastify": "^11.0.5",
+    "slick-carousel": "^1.8.1",
     "swiper": "^11.2.8"
   },
   "devDependencies": {

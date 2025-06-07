@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { FaHome, FaInfoCircle, FaUser, FaBook, FaBars, FaTimes, FaPlus, FaSearch, FaArrowRight } from 'react-icons/fa';
 import {MdBook, MdClose} from 'react-icons/md';
 import {FiMenu} from 'react-icons/fi'
-import background from '/home/swarnadip/Documents/Index/Index/Index/src/Components/Diaryland/Diaryland-Images/calligraphy-7188024.jpg';
+import background from './Diaryland-Images/calligraphy-7188024.jpg';
 
 function Diaryland() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

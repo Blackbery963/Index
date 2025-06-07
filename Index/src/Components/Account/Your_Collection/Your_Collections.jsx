@@ -318,7 +318,7 @@ import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { motion, AnimatePresence } from "framer-motion";
-import { databases, storage, account, Query, config } from "/home/swarnadip/Documents/Index/Index/Index/src/appwriteConfig.js";
+import { databases, storage, account, Query, config } from '../../../appwriteConfig'
 
 // Custom image component for Appwrite storage
 function AppwriteImage({ fileId, bucketId, alt, className, ...props }) {

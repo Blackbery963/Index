@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import FAQsBackground from '/home/swarnadip/Documents/Index/Index/Index/src/Resources/FAQs/FAQs-images/FAQS.jpeg'
+import FAQsBackground from './FAQs-images/FAQS.jpeg'
 import { FaHome, FaInfoCircle, FaUser, FaBook } from 'react-icons/fa'
 
 const faqSections = [

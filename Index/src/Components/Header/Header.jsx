@@ -421,7 +421,7 @@ import { useState, useEffect, useRef, useContext, createContext } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   FaUserPlus, FaUser, FaHeart, FaCartPlus, FaSun, FaMoon, FaHome, 
-  FaImages, FaUsers, FaHandsHelping, FaCrown, FaSearch,FaBell, FaBullhorn
+  FaImages, FaHandsHelping, FaCrown, FaSearch,FaBell, FaBullhorn
 } from "react-icons/fa";
 import { MdGroups3, MdClose, MdOutlineFeedback, MdBook, MdHistory } from "react-icons/md";
 import { IoMdHelpCircleOutline } from "react-icons/io";
@@ -430,7 +430,6 @@ import { BiCategoryAlt } from "react-icons/bi";
 import { ImBlog } from "react-icons/im";
 import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
-
 
 
 // Dark Mode Context

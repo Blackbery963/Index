@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { FaHome, FaInfoCircle, FaUser, FaBook } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import woodBackground from '/home/swarnadip/Documents/Index/Index/Index/src/Components/Journal/Diary-images/beige-wooden-textured-flooring-background.jpg';
-import diaryBackground from '/home/swarnadip/Documents/Index/Index/Index/src/Components/Journal/Diary-images/1d19d578-7d3a-454b-9ce3-2dae3fd63c7b.jpg';
+import woodBackground from './Diary-images/beige-wooden-textured-flooring-background.jpg';
+import diaryBackground from './Diary-images/1d19d578-7d3a-454b-9ce3-2dae3fd63c7b.jpg';
 import { FiEdit, FiUpload } from 'react-icons/fi';
 import { LuArrowRightFromLine } from 'react-icons/lu';
 import { MdBook } from 'react-icons/md';

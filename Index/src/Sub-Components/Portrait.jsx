@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, } from 'react';
-import BackImg from '/home/swarnadip/Documents/Index/Index/Index/src/Sub-Components/Sub_components_images/clem-onojeghuo-Ib1Cn2B5MlI-unsplash.jpg';
+import BackImg from './Sub_components_images/clem-onojeghuo-Ib1Cn2B5MlI-unsplash.jpg';
 import { Link } from 'react-router-dom';
 import { FaHome, FaUser, FaInfoCircle, FaPalette, FaSearch, FaArrowLeft, FaArrowRight, } from 'react-icons/fa';
 import { motion, AnimatePresence } from "framer-motion";

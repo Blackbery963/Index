@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import Reviewcard from './Reviewcard';
-import profile_1 from '/home/swarnadip/Documents/Index/Index/Index/src/Components/Review/Images-of-Review/pexels-jruwa-7421636.jpg';
+import profile_1 from './Images-of-Review/pexels-jruwa-7421636.jpg';
 
 function Review() {
   const scrollRef = useRef(null);

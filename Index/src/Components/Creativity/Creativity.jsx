@@ -1,5 +1,5 @@
 import { useState,useEffect } from 'react';
-import Background from '/home/swarnadip/Documents/Index/Index/Index/src/Components/Creativity/Images-of-Creativity/Untitled design.png';
+import Background from './Images-of-Creativity/Untitled design.png';
 import Creative_autoplay from './Creative_autoplay';
 import AOS from "aos";
 import "aos/dist/aos.css";

@@ -50,13 +50,13 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Blackbery963/Landing-Page.git"
+    "url": "git+https://github.com/Blackbery963/Index.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Blackbery963/Landing-Page/issues"
+    "url": "https://github.com/Blackbery963/Index/issues"
   },
-  "homepage": "https://github.com/Blackbery963/Landing-Page#readme"
+  "homepage": "https://github.com/Blackbery963/Index#readme"
 }

@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import './App.css';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
@@ -28,7 +28,7 @@ import Water_color from './Sub-Components/Water_color';
 import Abstract from './Sub-Components/Abstract';
 import Modern from './Sub-Components/Modern';
 import Diaryland from './Components/Diaryland/Diaryland';
-import January from './Months/January/January';
+import January from './DiaryService/January.jsx';
 import About from './Company/About/About';
 import Favourite from './Months/Favourite';
 import FAQs from './Resources/FAQs/FAQs';
@@ -38,6 +38,8 @@ import Dashboard from './Components/Account/Dashboard/Dashboard';
 import Your_Collections from './Components/Account/Your_Collection/Your_Collections';
 import Journal from './Components/Journal/Journal';
 import Privacy_Policy from './Legal/Privacy_Policy/Privacy_Policy';
+import Terms_Conditions from './Legal/Terms&Conditipons/Terms_Conditions.jsx';
+import License from './Legal/License.jsx';
 import ResetPassword from './Components/Login/ResetPassword';
 import Cart from './Months/Cart';
 import Help from './Resources/Help/Help.jsx';
@@ -53,12 +55,10 @@ import Digital from './Sub-Components/Digital.jsx';
 import Pop from './Sub-Components/Pop.jsx';
 import Portrait from './Sub-Components/Portrait.jsx';
 import Historical from './Sub-Components/Histoirical';
+import Express from './Sub-Components/Express.jsx';
 import Commerce from './Components/Commerce.jsx';
-
-
-
-
-
+import UserDiscoveryPage from './Components/Artisian/userDiscoveryPage.jsx';
+import DiaryCollection from './Components/Diaryland/DiaryCollection.jsx';
 
 
 function App() {
@@ -77,7 +77,7 @@ function App() {
       initGA();
     trackPageview(window.location.pathname);
   }, []);
-
+const [diaryEntries, setDiaryEntries] = useState([]);
   
   return (
     <Router>
@@ -148,6 +148,8 @@ function App() {
         <Route path="/collections" element={<Your_Collections />} />
         <Route path="/Journal" element={<Journal />} />
         <Route path="/Legal/Privacy_Policy" element={<Privacy_Policy />} />
+        <Route path="/Legal/Terms_Conditions" element={<Terms_Conditions />} />
+        <Route path="/Legal/License" element={<License />} />
         <Route path="/Login/ResetPassword" element={<ResetPassword />} />
         <Route path="/cart" element={<Cart />} />
         <Route path='/History' element={<History/>}/>
@@ -161,6 +163,10 @@ function App() {
         <Route path='/Surrealism' element={<Surrealism/>}/>       
         <Route path='/Digital' element={<Digital/>}/>
         <Route path='/Pop-Art' element={<Pop/>}/>
+        <Route path='/Expressionism' element={<Express/>}/>
+        <Route path='/Artist/discoverartists' element={<UserDiscoveryPage/>}/>
+        <Route path='/Diaries/Diary-Collection' element={<DiaryCollection/>}/>
+        <Route path='/diary/:id' element = {<January/>}/>
       </Routes>
     </Router>
   );

@@ -1,22 +1,16 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { FaHome, FaInfoCircle, FaUser, FaBook } from 'react-icons/fa';
+import { FaHome, FaInfoCircle, FaUser, FaPenFancy } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import woodBackground from './Diary-images/beige-wooden-textured-flooring-background.jpg';
-import diaryBackground from './Diary-images/1d19d578-7d3a-454b-9ce3-2dae3fd63c7b.jpg';
 import { FiEdit, FiUpload } from 'react-icons/fi';
 import { LuArrowRightFromLine } from 'react-icons/lu';
 import { MdBook } from 'react-icons/md';
 import { motion } from 'framer-motion';
-import { DarkModeContext } from '../Header/Header'; // Adjust the import path based on your project structure
 
-function Journal() {
-  const context = useContext(DarkModeContext);
-  if (!context) {
-    console.error("Journal must be used within a DarkModeProvider");
-    return <div>Error: Dark Mode Context is missing. Please wrap your app with DarkModeProvider.</div>;
-  }
-  const { darkMode } = context;
 
+const background = "https://cdn.pixabay.com/photo/2023/04/26/17/09/flower-7952950_1280.jpg"
+
+
+function Journal({ onCreateDiary, onExplore }) {
   const [backgroundImage, setBackgroundImage] = useState(null);
   const [monthsBackgrounds, setMonthsBackgrounds] = useState(Array(12).fill(null));
   const [title, setTitle] = useState('');
@@ -89,13 +83,48 @@ function Journal() {
     setIsSaved(false);
   };
 
-  const buttonVariants = {
-    hover: { scale: 1.1, backgroundColor: darkMode ? '#60A5FA' : '#A4C6EB', transition: { duration: 0.3 } },
-    tap: { scale: 0.95 },
-  };
+  const getBackgroundGradient = () => {
+  const hour = new Date().getHours();
+  if (hour >= 5 && hour < 12) {
+    // Morning
+    return 'from-amber-100 via-pink-100 to-blue-100';
+  } else if (hour >= 12 && hour < 17) {
+    // Afternoon
+    return 'from-blue-100 via-purple-100 to-amber-100';
+  } else if (hour >= 17 && hour < 21) {
+    // Evening
+    return 'from-purple-100 via-pink-100 to-orange-100';
+  } else {
+    // Night
+    return 'from-indigo-200 via-purple-100 to-gray-200';
+  }
+};
+
+// Animation variants
+const textVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } },
+};
+
+const buttonVariants = {
+  hidden: { opacity: 0, scale: 0.8 },
+  visible: { opacity: 1, scale: 1, transition: { duration: 0.4, delay: 0.2 } },
+  hover: { scale: 1.1, transition: { duration: 0.2 } },
+};
+
+// const HeroSection = ({ onCreateDiary, onExplore }) => {
+  const [background, setBackground] = useState(getBackgroundGradient());
+
+  // Update background every hour to reflect time of day
+  useEffect(() => {
+    const updateBackground = () => setBackground(getBackgroundGradient());
+    updateBackground();
+    const interval = setInterval(updateBackground, 3600000); // Update every hour
+    return () => clearInterval(interval);
+  }, []);
 
   return (
-    <div className={`min-h-screen flex flex-col max-w-screen ${darkMode ? 'bg-gradient-to-t from-[#1E3A46] via-[#374151] to-[#1A2A3A]' : 'bg-gradient-to-t from-[#f5e0b7] via-[#FFDAB9] to-[#A9B7A1]'}`}>
+    <div className={'min-h-screen flex flex-col max-w-screen dark:bg-gradient-to-t dark:from-[#1E3A46] dark:via-[#374151] dark:to-[#1A2A3A] bg-gradient-to-t from-[#f5e0b7] via-[#FFDAB9] to-[#A9B7A1]'}>
       {/* Header Section */}
       <header className="h-[80px] w-full backdrop-blur-md shadow-md flex items-center justify-between px-6 sticky top-0 z-50 bg-white/80 dark:bg-gray-900/80">
         <div>
@@ -151,18 +180,12 @@ function Journal() {
         </div>
       </header>
 
-      <div className="mt-8 lg:ml-14 md:ml-10 ml-4 flex flex-col items-center">
-        <h1 className="lg:text-4xl md:text-3xl text-2xl font-playfair text-gray-900 dark:text-gray-100">
-          The Canvas of My Life
-        </h1>
-      </div>
-
       {!explore ? (
-        <section className="lg:w-[90vw] w-[95vw] h-[75vh] mx-auto mt-8 relative border border-gray-400 dark:border-gray-600 overflow-hidden">
+        <section className="lg:w-[90vw] w-[95vw] h-[75vh] mx-auto mt-16 relative border border-gray-400 dark:border-gray-600 overflow-hidden rounded-lg">
           {!backgroundImage ? (
             <label
               htmlFor="background-upload"
-              className={`w-full h-full flex items-center justify-center cursor-pointer text-white font-Playfair text-lg font-semibold transition ${darkMode ? 'bg-gradient-to-tr from-[#4B5EAA] to-[#2E3A59]' : 'bg-gradient-to-tr from-[#a11d33] to-[#602437]'}`}
+              className={`w-full h-full flex items-center justify-center cursor-pointer text-white font-Playfair text-lg font-semibold transition dark:bg-gradient-to-tr dark:from-[#4B5EAA] dark:o-[#2E3A59] from-[#a11d33] to-[#602437]`}
             >
               Upload Background Image to Continue
               <input
@@ -213,7 +236,7 @@ function Journal() {
               </div>
               <button
                 onClick={handleEdit}
-                className="absolute top-2 right-2 border border-gray-600 dark:border-gray-400 p-1 bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-md text-gray-800 dark:text-gray-200"
+                className="absolute top-2 right-2 border border-gray-600/40 dark:border-gray-400/40 p-1 bg-white/40 dark:bg-gray-800/90 backdrop-blur-md rounded-md text-gray-800 dark:text-gray-200"
               >
                 <FiEdit className="text-[20px]" />
               </button>
@@ -221,89 +244,89 @@ function Journal() {
           )}
         </section>
       ) : (
-        <section
-          className="lg:w-[90vw] w-[95vw] mx-auto mt-8 relative border border-gray-400 dark:border-gray-600 bg-cover bg-center p-4"
-          style={{ backgroundImage: `url(${woodBackground})` }}
+            <motion.div
+      className={`w-[95%] lg:w-[80%] h-[80vh] mx-auto mt-16 rounded-2xl overflow-hidden bg-gradient-to-br ${background} shadow-2xl flex flex-col items-center justify-center relative border-2 border-indigo-200 dark:border-indigo-700`}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 1 }}
+    >
+      {/* Subtle overlay texture */}
+      <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/paper-fibers.png')] opacity-20" />
+
+      {/* Main Content */}
+      <motion.h1
+        className="text-2xl sm:text-3xl lg:text-4xl font-bold text-center text-gray-800 dark:text-gray-100 pt-16 z-10 px-4 font-Quicksand"
+        variants={textVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        Discover a New{' '}
+        <span className="text-4xl sm:text-5xl lg:text-6xl font-caveat text-orange-400 drop-shadow-md">
+          Creative Spark
+        </span>{' '}
+        Every Day
+      </motion.h1>
+
+      <motion.p
+        className="text-sm sm:text-base lg:text-lg font-lora text-gray-600 dark:text-gray-300 mt-4 text-center max-w-2xl px-4 z-10 font-Playfair"
+        variants={textVariants}
+        initial="hidden"
+        animate="visible"
+        transition={{ delay: 0.1 }}
+      >
+        Capture your artistic journey with a daily diary entry or explore your past creations to reignite your inspiration.
+      </motion.p>
+
+      {/* Buttons */}
+      <motion.div
+        className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6 mt-8 z-10"
+        variants={textVariants}
+        initial="hidden"
+        animate="visible"
+        transition={{ delay: 0.2 }}
+       >
+        <Link to={"/January"}>
+        <motion.button
+          onClick={onCreateDiary}
+          className="px-8 py-3 bg-indigo-600 text-white rounded-full flex items-center gap-2 text-lg font-caveat hover:bg-indigo-700 shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-colors"
+          variants={buttonVariants}
+          initial="hidden"
+          animate="visible"
+          whileHover="hover"
+          aria-label="Create a new diary entry"
         >
-          <h2 className="text-3xl font-Playfair mb-6 lg:mt-0 mt-4 text-center text-gray-900 dark:text-gray-100">
-            Your Year in 12 Chapters
-          </h2>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-full px-4">
-            {[
-              { month: 'January', description: 'The beginning, a fresh start.', to: '/January' },
-              { month: 'February', description: 'The month of love and reflection.', to: '/February' },
-              { month: 'March', description: 'Spring is here, time for new beginnings.', to: '/March' },
-              { month: 'April', description: 'A month of renewal and growth.', to: '/April' },
-              { month: 'May', description: 'The month of flowers and dreams.', to: '/May' },
-              { month: 'June', description: 'Summer approaches, energy and excitement.', to: '/June' },
-              { month: 'July', description: 'The height of summer, heat and adventure.', to: '/July' },
-              { month: 'August', description: 'A time to reflect and unwind.', to: '/August' },
-              { month: 'September', description: 'Back to routine, the fall breeze.', to: '/September' },
-              { month: 'October', description: 'The autumn chill, harvest and change.', to: '/October' },
-              { month: 'November', description: 'A time for gratitude and reflection.', to: '/November' },
-              { month: 'December', description: 'Endings and beginnings, a festive close.', to: '/December' },
-            ].map((item, index) => {
-              const hasBackground = monthsBackgrounds[index] !== null;
-              return (
-                <div
-                  key={index}
-                  className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-4 flex flex-col items-center justify-center cursor-pointer transition-transform border border-gray-300 dark:border-gray-600 relative"
-                  style={{
-                    height: '200px',
-                    backgroundImage: `url(${monthsBackgrounds[index] || diaryBackground})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                  }}
-                >
-                  <h3
-                    className={`text-base sm:text-xl font-semibold font-Playfair text-center ${
-                      hasBackground ? 'text-white dark:text-gray-200' : 'text-black dark:text-gray-200'
-                    }`}
-                  >
-                    {item.month}
-                  </h3>
-                  <p
-                    className={`text-base sm:text-lg font-normal font-Newsreader text-center ${
-                      hasBackground ? 'text-white dark:text-gray-300' : 'text-slate-800 dark:text-gray-300'
-                    }`}
-                  >
-                    {item.description}
-                  </p>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    id={`upload-${index}`}
-                    onChange={(e) => handleMonthBackgroundImage(e, index)}
-                  />
-                  <label
-                    htmlFor={`upload-${index}`}
-                    className="absolute top-2 right-2 bg-transparent text-black dark:text-white p-1 rounded-md cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition"
-                  >
-                    <FiUpload />
-                  </label>
-                  <Link to={item.to}>
-                    <button
-                      className={`hidden md:block border px-2 font-Playfair rounded-md mt-4 backdrop-blur-md ${
-                        hasBackground
-                          ? 'text-white dark:text-gray-200 border-slate-100 dark:border-gray-400'
-                          : 'text-slate-800 dark:text-gray-200 border-gray-600 dark:border-gray-400'
-                      }`}
-                    >
-                      Explore
-                    </button>
-                  </Link>
-                  <Link to={item.to}>
-                    <LuArrowRightFromLine
-                      size={22}
-                      className="md:hidden text-blue-500 dark:text-blue-400 text-lg backdrop-blur-md p-1 mt-4"
-                    />
-                  </Link>
-                </div>
-              );
-            })}
-          </div>
-        </section>
+          <FaPenFancy />
+          Create New Diary
+        </motion.button>
+        </Link>
+        <Link to={"/Diaryland"}>
+            <motion.button
+          onClick={onExplore}
+          className="px-8 py-3 bg-amber-500 text-white rounded-full flex items-center gap-2 text-lg font-caveat hover:bg-amber-600 shadow-lg focus:outline-none focus:ring-2 focus:ring-amber-400 transition-colors"
+          variants={buttonVariants}
+          initial="hidden"
+          animate="visible"
+          whileHover="hover"
+          transition={{ delay: 0.3 }}
+          aria-label="Explore existing diary entries"
+        >
+          <MdBook />
+          Explore More
+        </motion.button>
+        </Link>
+    </motion.div>
+      {/* Decorative Elements */}
+      <motion.div
+        className="absolute bottom-0 left-0 w-24 h-24 bg-[url('https://www.transparenttextures.com/patterns/paint-splatter.png')] opacity-30 transform -translate-x-1/4 translate-y-1/4"
+        animate={{ rotate: 360 }}
+        transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+      />
+      <motion.div
+        className="absolute top-0 right-0 w-32 h-32 bg-[url('https://www.transparenttextures.com/patterns/paint-splatter.png')] opacity-30 transform translate-x-1/4 -translate-y-1/4"
+        animate={{ rotate: -360 }}
+        transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
+      />
+    </motion.div>
       )}
     </div>
   );

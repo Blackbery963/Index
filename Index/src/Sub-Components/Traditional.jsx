@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, } from 'react';
 import BackImg from './Sub_components_images/traditional.jpg';
 import { Link } from 'react-router-dom';
-import { FaHome, FaUser, FaInfoCircle, FaPalette, FaSearch, FaArrowLeft, FaArrowRight, } from 'react-icons/fa';
+import { FaHome, FaUser, FaInfoCircle, FaPalette, FaSearch, FaArrowLeft, FaArrowRight, FaRegComment,FaRegEye} from 'react-icons/fa';
 import { motion, AnimatePresence } from "framer-motion";
 import { FiMenu } from 'react-icons/fi';
 import { MdClose } from 'react-icons/md';
@@ -9,7 +9,15 @@ import { MdClose } from 'react-icons/md';
 import { storage, Query, databases } from '../appwriteConfig';
 import { FaHeart, FaComment, FaDownload, FaPlus, FaUserCircle } from 'react-icons/fa';
 import { IoClose } from 'react-icons/io5';
+import InfoCard from './Info/InfoCards';
+import { infoCardsData } from './Info/InfoCardsData';
 import SearchBar from '../SearchBar';
+import FollowButton from '../Follow/FollowButton';
+import LikeButton from '../EngagementService/likeButton';
+import ArtworkViewTracker from '../Views/viewsTracker';
+import DownloadService from '../Downloads/downloadService';
+import ShareButton from '../Share/ShareFunction';
+
 
 
 const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
@@ -26,6 +34,8 @@ function Traditional() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null)
   const [profileImage, setProfileImage] = useState(null);
+  const cards = infoCardsData.traditional;
+
 
    const [profile, setProfile] = useState({
     username: '',
@@ -308,10 +318,11 @@ function Traditional() {
         </AnimatePresence>
         {/* Hero Section */}
         <main className='flex flex-col items-center justify-center h-full px-4 text-center'>
-          <h1 className='font-Tapestary text-[30px] md:text-[50px] text-red-600 drop-shadow-lg animate-fade-in'>In The Lap Of Nature</h1>
-          <h5 className='font-Carattere text-[20px] md:text-[28px] text-yellow-300 mt-4 drop-shadow-md animate-fade-in delay-200'>
-            An epic expedition into the heart of the wild, where every journey unfolds nature’s untold wonders and boundless beauty
-          </h5>
+         <h1 className='font-Tapestary text-[30px] md:text-[50px] text-red-600 drop-shadow-lg animate-fade-in'>Echoes of the Past</h1>
+<h5 className='font-Carattere text-[20px] md:text-[28px] text-gray-100 mt-4 drop-shadow-md animate-fade-in delay-200'>
+  Walk through timeless traditions and techniques that shaped centuries of artistic expression and cultural identity.
+</h5>
+
           <button 
             className='mt-8 px-4 md:px-6 py-2 md:py-3 bg-gradient-to-r from-green-500 to-blue-500 text-white font-bold rounded-full shadow-lg hover:scale-105 transition-transform'
             onClick={scrollToContent}
@@ -326,24 +337,28 @@ function Traditional() {
       </div>
       {/* Content Section */}
       <section ref={contentRef} className='w-[85%] py-12 bg-gray-100 dark:bg-gray-900  mx-auto'>
-        <div className='max-w-7xl mx-auto text-center mb-8'>
-          <h2 className='text-2xl md:text-3xl font-bold font-Quicksand text-gray-800 dark:text-gray-200 mb-4'>Discover the Beauty of Landscapes</h2>
-          <p className='text-base md:text-lg text-gray-600 dark:text-gray-300'>
-            Explore our curated collection of breathtaking landscape paintings that celebrate the raw beauty of nature. Each piece tells a story, capturing moments of tranquility, adventure, and wonder.
-          </p>
-        </div>
-        {/* The divider section */}
-      <div className="bg-gray-100 dark:bg-gray-900 py-4 flex justify-center">
-      <div className="w-[80%] relative h-1">
-         <div className="
-      absolute left-0 top-0 h-full w-full bg-gray-500 dark:bg-gray-400 
-      origin-left animate-expand
-      before:content-[''] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 
-      before:h-2 before:w-2 before:rounded-full before:bg-current 
-      before:animate-fadeOut
-    " />
-  </div>
+       <div className='max-w-7xl mx-auto text-center mb-8'>
+  <h2 className='text-2xl md:text-3xl font-bold font-Quicksand text-gray-800 dark:text-gray-200 mb-4'>Explore the Roots of Traditional Art</h2>
+  <p className='text-base md:text-lg text-gray-600 dark:text-gray-300'>
+    Traditional art preserves cultural heritage and craftsmanship. Dive into styles that stood the test of time.
+  </p>
 </div>
+
+        {/* The divider section */}
+           <div className="max-w-7xl mx-auto px-4 py-12 bg-gray-100 dark:bg-gray-900">
+           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+           {cards.map((card, index) => (
+           <InfoCard
+            key={index}
+            title={card.title}
+            content={card.content}
+            gradient={card.gradient}
+            type={card.type}
+            delay={index * 0.1}
+            />
+            ))}
+            </div>
+            </div>
 
         {/* Image Grid Section */}
         <section>
@@ -387,16 +402,9 @@ function Traditional() {
                       {profile.username || 'Unknown Artist'}
                     </p>
                   </div>
-                  <button
-                    onClick={() => toggleFollow(image.user?.id || image.$id)}
-                    className={`ml-auto px-3 py-1 text-sm rounded-full font-Quicksand ${
-                      followedUsers[image.user?.id || image.$id]
-                        ? 'bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200'
-                        : 'bg-blue-500 text-white hover:bg-blue-600'
-                    }`}
-                  >
-                    {followedUsers[image.user?.id || image.$id] ? 'Unfollow' : 'Follow'}
-                  </button>
+                  <div className=' pl-3'>
+                    <FollowButton targetUserId={image.user?.id || image.$id} />
+                  </div>
                 </div>
                 {/* Image */}
                 <img
@@ -409,32 +417,26 @@ function Traditional() {
                 />
                 {/* Actions */}
                 <div className="flex justify-between items-center p-4">
-                  <div className="flex space-x-4">
-                    <button
-                      onClick={() => toggleLike(image.$id)}
-                      className={`flex items-center space-x-1 ${
-                        likes[image.$id]?.liked ? 'text-red-500' : 'text-gray-500 dark:text-gray-400'
-                      } hover:text-red-500 transition-colors`}
-                    >
-                      <FaHeart />
-                      <span className="text-sm font-Quicksand">{likes[image.$id]?.count || 0}</span>
-                    </button>
-                    <button
-                      onClick={() => setShowComments(showComments === image.$id ? null : image.$id)}
-                      className="flex items-center space-x-1 text-gray-500 dark:text-gray-400 hover:text-blue-500 transition-colors"
-                    >
-                      <FaComment />
-                      <span className="text-sm font-Quicksand">Comment</span>
-                    </button>
-                    <button
-                      onClick={() => downloadImage(image.url, image.title)}
-                      className="flex items-center space-x-1 text-gray-500 dark:text-gray-400 hover:text-green-500 transition-colors"
-                    >
-                      <FaDownload />
-                      <span className="text-sm font-Quicksand">Download</span>
-                    </button>
-             
-                  </div>
+                   <div className="flex space-x-4">
+                                    <div className="flex items-center space-x-1 text-gray-500 dark:text-gray-400">
+                                      <FaRegEye className='text-[20px]'/>
+                                        <span className="text-sm font-Quicksand">{image.viewCount || 0}</span>
+                                      </div>
+                                      <LikeButton targetId={image.$id}/>
+                                      <button
+                                        onClick={() => setShowComments(showComments === image.$id ? null : image.$id)}
+                                        className="flex items-center space-x-1 text-gray-500 dark:text-gray-400 hover:text-blue-500 transition-colors"
+                                      >
+                                        <FaRegComment />
+                                        <span className="text-sm font-Quicksand">0</span>
+                                      </button>
+                                      <div>
+                                        <DownloadService artwork={image} />
+                                      </div>
+                                      <div className="flex items-center space-x-2">
+                                        <ShareButton artwork={image} />
+                                      </div>
+                                    </div>
                 </div>
                 {/* Comment Section */}
                 <AnimatePresence>
@@ -523,6 +525,9 @@ function Traditional() {
               <div className="absolute bottom-4 left-0 right-0 text-center text-white font-Quicksand">
                 <p>{traditionalImages[lightbox.index].title || 'Untitled'}</p>
                 <p className="text-sm">{lightbox.index + 1} / {traditionalImages.length}</p>
+                  <div className="absolute top-4 left-4">
+                    <ArtworkViewTracker artworkId={landscapeImages[lightbox.index].$id} />
+                  </div>
               </div>
             </motion.div>
           </motion.div>

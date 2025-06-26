@@ -84,6 +84,9 @@ const Artisan = () => {
           <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
             Discover the skilled hands and creative minds behind each unique piece in our collection.
           </p>
+          <Link to={'/Artist/discoverartists'}>
+          <button className=' px-4 py-2 border text-black hover:text-gray-200 dark:text-gray-300 bg-gray-300 hover:bg-gray-500 dark:bg-gray-900 border-gray-800 dark:border-gray-300 mt-2 font-medium text-[20px] font-Playfair rounded-md'> View your artist</button>
+          </Link>
         </div>
 
         {/* Slider Container */}

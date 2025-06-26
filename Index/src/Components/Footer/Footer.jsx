@@ -68,7 +68,7 @@ function Footer() {
       links: [
         { text: "FAQs", to: "/FAQs" },
         { text: "Reviews", to: "/reviews" },
-        { text: "Help & Support", to: "/support" },
+        { text: "Help & Support", to: "/Resources/Help" },
         { text: "Events", to: "/events" }
       ],
     },
@@ -77,7 +77,7 @@ function Footer() {
       links: [
         { text: "Terms & Conditions", to: "Legal/Terms_Conditions" },
         { text: "Privacy Policy", to: "/Legal/Privacy_Policy" },
-        { text: "License", to: "/license" },
+        { text: "License", to: "Legal/License" },
         { text: "Cookies", to: "/cookies" }
       ],
     },

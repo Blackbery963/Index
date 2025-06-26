@@ -6,16 +6,26 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FiMenu } from 'react-icons/fi';
 import { MdClose } from 'react-icons/md';
 import { storage, Query, databases } from '../appwriteConfig';
-import { FaHeart, FaComment, FaDownload, FaPlus, FaUserCircle } from 'react-icons/fa';
+import { FaHeart, FaRegComment, FaPlus, FaUserCircle, FaRegEye } from 'react-icons/fa';
+import { FiDownload } from 'react-icons/fi';
+import { PiShareFatLight } from 'react-icons/pi';
 import { IoClose } from 'react-icons/io5';
 import SearchBar from '../SearchBar';
+import { client } from '../appwriteConfig';
 import InfoCard from './Info/InfoCards';
 import { infoCardsData } from './Info/InfoCardsData';
+import FollowButton from '../Follow/FollowButton';
+import LikeButton from '../EngagementService/likeButton';
+import ArtworkViewTracker from '../Views/viewsTracker';
+import DownloadService from '../Downloads/downloadService';
+import ShareButton from '../Share/ShareFunction';
 
 
 const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
 const COLLECTION_ID = import.meta.env.VITE_APPWRITE_METADATA_COLLECTION_ID;
 const BUCKET_ID = import.meta.env.VITE_APPWRITE_BUCKET_ID;
+const USER_COLLECTION_ID = import.meta.env.VITE_APPWRITE_USERS_COLLECTION_ID;
+
 
 function Landscape() {
   const [activeButton, setActiveButton] = useState('landscape');
@@ -194,13 +204,35 @@ function Landscape() {
     const fetchImages = async () => {
       const response = await databases.listDocuments(DATABASE_ID, COLLECTION_ID);
       setAllImages(response.documents);
-      setFilteredImages(fetchLandscapeImages);
+      setFilteredImages(fetchlandscapeImages);
     };
     fetchImages();
   }, []);
 
   // rendering info
    const cards = infoCardsData.landscape;
+
+// real time updatw for vieww count
+     useEffect(() => {
+    const unsubscribe = client.subscribe(
+      `databases.${DATABASE_ID}.collections.${COLLECTION_ID}.documents`,
+      (response) => {
+        if (response.events.includes('databases.*.collections.*.documents.*.update')) {
+          const updatedDoc = response.payload;
+          setLandscapeImages((prev) =>
+            prev.map((image) =>
+              image.$id === updatedDoc.$id
+                ? { ...image, viewCount: updatedDoc.viewCount || 0 }
+                : image
+            )
+          );
+        }
+      }
+    );
+
+    return () => unsubscribe();
+  }, []);
+
 
   return (
     <div className='h-screen w-screen overflow-x-hidden bg-gray-100 dark:bg-gray-900 font-Playfair'>
@@ -396,16 +428,10 @@ function Landscape() {
                       {profile.username || 'Unknown Artist'}
                     </p>
                   </div>
-                  <button
-                    onClick={() => toggleFollow(image.user?.id || image.$id)}
-                    className={`ml-auto px-3 py-1 text-sm rounded-full font-Quicksand ${
-                      followedUsers[image.user?.id || image.$id]
-                        ? 'bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200'
-                        : 'bg-blue-500 text-white hover:bg-blue-600'
-                    }`}
-                  >
-                    {followedUsers[image.user?.id || image.$id] ? 'Unfollow' : 'Follow'}
-                  </button>
+                  {/* Follow button */}
+                  <div className=' pl-3'>
+                    <FollowButton targetUserId={image.user?.id || image.$id} />
+                  </div>
                 </div>
                 {/* Image */}
                 <img
@@ -419,30 +445,24 @@ function Landscape() {
                 {/* Actions */}
                 <div className="flex justify-between items-center p-4">
                   <div className="flex space-x-4">
-                    <button
-                      onClick={() => toggleLike(image.$id)}
-                      className={`flex items-center space-x-1 ${
-                        likes[image.$id]?.liked ? 'text-red-500' : 'text-gray-500 dark:text-gray-400'
-                      } hover:text-red-500 transition-colors`}
-                    >
-                      <FaHeart />
-                      <span className="text-sm font-Quicksand">{likes[image.$id]?.count || 0}</span>
-                    </button>
+                  <div className="flex items-center space-x-1 text-gray-500 dark:text-gray-400">
+                    <FaRegEye className='text-[20px]'/>
+                      <span className="text-sm font-Quicksand">{image.viewCount || 0}</span>
+                    </div>
+                    <LikeButton targetId={image.$id}/>
                     <button
                       onClick={() => setShowComments(showComments === image.$id ? null : image.$id)}
                       className="flex items-center space-x-1 text-gray-500 dark:text-gray-400 hover:text-blue-500 transition-colors"
                     >
-                      <FaComment />
-                      <span className="text-sm font-Quicksand">Comment</span>
+                      <FaRegComment />
+                      <span className="text-sm font-Quicksand">0</span>
                     </button>
-                    <button
-                      onClick={() => downloadImage(image.url, image.title)}
-                      className="flex items-center space-x-1 text-gray-500 dark:text-gray-400 hover:text-green-500 transition-colors"
-                    >
-                      <FaDownload />
-                      <span className="text-sm font-Quicksand">Download</span>
-                    </button>
-             
+                    <div>
+                      <DownloadService artwork={image} />
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <ShareButton artwork={image} />
+                    </div>
                   </div>
                 </div>
                 {/* Comment Section */}
@@ -532,6 +552,9 @@ function Landscape() {
               <div className="absolute bottom-4 left-0 right-0 text-center text-white font-Quicksand">
                 <p>{landscapeImages[lightbox.index].title || 'Untitled'}</p>
                 <p className="text-sm">{lightbox.index + 1} / {landscapeImages.length}</p>
+                  <div className="absolute top-4 left-4">
+                    <ArtworkViewTracker artworkId={landscapeImages[lightbox.index].$id} />
+                  </div>
               </div>
             </motion.div>
           </motion.div>

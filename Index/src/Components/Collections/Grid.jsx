@@ -399,6 +399,11 @@ import { BiCommentEdit } from "react-icons/bi";
 import { FiDownload, FiGrid } from "react-icons/fi";
 import { IoClose, IoEyeOutline, IoInformationCircleOutline } from "react-icons/io5";
 import { PiShareFatThin } from 'react-icons/pi';
+import ShareButton from '../../Share/ShareFunction';
+import DownloadService from '../../Downloads/downloadService';
+import FollowButton from '../../Follow/FollowButton';
+import LikeButton from '../../EngagementService/likeButton';
+import ArtworkViewTracker from '../../Views/viewsTracker';
 
 const images = [
   "/Image-of-Collection/abstract.jpg",
@@ -566,7 +571,7 @@ function Grid() {
 
   return (
     <>
-      <div className="columns-2 sm:columns-3 lg:columns-4 xl:columns-5 gap-3 bg-maroon py-6 px-3 sm:px-4">
+      <div className="columns-1 sm:columns-3 md:columns-3 lg:columns-4 xl:columns-5 gap-3 bg-maroon py-6 px-3 sm:px-4">
         {images.map((src, index) => (
           <div
             key={index}
@@ -583,7 +588,7 @@ function Grid() {
             <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             
             {/* Love button */}
-            <button
+        {/*    <button
               className="absolute top-2 right-2 h-8 w-8 bg-white/50 backdrop-blur-md rounded-lg flex items-center justify-center hover:bg-white/80 transition-colors z-10"
               onClick={(e) => {
                 e.stopPropagation();
@@ -603,11 +608,11 @@ function Grid() {
                   {lovedImages[index] ? "Loved" : "Love"}
                 </div>
               )}
-            </button>
+            </button>*/}
 
             {/* Info button */}
             <button
-              className="absolute top-2 left-2 h-8 w-8 bg-white/50 backdrop-blur-md rounded-lg flex items-center justify-center hover:bg-white/80 transition-colors z-10"
+              className="absolute top-2 right-2 h-8 w-8 bg-white/50 backdrop-blur-md rounded-lg flex items-center justify-center hover:bg-white/80 transition-colors z-10"
               onClick={(e) => {
                 e.stopPropagation();
                 setSelectedImage(src);
@@ -643,7 +648,7 @@ function Grid() {
               </Link>
               
               <div className="flex items-center gap-1 sm:gap-2">
-                <button
+                {/* <button
                   className={`h-8 w-8 rounded flex items-center justify-center relative ${
                     likedImages[index] ? "bg-gray-500" : "hover:bg-gray-600"
                   }`}
@@ -665,7 +670,7 @@ function Grid() {
                       {likedImages[index] ? "Liked" : "Like"}
                     </div>
                   )}
-                </button>
+                </button> */}
 
                 <button
                   className="h-8 w-8 rounded flex items-center justify-center hover:bg-gray-600 relative"
@@ -753,12 +758,17 @@ function Grid() {
               <div className="lg:w-1/3 w-full p-4 flex flex-col">
                 {/* User info */}
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-16 h-16 rounded-full bg-black flex-shrink-0"></div>
+                 <Link to={'/account'}>
+                    <div className="w-16 h-16 rounded-full bg-black flex-shrink-0"></div>
+                 </Link>
                   <div>
                     <h2 className="text-xl font-bold">Username</h2>
                     <button className="text-sm border border-gray-500 rounded px-2 py-1 hover:bg-gray-200 transition-colors">
                       Follow
                     </button>
+                      {/* <div className=' pl-3'>
+                        <FollowButton targetUserId={allImages.user?.id || image.$id} />
+                      </div> */}
                   </div>
                 </div>
 

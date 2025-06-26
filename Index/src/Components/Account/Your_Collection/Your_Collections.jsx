@@ -1,324 +1,20 @@
-
-// import React, { useState, useEffect } from "react";
-// import { FaThumbsUp, FaRegThumbsUp, FaEllipsisV } from "react-icons/fa";
-// import { MdPhoto, MdVideocam, MdBook, MdErrorOutline } from "react-icons/md";
-// import { useNavigate } from "react-router-dom";
-// import { toast, ToastContainer } from "react-toastify";
-// import "react-toastify/dist/ReactToastify.css";
-// import { motion, AnimatePresence } from "framer-motion";
-// import { databases, storage, account, Query, config } from "/home/swarnadip/Documents/Index/Index/Index/src/appwriteConfig.js";
-
-// // Custom image component for Appwrite storage
-// function AppwriteImage({ fileId, bucketId, alt, className, ...props }) {
-//   const [error, setError] = useState(false);
-
-//   if (error || !fileId) {
-//     return (
-//       <div className={`${className} bg-gray-100 dark:bg-gray-800 flex items-center justify-center rounded-lg`}>
-//         <MdErrorOutline className="text-gray-400 dark:text-gray-500 text-3xl" />
-//         <span className="sr-only">Error loading image</span>
-//       </div>
-//     );
-//   }
-
-//   const src = `${import.meta.env.VITE_APPWRITE_ENDPOINT}/storage/buckets/${bucketId}/files/${fileId}/view?project=${import.meta.env.VITE_APPWRITE_PROJECT_ID}&width=800&quality=85`;
-
-//   return (
-//     <img
-//       src={src}
-//       alt={alt}
-//       className={className}
-//       loading="lazy"
-//       onError={(e) => {
-//         console.error(`Failed to load image ${fileId}:`, e);
-//         setError(true);
-//       }}
-//       {...props}
-//     />
-//   );
-// }
-
-// function Your_Collections() {
-//   const navigate = useNavigate();
-//   const [activeButton, setActiveButton] = useState("Photos");
-//   const [uploads, setUploads] = useState([]);
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState(null);
-
-//   const handleButtonClick = (buttonName) => {
-//     setActiveButton(buttonName);
-//   };
-
-//   useEffect(() => {
-//     const fetchUploads = async () => {
-//       try {
-//         setLoading(true);
-//         setError(null);
-
-//         const user = await account.get();
-//         const userId = user.$id;
-
-//         const mediumFilters = {
-//           Photos: [
-//             "Oil Painting", "Acrylic Painting", "Watercolor Painting", "Ink", "Charcoal", "Pastel",
-//             "Pencil Drawing", "Graphite Drawing", "Tempera", "Fresco Painting", "Mosaic Art",
-//             "Glass Art", "Fiber Art", "Sand Art", "Digital Art", "Digital Painting", "Vector Art",
-//             "Pixel Art", "3D Modeling", "Photography", "Mixed Media", "Collage", "Printmaking",
-//             "AI-Generated Art", "Augmented Reality Art", "Virtual Reality Art", "NFT Art",
-//             "Data Visualization Art", "Calligraphy", "Typography Design", "Sculpture", "Ceramic",
-//             "Installation Art", "Kinetic Art", "Light Art", "Performance Art", "Sound Art", "Bio Art",
-//             "Graphic Design", "Industrial Design", "Fashion Design", "Interior Design",
-//             "Architectural Drawing", "Game Design", "Other"
-//           ],
-//           Videos: ["Video"],
-//           Diary: ["Other"],
-//         };
-
-//         const response = await databases.listDocuments(
-//           config.databaseId,
-//           config.collectionId,
-//           [
-//             Query.equal("userId", userId),
-//             Query.orderDesc("uploadDate"),
-//             Query.limit(20),
-//             Query.select(["$id", "title", "description", "fileId", "medium", "tag", "userId", "uploadDate"]),
-//             ...(mediumFilters[activeButton] ? [Query.equal("medium", mediumFilters[activeButton])] : []),
-//           ]
-//         );
-
-//         console.log("Fetched documents:", response.documents);
-
-//         const uploadsWithMedia = response.documents.map((doc) => {
-//           if (!doc.fileId) {
-//             console.warn(`Document ${doc.$id} missing fileId`);
-//           }
-//           return {
-//             ...doc,
-//             mediaUrl: doc.fileId
-//               ? `${import.meta.env.VITE_APPWRITE_ENDPOINT}/storage/buckets/${config.bucketId}/files/${doc.fileId}/view?project=${import.meta.env.VITE_APPWRITE_PROJECT_ID}&width=800&quality=85`
-//               : null,
-//             isImage: ["Photos", "Diary"].includes(activeButton),
-//             isVideo: activeButton === "Videos",
-//             formattedDate: new Date(doc.uploadDate).toLocaleDateString("en-US", {
-//               year: "numeric",
-//               month: "short",
-//               day: "numeric",
-//             }),
-//           };
-//         });
-
-//         setUploads(uploadsWithMedia);
-//       } catch (err) {
-//         console.error("Fetch error:", {
-//           message: err.message,
-//           code: err.code,
-//           type: err.type,
-//         });
-//         if (err.code === 401) {
-//           toast.error("Please log in to view your collections.");
-//           navigate("/login");
-//         } else if (err.code === 404) {
-//           setError("Collection or bucket not found. Check Appwrite configuration.");
-//           toast.error("Collection or bucket not found.");
-//         } else if (err.code === 403) {
-//           setError("Permission denied. Ensure you have access to the collection.");
-//           toast.error("Permission denied.");
-//         } else {
-//           setError(`Failed to load collections: ${err.message}`);
-//           toast.error("Failed to load your collections.");
-//         }
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-
-//     fetchUploads();
-//   }, [activeButton, navigate]);
-
-//   const ImagePlaceholder = ({ type }) => (
-//     <div className="w-full h-full flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-500 p-4 rounded-lg">
-//       {type === "error" ? (
-//         <>
-//           <MdErrorOutline className="text-4xl mb-2" />
-//           <p className="text-center text-sm">Media unavailable</p>
-//         </>
-//       ) : (
-//         <>
-//           {activeButton === "Photos" && <MdPhoto className="text-4xl mb-2" />}
-//           {activeButton === "Videos" && <MdVideocam className="text-4xl mb-2" />}
-//           {activeButton === "Diary" && <MdBook className="text-4xl mb-2" />}
-//           <p className="text-center text-sm">No media available</p>
-//         </>
-//       )}
-//     </div>
-//   );
-
-//   return (
-//     <div className="min-h-screen w-full bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
-//       <ToastContainer position="top-right" autoClose={5000} theme={document.documentElement.classList.contains('dark') ? 'dark' : 'light'} />
-
-//       {/* Navigation Tabs */}
-//       <nav className="w-full max-w-7xl mx-auto px-4 py-4 bg-white dark:bg-gray-800 shadow-sm">
-//         <div className="flex gap-4">
-//           {["Photos", "Videos", "Diary"].map((buttonName) => (
-//             <motion.button
-//               key={buttonName}
-//               className={`relative px-4 py-2 flex items-center gap-2 text-sm font-medium font-Quicksand rounded-md transition-colors duration-200 ${
-//                 activeButton === buttonName
-//                   ? "bg-violet-100 dark:bg-violet-900 text-violet-600 dark:text-violet-300"
-//                   : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-//               }`}
-//               onClick={() => handleButtonClick(buttonName)}
-//               whileHover={{ scale: 1.05 }}
-//               whileTap={{ scale: 0.95 }}
-//             >
-//               {buttonName === "Photos" && <MdPhoto className="text-lg" />}
-//               {buttonName === "Videos" && <MdVideocam className="text-lg" />}
-//               {buttonName === "Diary" && <MdBook className="text-lg" />}
-//               <span>{buttonName}</span>
-//               {activeButton === buttonName && (
-//                 <motion.span
-//                   className="absolute bottom-0 left-0 w-full h-0.5 bg-violet-600 dark:bg-violet-400"
-//                   layoutId="underline"
-//                   transition={{ type: "spring", stiffness: 300, damping: 30 }}
-//                 />
-//               )}
-//             </motion.button>
-//           ))}
-//         </div>
-//       </nav>
-
-//       {/* Main Content */}
-//       <div className="w-full max-w-7xl mx-auto px-4 py-8">
-//         {loading ? (
-//           <div className="flex justify-center items-center h-64">
-//             <motion.div
-//               className="rounded-full h-12 w-12 border-t-2 border-b-2 border-violet-500"
-//               animate={{ rotate: 360 }}
-//               transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-//             />
-//           </div>
-//         ) : error ? (
-//           <div className="text-center py-12">
-//             <p className="text-red-500 dark:text-red-400 text-lg font-Quicksand mb-4">{error}</p>
-//             <motion.button
-//               onClick={() => window.location.reload()}
-//               className="px-6 py-2 bg-violet-600 text-white rounded-full font-Quicksand hover:bg-violet-700 transition-colors"
-//               whileHover={{ scale: 1.05 }}
-//               whileTap={{ scale: 0.95 }}
-//             >
-//               Retry
-//             </motion.button>
-//           </div>
-//         ) : uploads.length === 0 ? (
-//           <div className="text-center py-12">
-//             <p className="text-gray-600 dark:text-gray-400 text-lg font-Quicksand mb-4">
-//               No {activeButton.toLowerCase()} found in your collection.
-//             </p>
-//             <motion.button
-//               onClick={() => navigate("/Account/Upload")}
-//               className="px-6 py-2 bg-violet-600 text-white rounded-full font-Quicksand hover:bg-violet-700 transition-colors"
-//               whileHover={{ scale: 1.05 }}
-//               whileTap={{ scale: 0.95 }}
-//             >
-//               Upload Your First {activeButton.slice(0, -1)}
-//             </motion.button>
-//           </div>
-//         ) : (
-//           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-//             {uploads.map((upload) => (
-//               <motion.div
-//                 key={upload.$id}
-//                 className="relative flex flex-col rounded-xl overflow-hidden bg-white dark:bg-gray-800 shadow-sm hover:shadow-xl border border-gray-200 dark:border-gray-700 transition-all duration-300"
-//                 initial={{ opacity: 0, y: 20 }}
-//                 animate={{ opacity: 1, y: 0 }}
-//                 transition={{ duration: 0.3 }}
-//               >
-//                 {/* Image/Video Container */}
-//                 <div className="relative w-full aspect-[4/3] overflow-hidden">
-//                   {upload.mediaUrl && upload.isImage ? (
-//                     <AppwriteImage
-//                       fileId={upload.fileId}
-//                       bucketId={config.bucketId}
-//                       alt={upload.title || "Uploaded image"}
-//                       className="w-full h-full object-cover rounded-t-xl transition-transform duration-300 group-hover:scale-105"
-//                     />
-//                   ) : upload.mediaUrl && upload.isVideo ? (
-//                     <video
-//                       src={upload.mediaUrl}
-//                       controls
-//                       className="w-full h-full object-cover rounded-t-xl"
-//                       onError={(e) => console.warn(`Failed to load video ${upload.fileId}:`, e)}
-//                     />
-//                   ) : (
-//                     <ImagePlaceholder type="error" />
-//                   )}
-//                   {/* Tag Badge */}
-//                   {upload.tag && (
-//                     <span className="absolute top-3 right-3 bg-violet-600 dark:bg-violet-500 text-white text-xs font-Quicksand px-2 py-1 rounded-full capitalize">
-//                       {upload.tag}
-//                     </span>
-//                   )}
-//                 </div>
-//                 {/* Metadata Container */}
-//                 <div className="p-4 flex flex-col gap-2 bg-white dark:bg-gray-800">
-//                   <div className="flex justify-between items-center">
-//                     <h3 className="text-lg font-semibold font-Quicksand text-gray-900 dark:text-gray-100 line-clamp-1">
-//                       {upload.title || "Untitled"}
-//                     </h3>
-//                     <motion.button
-//                       className="text-gray-500 dark:text-gray-400 hover:text-violet-600 dark:hover:text-violet-400 transition-colors"
-//                       aria-label="More options"
-//                       whileHover={{ scale: 1.1 }}
-//                       whileTap={{ scale: 0.9 }}
-//                     >
-//                       <FaEllipsisV size={16} />
-//                     </motion.button>
-//                   </div>
-//                   <p className="text-sm text-gray-600 dark:text-gray-400 font-Quicksand line-clamp-2">
-//                     {upload.description || "No description provided"}
-//                   </p>
-//                   <div className="flex justify-between items-center mt-2">
-//                     <span className="text-xs text-gray-500 dark:text-gray-400 font-Quicksand">
-//                       {upload.formattedDate}
-//                     </span>
-//                     <div className="flex items-center gap-3">
-//                       <motion.button
-//                         className="text-gray-500 dark:text-gray-400 hover:text-violet-600 dark:hover:text-violet-400 transition-colors"
-//                         onClick={() => toast.info("Like functionality coming soon!")}
-//                         aria-label="Like"
-//                         whileHover={{ scale: 1.1 }}
-//                         whileTap={{ scale: 0.9 }}
-//                       >
-//                         <FaRegThumbsUp size={16} />
-//                       </motion.button>
-//                       <span className="text-xs text-gray-500 dark:text-gray-400 font-Quicksand">0</span>
-//                     </div>
-//                   </div>
-//                 </div>
-//               </motion.div>
-//             ))}
-//           </div>
-//         )}
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default Your_Collections;
-
-
 import React, { useState, useEffect } from "react";
-import { FaThumbsUp, FaRegThumbsUp, FaEllipsisV, FaArrowLeft, FaArrowRight, FaRegComment, FaRegHeart, FaRegEye } from "react-icons/fa";
+import { FaThumbsUp, FaRegThumbsUp, FaEllipsisV, FaArrowLeft, FaArrowRight, FaRegComment, FaRegHeart, FaRegEye, FaPlay, FaTrophy } from "react-icons/fa";
 import { FiDownload, FiMaximize } from "react-icons/fi";
 import { MdPhoto, MdVideocam, MdBook, MdErrorOutline } from "react-icons/md";
 import { IoClose } from "react-icons/io5";
-import {PiShareFatLight} from'react-icons/pi'
+import { PiShareFatLight } from 'react-icons/pi';
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { motion, AnimatePresence } from "framer-motion";
-import { databases, storage, account, Query, config } from '../../../appwriteConfig'
+import { databases, storage, account, Query, config } from '../../../appwriteConfig';
+import LikeButton from '../../../EngagementService/likeButton'; // Adjust path as needed
+import { engagementService } from '../../../EngagementService/engagementService'; // Adjust path as needed
+import { recordArtworkView, getArtworkViewCount } from '../../../Views/viewService';
+import ArtworkViewTracker from "../../../Views/viewsTracker";
+import ShareButton from "../../../Share/ShareFunction";
+import DownloadService from "../../../Downloads/downloadService";
 
 // Custom image component for Appwrite storage
 function AppwriteImage({ fileId, bucketId, alt, className, ...props }) {
@@ -397,6 +93,8 @@ function Your_Collections() {
           ],
           Videos: ["Video"],
           Diary: ["Other"],
+          Masterpiece:["Masterpiece"]
+
         };
 
         const response = await databases.listDocuments(
@@ -413,24 +111,31 @@ function Your_Collections() {
 
         console.log("Fetched documents:", response.documents);
 
-        const uploadsWithMedia = response.documents.map((doc) => {
-          if (!doc.fileId) {
-            console.warn(`Document ${doc.$id} missing fileId`);
-          }
-          return {
-            ...doc,
-            mediaUrl: doc.fileId
-              ? `${import.meta.env.VITE_APPWRITE_ENDPOINT}/storage/buckets/${config.bucketId}/files/${doc.fileId}/view?project=${import.meta.env.VITE_APPWRITE_PROJECT_ID}&width=800&quality=85`
-              : null,
-            isImage: ["Photos", "Diary"].includes(activeButton),
-            isVideo: activeButton === "Videos",
-            formattedDate: new Date(doc.uploadDate).toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "short",
-              day: "numeric",
-            }),
-          };
-        });
+        const uploadsWithMedia = await Promise.all(
+          response.documents.map(async (doc) => {
+            if (!doc.fileId) {
+              console.warn(`Document ${doc.$id} missing fileId`);
+            }
+            // Fetch the like count for each upload
+            const likeCount = await engagementService.getEngagementCount(doc.$id, 'like');
+            const viewCount = await getArtworkViewCount(doc.$id);
+            return {
+              ...doc,
+              mediaUrl: doc.fileId
+                ? `${import.meta.env.VITE_APPWRITE_ENDPOINT}/storage/buckets/${config.bucketId}/files/${doc.fileId}/view?project=${import.meta.env.VITE_APPWRITE_PROJECT_ID}&width=800&quality=85`
+                : null,
+              isImage: ["Photos", "Diary"].includes(activeButton),
+              isVideo: activeButton === "Videos",
+              formattedDate: new Date(doc.uploadDate).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+              }),
+              likeCount, // Store the like count
+              viewCount
+            };
+          })
+        );
 
         setUploads(uploadsWithMedia);
       } catch (err) {
@@ -471,7 +176,8 @@ function Your_Collections() {
         <>
           {activeButton === "Photos" && <MdPhoto className="text-4xl mb-2" />}
           {activeButton === "Videos" && <MdVideocam className="text-4xl mb-2" />}
-          {activeButton === "Diary" && <MdBook className="text-4xl mb-2" />}
+          {/* {activeButton === "Diary" && <MdBook className="text-4xl mb-2" />} */}
+          {activeButton === "Masterpieces" && <FaTrophy className="text-4xl mb-2"/>}
           <p className="text-center text-sm">No media available</p>
         </>
       )}
@@ -484,39 +190,31 @@ function Your_Collections() {
     visible: { opacity: 1, scale: 1, transition: { duration: 0.3 } },
     exit: { opacity: 0, scale: 0.8, transition: { duration: 0.3 } },
   };
-// Like functionaality
-  const [likes, setLikes] = useState({}); // Placeholder for Like functionality
 
-  const toggleLike = (id) => {
-    setLikes((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
-  };
-
-  // the tooltip components 
+  // Tooltip component
   const Tooltip = ({ content, children }) => (
-  <div className="relative group">
-    {children}
-    <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 hidden group-hover:block px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap">
-      {content}
-      <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-0 border-t-4 border-gray-800 border-solid"></div>
+    <div className="relative group">
+      {children}
+      <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 hidden group-hover:block px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap">
+        {content}
+        <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-0 border-t-4 border-gray-800 border-solid"></div>
+      </div>
     </div>
-  </div>
-);
+  );
 
-// Action button components 
-const ActionButton = ({ icon, count, tooltip, onClick }) => (
-  <Tooltip content={tooltip}>
-    <button 
-      onClick={onClick}
-      className="flex flex-row gap-2 items-center text-gray-400 hover:text-violet-600 dark:hover:text-violet-400 text-[15px]"
-    >
-      {icon}
-      <span>{count}</span>
-    </button>
-  </Tooltip>
-);
+  // Action button component
+  const ActionButton = ({ icon, count, tooltip, onClick }) => (
+    <Tooltip content={tooltip}>
+      <button 
+        onClick={onClick}
+        className="flex flex-row gap-2 items-center text-gray-400 hover:text-violet-600 dark:hover:text-violet-400 text-[15px]"
+      >
+        {icon}
+        <span>{count}</span>
+      </button>
+    </Tooltip>
+  );
+
   return (
     <div className="min-h-screen w-full bg-gray-100 dark:bg-[#040d1200] text-gray-900 dark:text-gray-100 transition-colors duration-300">
       <ToastContainer position="top-right" autoClose={5000} theme={document.documentElement.classList.contains('dark') ? 'dark' : 'light'} />
@@ -524,7 +222,7 @@ const ActionButton = ({ icon, count, tooltip, onClick }) => (
       {/* Navigation Tabs */}
       <nav className="w-full max-w-7xl mx-auto px-4 py-4 bg-white dark:bg-gray-800 shadow-sm">
         <div className="flex gap-4">
-          {["Photos", "Videos", "Diary"].map((buttonName) => (
+          {["Photos", "Videos", "Masterpiece"].map((buttonName) => (
             <motion.button
               key={buttonName}
               className={`relative px-4 py-2 flex items-center gap-2 text-sm font-medium font-Quicksand rounded-md transition-colors duration-200 ${
@@ -538,7 +236,8 @@ const ActionButton = ({ icon, count, tooltip, onClick }) => (
             >
               {buttonName === "Photos" && <MdPhoto className="text-lg" />}
               {buttonName === "Videos" && <MdVideocam className="text-lg" />}
-              {buttonName === "Diary" && <MdBook className="text-lg" />}
+              {/* {buttonName === "Diary" && <MdBook className="text-lg" />} */}
+              {buttonName === "Masterpiece" && <FaTrophy className="text-lg" />}
               <span>{buttonName}</span>
               {activeButton === buttonName && (
                 <motion.span
@@ -589,141 +288,121 @@ const ActionButton = ({ icon, count, tooltip, onClick }) => (
             </motion.button>
           </div>
         ) : (
-    
-<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-  {uploads.map((upload, index) => (
-    <motion.div
-      key={upload.$id}
-      className="relative flex flex-col rounded-lg overflow-hidden bg-white dark:bg-gray-800 shadow-sm hover:shadow-md border border-gray-100 dark:border-gray-700 transition-all duration-200"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-    >
-      {/* Image/Video Container */}
-      <div className="relative w-full aspect-[4/3] overflow-hidden group">
-        {upload.mediaUrl && upload.isImage ? (
-          <AppwriteImage
-            fileId={upload.fileId}
-            bucketId={config.bucketId}
-            alt={upload.title || "Uploaded image"}
-            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-            // onClick={() => openLightbox(index)}
-          />
-        ) : upload.mediaUrl && upload.isVideo ? (
-          <div className="relative w-full h-full">
-            <video
-              src={upload.mediaUrl}
-              className="w-full h-full object-cover"
-              onError={(e) => console.warn(`Failed to load video ${upload.fileId}:`, e)}
-            />
-            <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-20">
-              <FaPlay className="text-white text-2xl opacity-80" />
-            </div>
-          </div>
-        ) : (
-          <ImagePlaceholder type="error" />
-        )}
-        
-        {/* Hover action buttons */}
-        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
-          <button 
-            onClick={() => openLightbox(index)}
-            className="p-2 bg-white bg-opacity-90 rounded-full shadow-md hover:bg-opacity-100 transition-all"
-            aria-label="View fullscreen"
-          >
-            <FiMaximize className="text-gray-800" />
-          </button>
-        </div>
-        
-        {/* Tag Badge */}
-        {upload.tag && (
-          <span className="absolute top-2 right-2 bg-violet-600 dark:bg-violet-500 text-white text-xs font-medium px-2 py-1 rounded-full capitalize">
-            {upload.tag}
-          </span>
-        )}
-      </div>
-      
-      {/* Metadata Container */}
-      <div className="p-3 md:p-4 flex flex-col gap-2">
-        <div className="flex justify-between items-start">
-          <div>
-            <h3 className="text-sm md:text-base font-medium text-gray-900 dark:text-gray-100 line-clamp-1">
-              {upload.title || "Untitled"}
-            </h3>
-            <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400 line-clamp-2 mt-1">
-              {upload.description || "No description"}
-            </p>
-          </div>
-          <button className="text-gray-400 hover:text-violet-600 dark:hover:text-violet-400 p-1">
-            <FaEllipsisV size={14} />
-          </button>
-        </div>
-        
-        <div className="flex justify-between items-center mt-2">
-          <span className="text-xs text-gray-400">
-            {upload.formattedDate}
-          </span>
-          
-          <div className="flex gap-4">
-            {/* Compact action buttons for smaller screens */}
-            <Tooltip content="Views">
-              <button 
-                onClick={() => toast.info("Views functionality coming soon!")}
-                className="flex items-center gap-1 text-gray-400 hover:text-violet-600 dark:hover:text-violet-400"
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+            {uploads.map((upload, index) => (
+              <motion.div
+                key={upload.$id}
+                className="relative flex flex-col rounded-lg overflow-hidden bg-white dark:bg-gray-800 shadow-sm hover:shadow-md border border-gray-100 dark:border-gray-700 transition-all duration-200"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
               >
-                <FaRegEye size={16} />
-                <span className="text-xs">0</span>
-              </button>
-            </Tooltip>
-            
-            <Tooltip content="Likes">
-              <button 
-                onClick={() => toast.info("Like functionality coming soon!")}
-                className="flex items-center gap-1 text-gray-400 hover:text-violet-600 dark:hover:text-violet-400"
-              >
-                <FaRegThumbsUp size={16} />
-                <span className="text-xs">0</span>
-              </button>
-            </Tooltip>
+                {/* Image/Video Container */}
+                <div className="relative w-full aspect-[4/3] overflow-hidden group">
+                  {upload.mediaUrl && upload.isImage ? (
+                    <AppwriteImage
+                      fileId={upload.fileId}
+                      bucketId={config.bucketId}
+                      alt={upload.title || "Uploaded image"}
+                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                  ) : upload.mediaUrl && upload.isVideo ? (
+                    <div className="relative w-full h-full">
+                      <video
+                        src={upload.mediaUrl}
+                        className="w-full h-full object-cover"
+                        onError={(e) => console.warn(`Failed to load video ${upload.fileId}:`, e)}
+                      />
+                      <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-20">
+                        <FaPlay className="text-white text-2xl opacity-80" />
+                      </div>
+                    </div>
+                  ) : (
+                    <ImagePlaceholder type="error" />
+                  )}
+                  
+                  {/* Hover action buttons */}
+                  <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
+                    <button 
+                      onClick={() => openLightbox(index)}
+                      className="p-2 bg-white bg-opacity-90 rounded-full shadow-md hover:bg-opacity-100 transition-all"
+                      aria-label="View fullscreen"
+                    >
+                      <FiMaximize className="text-gray-800" />
+                    </button>
+                  </div>
+                  
+                  {/* Tag Badge */}
+                  {upload.tag && (
+                    <span className="absolute top-2 right-2 bg-violet-600 dark:bg-violet-500 text-white text-xs font-medium px-2 py-1 rounded-full capitalize">
+                      {upload.tag}
+                    </span>
+                  )}
+                </div>
+                
+                {/* Metadata Container */}
+                <div className="p-3 md:p-4 flex flex-col gap-2">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h3 className="text-sm md:text-base font-medium text-gray-900 dark:text-gray-100 line-clamp-1">
+                        {upload.title || "Untitled"}
+                      </h3>
+                      <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400 line-clamp-2 mt-1">
+                        {upload.description || "No description"}
+                      </p>
+                    </div>
+                    <button className="text-gray-400 hover:text-violet-600 dark:hover:text-violet-400 p-1">
+                      <FaEllipsisV size={14} />
+                    </button>
+                  </div>
+                  
+                  <div className="flex justify-between items-center mt-2">
+                    <span className="text-xs text-gray-400">
+                      {upload.formattedDate}
+                    </span>
+                    
+                    <div className="flex gap-4">
+                      {/* Compact action buttons for smaller screens */}
+                        <Tooltip content="Views">
+                        <button 
+                          className="flex items-center gap-1 text-gray-400 hover:text-violet-600 dark:hover:text-violet-400"
+                        >
+                          <FaRegEye size={16} />
+                          <span className="text-xs">{upload.viewCount || 0}</span>
+                        </button>
+                      </Tooltip>
+                    </div>
+                  </div>
+                  
+                  {/* Expanded action buttons for larger screens */}
+                  <div className="flex justify-between items-center pt-2 mt-2 border-t border-gray-100 dark:border-gray-700">
+                      {/* Replace static like button with LikeButton */}
+                      <LikeButton targetId={upload.$id} targetType="artwork" />
+                    {/* download */}
+                    <div>
+                      <DownloadService artwork={upload} />
+                    </div>
+                    <ActionButton 
+                      icon={<FaRegComment />} 
+                      count={0}
+                      tooltip="Comments"
+                      onClick={() => toast.info("Comment functionality coming soon!")}
+                    />
+                    <div className="flex items-center space-x-2">
+                     <ShareButton artwork={upload} />
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
           </div>
-        </div>
-        
-        {/* Expanded action buttons for larger screens (hidden on mobile) */}
-        <div className=" flex justify-between items-center pt-2 mt-2 border-t border-gray-100 dark:border-gray-700">
-          <ActionButton 
-            icon={<FiDownload />} 
-            count={0}
-            tooltip="Download"
-            onClick={() => toast.info("Download functionality coming soon!")}
-          />
-          <ActionButton 
-            icon={<FaRegHeart />} 
-            count={0}
-            tooltip="Favorite"
-            onClick={() => toast.info("Favorite functionality coming soon!")}
-          />
-          <ActionButton 
-            icon={<FaRegComment  />} 
-            count={0}
-            tooltip="Comments"
-            onClick={() => toast.info("Comment functionality coming soon!")}
-          />
-          <ActionButton 
-            icon={<PiShareFatLight  />} 
-            count={0}
-            tooltip="Share"
-            onClick={() => toast.info("Share functionality coming soon!")}
-          />
-        </div>
-      </div>
-    </motion.div>
-  ))}
-</div>
         )}
       </div>
 
       {/* Lightbox Modal */}
       <AnimatePresence>
+
+
         {lightbox.open && (
           <motion.div
             className="fixed inset-0 bg-black/80 flex items-center justify-center z-50"
@@ -784,6 +463,21 @@ const ActionButton = ({ icon, count, tooltip, onClick }) => (
               <div className="absolute bottom-4 left-0 right-0 text-center text-white font-Quicksand">
                 <p className="text-lg">{uploads[lightbox.index].title || "Untitled"}</p>
                 <p className="text-sm">{lightbox.index + 1} / {uploads.length}</p>
+                  <div className="absolute inset-0" onClick={() => openLightbox(index)}>
+                  <ArtworkViewTracker artworkId={uploads.$id} silent />
+                  </div>
+                  <div className="absolute top-4 left-4 bg-black/50 text-white px-3 py-1 rounded-full flex items-center">
+                  <FaRegEye className="mr-2" />
+                  <ArtworkViewTracker 
+                  artworkId={uploads[lightbox.index].$id}
+                  onViewUpdated={(count) => {
+                  // Update the local state to reflect new view count
+                  setUploads(prev => prev.map(u => 
+                  u.$id === uploads[lightbox.index].$id ? {...u, viewCount: count} : u
+                  ))}
+                  }
+                  />
+                  </div>
               </div>
             </motion.div>
           </motion.div>

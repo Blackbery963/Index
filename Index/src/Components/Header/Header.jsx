@@ -588,20 +588,8 @@ const Header = () => {
 
 
   const menuVariants = {
-    open: { 
-      x: 0, 
-      transition: { 
-        duration: 0.5, 
-        ease: [0.16, 1, 0.3, 1] 
-      } 
-    },
-    closed: { 
-      x: "-100%", 
-      transition: { 
-        duration: 0.4, 
-        ease: [0.7, 0, 0.84, 0] 
-      } 
-    },
+    open: { x: 0, opacity: 1, transition: { duration: 0.5, ease: 'easeInOut' } },
+    closed: { x: '-100%', opacity: 0, transition: { duration: 0.5, ease: 'easeInOut' } },
   };
 
   const menuItemVariants = {
@@ -893,7 +881,7 @@ const Header = () => {
                 </div>
                 <div className="flex-1">
                   <h1 className="text-white dark:text-gray-200 font-playfair text-lg sm:text-xl">
-                    {profile.username}
+                    {profile.nickname}
                   </h1>
                   <p className="text-white dark:text-gray-300 font-Playfair text-sm">
                     {profile.email}
@@ -945,7 +933,7 @@ const Header = () => {
         >
           <p className="text-yellow-400 drop-shadow-lg font-Quicksand flex flex-row gap-2">Immerse <span className="text-yellow-50">Yourself</span>
           {/* <span className="font-Quicksand"> Yourself {''} </span> */}
-          <span className="italic font-Playfair text-white/90 drop-shadow-lg"> On Art</span></p> 
+          <span className=" font-Playfair text-white/90 drop-shadow-lg"> On Art</span></p> 
         </motion.h1>
         
         <motion.p

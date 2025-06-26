@@ -46,8 +46,7 @@
         {profileImage ? "Edit" : "Upload"}
     </label></div>
 </div>
-    )
- }
+  
 
  <div className="h-full lg:w-[60%] sm:w-[80%] w-[95%] bg-black/20 rounded-xl border border-[#fc8e97be] flex flex-col items-center p-6 gap-4">
 

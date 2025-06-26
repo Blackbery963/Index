@@ -1,22 +1,20 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { FaHome, FaUser, FaInfoCircle, FaPalette, FaMapMarkerAlt, FaPhoneAlt, FaFax, FaEnvelope } from 'react-icons/fa';
 import { motion, AnimatePresence } from "framer-motion";
 import { FiMenu } from 'react-icons/fi';
 import { MdClose } from 'react-icons/md';
 
-// Placeholder background image (replace with your own)
+// Placeholder background image
 const BackImg = 'https://images.pexels.com/photos/7709161/pexels-photo-7709161.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1';
 
 function Help() {
   const [activeButton, setActiveButton] = useState('contact');
   const formRef = useRef(null);
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [query, setQuery] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [formStatus, setFormStatus] = useState('');
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const scrollToForm = () => {
     if (formRef.current) {
@@ -35,45 +33,42 @@ function Help() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!formData.name || !formData.email || !formData.message) {
       setFormStatus('Please fill in all fields.');
       return;
     }
-  
+
+    setIsSubmitting(true);
+    setFormStatus('Sending...');
+
     try {
-      setFormStatus('Sending...');
-      
-      // Call Appwrite function
-      const response = await functions.createExecution(
-        import.meta.env.VITE_APPWRITE_FUNCTION_ID, // Replace with your actual function ID
-        JSON.stringify(formData)
-      );
-  
-      const result = JSON.parse(response.response);
-      
-      if (result.success) {
+      const response = await fetch('http://localhost:3000/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
         setFormStatus('Message sent successfully!');
         setFormData({ name: '', email: '', message: '' });
-        
-        // Optional: Show toast notification
-        toast.success('Your message has been sent!', {
-          position: "top-right",
-          autoClose: 5000,
-        });
+        // Clear status message after 5 seconds
+        setTimeout(() => setFormStatus(''), 5000);
       } else {
-        setFormStatus(result.error || 'Failed to send message');
+        setFormStatus(data.message || 'Failed to send message.');
       }
     } catch (err) {
       console.error('Submission error:', err);
       setFormStatus('Failed to send message. Please try again later.');
-      
-      toast.error('Failed to send message', {
-        position: "top-right",
-        autoClose: 5000,
-      });
+    } finally {
+      setIsSubmitting(false);
     }
   };
+
   // Dropdown animation variants
   const dropdownVariants = {
     hidden: { opacity: 0, y: -10, transition: { duration: 0.2 } },
@@ -100,7 +95,6 @@ function Help() {
           </div>
           
           <div className="flex items-center gap-x-2 sm:gap-x-4">
-
             {/* Desktop Navigation */}
             <nav className="hidden md:flex gap-x-4 text-gray-800 dark:text-gray-100 font-Playfair font-bold">
               <Link to="/">
@@ -139,7 +133,6 @@ function Help() {
                   <span className="ml-1">Gallery</span>
                 </button>
               </Link>
-             
             </nav>
             
             {/* Mobile Menu Button */}
@@ -157,7 +150,7 @@ function Help() {
         <AnimatePresence>
           {isMenuOpen && (
             <motion.nav
-              className="md:hidden fixed top-[85px] right-2 w-48 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-md z-40 rounded-lg"
+              className="md:hidden fixed top-[85px] right-2 w-48 bg-white/40 dark:bg-gray-800/90 backdrop-blur-md shadow-md z-40 rounded-lg"
               variants={dropdownVariants}
               initial="hidden"
               animate="visible"
@@ -188,7 +181,6 @@ function Help() {
                     Gallery
                   </button>
                 </Link>
-                
               </div>
             </motion.nav>
           )}
@@ -305,6 +297,7 @@ function Help() {
                     className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
                     placeholder="Your name"
                     required
+                    aria-label="Your name"
                   />
                 </div>
                 
@@ -319,6 +312,7 @@ function Help() {
                     className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
                     placeholder="your.email@example.com"
                     required
+                    aria-label="Your email address"
                   />
                 </div>
                 
@@ -332,6 +326,7 @@ function Help() {
                     className="w-full h-32 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors resize-none"
                     placeholder="How can we help you?"
                     required
+                    aria-label="Your message"
                   />
                 </div>
                 
@@ -344,9 +339,10 @@ function Help() {
                 <div className="text-center">
                   <button
                     type="submit"
-                    className="px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg transition-colors shadow-md hover:shadow-lg"
+                    className="px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg transition-colors shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={isSubmitting}
                   >
-                    Send Message
+                    {isSubmitting ? 'Sending...' : 'Send Message'}
                   </button>
                 </div>
               </form>

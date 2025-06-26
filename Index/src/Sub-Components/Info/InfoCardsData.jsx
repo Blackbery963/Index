@@ -137,39 +137,7 @@ modern: [
     ]
   }
 ],
-//modern
-modern: [
-  {
-    title: "Rise of Modern Art",
-    gradient: gradient_1,
-    type: "paragraphs",
-    content: [
-      "Modern art developed in the late 19th to mid-20th century, embracing innovation.",
-      "Movements like Cubism, Futurism, and Dada redefined art’s purpose and form."
-    ]
-  },
-  {
-    title: "Legacy of Modernism Today",
-    gradient: gradient_2,
-    type: "paragraphs",
-    content: [
-      "Modernism opened doors to abstraction, conceptual art, and new materials.",
-      "Its influence remains strong in both fine art and design."
-    ]
-  },
-  {
-    title: "Modern Art Tips",
-    gradient: gradient_3,
-    type: "list",
-    content: [
-      "Study modern movements and pioneers",
-      "Challenge traditional norms",
-      "Use minimalism and bold shapes",
-      "Let concept drive the form",
-      "Embrace experimentation"
-    ]
-  }
-],
+
 //realism
 realism: [
   {
@@ -367,7 +335,239 @@ Abstract: [
       "Let emotion guide the brush"
     ]
   }
-]
+],
+// surrealism
+surrealism: [
+  {
+    title: "The Rise of Surrealism",
+    gradient: gradient_1,
+    type: "paragraphs",
+    content: [
+      "Surrealism emerged after World War I, inspired by Freud’s theories of the unconscious mind.",
+      "Artists like Salvador Dalí and René Magritte created dreamlike, irrational imagery to challenge logic and reality."
+    ]
+  },
+  {
+    title: "Surrealism’s Modern Legacy",
+    gradient: gradient_2,
+    type: "paragraphs",
+    content: [
+      "Surrealist themes appear in film, digital art, and photography, blending fantasy with personal symbolism.",
+      "Contemporary artists explore identity, dreams, and subconscious fears through surrealist techniques."
+    ]
+  },
+  {
+    title: "Surrealist Art Tips",
+    gradient: gradient_3,
+    type: "list",
+    content: [
+      "Draw inspiration from dreams and imagination",
+      "Combine unrelated objects in bizarre ways",
+      "Use realistic techniques to render fantasy scenes",
+      "Incorporate personal or cultural symbols",
+      "Embrace mystery and open-ended interpretations"
+    ]
+  }
+],
+// Oil Painting
+oil: [
+  {
+    title: "The Legacy of Oil Painting",
+    gradient: gradient_1,
+    type: "paragraphs",
+    content: [
+      "Oil painting became dominant in the Renaissance, offering artists flexibility, depth, and vivid colors.",
+      "Masters like Rembrandt and Da Vinci developed layering techniques that defined classical art."
+    ]
+  },
+  {
+    title: "Modern Use of Oil Paint",
+    gradient: gradient_2,
+    type: "paragraphs",
+    content: [
+      "Contemporary artists use oils to create hyperrealism, abstract work, and even mixed media experiments.",
+      "Though slow drying, oil paints offer unmatched richness and texture."
+    ]
+  },
+  {
+    title: "Oil Painting Tips",
+    gradient: gradient_3,
+    type: "list",
+    content: [
+      "Start with a toned canvas to unify the work",
+      "Work fat-over-lean to avoid cracking",
+      "Allow layers to dry between applications",
+      "Blend colors slowly for smoother transitions",
+      "Use turpentine or linseed oil to modify texture"
+    ]
+  }
+],
+// Pop art
+pop: [
+  {
+    title: "Pop Art Origins",
+    gradient: gradient_1,
+    type: "paragraphs",
+    content: [
+      "Pop Art emerged in the 1950s–60s, drawing inspiration from popular culture, advertising, and mass media.",
+      "Artists like Andy Warhol and Roy Lichtenstein used bold colors and commercial imagery to blur the line between high and low art."
+    ]
+  },
+  {
+    title: "Pop Art in the Digital Age",
+    gradient: gradient_2,
+    type: "paragraphs",
+    content: [
+      "Modern Pop Art continues to explore consumerism and celebrity culture using digital tools and street art aesthetics.",
+      "It remains vibrant and accessible, appealing to broad audiences through iconic symbols."
+    ]
+  },
+  {
+    title: "Pop Art Tips",
+    gradient: gradient_3,
+    type: "list",
+    content: [
+      "Incorporate familiar logos, products, or celebrities",
+      "Use bright, saturated colors",
+      "Employ repetition for impact",
+      "Add text or comic-style elements",
+      "Make your message bold and ironic"
+    ]
+  }
+],
+// impression
+impressionism: [
+  {
+    title: "The Birth of Impressionism",
+    gradient: gradient_1,
+    type: "paragraphs",
+    content: [
+      "Impressionism started in 19th-century France, with artists like Monet and Renoir seeking to capture fleeting moments.",
+      "They painted en plein air to observe natural light and color directly from life."
+    ]
+  },
+  {
+    title: "Impressionism's Influence Today",
+    gradient: gradient_2,
+    type: "paragraphs",
+    content: [
+      "Impressionism inspires contemporary artists to embrace spontaneity and perception.",
+      "Many still use loose brushwork and bright palettes to reflect mood and motion."
+    ]
+  },
+  {
+    title: "Impressionist Art Tips",
+    gradient: gradient_3,
+    type: "list",
+    content: [
+      "Use short, visible brushstrokes",
+      "Avoid black; use complementary colors for shadows",
+      "Paint quickly to capture changing light",
+      "Focus on light and atmosphere, not detail",
+      "Choose everyday scenes or landscapes"
+    ]
+  }
+],
+// expression
+expressionism: [
+  {
+    title: "What is Expressionism?",
+    gradient: gradient_1,
+    type: "paragraphs",
+    content: [
+      "Expressionism began in early 20th-century Germany, emphasizing emotion over realism.",
+      "Artists like Edvard Munch and Egon Schiele distorted forms and used bold colors to convey inner experiences and anxiety."
+    ]
+  },
+  {
+    title: "Modern Expressionist Practices",
+    gradient: gradient_2,
+    type: "paragraphs",
+    content: [
+      "Today’s expressionist works explore themes of identity, mental health, and political unrest.",
+      "Artists often combine mixed media and abstract forms to express raw emotion and personal narratives."
+    ]
+  },
+  {
+    title: "Expressionist Art Tips",
+    gradient: gradient_3,
+    type: "list",
+    content: [
+      "Prioritize feeling over accuracy",
+      "Use strong, contrasting colors",
+      "Exaggerate facial expressions and body language",
+      "Experiment with brushstroke energy and texture",
+      "Draw from personal emotion or social issues"
+    ]
+  }
+],
+// minimilism
+minimalism: [
+  {
+    title: "Origins of Minimalist Art",
+    gradient: gradient_1,
+    type: "paragraphs",
+    content: [
+      "Minimalism emerged in the 1960s in the United States as a reaction against abstract expressionism and excessive complexity in art.",
+      "Artists like Donald Judd and Agnes Martin focused on simplicity, using geometric forms and limited colors to emphasize clarity and objectivity."
+    ]
+  },
+  {
+    title: "Minimalism in Contemporary Art",
+    gradient: gradient_2,
+    type: "paragraphs",
+    content: [
+      "Modern minimalist artists explore space, repetition, and silence through sculpture, painting, and digital media.",
+      "Minimalism influences design, architecture, and fashion, promoting calmness through less visual noise."
+    ]
+  },
+  {
+    title: "Minimalist Art Tips",
+    gradient: gradient_3,
+    type: "list",
+    content: [
+      "Limit your color palette to 1–3 hues",
+      "Focus on symmetry, balance, and clean lines",
+      "Eliminate unnecessary details or distractions",
+      "Use repetition to create rhythm and consistency",
+      "Let negative space play a key role"
+    ]
+  }
+],
+// historic
+historical: [
+  {
+    title: "Understanding Historical Art",
+    gradient: gradient_1,
+    type: "paragraphs",
+    content: [
+      "Historical art portrays significant events, figures, or myths from the past, often glorifying or critiquing them.",
+      "It served as both education and propaganda in different eras, especially in Renaissance and Neoclassical periods."
+    ]
+  },
+  {
+    title: "Preserving and Interpreting History",
+    gradient: gradient_2,
+    type: "paragraphs",
+    content: [
+      "Today, artists reinterpret historical themes to reflect modern values and identities.",
+      "Historical artworks are also key to understanding cultural heritage and social evolution."
+    ]
+  },
+  {
+    title: "Historical Art Tips",
+    gradient: gradient_3,
+    type: "list",
+    content: [
+      "Research your chosen era thoroughly",
+      "Incorporate symbolic clothing and settings",
+      "Use dramatic lighting for effect",
+      "Balance narrative and composition",
+      "Explore history from new or untold perspectives"
+    ]
+  }
+],
+
 
 
 }

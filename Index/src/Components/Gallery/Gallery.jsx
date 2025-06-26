@@ -648,8 +648,8 @@
 // export default Gallery;
 
 import { useState, useEffect, useRef,useCallback } from 'react';
-import bg from './Bgimage-for-Container/pexels-scottwebb-305821.jpg';
-import { FaHome, FaInfoCircle, FaUser, FaPalette, FaRegComment, FaDownload, FaRegThumbsUp, FaSearch, FaRegShareSquare } from 'react-icons/fa';
+import bg from './pexels-scottwebb-305821.jpg';
+import { FaHome, FaInfoCircle, FaUser, FaPalette, FaRegComment, FaSearch, FaRegShareSquare, FaRegEye } from 'react-icons/fa';
 import { MdCollections } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -660,7 +660,13 @@ import { storage, Query, databases } from '../../appwriteConfig';
 import { FaArrowLeft, FaArrowRight, FaRegHeart, FaHeart } from 'react-icons/fa';
 import { FiDownload } from 'react-icons/fi';
 import {PiShareFatLight} from'react-icons/pi'
+import { client } from '../../appwriteConfig';
 import { toast,ToastContainer } from 'react-toastify';
+import ShareButton from '../../Share/ShareFunction';
+import DownloadService from '../../Downloads/downloadService';
+import FollowButton from '../../Follow/FollowButton';
+import LikeButton from '../../EngagementService/likeButton';
+import ArtworkViewTracker from '../../Views/viewsTracker';
 
 
 const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
@@ -720,7 +726,8 @@ function Gallery() {
           [
             Query.orderDesc('uploadDate'),
             Query.limit(50),
-            Query.select(['$id', 'fileId', 'title', 'description', 'tag', 'userId', 'uploadDate']),
+            // Query.select([])
+            Query.select(['$id', 'fileId', 'title', 'description', 'tag', 'userId', 'uploadDate','viewCount']),
           ]
         );
 
@@ -946,6 +953,25 @@ function Gallery() {
           });
           setLovedImages(syncedLoved);
         }, []);
+
+    useEffect(() => {
+  const unsubscribe = client.subscribe(
+    `databases.${DATABASE_ID}.collections.${COLLECTION_ID}.documents`,
+    (response) => {
+      if (response.events.includes('databases.*.collections.*.documents.*.update')) {
+        const updatedDoc = response.payload;
+        setAllImages(prev =>  // Update allImages instead of landscapeImages
+          prev.map(image =>
+            image.$id === updatedDoc.$id
+              ? { ...image, viewCount: updatedDoc.viewCount || 0 }
+              : image
+          )
+        );
+      }
+    }
+  );
+  return () => unsubscribe();
+}, []);
 
   return (
     <div className="max-w-screen min-h-screen flex flex-col bg-gray-100 dark:bg-gray-900">
@@ -1216,12 +1242,12 @@ function Gallery() {
             <div className="text-center text-gray-600 dark:text-gray-300 p-4">No images found.</div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-4 max-w-7xl mx-auto">
-              {filteredImages.length === 0 ? (
+               {filteredImages.length === 0 ? (
                 <div className="text-center text-gray-600 dark:text-gray-300 p-8 col-span-full">
                   {searchTerm ? 'No matching paintings found' : 'No paintings available'}
                 </div>
-              ) : (
-                filteredImages.map((image, index) => (
+              ) : 
+            filteredImages.map((image, index) => (
                   <motion.div
                     key={image.$id}
                     className="relative overflow-hidden rounded-xl shadow-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700"
@@ -1229,6 +1255,7 @@ function Gallery() {
                     transition={{ type: 'spring', stiffness: 400, damping: 10 }}
                   >
                     <div className="flex items-center p-4 border-b border-gray-200 dark:border-gray-700">
+                      <Link to={'/account'}>
                       {profileImage ? (
                         <img
                           src={profileImage}
@@ -1238,21 +1265,15 @@ function Gallery() {
                       ) : (
                         <FaUser className="text-3xl text-white" />
                       )}
+                      </Link>
                       <div className="ml-3">
                         <p className="text-sm font-semibold text-gray-800 dark:text-gray-200 font-Quicksand">
                           {profile.username || 'Unknown Artist'}
                         </p>
                       </div>
-                      <button
-                        onClick={() => toggleFollow(image.user?.id || image.$id)}
-                        className={`ml-auto px-3 py-1 text-sm rounded-full font-Quicksand ${
-                          followedUsers[image.user?.id || image.$id]
-                            ? 'bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200'
-                            : 'bg-blue-500 text-white hover:bg-blue-600'
-                        }`}
-                      >
-                        {followedUsers[image.user?.id || image.$id] ? 'Unfollow' : 'Follow'}
-                      </button>
+                       <div className=' pl-3'>
+                        <FollowButton targetUserId={allImages.user?.id || image.$id} />
+                       </div>
                     </div>
                     <img
                       src={image.url}
@@ -1260,60 +1281,30 @@ function Gallery() {
                       className="w-full h-64 object-cover cursor-pointer"
                       loading="lazy"
                       onError={(e) => (e.target.src = 'https://via.placeholder.com/150')}
-                      onClick={() => openLightbox(index)}
+                     onClick={() => {
+                     openLightbox(index);
+                    }}
                     />
                     <div className="flex justify-between items-center p-4">
-                      <div className="flex space-x-4">
-                        <button
-                          onClick={() => toggleLike(image.$id)}
-                          className={`flex items-center space-x-1 ${
-                            likes[image.$id]?.liked ? 'text-red-500' : 'text-gray-500 dark:text-gray-400'
-                          } hover:text-red-500 transition-colors`}
-                        >
-                          <FaRegThumbsUp />
-                          <span className="text-sm font-Quicksand">{likes[image.$id]?.count || 0}</span>
-                        </button>
-                        <button
-                          // onClick={() => setShowComments(showComments === image.$id ? null : image.$id)}
-                          onClick={() => toast.info("Comment functionality coming soon!")}
-                          className="flex items-center space-x-1 text-gray-500 dark:text-gray-400 hover:text-blue-500 transition-colors"
-                        >
-                          <FaRegComment />
-                          <span className="text-sm font-Quicksand">0</span>
-                        </button>
-                        <button
-                          onClick={() => downloadImage(image.url, image.title)}
-                          className="flex items-center space-x-1 text-gray-500 dark:text-gray-400 hover:text-green-500 transition-colors"
-                        >
-                          <FiDownload />
-                          <span className="text-sm font-Quicksand">0</span>
-                        </button>
-                        <button
-                         className=" bg-white/50 backdrop-blur-md rounded-lg flex items-center justify-center hover:bg-white/80 transition-colors z-10 space-x-1 text-gray-500 dark:text-gray-400"
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        toggleLove(index);
-                                      }}
-                                      onMouseEnter={() => setHoveredButton(`love-${index}`)}
-                                      onMouseLeave={() => setHoveredButton(null)}
-                                      aria-label={lovedImages[index] ? "Unlove this image" : "Love this image"}
-                                    >
-                                      {lovedImages[index] ? (
-                                        <FaHeart className="text-red-600" />
-                                      ) : (
-                                        <FaRegHeart className="text-gray-800" />
-                                      )}
-                                      {hoveredButton === `love-${index}` && (
-                                        <div className="absolute bottom-full mb-2 w-max bg-black text-white text-sm rounded px-2 py-1">
-                                          {lovedImages[index] ? "Loved" : "Love"}
-                                        </div>
-                                      )}
-                         <span>0</span>
-                        </button>
-                        <button className='flex items-center space-x-1 text-gray-500 dark:text-gray-400 hover:text-green-500 transition-colors'>
-                          <PiShareFatLight/>
-                          <span>0</span>
-                        </button>
+                    <div className="flex space-x-4">
+                      <div className="flex items-center space-x-1 text-gray-500 dark:text-gray-400">
+                      <FaRegEye className='text-[20px]'/>
+                      <span className="text-sm font-Quicksand">{image.viewCount || 0}</span> {/* Fix this line */}
+                      </div>
+                      <LikeButton targetId={image.$id}/>
+                      <button
+                      onClick={() => setShowComments(showComments === image.$id ? null : image.$id)}
+                      className="flex items-center space-x-1 text-gray-500 dark:text-gray-400 hover:text-blue-500 transition-colors"
+                      >
+                      <FaRegComment />
+                      <span className="text-sm font-Quicksand">0</span>
+                      </button>
+                      <div>
+                      <DownloadService artwork={image} />
+                      </div>
+                      <div className="flex items-center space-x-2">
+                      <ShareButton artwork={image} />
+                      </div>
                       </div>
                     </div>
                     <AnimatePresence>
@@ -1354,9 +1345,9 @@ function Gallery() {
                       )}
                     </div>
                   </motion.div>
-                ))
-              )}
-            </div>
+                )
+               )}
+                    </div>
           )}
         </section>
         <AnimatePresence>
@@ -1402,6 +1393,9 @@ function Gallery() {
                 <div className="absolute bottom-4 left-0 right-0 text-center text-white font-Quicksand">
                   <p>{allImages[lightbox.index].title || 'Untitled'}</p>
                   <p className="text-sm">{lightbox.index + 1} / {allImages.length}</p>
+                  <div className="absolute top-4 left-4">
+                    <ArtworkViewTracker artworkId={allImages[lightbox.index].$id} />
+                  </div>
                 </div>
               </motion.div>
             </motion.div>

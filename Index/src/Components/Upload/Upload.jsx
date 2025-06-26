@@ -754,7 +754,7 @@ const UploadSection = () => {
         </div>
       ))}
 
-      <button
+      {/* <button
         onClick={addEntry}
         className="mb-8 p-3 bg-teal-100 dark:bg-teal-600 text-teal-700 dark:text-white rounded-full hover:bg-teal-200 dark:hover:bg-teal-700 transition-all duration-300 shadow-md hover:shadow-lg flex items-center gap-2"
         title="Add another image"
@@ -775,7 +775,7 @@ const UploadSection = () => {
           />
         </svg>
         <span>Add Another Image</span>
-      </button>
+      </button> */}
 
       {Object.values(uploadingStates).some((state) => state) && (
         <div className="w-full max-w-5xl mb-6">

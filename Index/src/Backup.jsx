@@ -2555,3 +2555,324 @@ export default Signup;
               </motion.div>
             ))}
           </div>
+
+
+
+
+
+
+
+
+
+
+
+
+          // import React, { useState, useEffect } from "react";
+          // import { FaThumbsUp, FaRegThumbsUp, FaEllipsisV } from "react-icons/fa";
+          // import { MdPhoto, MdVideocam, MdBook, MdErrorOutline } from "react-icons/md";
+          // import { useNavigate } from "react-router-dom";
+          // import { toast, ToastContainer } from "react-toastify";
+          // import "react-toastify/dist/ReactToastify.css";
+          // import { motion, AnimatePresence } from "framer-motion";
+          // import { databases, storage, account, Query, config } from "/home/swarnadip/Documents/Index/Index/Index/src/appwriteConfig.js";
+          
+          // // Custom image component for Appwrite storage
+          // function AppwriteImage({ fileId, bucketId, alt, className, ...props }) {
+          //   const [error, setError] = useState(false);
+          
+          //   if (error || !fileId) {
+          //     return (
+          //       <div className={`${className} bg-gray-100 dark:bg-gray-800 flex items-center justify-center rounded-lg`}>
+          //         <MdErrorOutline className="text-gray-400 dark:text-gray-500 text-3xl" />
+          //         <span className="sr-only">Error loading image</span>
+          //       </div>
+          //     );
+          //   }
+          
+          //   const src = `${import.meta.env.VITE_APPWRITE_ENDPOINT}/storage/buckets/${bucketId}/files/${fileId}/view?project=${import.meta.env.VITE_APPWRITE_PROJECT_ID}&width=800&quality=85`;
+          
+          //   return (
+          //     <img
+          //       src={src}
+          //       alt={alt}
+          //       className={className}
+          //       loading="lazy"
+          //       onError={(e) => {
+          //         console.error(`Failed to load image ${fileId}:`, e);
+          //         setError(true);
+          //       }}
+          //       {...props}
+          //     />
+          //   );
+          // }
+          
+          // function Your_Collections() {
+          //   const navigate = useNavigate();
+          //   const [activeButton, setActiveButton] = useState("Photos");
+          //   const [uploads, setUploads] = useState([]);
+          //   const [loading, setLoading] = useState(true);
+          //   const [error, setError] = useState(null);
+          
+          //   const handleButtonClick = (buttonName) => {
+          //     setActiveButton(buttonName);
+          //   };
+          
+          //   useEffect(() => {
+          //     const fetchUploads = async () => {
+          //       try {
+          //         setLoading(true);
+          //         setError(null);
+          
+          //         const user = await account.get();
+          //         const userId = user.$id;
+          
+          //         const mediumFilters = {
+          //           Photos: [
+          //             "Oil Painting", "Acrylic Painting", "Watercolor Painting", "Ink", "Charcoal", "Pastel",
+          //             "Pencil Drawing", "Graphite Drawing", "Tempera", "Fresco Painting", "Mosaic Art",
+          //             "Glass Art", "Fiber Art", "Sand Art", "Digital Art", "Digital Painting", "Vector Art",
+          //             "Pixel Art", "3D Modeling", "Photography", "Mixed Media", "Collage", "Printmaking",
+          //             "AI-Generated Art", "Augmented Reality Art", "Virtual Reality Art", "NFT Art",
+          //             "Data Visualization Art", "Calligraphy", "Typography Design", "Sculpture", "Ceramic",
+          //             "Installation Art", "Kinetic Art", "Light Art", "Performance Art", "Sound Art", "Bio Art",
+          //             "Graphic Design", "Industrial Design", "Fashion Design", "Interior Design",
+          //             "Architectural Drawing", "Game Design", "Other"
+          //           ],
+          //           Videos: ["Video"],
+          //           Diary: ["Other"],
+          //         };
+          
+          //         const response = await databases.listDocuments(
+          //           config.databaseId,
+          //           config.collectionId,
+          //           [
+          //             Query.equal("userId", userId),
+          //             Query.orderDesc("uploadDate"),
+          //             Query.limit(20),
+          //             Query.select(["$id", "title", "description", "fileId", "medium", "tag", "userId", "uploadDate"]),
+          //             ...(mediumFilters[activeButton] ? [Query.equal("medium", mediumFilters[activeButton])] : []),
+          //           ]
+          //         );
+          
+          //         console.log("Fetched documents:", response.documents);
+          
+          //         const uploadsWithMedia = response.documents.map((doc) => {
+          //           if (!doc.fileId) {
+          //             console.warn(`Document ${doc.$id} missing fileId`);
+          //           }
+          //           return {
+          //             ...doc,
+          //             mediaUrl: doc.fileId
+          //               ? `${import.meta.env.VITE_APPWRITE_ENDPOINT}/storage/buckets/${config.bucketId}/files/${doc.fileId}/view?project=${import.meta.env.VITE_APPWRITE_PROJECT_ID}&width=800&quality=85`
+          //               : null,
+          //             isImage: ["Photos", "Diary"].includes(activeButton),
+          //             isVideo: activeButton === "Videos",
+          //             formattedDate: new Date(doc.uploadDate).toLocaleDateString("en-US", {
+          //               year: "numeric",
+          //               month: "short",
+          //               day: "numeric",
+          //             }),
+          //           };
+          //         });
+          
+          //         setUploads(uploadsWithMedia);
+          //       } catch (err) {
+          //         console.error("Fetch error:", {
+          //           message: err.message,
+          //           code: err.code,
+          //           type: err.type,
+          //         });
+          //         if (err.code === 401) {
+          //           toast.error("Please log in to view your collections.");
+          //           navigate("/login");
+          //         } else if (err.code === 404) {
+          //           setError("Collection or bucket not found. Check Appwrite configuration.");
+          //           toast.error("Collection or bucket not found.");
+          //         } else if (err.code === 403) {
+          //           setError("Permission denied. Ensure you have access to the collection.");
+          //           toast.error("Permission denied.");
+          //         } else {
+          //           setError(`Failed to load collections: ${err.message}`);
+          //           toast.error("Failed to load your collections.");
+          //         }
+          //       } finally {
+          //         setLoading(false);
+          //       }
+          //     };
+          
+          //     fetchUploads();
+          //   }, [activeButton, navigate]);
+          
+          //   const ImagePlaceholder = ({ type }) => (
+          //     <div className="w-full h-full flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-500 p-4 rounded-lg">
+          //       {type === "error" ? (
+          //         <>
+          //           <MdErrorOutline className="text-4xl mb-2" />
+          //           <p className="text-center text-sm">Media unavailable</p>
+          //         </>
+          //       ) : (
+          //         <>
+          //           {activeButton === "Photos" && <MdPhoto className="text-4xl mb-2" />}
+          //           {activeButton === "Videos" && <MdVideocam className="text-4xl mb-2" />}
+          //           {activeButton === "Diary" && <MdBook className="text-4xl mb-2" />}
+          //           <p className="text-center text-sm">No media available</p>
+          //         </>
+          //       )}
+          //     </div>
+          //   );
+          
+          //   return (
+          //     <div className="min-h-screen w-full bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
+          //       <ToastContainer position="top-right" autoClose={5000} theme={document.documentElement.classList.contains('dark') ? 'dark' : 'light'} />
+          
+          //       {/* Navigation Tabs */}
+          //       <nav className="w-full max-w-7xl mx-auto px-4 py-4 bg-white dark:bg-gray-800 shadow-sm">
+          //         <div className="flex gap-4">
+          //           {["Photos", "Videos", "Diary"].map((buttonName) => (
+          //             <motion.button
+          //               key={buttonName}
+          //               className={`relative px-4 py-2 flex items-center gap-2 text-sm font-medium font-Quicksand rounded-md transition-colors duration-200 ${
+          //                 activeButton === buttonName
+          //                   ? "bg-violet-100 dark:bg-violet-900 text-violet-600 dark:text-violet-300"
+          //                   : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+          //               }`}
+          //               onClick={() => handleButtonClick(buttonName)}
+          //               whileHover={{ scale: 1.05 }}
+          //               whileTap={{ scale: 0.95 }}
+          //             >
+          //               {buttonName === "Photos" && <MdPhoto className="text-lg" />}
+          //               {buttonName === "Videos" && <MdVideocam className="text-lg" />}
+          //               {buttonName === "Diary" && <MdBook className="text-lg" />}
+          //               <span>{buttonName}</span>
+          //               {activeButton === buttonName && (
+          //                 <motion.span
+          //                   className="absolute bottom-0 left-0 w-full h-0.5 bg-violet-600 dark:bg-violet-400"
+          //                   layoutId="underline"
+          //                   transition={{ type: "spring", stiffness: 300, damping: 30 }}
+          //                 />
+          //               )}
+          //             </motion.button>
+          //           ))}
+          //         </div>
+          //       </nav>
+          
+          //       {/* Main Content */}
+          //       <div className="w-full max-w-7xl mx-auto px-4 py-8">
+          //         {loading ? (
+          //           <div className="flex justify-center items-center h-64">
+          //             <motion.div
+          //               className="rounded-full h-12 w-12 border-t-2 border-b-2 border-violet-500"
+          //               animate={{ rotate: 360 }}
+          //               transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+          //             />
+          //           </div>
+          //         ) : error ? (
+          //           <div className="text-center py-12">
+          //             <p className="text-red-500 dark:text-red-400 text-lg font-Quicksand mb-4">{error}</p>
+          //             <motion.button
+          //               onClick={() => window.location.reload()}
+          //               className="px-6 py-2 bg-violet-600 text-white rounded-full font-Quicksand hover:bg-violet-700 transition-colors"
+          //               whileHover={{ scale: 1.05 }}
+          //               whileTap={{ scale: 0.95 }}
+          //             >
+          //               Retry
+          //             </motion.button>
+          //           </div>
+          //         ) : uploads.length === 0 ? (
+          //           <div className="text-center py-12">
+          //             <p className="text-gray-600 dark:text-gray-400 text-lg font-Quicksand mb-4">
+          //               No {activeButton.toLowerCase()} found in your collection.
+          //             </p>
+          //             <motion.button
+          //               onClick={() => navigate("/Account/Upload")}
+          //               className="px-6 py-2 bg-violet-600 text-white rounded-full font-Quicksand hover:bg-violet-700 transition-colors"
+          //               whileHover={{ scale: 1.05 }}
+          //               whileTap={{ scale: 0.95 }}
+          //             >
+          //               Upload Your First {activeButton.slice(0, -1)}
+          //             </motion.button>
+          //           </div>
+          //         ) : (
+          //           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          //             {uploads.map((upload) => (
+          //               <motion.div
+          //                 key={upload.$id}
+          //                 className="relative flex flex-col rounded-xl overflow-hidden bg-white dark:bg-gray-800 shadow-sm hover:shadow-xl border border-gray-200 dark:border-gray-700 transition-all duration-300"
+          //                 initial={{ opacity: 0, y: 20 }}
+          //                 animate={{ opacity: 1, y: 0 }}
+          //                 transition={{ duration: 0.3 }}
+          //               >
+          //                 {/* Image/Video Container */}
+          //                 <div className="relative w-full aspect-[4/3] overflow-hidden">
+          //                   {upload.mediaUrl && upload.isImage ? (
+          //                     <AppwriteImage
+          //                       fileId={upload.fileId}
+          //                       bucketId={config.bucketId}
+          //                       alt={upload.title || "Uploaded image"}
+          //                       className="w-full h-full object-cover rounded-t-xl transition-transform duration-300 group-hover:scale-105"
+          //                     />
+          //                   ) : upload.mediaUrl && upload.isVideo ? (
+          //                     <video
+          //                       src={upload.mediaUrl}
+          //                       controls
+          //                       className="w-full h-full object-cover rounded-t-xl"
+          //                       onError={(e) => console.warn(`Failed to load video ${upload.fileId}:`, e)}
+          //                     />
+          //                   ) : (
+          //                     <ImagePlaceholder type="error" />
+          //                   )}
+          //                   {/* Tag Badge */}
+          //                   {upload.tag && (
+          //                     <span className="absolute top-3 right-3 bg-violet-600 dark:bg-violet-500 text-white text-xs font-Quicksand px-2 py-1 rounded-full capitalize">
+          //                       {upload.tag}
+          //                     </span>
+          //                   )}
+          //                 </div>
+          //                 {/* Metadata Container */}
+          //                 <div className="p-4 flex flex-col gap-2 bg-white dark:bg-gray-800">
+          //                   <div className="flex justify-between items-center">
+          //                     <h3 className="text-lg font-semibold font-Quicksand text-gray-900 dark:text-gray-100 line-clamp-1">
+          //                       {upload.title || "Untitled"}
+          //                     </h3>
+          //                     <motion.button
+          //                       className="text-gray-500 dark:text-gray-400 hover:text-violet-600 dark:hover:text-violet-400 transition-colors"
+          //                       aria-label="More options"
+          //                       whileHover={{ scale: 1.1 }}
+          //                       whileTap={{ scale: 0.9 }}
+          //                     >
+          //                       <FaEllipsisV size={16} />
+          //                     </motion.button>
+          //                   </div>
+          //                   <p className="text-sm text-gray-600 dark:text-gray-400 font-Quicksand line-clamp-2">
+          //                     {upload.description || "No description provided"}
+          //                   </p>
+          //                   <div className="flex justify-between items-center mt-2">
+          //                     <span className="text-xs text-gray-500 dark:text-gray-400 font-Quicksand">
+          //                       {upload.formattedDate}
+          //                     </span>
+          //                     <div className="flex items-center gap-3">
+          //                       <motion.button
+          //                         className="text-gray-500 dark:text-gray-400 hover:text-violet-600 dark:hover:text-violet-400 transition-colors"
+          //                         onClick={() => toast.info("Like functionality coming soon!")}
+          //                         aria-label="Like"
+          //                         whileHover={{ scale: 1.1 }}
+          //                         whileTap={{ scale: 0.9 }}
+          //                       >
+          //                         <FaRegThumbsUp size={16} />
+          //                       </motion.button>
+          //                       <span className="text-xs text-gray-500 dark:text-gray-400 font-Quicksand">0</span>
+          //                     </div>
+          //                   </div>
+          //                 </div>
+          //               </motion.div>
+          //             ))}
+          //           </div>
+          //         )}
+          //       </div>
+          //     </div>
+          //   );
+          // }
+          
+          // export default Your_Collections;
+          
+          

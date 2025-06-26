@@ -5,23 +5,23 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { motion } from 'framer-motion';
 import Galleryitem from './Galleryitem';
-import Pic_1 from './Category-images/no-1.png';
-import Pic_2 from './Category-images/no-2.jpg';
-import Pic_3 from './Category-images/no-3.jpg';
-import Pic_4 from './Category-images/no-4.jpg';
-import Pic_5 from './Category-images/no-5.jpg';
-import Pic_6 from './Category-images/no-6.jpg';
-import Pic_7 from './Category-images/no-7.jpg';
-import Pic_8 from './Category-images/no-8.jpg';
-import Pic_9 from './Category-images/no-9.jpg';
-import Pic_10 from './Category-images/no-10.jpg';
-import Pic_11 from './Category-images/no-11.jpg';
-import Pic_12 from './Category-images/no-12.jpg';
-import Pic_13 from './Category-images/no-13.jpg';
-import Pic_14 from './Category-images/no-14.jpg';
-import Pic_15 from './Category-images/no-15.jpg';
-import Pic_16 from './Category-images/no-16.jpg';
-import Pic_17 from './Category-images/no-17.jpeg';
+import Pic_1 from './Category-images/landscape.png';
+import Pic_2 from './Category-images/water.jpg';
+import Pic_3 from './Category-images/oil.jpg';
+import Pic_4 from './Category-images/abstract.jpg';
+import Pic_5 from './Category-images/still life.jpg';
+import Pic_6 from './Category-images/surreal.png';
+import Pic_7 from './Category-images/impression.jpg';
+import Pic_8 from './Category-images/realism.jpg';
+import Pic_9 from './Category-images/portrait.jpg';
+import Pic_10 from './Category-images/express.jpg';
+import Pic_11 from './Category-images/minimal.jpg';
+import Pic_12 from './Category-images/pop.jpg';
+import Pic_13 from './Category-images/nature.jpg';
+import Pic_14 from './Category-images/tradition.jpg';
+import Pic_15 from './Category-images/historic.jpg';
+import Pic_16 from './Category-images/digital.jpg';
+import Pic_17 from './Category-images/modern.jpg';
 import { FaHome } from 'react-icons/fa';
 
 function Category() {
@@ -31,118 +31,110 @@ function Category() {
       easing: 'ease-in-out',
       once: true,
     });
-  }, []);
-
-  const images = [
-    {
-      name: 'Portrait',
-      para: 'A portrait painting captures a person’s face, expression, and personality, often focusing on likeness and emotional depth.',
-      backImg: 'https://images.pexels.com/photos/29451082/pexels-photo-29451082/free-photo-of-squirrel-in-autumn-tree-with-colorful-leaves.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-      link: '/Portrait',
-    },
-    {
-      name: 'Landscape',
-      para: 'A landscape painting portrays natural scenery like mountains, forests, or rivers, emphasizing light and atmosphere.',
-      backImg: Pic_1,
-      link: '/Landscape',
-    },
-    {
-      name: 'Watercolor',
-      para: 'Watercolor painting uses translucent pigments mixed with water, creating soft, luminous effects on textured paper.',
-      backImg: Pic_2,
-      link: '/Watercolor',
-    },
-    {
-      name: 'Oil Painting',
-      para: 'Oil painting uses slow-drying pigments mixed with oil, creating rich textures, vibrant colors, and layered effects.',
-      backImg: Pic_3,
-      link: '/Oil_Paint',
-    },
-    {
-      name: 'Abstract',
-      para: 'Abstract art uses shapes, colors, and textures to express emotions or concepts, often without recognizable forms.',
-      backImg: Pic_4,
-      link: '/Abstract',
-    },
-    {
-      name: 'Still Life',
-      para: 'Still life paintings depict inanimate objects like flowers or food, focusing on composition, light, and detail.',
-      backImg: Pic_5,
-      link: '/StillLife',
-    },
-    {
-      name: 'Surrealism',
-      para: 'Surrealist paintings explore dream-like scenes and illogical imagery, blending reality with imagination.',
-      backImg: Pic_6,
-      link: '/Surrealism',
-    },
-    {
-      name: 'Impressionism',
-      para: 'Impressionist art captures fleeting moments with loose brushstrokes and vibrant colors, emphasizing light.',
-      backImg: Pic_7,
-      link: '/Impressionism',
-    },
-    {
-      name: 'Realism',
-      para: 'Realist paintings aim to depict subjects as they appear in real life, with meticulous detail and accuracy.',
-      backImg: Pic_8,
-      link: '/Realism',
-    },
-    {
-      name: 'Cubism',
-      para: 'Cubist art breaks down objects into geometric shapes, presenting multiple perspectives simultaneously.',
-      backImg: Pic_9,
-      link: '/Cubism',
-    },
-    {
-      name: 'Expressionism',
-      para: 'Expressionist art conveys emotional experiences through bold colors and distorted forms.',
-      backImg: Pic_10,
-      link: '/Expressionism',
-    },
-    {
-      name: 'Minimalism',
-      para: 'Minimalist art uses simple forms and limited colors to create a sense of calm and clarity.',
-      backImg: Pic_11,
-      link: '/Minimalism',
-    },
-    {
-      name: 'Pop Art',
-      para: 'Pop art incorporates popular culture imagery, using bright colors and bold patterns.',
-      backImg: Pic_12,
-      link: '/Pop-Art',
-    },
-    {
-      name: 'Fauvism',
-      para: 'Fauvist paintings use vivid, non-naturalistic colors and fierce brushwork to evoke emotion.',
-      backImg: Pic_13,
-      link: '/Nature',
-    },
-    {
-      name: 'Baroque',
-      para: 'Baroque art emphasizes drama, movement, and rich details, often with religious or mythological themes.',
-      backImg: Pic_14,
-      link: '/Traditional',
-    },
-    {
-      name: 'Renaissance',
-      para: 'Renaissance art focuses on realism, perspective, and humanism, inspired by classical antiquity.',
-      backImg: Pic_15,
-      link: '/Renaissance',
-    },
-    {
-      name: 'Gothic',
-      para: 'Gothic art features elongated figures and intricate details, often in religious contexts.',
-      backImg: Pic_16,
-      link: '/Digital',
-    },
-    {
-      name: 'Modern',
-      para: 'Modern art experiments with new forms and techniques, breaking from traditional styles.',
-      backImg: Pic_17,
-      link: '/Modern',
-    },
-  ];
+  }, []);const images = [
+  {
+    name: 'Landscape',
+    para: 'A landscape painting portrays natural scenery such as mountains, forests, rivers, or skies, emphasizing light, mood, and atmosphere.',
+    backImg: Pic_1,
+    link: '/Landscape',
+  },
+  {
+    name: 'Portrait',
+    para: 'Portrait art focuses on capturing the personality, expression, and likeness of a person, often emphasizing facial features and emotions.',
+    backImg: Pic_9,
+    link: '/Portrait',
+  },
+  {
+    name: 'Watercolor',
+    para: 'Watercolor painting uses transparent pigments mixed with water, producing soft, luminous effects with delicate layers.',
+    backImg: Pic_2,
+    link: '/Watercolor',
+  },
+  {
+    name: 'Oil Painting',
+    para: 'Oil painting involves pigments mixed with oil, allowing rich textures, vibrant colors, and slow blending for detailed artworks.',
+    backImg: Pic_3,
+    link: '/Oil_Paint',
+  },
+  {
+    name: 'Abstract',
+    para: 'Abstract art expresses ideas or emotions through colors, shapes, and forms without representing specific objects or scenes.',
+    backImg: Pic_4,
+    link: '/Abstract',
+  },
+  {
+    name: 'Still Life',
+    para: 'Still life paintings depict inanimate objects such as fruits, flowers, or everyday items, emphasizing composition and lighting.',
+    backImg: Pic_5,
+    link: '/Still-Life',
+  },
+  {
+    name: 'Historical Art',
+    para: 'Historical art represents significant events or figures from history, often conveying moral, political, or cultural messages.',
+    backImg: Pic_15,
+    link: '/Historical',
+  },
+  {
+    name: 'Surrealism',
+    para: 'Surrealist art blends reality and dreams, creating strange, illogical scenes filled with symbolic and imaginative elements.',
+    backImg: Pic_6,
+    link: '/Surrealism',
+  },
+  {
+    name: 'Impressionism',
+    para: 'Impressionism captures fleeting moments with quick brushstrokes and bright colors, focusing on light and movement.',
+    backImg: Pic_7,
+    link: '/Impressionism',
+  },
+  {
+    name: 'Realism',
+    para: 'Realist art portrays subjects truthfully and accurately, avoiding idealization and emphasizing everyday life and detail.',
+    backImg: Pic_8,
+    link: '/Realism',
+  },
+  {
+    name: 'Expressionism',
+    para: 'Expressionist art uses vivid colors and dramatic distortions to reflect inner emotions and psychological states.',
+    backImg: Pic_10,
+    link: '/Expressionism',
+  },
+  {
+    name: 'Minimalism',
+    para: 'Minimalist art simplifies composition using basic shapes, limited colors, and empty space to create clarity and focus.',
+    backImg: Pic_11,
+    link: '/Minimalism',
+  },
+  {
+    name: 'Pop Art',
+    para: 'Pop Art features bold colors and imagery from mass culture, such as advertisements and celebrities, often with irony.',
+    backImg: Pic_12,
+    link: '/Pop-Art',
+  },
+  {
+    name: 'Nature',
+    para: 'Nature art showcases the beauty of the natural world—plants, animals, and landscapes—often emphasizing harmony and detail.',
+    backImg: Pic_13,
+    link: '/Nature',
+  },
+  {
+    name: 'Traditional',
+    para: 'Traditional art follows established styles and techniques, often representing cultural heritage and historical craftsmanship.',
+    backImg: Pic_14,
+    link: '/Traditional',
+  },
+  {
+    name: 'Digital',
+    para: 'Digital art is created using digital tools and software, offering limitless possibilities in style, texture, and manipulation.',
+    backImg: Pic_16,
+    link: '/Digital',
+  },
+  {
+    name: 'Modern',
+    para: 'Modern art breaks away from classical forms, embracing innovation, abstraction, and new perspectives of expression.',
+    backImg: Pic_17,
+    link: '/Modern',
+  },
+];
 
   return (
     <div className="min-h-screen max-w-screen bg-gradient-to-br from-[#2D0434] to-[#3A0B4F] flex items-center flex-col justify-center py-8 overflow-x-hidden">

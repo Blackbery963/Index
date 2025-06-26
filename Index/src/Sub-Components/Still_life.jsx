@@ -1,15 +1,23 @@
 import { useState, useRef,useEffect } from 'react';
 import BackImg from './Sub_components_images/baroque-style-with-tasty-fruits-assortment.jpg';
 import { Link } from 'react-router-dom';
-import { FaHome, FaUser, FaInfoCircle, FaWineBottle,FaSearch,FaPalette,FaArrowLeft, FaArrowRight, } from 'react-icons/fa'; // Importing icons
+import { FaHome, FaUser, FaInfoCircle, FaWineBottle,FaSearch,FaPalette,FaArrowLeft, FaArrowRight,FaRegComment } from 'react-icons/fa'; // Importing icons
 import { motion, AnimatePresence } from "framer-motion";
 import { FiMenu } from 'react-icons/fi';
 import { MdClose } from 'react-icons/md';
 import { storage, Query, databases } from '../appwriteConfig';
 import { FaHeart, FaComment, FaDownload, FaPlus, FaUserCircle } from 'react-icons/fa';
+import InfoCard from './Info/InfoCards';
+import { infoCardsData } from './Info/InfoCardsData';
 import { IoClose } from 'react-icons/io5';
 import { FiDownload } from 'react-icons/fi';
 import SearchBar from '../SearchBar';
+import FollowButton from '../Follow/FollowButton';
+import LikeButton from '../EngagementService/likeButton';
+import ArtworkViewTracker from '../Views/viewsTracker';
+import DownloadService from '../Downloads/downloadService';
+import ShareButton from '../Share/ShareFunction';
+
 
 const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
 const COLLECTION_ID = import.meta.env.VITE_APPWRITE_METADATA_COLLECTION_ID;
@@ -29,6 +37,7 @@ function Still_life() {
   // const [filteredImages, setFilteredImages] = useState([]);
   const [images, setImages] = useState([]);
   const [filteredImages, setFilteredImages] = useState([]);
+  const cards = infoCardsData.stillLife;
 
   // the fetching 
     useEffect(() => {
@@ -203,7 +212,7 @@ function Still_life() {
 
 
   return (
-    <div className='h-screen w-screen overflow-x-hidden'>
+    <div className='h-screen w-screen overflow-x-hidden bg-gray-100 dark:bg-gray-900'>
       {/* Header Section */}
       <div className='h-[80vh] w-full bg-center bg-cover' style={{ backgroundImage: `url(${BackImg})` }}>
         {/* Navbar */}
@@ -341,17 +350,20 @@ function Still_life() {
   </div>
 </section>
 {/* the divider section */}
-<div className="bg-gray-100 dark:bg-gray-900 py-4 flex justify-center">
-  <div className="w-[80%] relative h-1">
-    <div className="
-      absolute left-0 top-0 h-full w-full bg-gray-500 dark:bg-gray-400 
-      origin-left animate-expand
-      before:content-[''] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 
-      before:h-2 before:w-2 before:rounded-full before:bg-current 
-      before:animate-fadeOut
-    " />
-  </div>
-</div>
+           <div className="max-w-7xl mx-auto px-4 py-12 bg-gray-100 dark:bg-gray-900">
+           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+           {cards.map((card, index) => (
+           <InfoCard
+            key={index}
+            title={card.title}
+            content={card.content}
+            gradient={card.gradient}
+            type={card.type}
+            delay={index * 0.1}
+            />
+            ))}
+            </div>
+            </div>
 {/* from here the image part starts */}
         {/* all images */}
       <section>
@@ -395,16 +407,9 @@ function Still_life() {
                             {profile.username || "Unkown Artist"}
                          </p>
                        </div>
-                       <button
-                         onClick={() => toggleFollow(image.user?.id || image.$id)}
-                         className={`ml-auto px-3 py-1 text-sm rounded-full font-Quicksand ${
-                           followedUsers[image.user?.id || image.$id]
-                             ? 'bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200'
-                             : 'bg-blue-500 text-white hover:bg-blue-600'
-                         }`}
-                       >
-                         {followedUsers[image.user?.id || image.$id] ? 'Unfollow' : 'Follow'}
-                       </button>
+                  <div className=' pl-3'>
+                    <FollowButton targetUserId={image.user?.id || image.$id} />
+                  </div>
                      </div>
                      {/* Image */}
                      <img
@@ -417,32 +422,26 @@ function Still_life() {
                      />
                      {/* Actions */}
                      <div className="flex justify-between items-center p-4">
-                       <div className="flex space-x-4">
-                         <button
-                           onClick={() => toggleLike(image.$id)}
-                           className={`flex items-center space-x-1 ${
-                             likes[image.$id]?.liked ? 'text-red-500' : 'text-gray-500 dark:text-gray-400'
-                           } hover:text-red-500 transition-colors`}
-                         >
-                           <FaHeart />
-                           <span className="text-sm font-Quicksand">{likes[image.$id]?.count || 0}</span>
-                         </button>
-                         <button
-                           onClick={() => setShowComments(showComments === image.$id ? null : image.$id)}
-                           className="flex items-center space-x-1 text-gray-500 dark:text-gray-400 hover:text-blue-500 transition-colors"
-                         >
-                           <FaComment />
-                           <span className="text-sm font-Quicksand">Comment</span>
-                         </button>
-                         <button
-                           onClick={() => downloadImage(image.url, image.title)}
-                           className="flex items-center space-x-1 text-gray-500 dark:text-gray-400 hover:text-green-500 transition-colors"
-                         >
-                           <FiDownload />
-                           <span className="text-sm font-Quicksand">Download</span>
-                         </button>
-                  
-                       </div>
+                      <div className="flex space-x-4">
+                  <div className="flex items-center space-x-1 text-gray-500 dark:text-gray-400">
+                    <FaRegEye className='text-[20px]'/>
+                      <span className="text-sm font-Quicksand">{image.viewCount || 0}</span>
+                    </div>
+                    <LikeButton targetId={image.$id}/>
+                    <button
+                      onClick={() => setShowComments(showComments === image.$id ? null : image.$id)}
+                      className="flex items-center space-x-1 text-gray-500 dark:text-gray-400 hover:text-blue-500 transition-colors"
+                    >
+                      <FaRegComment />
+                      <span className="text-sm font-Quicksand">0</span>
+                    </button>
+                    <div>
+                      <DownloadService artwork={image} />
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <ShareButton artwork={image} />
+                    </div>
+                  </div>
                      </div>
                      {/* Comment Section */}
                      <AnimatePresence>
@@ -531,6 +530,9 @@ function Still_life() {
                    <div className="absolute bottom-4 left-0 right-0 text-center text-white font-Quicksand">
                      <p>{stillLifeImages[lightbox.index].title || 'Untitled'}</p>
                      <p className="text-sm">{lightbox.index + 1} / {stillLifeImages.length}</p>
+                    <div className="absolute top-4 left-4">
+                    <ArtworkViewTracker artworkId={landscapeImages[lightbox.index].$id} />
+                  </div>
                    </div>
                  </motion.div>
                </motion.div>

@@ -34,7 +34,7 @@ export default function Galleryitem({ name, para, backImg }) {
       >
         <p className="text-xl text-white font-semibold font-Playfair text-center">{name}</p>
         {para && (
-          <p className="text-sm text-gray-200 font-Upright text-center mt-2 line-clamp-3">{para}</p>
+          <p className="text-sm text-gray-200 font-Quicksand font-semibold text-center mt-2 line-clamp-3">{para}</p>
         )}
       </motion.div>
     </motion.div>

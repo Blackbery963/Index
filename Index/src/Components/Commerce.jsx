@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { FiArrowRight, FiShoppingCart } from 'react-icons/fi';
 import { motion } from 'framer-motion';
 import bg from './Commerce/ai-generated-8421436.jpg'
+import { Link } from 'react-router-dom';
 
 const Commerce = () => {
   const [hoveredCard, setHoveredCard] = useState(null);
@@ -81,22 +82,22 @@ const Commerce = () => {
       Your gateway to extraordinary artworks from emerging and established artists worldwide.
     </p>
     <div className="flex flex-col sm:flex-row justify-center gap-4">
-      <motion.a
-        href="/gallery"
+       <Link
+        to="/gallery"
         className="px-8 py-4 bg-teal-400 text-black rounded-md font-semibold hover:bg-teal-300 transition shadow-lg font-Quicksand"
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
       >
         Explore Gallery
-      </motion.a>
-      <motion.a
-        href="/artists"
+       </Link>
+       <Link
+        to="/artists"
         className="px-8 py-4 border border-teal-300 text-white rounded-md font-semibold hover:bg-white/10 transition bg-white/5 backdrop-blur-md font-Quicksand"
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
       >
         Meet the Artists
-      </motion.a>
+       </Link>
     </div>
   </motion.div>
 </main>
@@ -117,9 +118,9 @@ const Commerce = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             {featuredCategories.map((category) => (
-              <motion.a
+              <Link
                 key={category.id}
-                href={category.link}
+                to={category.link}
                 className="relative group overflow-hidden rounded-lg shadow-xl h-96"
                 onMouseEnter={() => setHoveredCard(category.id)}
                 onMouseLeave={() => setHoveredCard(null)}
@@ -165,7 +166,7 @@ const Commerce = () => {
                     View Collection <FiArrowRight className="ml-2" />
                   </motion.div>
                 </div>
-              </motion.a>
+              </Link>
             ))}
           </div>
         </section>

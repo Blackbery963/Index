@@ -11,6 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "@sendgrid/mail": "^8.1.5",
     "aos": "^2.3.4",
     "appwrite": "^18.0.0",

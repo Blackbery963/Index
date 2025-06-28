@@ -713,9 +713,7 @@ import { account, databases } from '../../appwriteConfig';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Your_Collections from './Your_Collection/Your_Collections';
-// import FollowButton from '../../Follow/FollowButton';
 import { followService } from '../../Follow/FollowService';
-// import FollowButton from '../../Follow/FollowButton';
 import FollowButton from '../../Follow/FollowButton';
 import { getCollectionCount } from './getUploadArt';
 

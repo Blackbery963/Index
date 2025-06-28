@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import footer from './Footer-images/freepik-export-20240930073049yijq.png'
 import palette from './Footer-images/pallete.jpg'
-import { FaFacebook, FaInstagram, FaTwitter, FaYoutube, FaLinkedin } from 'react-icons/fa';
+import { FaFacebook, FaInstagram, FaYoutube, FaLinkedin } from 'react-icons/fa';
 import { FaXTwitter } from 'react-icons/fa6';
 
 
@@ -117,32 +117,53 @@ function Footer() {
 
         {/* Contact Info */}
         <div className="flex flex-col items-center justify-center mx-auto mt-10">
-          <p className="text-sm md:text-base">EMAIL US</p>
-          <p className="text-sm md:text-base">swarnadipb727@gmail.com</p>
-        </div>
+  <p className="text-sm md:text-base">EMAIL US</p>
+  <p className="text-sm md:text-base">swarnadipb727@gmail.com</p>
+</div>
 
-        {/* Social Media */}
-        <div className="flex items-center justify-center gap-6 mt-4">
-          <div className="hidden md:block w-[20vw] h-[2px] bg-black"></div>
-          <div className="flex gap-6">
-           
-             {[
-              { Icon: FaFacebook },
-              { Icon: FaInstagram },
-              { Icon: FaXTwitter },
-              { Icon: FaYoutube },
-              { Icon: FaLinkedin }
-            ].map(({ Icon }, idx) => (
-              <div
-                key={idx}
-                className="h-[30px] w-[30px] sm:h-[40px] sm:w-[40px] rounded-lg cursor-pointer flex items-center justify-center transition-transform duration-200 hover:scale-110"
-              >
-                <Icon className="h-full w-full p-1 text-black hover:text-cyan-600" />
-              </div>
-            ))}
-          </div>
-          <div className="hidden md:block w-[20vw] h-[2px] bg-black"></div>
+{/* Social Media */}
+<div className="flex items-center justify-center gap-6 mt-4">
+  <div className="hidden md:block w-[20vw] h-[2px] bg-black"></div>
+  <div className="flex gap-6">
+    {[
+      {
+        Icon: FaFacebook,
+        Link: 'https://www.facebook.com/profile.php?id=61577769513723'
+      },
+      {
+        Icon: FaInstagram,
+        Link: 'https://instagram.com/your_instagram'
+      },
+      {
+        Icon: FaXTwitter,
+        Link: 'https://twitter.com/your_twitter'
+      },
+      {
+        Icon: FaYoutube,
+        Link: 'https://youtube.com/@blackberry-cc5vy?si=bL2epR4xYk1NbV9F'
+      },
+      {
+        Icon: FaLinkedin,
+        Link: 'https://linkedin.com/in/your_linkedin'
+      }
+    ].map(({ Icon, Link }, idx) => (
+      <a
+        key={idx}
+        href={Link || '#'}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <div
+          className="h-[30px] w-[30px] sm:h-[40px] sm:w-[40px] rounded-lg cursor-pointer flex items-center justify-center transition-transform duration-200 hover:scale-110"
+        >
+          <Icon className="h-full w-full p-1 text-black hover:text-cyan-600" />
         </div>
+      </a>
+    ))}
+  </div>
+  <div className="hidden md:block w-[20vw] h-[2px] bg-black"></div>
+</div>
+
 
         {/* Copyright */}
         <div className="flex flex-col items-center justify-center my-6 text-center text-xs md:text-sm">

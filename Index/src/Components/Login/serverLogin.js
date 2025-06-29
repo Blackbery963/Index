@@ -5,7 +5,11 @@ const cors = require('cors'); // For CORS support
 
 // Initialize Express app
 const app = express();
-app.use(cors()); // Allow frontend to access the API
+// app.use(cors()); // Allow frontend to access the API
+app.use(cors({
+  origin: 'https://www.thepaintersdiary.com',
+  credentials: true, // only if you plan to use cookies or HTTP credentials
+}));
 app.use(express.json()); // Parse JSON requests
 
 // Initialize Appwrite client

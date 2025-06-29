@@ -407,19 +407,19 @@ import { motion,AnimatePresence } from 'framer-motion';
 const cards = [
   {
     title: "Connect & Collaborate",
-    image: "https://images.unsplash.com/photo-1518998053901-5348d3961a04?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60",
+    image: "https://images.pexels.com/photos/3184430/pexels-photo-3184430.jpeg",
     description: "Join a global network of artists to share ideas and create together.",
     bgClass: "bg-teal-700 bg-opacity-30",
   },
   {
     title: "Research & Teach",
-    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60",
+    image: "https://images.pexels.com/photos/941555/pexels-photo-941555.jpeg",
     description: "Access resources to study, teach, and analyze art history and techniques.",
     bgClass: "bg-indigo-700 bg-opacity-30",
   },
   {
     title: "Publish & Inspire",
-    image: "https://cdn.pixabay.com/photo/2025/05/02/07/28/panorama-9573161_1280.jpg",
+    image: "https://images.pexels.com/photos/355952/pexels-photo-355952.jpeg",
     description: "Share your research papers and inspire the global art community.",
     bgClass: "bg-rose-700 bg-opacity-30 ",
 
@@ -447,6 +447,7 @@ const Gateway = () => {
       {/* Main Content */}
       <div className="relative z-10 flex flex-col items-center justify-center text-left min-h-screen px-4 py-16 sm:px-6 md:px-20 md:py-32 text-white overflow-y-auto">
         {/* Heading */}
+        <h1 className='text-xl text-black absolute top-2 right-2 font-Playfair'>Coming Soon...</h1>
          <AnimatePresence mode="wait">
         {showFirst ? (
           <motion.h1

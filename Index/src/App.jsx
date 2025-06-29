@@ -12,6 +12,7 @@ const Collection = lazy(() => import('./Components/Collections/Collection'));
 const Diarytemp = lazy(() => import('./Components/Diarytemp/Diarytemp'));
 const Connecting = lazy(() => import('./Components/Connecting/Connecting'));
 const Creativity = lazy(() => import('./Components/Creativity/Creativity'));
+const Commerce = lazy(() => import('./Components/Commerce/Commerce'))
 const Visual = lazy(() => import('./Components/Visual/Visual'));
 const Review = lazy(() => import('./Components/Review/Review'));
 // Other imports remain the same...
@@ -56,9 +57,11 @@ import Pop from './Sub-Components/Pop.jsx';
 import Portrait from './Sub-Components/Portrait.jsx';
 import Historical from './Sub-Components/Histoirical';
 import Express from './Sub-Components/Express.jsx';
-import Commerce from './Components/Commerce.jsx';
 import UserDiscoveryPage from './Components/Artisian/userDiscoveryPage.jsx';
 import DiaryCollection from './Components/Diaryland/DiaryCollection.jsx';
+
+// The commecial part starts from here 
+import Artstore from './Arteva/Artstore.jsx';
 
 
 function App() {
@@ -167,6 +170,9 @@ const [diaryEntries, setDiaryEntries] = useState([]);
         <Route path='/Artist/discoverartists' element={<UserDiscoveryPage/>}/>
         <Route path='/Diaries/Diary-Collection' element={<DiaryCollection/>}/>
         <Route path='/diary/:id' element = {<January/>}/>
+
+        {/* the routing of commercial section */}
+        <Route path='/Arteva/ArtStore' element = {<Artstore/>}/>
       </Routes>
     </Router>
   );

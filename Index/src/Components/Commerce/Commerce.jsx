@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FiArrowRight, FiShoppingCart } from 'react-icons/fi';
 import { motion } from 'framer-motion';
-import bg from './Commerce/ai-generated-8421436.jpg'
+import bg from '../Commerce/ai-generated-8421436.jpg'
 import { Link } from 'react-router-dom';
 
 const Commerce = () => {

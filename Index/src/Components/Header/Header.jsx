@@ -971,7 +971,7 @@ const Header = () => {
             </motion.button>
           </Link>
           
-          <Link to="/commission">
+          <Link to="/Arteva/Artstore">
             <motion.button
               className="px-8 py-3 border-2 border-white hover:border-yellow-300 text-white hover:text-yellow-300 font-semibold rounded-full text-sm sm:text-base flex items-center gap-2 backdrop-blur-sm"
               whileHover={{ 

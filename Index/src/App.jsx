@@ -19,6 +19,7 @@ const Review = lazy(() => import('./Components/Review/Review'));
 import Account from './Components/Account/Account';
 import Upload from './Components/Upload/Upload.jsx';
 import Signup from './Components/Signup/Signup';
+import VerifyMFA from './Components/Signup/VerifyMFA.jsx';
 import Login from './Components/Login/Login';
 import Gallery from './Components/Gallery/Gallery';
 import Category from './Components/Category/Category';
@@ -45,9 +46,11 @@ import ResetPassword from './Components/Login/ResetPassword';
 import Cart from './Months/Cart';
 import Help from './Resources/Help/Help.jsx';
 import Artisan from './Components/Artisian/Artisian.jsx';
+import Security from './Product/Security.jsx';
 import Community from './Company/Community/Community.jsx';
 import Nature from './Sub-Components/Nature.jsx';
 import Traditional from './Sub-Components/Traditional.jsx';
+import Photography from './Sub-Components/Photography.jsx';
 import Realism from './Sub-Components/Realism.jsx';
 import Minimalism from './Sub-Components/Minimalism.jsx';
 import Impression from './Sub-Components/Impression.jsx';
@@ -128,6 +131,7 @@ const [diaryEntries, setDiaryEntries] = useState([]);
         {/* Other routes remain the same */}
         <Route path="/Account" element={<Account />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path='/Signup/Multi-Factor_Authentication' element={<VerifyMFA/>}/>
         <Route path="/login" element={<Login />} />
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/category" element={<Category />} />
@@ -135,6 +139,7 @@ const [diaryEntries, setDiaryEntries] = useState([]);
         <Route path="/portrait" element={<Portrait />} />
         <Route path="/still-life" element={<Still_life />} />
         <Route path="/oil_paint" element={<Oil_paint />} />
+        <Route path='/Photography' element={<Photography/>}/>
         <Route path="/watercolor" element={<Water_color />} />
         <Route path="/abstract" element={<Abstract />} />
         <Route path="/historical" element={<Historical />} />
@@ -153,6 +158,7 @@ const [diaryEntries, setDiaryEntries] = useState([]);
         <Route path="/Legal/Privacy_Policy" element={<Privacy_Policy />} />
         <Route path="/Legal/Terms_Conditions" element={<Terms_Conditions />} />
         <Route path="/Legal/License" element={<License />} />
+        <Route path='/Product/Security' element={<Security/>}/>
         <Route path="/Login/ResetPassword" element={<ResetPassword />} />
         <Route path="/cart" element={<Cart />} />
         <Route path='/History' element={<History/>}/>

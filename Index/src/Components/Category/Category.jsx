@@ -22,7 +22,7 @@ import Pic_14 from './Category-images/tradition.jpg';
 import Pic_15 from './Category-images/historic.jpg';
 import Pic_16 from './Category-images/digital.jpg';
 import Pic_17 from './Category-images/modern.jpg';
-import { FaHome } from 'react-icons/fa';
+import Pic_18 from './Category-images/Photography.jpg'
 
 function Category() {
   useEffect(() => {
@@ -134,6 +134,12 @@ function Category() {
     backImg: Pic_17,
     link: '/Modern',
   },
+  {
+    name:'Photography',
+    para:'Modern art breaks away from classical forms, embracing innovation, abstraction, and new perspectives of expression.',
+    backImg:Pic_18,
+    link:'/Photography'
+  }
 ];
 
   return (

@@ -84,8 +84,8 @@ function Footer() {
     {
       title: "Product",
       links: [
-        { text: "Update", to: "/update" },
-        { text: "Security", to: "/security" }
+        { text: "Update", to: "/Update" },
+        { text: "Security", to: "/Product/Security" }
       ],
     },
     {

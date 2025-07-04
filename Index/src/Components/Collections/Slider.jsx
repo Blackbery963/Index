@@ -91,10 +91,10 @@ const CustomNextArrow = ({ onClick }) => (
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent"></div>
             {/* Slide Content */}
             <div className="absolute bottom-10 left-10 text-white z-10">
-              <h2 className="text-4xl md:text-5xl font-bold mb-4 animate-fadeInUp">
+              <h2 className="text-4xl md:text-5xl font-bold mb-4 animate-fadeInUp font-Quicksand">
                 {slide.title}
               </h2>
-              <p className="text-lg md:text-xl animate-fadeInUp delay-300">
+              <p className="text-lg md:text-xl animate-fadeInUp delay-300 font-Roboto">
                 {slide.description}
               </p>
             </div>

@@ -42,8 +42,8 @@ export default {
         Create: ["Crete Round"],
         Upright: ["Cormorant Upright"],
         Lugrasimo:["Lugrasimo"],
-        Nano:["Nano Serif"]
-        
+        Nano:["Nano Serif"],
+        Roboto:["Roboto"]
     },
 
    

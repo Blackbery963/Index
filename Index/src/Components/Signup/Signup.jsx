@@ -1,5 +1,3 @@
-
-
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
@@ -76,212 +74,93 @@ const Signup = () => {
     setErrors((prev) => ({ ...prev, [name]: validateField(name, newValue, { ...formData, [name]: newValue }) }));
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   setIsLoading(true);
 
-  //   // Validate all fields
-  //   const newErrors = {
-  //     name: validateField('name', formData.name, formData),
-  //     email: validateField('email', formData.email, formData),
-  //     phone: validateField('phone', formData.phone, formData),
-  //     password: validateField('password', formData.password, formData),
-  //     confirmPassword: validateField('confirmPassword', formData.confirmPassword, formData),
-  //     agreeToTerms: validateField('agreeToTerms', formData.agreeToTerms, formData),
-  //   };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
 
-  //   setErrors(newErrors);
-  //   if (Object.values(newErrors).some((error) => error)) {
-  //     toast.error('Please fix the errors in the form');
-  //     setIsLoading(false);
-  //     return;
-  //   }
+    // Validate all fields
+    const newErrors = {
+      name: validateField('name', formData.name, formData),
+      email: validateField('email', formData.email, formData),
+      phone: validateField('phone', formData.phone, formData),
+      password: validateField('password', formData.password, formData),
+      confirmPassword: validateField('confirmPassword', formData.confirmPassword, formData),
+      agreeToTerms: validateField('agreeToTerms', formData.agreeToTerms, formData),
+    };
 
-  //   try {
-  //     const user = await account.create(
-  //       ID.unique(),
-  //       formData.email,
-  //       formData.password,
-  //       formData.name);
-  //     await account.createEmailPasswordSession(formData.email, formData.password);
-       
-      
-  //     const userData = {
-  //     userId: user.$id,
-  //     username: formData.name,
-  //     email: formData.email,
-  //     createdAt: new Date().toISOString()
-  //     };
-
-
-  //     // Store minimal user data in localStorage
-  //      localStorage.setItem('userProfile', JSON.stringify({
-  //      $id: user.$id,
-  //      username: formData.name,
-  //      email: formData.email
-  //      }));
-
-  //     toast.success('Account created successfully!', { autoClose: 3000 });
-  //     navigate('/Account');
-  //     // After successful signup
-  //     try {
-  //     // Create a phone session for MFA (if using phone verification)
-  //     // Or prepare for authenticator app enrollment
-  //     const token = await account.createMFAChallenge(); // This is a simplified example
-      
-  //     // Store the token in state or temporary storage
-  //     localStorage.setItem('mfaToken', token);
-
-  //     // Redirect to MFA verification page
-  //     navigate('/verify-mfa', { 
-  //       state: { 
-  //         email: formData.email,
-  //         password: formData.password,
-  //         mfaToken: token 
-  //       } 
-  //     });
-  //     return;
-  //   } catch (mfaErr) {
-  //     console.error('MFA setup error:', mfaErr);
-  //     toast.error('Failed to set up MFA');
-  //     throw mfaErr; // This will be caught by the outer catch
-  //   }
-
-  //   // 1. Store in database (via Appwrite)
-  //     try {
-  //       await databases.createDocument(
-  //         DATABASE_ID,
-  //         USER_COLLECTION_ID,
-  //         user.$id,// Using user ID as document ID
-  //         {
-  //         userId: user.$id,
-  //         username: formData.name,
-  //         email: formData.email,
-  //         createdAt: new Date().toISOString()
-  //         },
-  //         // userData,
-  //         [
-  //           Permission.read(Role.user(user.$id)),
-  //           Permission.update(Role.user(user.$id)),
-  //           Permission.delete(Role.user(user.$id))
-  //         ]
-  // );
-
-  //   } catch (dbErr) {
-  //     console.error('Database error:', dbErr);
-  //     toast.error('Account created but failed to store profile.');
-  //   }
-
-  //   } catch (err) {
-  //     console.error('Appwrite error:', err);
-  //     const errorMessage =
-  //       err.code === 409 ? 'Email already exists' : err.message || 'Failed to create account';
-  //     toast.error(errorMessage, { autoClose: 3000 });
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  setIsLoading(true);
-
-  // Validate fields
-  const newErrors = {
-    name: validateField('name', formData.name, formData),
-    email: validateField('email', formData.email, formData),
-    phone: validateField('phone', formData.phone, formData),
-    password: validateField('password', formData.password, formData),
-    confirmPassword: validateField('confirmPassword', formData.confirmPassword, formData),
-    agreeToTerms: validateField('agreeToTerms', formData.agreeToTerms, formData),
-  };
-
-  setErrors(newErrors);
-  if (Object.values(newErrors).some((error) => error)) {
-    toast.error('Please fix the errors in the form');
-    setIsLoading(false);
-    return;
-  }
-
-  try {
-    // 1. Create the user account
-    const user = await account.create(
-      ID.unique(),
-      formData.email,
-      formData.password,
-      formData.name
-    );
+    setErrors(newErrors);
+    if (Object.values(newErrors).some((error) => error)) {
+      toast.error('Please fix the errors in the form');
+      setIsLoading(false);
+      return;
+    }
 
     try {
-      // 2. Try to create session
+      const user = await account.create(
+        ID.unique(),
+        formData.email,
+        formData.password,
+        formData.name);
       await account.createEmailPasswordSession(formData.email, formData.password);
+       
+      
+      const userData = {
+      userId: user.$id,
+      username: formData.name,
+      email: formData.email,
+      createdAt: new Date().toISOString()
+      };
 
-      // 3. No MFA required, proceed to create document
-      await databases.createDocument(
-        DATABASE_ID,
-        USER_COLLECTION_ID,
-        user.$id,
-        {
+
+      // Store minimal user data in localStorage
+       localStorage.setItem('userProfile', JSON.stringify({
+       $id: user.$id,
+       username: formData.name,
+       email: formData.email
+       }));
+
+      toast.success('Account created successfully!', { autoClose: 3000 });
+      navigate('/Account');
+      // After successful signup
+   
+
+
+      // 1. Store in database (via Appwrite)
+
+      try {
+        await databases.createDocument(
+          DATABASE_ID,
+          USER_COLLECTION_ID,
+          user.$id,// Using user ID as document ID
+          {
           userId: user.$id,
           username: formData.name,
           email: formData.email,
-          createdAt: new Date().toISOString(),
-        },
-        [
-          Permission.read(Role.user(user.$id)),
-          Permission.update(Role.user(user.$id)),
-          Permission.delete(Role.user(user.$id)),
-        ]
-      );
-
-      localStorage.setItem(
-        'userProfile',
-        JSON.stringify({
-          $id: user.$id,
-          username: formData.name,
-          email: formData.email,
-        })
-      );
-
-      toast.success('Account created successfully!');
-      navigate('/Account');
-    } catch (err) {
-      // 4. Check if MFA is required
-      if (
-        err.code === 401 &&
-        err.response &&
-        err.response.headers['x-appwrite-mfa']
-      ) {
-        // MFA is required, create challenge
-        const challenge = await account.createMfaChallenge();
-
-        // Redirect to MFA verification page
-        navigate('/Signup/Multi-Factor_Authentication', {
-          state: {
-            email: formData.email,
-            password: formData.password,
-            challengeId: challenge.challengeId,
+          createdAt: new Date().toISOString()
           },
-        });
-        return;
-      } else {
-        throw err;
-      }
+          // userData,
+          [
+            Permission.read(Role.user(user.$id)),
+            Permission.update(Role.user(user.$id)),
+            Permission.delete(Role.user(user.$id))
+          ]
+  );
+
+    } catch (dbErr) {
+        console.error('Database error:', dbErr);
+  toast.error('Account created but failed to store profile.');
+}
+
+    } catch (err) {
+      console.error('Appwrite error:', err);
+      const errorMessage =
+        err.code === 409 ? 'Email already exists' : err.message || 'Failed to create account';
+      toast.error(errorMessage, { autoClose: 3000 });
+    } finally {
+      setIsLoading(false);
     }
-  } catch (err) {
-    console.error('Signup error:', err);
-    const errorMessage =
-      err.code === 409
-        ? 'Email already exists'
-        : err.message || 'Failed to create account';
-    toast.error(errorMessage);
-  } finally {
-    setIsLoading(false);
-  }
-};
-
-
-  // Animation variants
+  };        
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: { opacity: 1, transition: { staggerChildren: 0.2 } },
@@ -625,3 +504,4 @@ const handleSubmit = async (e) => {
 }
 
 export default Signup;
+

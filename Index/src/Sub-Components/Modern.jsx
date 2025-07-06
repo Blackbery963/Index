@@ -1,211 +1,3 @@
-// import { useState, useRef } from 'react';
-// import BackImg from './Sub_components_images/art-8324768.jpg';
-// import { Link } from 'react-router-dom';
-// import { FaHome, FaUser, FaInfoCircle, FaPalette,FaSearch } from 'react-icons/fa'; // Importing icons
-// import { motion, AnimatePresence } from "framer-motion";
-// import { FiMenu } from 'react-icons/fi';
-// import { MdClose } from 'react-icons/md';
-
-// function Modern() {
-//   const [activeButton, setActiveButton] = useState('landscape');
-//   const contentRef = useRef(null); // Create a ref for the content section
-//   const [isExpanded, setIsExpanded] = useState(false);
-//   const [query, setQuery] = useState("");
-//   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-
-//   const scrollToContent = () => {
-//     if (contentRef.current) {
-//       contentRef.current.scrollIntoView({ behavior: 'smooth' });
-//     }
-//   };
-  
-//   const toggleMenu = () => {
-//     setIsMenuOpen(!isMenuOpen);
-//   };
-
-//   // Dropdown animation variants
-//   const dropdownVariants = {
-//     hidden: {
-//       opacity: 0,
-//       y: -10,
-//       transition: { duration: 0.2 }
-//     },
-//     visible: {
-//       opacity: 1,
-//       y: 0,
-//       transition: { duration: 0.2 }
-//     }
-//   };
-//   return (
-//     <div className='h-screen w-screen overflow-x-hidden'>
-//       {/* Header Section */}
-//       <div className='h-screen w-full bg-center bg-cover' style={{ backgroundImage: `url(${BackImg})` }}>
-//         {/* Navbar */}
-//         <header className='fixed top-0 h-[80px] w-full bg-white/20 backdrop-blur-sm flex items-center justify-between px-4 md:px-6 shadow-md z-50'>
-//           {/* Logo Section */}
-//           <div className='flex items-center'>
-//             <h1 className='lg:text-[35px] md:text-[30px] sm:text-[25px] text-[21px] font-bold font-Eagle text-black'>Painters' Diary</h1>
-//           </div>
-//           {/* Navigation Buttons */}
-//           <div className='flex items-center gap-x-2 sm:gap-x-4'>
-//             {/* Search Bar */}
-//             <motion.div
-//               className="flex items-center bg-white/40 border border-gray-300 rounded-lg shadow-md overflow-hidden"
-//               initial={{ width: "40px" }}
-//               animate={{ width: isExpanded ? "200px" : "40px" }}
-//               transition={{ duration: 0.3, ease: "easeInOut" }}
-//             >
-//               <motion.input
-//                 type="text"
-//                 value={query}
-//                 onChange={(e) => setQuery(e.target.value)}
-//                 className={`px-2 py-1 w-full outline-none text-gray-700 bg-transparent ${isExpanded ? "block" : "hidden"}`}
-//                 placeholder="Search..."
-//               />
-//               <motion.button
-//                 onClick={() => setIsExpanded(!isExpanded)}
-//                 className="px-2 py-1 text-gray-600 hover:text-gray-800"
-//                 whileTap={{ scale: 0.9 }}
-//               >
-//                 <FaSearch />
-//               </motion.button>
-//             </motion.div>
-//             {/* Desktop Navigation */}
-//             <nav className='hidden md:flex gap-x-4 text-black font-Playfair font-bold'>
-//               <Link to='/'>
-//                 <button 
-//                   className={`px-2 py-1 rounded-md transition-all border-gray-400 border hover:bg-gray-600/50 flex items-center justify-center gap-1 ${activeButton === 'home' ? 'bg-gray-600/50' : ''}`}
-//                   onClick={() => setActiveButton('home')}
-//                 >
-//                   <FaHome />
-//                   <span className="ml-1">Home</span>
-//                 </button>
-//               </Link>
-//               <Link to='/About'> 
-//                 <button 
-//                   className={`px-2 py-1 rounded-md transition-all border-gray-400 border hover:bg-gray-600/50 flex items-center justify-center gap-1 ${activeButton === 'about' ? 'bg-gray-600/50' : ''}`}
-//                   onClick={() => setActiveButton('about')}
-//                 >
-//                   <FaInfoCircle />
-//                   <span className="ml-1">About</span>
-//                 </button>
-//               </Link>
-//               <Link to='/Account'>
-//                 <button 
-//                   className={`px-2 py-1 rounded-md transition-all border-gray-400 border hover:bg-gray-600/50 flex items-center justify-center gap-1 ${activeButton === 'account' ? 'bg-gray-600/50' : ''}`}
-//                   onClick={() => setActiveButton('account')}
-//                 >
-//                   <FaUser />
-//                   <span className="ml-1">Account</span>
-//                 </button>
-//               </Link>
-//               <Link to='/Landscape'>
-//                 <button 
-//                   className={`px-2 py-1 rounded-md transition-all bg-blue-500 text-white flex items-center justify-center gap-1 ${activeButton === 'landscape' ? 'bg-blue-600' : ''}`}
-//                   onClick={() => setActiveButton('landscape')}
-//                 >
-//                   <FaPalette />
-//                   <span className="ml-1">Gallery</span>
-//                 </button>
-//               </Link>
-//             </nav>
-//             {/* Mobile Menu Button */}
-//             <button 
-//               className="md:hidden p-2 text-black hover:text-gray-800 transition-all duration-300"
-//               onClick={toggleMenu}
-//               aria-label="Toggle menu"
-//             >
-//               {isMenuOpen ? <MdClose size={24} /> : <FiMenu size={24} />}
-//             </button>
-//           </div>
-//         </header>
-//         {/* Mobile Dropdown Menu */}
-//         <AnimatePresence>
-//           {isMenuOpen && (
-//             <motion.nav
-//               className="md:hidden fixed top-[85px] right-2 w-36 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-md z-40 rounded-lg"
-//               variants={dropdownVariants}
-//               initial="hidden"
-//               animate="visible"
-//               exit="hidden"
-//             >
-//               <div className="flex flex-col items-center py-4 gap-y-3 font-Playfair font-bold text-black dark:text-gray-100">
-//                 <Link to='/' onClick={() => { setActiveButton('home'); toggleMenu(); }}>
-//                   <button className={`w-full py-2 px-4 flex items-center justify-center gap-2 hover:bg-gray-200 dark:hover:bg-gray-700 ${activeButton === 'home' ? 'bg-gray-200 dark:bg-gray-700' : ''}`}>
-//                     <FaHome />
-//                     Home
-//                   </button>
-//                 </Link>
-//                 <Link to='/About' onClick={() => { setActiveButton('about'); toggleMenu(); }}>
-//                   <button className={`w-full py-2 px-4 flex items-center justify-center gap-2 hover:bg-gray-200 dark:hover:bg-gray-700 ${activeButton === 'about' ? 'bg-gray-200 dark:bg-gray-700' : ''}`}>
-//                     <FaInfoCircle />
-//                     About
-//                   </button>
-//                 </Link>
-//                 <Link to='/Account' onClick={() => { setActiveButton('account'); toggleMenu(); }}>
-//                   <button className={`w-full py-2 px-4 flex items-center justify-center gap-2 hover:bg-gray-200 dark:hover:bg-gray-700 ${activeButton === 'account' ? 'bg-gray-200 dark:bg-gray-700' : ''}`}>
-//                     <FaUser />
-//                     Account
-//                   </button>
-//                 </Link>
-//                 <Link to='/Landscape' onClick={() => { setActiveButton('landscape'); toggleMenu(); }}>
-//                   <button className={`w-full py-2 px-4 flex items-center justify-center gap-2 bg-blue-500 text-white hover:bg-blue-600 ${activeButton === 'landscape' ? 'bg-blue-600' : ''}`}>
-//                     <FaPalette />
-//                     Gallery
-//                   </button>
-//                 </Link>
-//               </div>
-//             </motion.nav>
-//           )}
-//         </AnimatePresence>
-//         {/* Hero Section */}
-//         <main className='flex flex-col items-center justify-center h-full px-4 text-center'>
-//           <h1 className='font-Tapestary text-[30px] md:text-[50px] text-[#ffffff] drop-shadow-lg animate-fade-in'>
-//           The Spirit of Now
-//           </h1>
-//           <h5 className='font-Carattere font-normal text-[20px] md:text-[28px] text-[#ffffff] mt-4 drop-shadow-md animate-fade-in delay-200'>
-//           A vivid expression of the present, where every stroke and color captures the urgency, dreams, and complexities of today’s world.
-//           </h5>
-//           <button 
-//             className='mt-8 px-4 md:px-6 py-2 md:py-3 bg-gradient-to-r from-green-500 to-blue-500 text-white font-bold rounded-full shadow-lg hover:scale-105 transition-transform'
-//             onClick={scrollToContent} // Call the scroll function
-//           >
-//             Explore Now
-//           </button>
-//         </main>
-//         {/* Floating Decorative Element */}
-//         <div className='absolute bottom-6 left-1/2 transform -translate-x-1/2 animate-bounce'>
-//           <div className='w-6 h-6 border-4 border-white rounded-full'></div>
-//         </div>
-//       </div>
-//       {/* Content Section */}
-//       <section ref={contentRef} className='w-full py-12 bg-gray-100'>
-//   <div className='max-w-7xl mx-auto text-center mb-12'>
-//     <h2 className='text-2xl md:text-3xl font-bold font-Playfair text-gray-800 mb-4'>The Pulse of the Present in Modern Art</h2>
-//     <p className='text-base md:text-lg text-gray-600'>
-//     In every abstract form and vibrant hue, modern art speaks to the soul, pushing the boundaries of expression and telling the untold stories of our time.
-//     </p>
-//   </div>
-//   {/* Image with quote Grid Section */}
-//   <div className='flex overflow-x-scroll overflow-y-hidden w-[60%] gap-8 mx-auto'>
-    
-//   </div>
-// </section>
-//         {/* all images */}
-//        <section>
-
-//        </section>
-
-//     </div>
-//   );
-// }
-
-// export default Modern;
-
-
-
-
 import { useState, useRef, useEffect, } from 'react';
 import BackImg from './Sub_components_images/modern.jpg';
 import { Link } from 'react-router-dom';
@@ -225,6 +17,7 @@ import LikeButton from '../EngagementService/likeButton';
 import ArtworkViewTracker from '../Views/viewsTracker';
 import DownloadService from '../Downloads/downloadService';
 import ShareButton from '../Share/ShareFunction';
+import { fetchUserProfile, } from '../Components/Account/ProfileServixe';
 
 
 const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
@@ -242,69 +35,118 @@ function Modern() {
   const [error, setError] = useState(null)
   const [profileImage, setProfileImage] = useState(null);
   const cards = infoCardsData.modern;
-
-   const [profile, setProfile] = useState({
+  const [userProfiles, setUserProfiles] = useState({});
+  const [profile, setProfile] = useState({
     username: '',
     email: '',
+    profileImage:null
   });
 
   useEffect(() => {
-    const savedProfile = JSON.parse(localStorage.getItem('userProfile')) || {};
-    const savedProfileImage = localStorage.getItem('profileImage');
-    setProfile((prev) => ({
-      ...prev,
-      ...savedProfile
-    }));
-    if (savedProfileImage) {
-      setProfileImage(savedProfileImage);
-    }
-  }, []);
+  const loadProfile = async () => {
+    const profileData = await fetchUserProfile();
+    setProfile(profileData);
+  };
+  
+  loadProfile();
+}, []);
+
+  // useEffect(() => {
+  //   const fetchModernImages = async () => {
+  //     try {
+  //       setLoading(true);
+        
+  //       // List files with 'landscape' tag
+  //       const response = await databases.listDocuments(
+  //         DATABASE_ID,
+  //         COLLECTION_ID,
+  //         // Replace with your bucket ID
+
+  //         [      
+  //           Query.equal( 'tag', 'Modern')] // Query for landscape tag
+  //       );
+
+  //   //Get URLs for each file
+
+  //     const imagesWithUrls = await Promise.all(
+  //     response.documents.map(async (doc) => {
+  //       if (!doc.fileId) {
+  //         console.warn(`Document ${doc.$id} is missing fileId`);
+  //         return null; // Skip documents without fileId
+  //       }
+  //       try {
+  //         const url = storage.getFileView(BUCKET_ID, doc.fileId);
+  //         return {
+  //           ...doc,
+  //           url
+  //         };
+  //       } catch (urlError) {
+  //         console.error(`Error getting URL for fileId ${doc.fileId}:`, urlError);
+  //         return null; // Skip files with invalid URLs
+  //       }
+  //     })
+  //   );
+        
+  //     setModernImages(imagesWithUrls.filter(image => image !== null));
+  //     } catch (err) {
+  //       console.error('Error fetching images:', err);
+  //       setError(err.message);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchModernImages();
+  // }, []);
+  
 
   useEffect(() => {
     const fetchModernImages = async () => {
       try {
         setLoading(true);
         
-        // List files with 'landscape' tag
+        // Fetch landscape artworks
         const response = await databases.listDocuments(
           DATABASE_ID,
           COLLECTION_ID,
-          // Replace with your bucket ID
-
-          [      
-            Query.equal( 'tag', 'Modern')] // Query for landscape tag
+          [Query.equal('tag', 'Modern')]
         );
-
-    //Get URLs for each file
-
-      const imagesWithUrls = await Promise.all(
-      response.documents.map(async (doc) => {
-        if (!doc.fileId) {
-          console.warn(`Document ${doc.$id} is missing fileId`);
-          return null; // Skip documents without fileId
-        }
-        try {
-          const url = storage.getFileView(BUCKET_ID, doc.fileId);
-          return {
-            ...doc,
-            url
-          };
-        } catch (urlError) {
-          console.error(`Error getting URL for fileId ${doc.fileId}:`, urlError);
-          return null; // Skip files with invalid URLs
-        }
-      })
-    );
+  
+        // Get image URLs
+        const imagesWithUrls = await Promise.all(
+          response.documents.map(async (doc) => {
+            try {
+              const url = storage.getFileView(BUCKET_ID, doc.fileId);
+              return { ...doc, url };
+            } catch (err) {
+              console.error(`Error getting URL for ${doc.fileId}:`, err);
+              return null;
+            }
+          })
+        );
+  
+        const validImages = imagesWithUrls.filter(img => img !== null);
+        setModernImages(validImages);
+  
+        // Fetch all unique user profiles
+        const uniqueUserIds = [...new Set(validImages.map(img => img.userId))];
+        const profiles = {};
         
-      setModernImages(imagesWithUrls.filter(image => image !== null));
+        await Promise.all(
+          uniqueUserIds.map(async userId => {
+            profiles[userId] = await fetchUserProfile(userId);
+          })
+        );
+  
+        setUserProfiles(profiles);
       } catch (err) {
-        console.error('Error fetching images:', err);
-        setError(err.message);
+        console.error('Error fetching data:', err);
+        setError(err.message || 'Failed to load Modern images');
       } finally {
         setLoading(false);
       }
     };
-
+  
     fetchModernImages();
   }, []);
   
@@ -591,27 +433,41 @@ function Modern() {
                 transition={{ type: 'spring', stiffness: 400, damping: 10 }}
               >
                 {/* Profile Section */}
-                <div className="flex items-center p-4 border-b border-gray-200 dark:border-gray-700">
-                  <Link to={"/Account"}>
-                   {profileImage ? (
-                       <img 
-                       src={profileImage} 
-                       alt="Profile" 
-                       className=" h-10 w-10 rounded-full object-cover" 
-                       />
-                       ) : (
-                       <FaUser className="text-3xl text-white" />
-                        )}
-                      </Link>
-                  <div className="ml-3">
-                    <p className="text-sm font-semibold text-gray-800 dark:text-gray-200 font-Quicksand">
-                      {profile.username || 'Unknown Artist'}
-                    </p>
-                  </div>
-                  <div className=' pl-3'>
-                    <FollowButton targetUserId={image.user?.id || image.$id} />
-                  </div>
-                </div>
+              <div className="flex items-center p-4 border-b border-gray-200 dark:border-gray-700">
+               <Link 
+               to={`/Account/${image.userId}`}
+               className="flex items-center group flex-1 min-w-0"
+               >
+               {userProfiles[image.userId]?.profileImage ? (
+               <img
+               src={userProfiles[image.userId].profileImage}
+               className="h-10 w-10 rounded-full object-cover"
+               alt={userProfiles[image.userId].name}
+               onError={(e) => {
+               e.target.onerror = null;
+               e.target.src = '';
+               e.target.className = 'h-10 w-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-white';
+               e.target.textContent = userProfiles[image.userId]?.name?.charAt(0) || 'U';
+               }}
+               />
+               ) : (
+               <div className="h-10 w-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-white">
+               {userProfiles[image.userId]?.name?.charAt(0) || 'U'}
+               </div>
+               )}
+               <div className="ml-3 min-w-0">
+               <p className="text-sm font-semibold text-gray-800 dark:text-gray-200 truncate group-hover:underline">
+               {userProfiles[image.userId]?.name || 'Unknown Artist'}
+               </p>
+                {userProfiles[image.userId]?.title && (
+               <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+               {userProfiles[image.userId].title}
+               </p>
+                )}
+               </div>
+               </Link>
+               <FollowButton targetUserId={image.userId} />
+              </div>
                 {/* Image */}
                 <img
                   src={image.url}

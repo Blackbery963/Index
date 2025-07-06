@@ -85,7 +85,7 @@ function Edit_Profile() {
   const artStyles = [
     'Abstract', 'Realism', 'Impressionism', 'Expressionism', 
     'Surrealism', 'Cubism', 'Pop Art', 'Minimalism', 
-    'Contemporary', 'Digital Art', 'Watercolor', 'Oil Painting'
+    'Contemporary', 'Digital Art', 'Watercolor', 'Oil Painting','Photography'
   ];
 
   //storing the data in the databse collection

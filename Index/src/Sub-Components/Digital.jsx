@@ -19,6 +19,7 @@ import LikeButton from '../EngagementService/likeButton';
 import ArtworkViewTracker from '../Views/viewsTracker';
 import ShareButton from '../Share/ShareFunction';
 import DownloadService from '../Downloads/downloadService';
+import { fetchUserProfile, } from '../Components/Account/ProfileServixe';
 
 
 const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
@@ -36,81 +37,123 @@ function Digital() {
   const [error, setError] = useState(null)
   const [profileImage, setProfileImage] = useState(null);
   const cards = infoCardsData.digital;
+  const [userProfiles, setUserProfiles] = useState({});
+
 
    const [profile, setProfile] = useState({
     username: '',
     email: '',
+    profileImage:null
   });
 
   useEffect(() => {
-    const savedProfile = JSON.parse(localStorage.getItem('userProfile')) || {};
-    const savedProfileImage = localStorage.getItem('profileImage');
-    setProfile((prev) => ({
-      ...prev,
-      ...savedProfile
-    }));
-    if (savedProfileImage) {
-      setProfileImage(savedProfileImage);
-    }
-  }, []);
-
-  useEffect(() => {
-    const fetchDigitalImages = async () => {
-      try {
-        setLoading(true);
-        
-        // List files with 'landscape' tag
-        const response = await databases.listDocuments(
-          DATABASE_ID,
-          COLLECTION_ID,
-          // Replace with your bucket ID
-
-          [      
-            Query.equal( 'tag', 'DigitalArt')] // Query for landscape tag
-        );
-
-    //Get URLs for each file
-
-      const imagesWithUrls = await Promise.all(
-      response.documents.map(async (doc) => {
-        if (!doc.fileId) {
-          console.warn(`Document ${doc.$id} is missing fileId`);
-          return null; // Skip documents without fileId
-        }
-        try {
-          const url = storage.getFileView(BUCKET_ID, doc.fileId);
-          return {
-            ...doc,
-            url
-          };
-        } catch (urlError) {
-          console.error(`Error getting URL for fileId ${doc.fileId}:`, urlError);
-          return null; // Skip files with invalid URLs
-        }
-      })
-    );
-        
-      setDigitalImages(imagesWithUrls.filter(image => image !== null));
-      } catch (err) {
-        console.error('Error fetching images:', err);
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchDigitalImages();
-  }, []);
+  const loadProfile = async () => {
+    const profileData = await fetchUserProfile();
+    setProfile(profileData);
+  };
   
-  const scrollToContent = () => {
-    if (contentRef.current) {
-      contentRef.current.scrollIntoView({ behavior: 'smooth' });
+  loadProfile();
+}, []);
+
+// useEffect(() => {
+//   const fetchDigitalImages = async () => {
+//     try {
+//       setLoading(true);
+      
+//       // Fetch landscape artworks
+//       const response = await databases.listDocuments(
+//         DATABASE_ID,
+//         COLLECTION_ID,
+//         [Query.equal('tag', 'DigitalArt')]
+//       );
+
+//       // Get image URLs
+//       const imagesWithUrls = await Promise.all(
+//         response.documents.map(async (doc) => {
+//           try {
+//             const url = storage.getFileView(BUCKET_ID, doc.fileId);
+//             return { ...doc, url };
+//           } catch (err) {
+//             console.error(`Error getting URL for ${doc.fileId}:`, err);
+//             return null;
+//           }
+//         })
+//       );
+
+//       const validImages = imagesWithUrls.filter(img => img !== null);
+//       setDigitalImages(validImages);
+
+//       // Fetch all unique user profiles
+//       const uniqueUserIds = [...new Set(validImages.map(img => img.userId))];
+//       const profiles = {};
+      
+//       await Promise.all(
+//         uniqueUserIds.map(async userId => {
+//           profiles[userId] = await fetchUserProfile(userId);
+//         })
+//       );
+
+//       setUserProfiles(profiles);
+//     } catch (err) {
+//       console.error('Error fetching data:', err);
+//       setError(err.message || 'Failed to load Digital Art images');
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   fetchDigitalImages();
+// }, []);
+
+useEffect(() => {
+  const fetchDigitalImages = async () => {
+    try {
+      setLoading(true);
+      
+      // Fetch landscape artworks
+      const response = await databases.listDocuments(
+        DATABASE_ID,
+        COLLECTION_ID,
+        [Query.equal('tag', 'DigitalArt')]
+      );
+
+      // Get image URLs
+      const imagesWithUrls = await Promise.all(
+        response.documents.map(async (doc) => {
+          try {
+            const url = storage.getFileView(BUCKET_ID, doc.fileId);
+            return { ...doc, url };
+          } catch (err) {
+            console.error(`Error getting URL for ${doc.fileId}:`, err);
+            return null;
+          }
+        })
+      );
+
+      const validImages = imagesWithUrls.filter(img => img !== null);
+      setDigitalImages(validImages);
+
+      // Fetch all unique user profiles
+      const uniqueUserIds = [...new Set(validImages.map(img => img.userId))];
+      const profiles = {};
+      
+      await Promise.all(
+        uniqueUserIds.map(async userId => {
+          profiles[userId] = await fetchUserProfile(userId);
+        })
+      );
+
+      setUserProfiles(profiles);
+    } catch (err) {
+      console.error('Error fetching data:', err);
+      setError(err.message || 'Failed to load Digital images');
+    } finally {
+      setLoading(false);
     }
   };
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+  fetchDigitalImages();
+}, []);
 
   // Dropdown animation variants
   const dropdownVariants = {
@@ -385,27 +428,41 @@ function Digital() {
                 transition={{ type: 'spring', stiffness: 400, damping: 10 }}
               >
                 {/* Profile Section */}
-                <div className="flex items-center p-4 border-b border-gray-200 dark:border-gray-700">
-                  <Link to={"/Account"}>
-                   {profileImage ? (
-                       <img 
-                       src={profileImage} 
-                       alt="Profile" 
-                       className=" h-10 w-10 rounded-full object-cover" 
-                       />
-                       ) : (
-                       <FaUser className="text-3xl text-white" />
-                        )}
-                      </Link>
-                  <div className="ml-3">
-                    <p className="text-sm font-semibold text-gray-800 dark:text-gray-200 font-Quicksand">
-                      {profile.username || 'Unknown Artist'}
-                    </p>
-                  </div>
-                      <div className='pl-3'>
-                        <FollowButton targetUserId={image.user?.id || image.$id} />
-                      </div>
-                </div>
+              <div className="flex items-center p-4 border-b border-gray-200 dark:border-gray-700">
+               <Link 
+               to={`/Account/${image.userId}`}
+               className="flex items-center group flex-1 min-w-0"
+               >
+               {userProfiles[image.userId]?.profileImage ? (
+               <img
+               src={userProfiles[image.userId].profileImage}
+               className="h-10 w-10 rounded-full object-cover"
+               alt={userProfiles[image.userId].name}
+               onError={(e) => {
+               e.target.onerror = null;
+               e.target.src = '';
+               e.target.className = 'h-10 w-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-white';
+               e.target.textContent = userProfiles[image.userId]?.name?.charAt(0) || 'U';
+               }}
+               />
+               ) : (
+               <div className="h-10 w-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-white">
+               {userProfiles[image.userId]?.name?.charAt(0) || 'U'}
+               </div>
+               )}
+               <div className="ml-3 min-w-0">
+               <p className="text-sm font-semibold text-gray-800 dark:text-gray-200 truncate group-hover:underline">
+               {userProfiles[image.userId]?.name || 'Unknown Artist'}
+               </p>
+                {userProfiles[image.userId]?.title && (
+               <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+               {userProfiles[image.userId].title}
+               </p>
+                )}
+               </div>
+               </Link>
+               <FollowButton targetUserId={image.userId} />
+              </div>
                 {/* Image */}
                 <img
                   src={image.url}

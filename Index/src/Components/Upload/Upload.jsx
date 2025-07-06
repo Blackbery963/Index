@@ -64,6 +64,14 @@ const UploadEntry = ({ index, entry, updateEntry, removeEntry, handleFileChange,
   "Sound Art",
   "Bio Art",
 
+  //Photogrraphy
+  "Portrait Photography",
+  "Landscape Photography",
+  "Street Photography",
+  "Conceptual Photography",
+  "Documentary Photography",
+  "Micro Photography",
+
   // Design & Applied Arts
   "Graphic Design",
   "Industrial Design",
@@ -93,6 +101,7 @@ const tagOptions = [
   'Historical',
   'Modern',
   'Nature',
+  'Photography'
 ];
 
 

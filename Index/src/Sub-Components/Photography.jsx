@@ -1,15 +1,17 @@
 import { useState, useRef, useEffect, } from 'react';
 import BackImg from './Sub_components_images/Photography.jpg';
 import { Link } from 'react-router-dom';
-import { FaHome, FaUser, FaInfoCircle, FaPalette, FaSearch, FaArrowLeft, FaArrowRight,FaRegComment, FaRegEye } from 'react-icons/fa';
+import { FaHome, FaUser, FaInfoCircle, FaPalette, FaSearch, FaArrowLeft, FaArrowRight, } from 'react-icons/fa';
 import { motion, AnimatePresence } from "framer-motion";
 import { FiMenu } from 'react-icons/fi';
 import { MdClose } from 'react-icons/md';
 import { storage, Query, databases } from '../appwriteConfig';
-import { FaHeart, FaComment, FaDownload, FaPlus, FaUserCircle } from 'react-icons/fa';
+import { FaHeart, FaRegComment, FaPlus, FaUserCircle, FaRegEye } from 'react-icons/fa';
+import { FiDownload } from 'react-icons/fi';
+import { PiShareFatLight } from 'react-icons/pi';
 import { IoClose } from 'react-icons/io5';
 import SearchBar from '../SearchBar';
-import { ID } from '../appwriteConfig';
+import { client } from '../appwriteConfig';
 import InfoCard from './Info/InfoCards';
 import { infoCardsData } from './Info/InfoCardsData';
 import FollowButton from '../Follow/FollowButton';
@@ -17,6 +19,9 @@ import LikeButton from '../EngagementService/likeButton';
 import ArtworkViewTracker from '../Views/viewsTracker';
 import DownloadService from '../Downloads/downloadService';
 import ShareButton from '../Share/ShareFunction';
+
+import { fetchUserProfile, } from '../Components/Account/ProfileServixe';
+
 
 const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
 const COLLECTION_ID = import.meta.env.VITE_APPWRITE_METADATA_COLLECTION_ID;
@@ -30,80 +35,78 @@ function Photography() {
   const [isExpanded, setIsExpanded] = useState(false);
   const [query, setQuery] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [oilImages, setOilImages] = useState([]);
+  const [photographyImages, setPhotographyImages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null)
   const [profileImage, setProfileImage] = useState(null);
-  const [currentUserId, setCurrentUserId] = useState(''); // Add current user ID
-  const [follows, setFollows] = useState([]); // Track all follows
-  const cards = infoCardsData.oil;
+  const [userProfiles, setUserProfiles] = useState({});
 
 
    const [profile, setProfile] = useState({
     username: '',
     email: '',
-    $id:''
+    profileImage:null
   });
 
   useEffect(() => {
-    const savedProfile = JSON.parse(localStorage.getItem('userProfile')) || {};
-    const savedProfileImage = localStorage.getItem('profileImage');
-    setProfile((prev) => ({
-      ...prev,
-      ...savedProfile
-    }));
-    if (savedProfileImage) {
-      setProfileImage(savedProfileImage);
-    }
-  }, []);
+  const loadProfile = async () => {
+    const profileData = await fetchUserProfile();
+    setProfile(profileData);
+  };
+  
+  loadProfile();
+}, []);
 
-  useEffect(() => {
-    const fetchOilImages = async () => {
-      try {
-        setLoading(true);
-        
-        // List files with 'landscape' tag
-        const response = await databases.listDocuments(
-          DATABASE_ID,
-          COLLECTION_ID,
-          // Replace with your bucket ID
+useEffect(() => {
+  const fetchPhotographyImages = async () => {
+    try {
+      setLoading(true);
+      
+      // Fetch landscape artworks
+      const response = await databases.listDocuments(
+        DATABASE_ID,
+        COLLECTION_ID,
+        [Query.equal('tag', 'Photography')]
+      );
 
-          [      
-            Query.equal( 'medium', 'Oil Painting')] // Query for landscape tag
-        );
-
-    //Get URLs for each file
-
+      // Get image URLs
       const imagesWithUrls = await Promise.all(
-      response.documents.map(async (doc) => {
-        if (!doc.fileId) {
-          console.warn(`Document ${doc.$id} is missing fileId`);
-          return null; // Skip documents without fileId
-        }
-        try {
-          const url = storage.getFileView(BUCKET_ID, doc.fileId);
-          return {
-            ...doc,
-            url
-          };
-        } catch (urlError) {
-          console.error(`Error getting URL for fileId ${doc.fileId}:`, urlError);
-          return null; // Skip files with invalid URLs
-        }
-      })
-    );
-        
-      setOilImages(imagesWithUrls.filter(image => image !== null));
-      } catch (err) {
-        console.error('Error fetching images:', err);
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+        response.documents.map(async (doc) => {
+          try {
+            const url = storage.getFileView(BUCKET_ID, doc.fileId);
+            return { ...doc, url };
+          } catch (err) {
+            console.error(`Error getting URL for ${doc.fileId}:`, err);
+            return null;
+          }
+        })
+      );
 
-    fetchOilImages();
-  }, []);
+      const validImages = imagesWithUrls.filter(img => img !== null);
+      setPhotographyImages(validImages);
+
+      // Fetch all unique user profiles
+      const uniqueUserIds = [...new Set(validImages.map(img => img.userId))];
+      const profiles = {};
+      
+      await Promise.all(
+        uniqueUserIds.map(async userId => {
+          profiles[userId] = await fetchUserProfile(userId);
+        })
+      );
+
+      setUserProfiles(profiles);
+    } catch (err) {
+      console.error('Error fetching data:', err);
+      setError(err.message || 'Failed to load landscape images');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchPhotographyImages();
+}, []);
+
   
   const scrollToContent = () => {
     if (contentRef.current) {
@@ -135,25 +138,7 @@ function Photography() {
   const [followedUsers, setFollowedUsers] = useState({});
   const [lightbox, setLightbox] = useState({ open: false, index: 0 });
 
-  // Toggle like for an image
-  const toggleLike = (imageId) => {
-    setLikes((prev) => ({
-      ...prev,
-      [imageId]: {
-        liked: !prev[imageId]?.liked,
-        count: (prev[imageId]?.count || 0) + (prev[imageId]?.liked ? -1 : 1),
-      },
-    }));
-  };
-
-  // // Toggle follow for a user
-  const toggleFollow = (userId) => {
-    setFollowedUsers((prev) => ({
-      ...prev,
-      [userId]: !prev[userId],
-    }));
-  };
-
+  
   // Handle comment submission (simulated)
   const handleCommentSubmit = (imageId, e) => {
     e.preventDefault();
@@ -164,29 +149,16 @@ function Photography() {
     }
   };
 
-  // Download image
-  const downloadImage = (url, title) => {
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = title || 'OilPainting-image';
-    link.click();
-  };
-
-  // Add to collection (simulated)
-  const addToCollection = (imageId) => {
-    console.log(`Added image ${imageId} to collection`); // Replace with Appwrite integration
-  };
-
   // Lightbox navigation
   const openLightbox = (index) => setLightbox({ open: true, index });
   const closeLightbox = () => setLightbox({ open: false, index: 0 });
   const prevImage = () => setLightbox((prev) => ({
     ...prev,
-    index: prev.index > 0 ? prev.index - 1 : oilImages.length - 1,
+    index: prev.index > 0 ? prev.index - 1 : landscapeImages.length - 1,
   }));
   const nextImage = () => setLightbox((prev) => ({
     ...prev,
-    index: prev.index < oilImages.length - 1 ? prev.index + 1 : 0,
+    index: prev.index < landscapeImages.length - 1 ? prev.index + 1 : 0,
   }));
 
   // Animation variants for lightbox
@@ -206,76 +178,36 @@ function Photography() {
     const fetchImages = async () => {
       const response = await databases.listDocuments(DATABASE_ID, COLLECTION_ID);
       setAllImages(response.documents);
-      setFilteredImages(fetchOilImages);
+      setFilteredImages(fetchPhotographymages);
     };
     fetchImages();
   }, []);
 
+  // rendering info
+   const cards = infoCardsData.photography;
 
-  //Storing Followers in local storage
- useEffect(() => {
-  const user = JSON.parse(localStorage.getItem('userProfile'));
-  if (user?.$id) {
-    setCurrentUserId(user.$id);
-    fetchFollows(user.$id);
-  }
-}, []);
-
-// Fetch follows
-const fetchFollows = async (userId) => {
-  try {
-    const response = await databases.listDocuments(
-      DATABASE_ID,
-      USER_COLLECTION_ID,
-      [Query.equal('followerId', userId)]
-    );
-    setFollows(response.documents);
-  } catch (err) {
-    console.error("Error fetching follows:", err);
-  }
-};
-
-// Handle follow
-const handleFollow = async (artistId) => {
-  if (!currentUserId) {
-    alert('Please log in to follow artists');
-    return;
-  }
-
-  try {
-    const response = await databases.createDocument(
-      DATABASE_ID,
-      USER_COLLECTION_ID,
-      ID.unique(),
-      {
-        followerId: currentUserId,
-        followingId: artistId,
-        createdAt: new Date().toISOString()
+// real time updatw for vieww count
+     useEffect(() => {
+    const unsubscribe = client.subscribe(
+      `databases.${DATABASE_ID}.collections.${COLLECTION_ID}.documents`,
+      (response) => {
+        if (response.events.includes('databases.*.collections.*.documents.*.update')) {
+          const updatedDoc = response.payload;
+          setLandscapeImages((prev) =>
+            prev.map((image) =>
+              image.$id === updatedDoc.$id
+                ? { ...image, viewCount: updatedDoc.viewCount || 0 }
+                : image
+            )
+          );
+        }
       }
     );
-    setFollows(prev => [...prev, response]);
-  } catch (err) {
-    console.error("Error following user:", err);
-    alert('Failed to follow user. Please try again.');
-  }
-};
 
-// Handle unfollow
-const handleUnfollow = async (followId) => {
-  try {
-    await databases.deleteDocument(
-      DATABASE_ID,
-      USER_COLLECTION_ID,
-      followId
-    );
-    setFollows(prev => prev.filter(follow => follow.$id !== followId));
-  } catch (err) {
-    console.error("Error unfollowing user:", err);
-    alert('Failed to unfollow user. Please try again.');
-  }
-};
+    return () => unsubscribe();
+  }, []);
 
-  
+
   return (
     <div className='h-screen w-screen overflow-x-hidden bg-gray-100 dark:bg-gray-900 font-Playfair'>
       {/* Header Section */}
@@ -291,9 +223,9 @@ const handleUnfollow = async (followId) => {
             {/* Search Bar */}
              <div>
              <SearchBar 
-             allImages={oilImages} 
+             allImages={photographyImages} 
              onFilter={setFilteredImages} 
-             placeholder="Search Oil Colour..." 
+             placeholder="Search Photos..." 
              />
              </div>
             {/* Desktop Navigation */}
@@ -325,7 +257,7 @@ const handleUnfollow = async (followId) => {
                   <span className="ml-1">Account</span>
                 </button>
               </Link>
-              <Link to='/Landscape'>
+              <Link to='/gallery'>
                 <button 
                   className={`px-2 py-1 rounded-md transition-all bg-blue-500 text-white flex items-center justify-center gap-1 ${activeButton === 'landscape' ? 'bg-blue-600' : ''}`}
                   onClick={() => setActiveButton('landscape')}
@@ -374,7 +306,7 @@ const handleUnfollow = async (followId) => {
                     Account
                   </button>
                 </Link>
-                <Link to='/Landscape' onClick={() => { setActiveButton('landscape'); toggleMenu(); }}>
+                <Link to='/gallery' onClick={() => { setActiveButton('landscape'); toggleMenu(); }}>
                   <button className={`w-full py-2 px-4 flex items-center justify-center gap-2 bg-blue-500 text-white hover:bg-blue-600 rounded-lg`}>
                     <FaPalette />
                     Gallery
@@ -386,12 +318,13 @@ const handleUnfollow = async (followId) => {
         </AnimatePresence>
         {/* Hero Section */}
         <main className='flex flex-col items-center justify-center h-full px-4 text-center'>
-                   <h1 className='font-Tapestary text-[30px] md:text-[50px] text-[#2c0303] drop-shadow-lg animate-fade-in'>
-          Echoes in Every Stroke
-          </h1>
-          <h5 className='font-Carattere font-normal text-[20px] md:text-[28px] text-[#0f032b] mt-4 drop-shadow-md animate-fade-in delay-200'>
-          Through layers of rich pigment, oil paintings breathe life into emotions, preserving the unspoken beauty of the heart's deepest whispers.
-          </h5>
+        <h1 className='font-Tapestary text-[30px] md:text-[50px] text-white drop-shadow-lg animate-fade-in'>
+        Through the Lens of Time
+        </h1>
+        <h5 className='font-Carattere text-[20px] md:text-[28px] text-white mt-4 drop-shadow-md animate-fade-in delay-200'>
+        Capturing fleeting moments and hidden stories, where every frame preserves the beauty, truth, and emotion of life itself
+        </h5>
+
           <button 
             className='mt-8 px-4 md:px-6 py-2 md:py-3 bg-gradient-to-r from-green-500 to-blue-500 text-white font-bold rounded-full shadow-lg hover:scale-105 transition-transform'
             onClick={scrollToContent}
@@ -407,13 +340,15 @@ const handleUnfollow = async (followId) => {
       {/* Content Section */}
       <section ref={contentRef} className='w-[85%] py-12 bg-gray-100 dark:bg-gray-900  mx-auto'>
         <div className='max-w-7xl mx-auto text-center mb-8'>
-         <h2 className='text-2xl md:text-3xl font-bold font-Playfair text-gray-800 mb-4'>Brushstrokes of Eternity – The Timeless Art of Oil Painting</h2>
-    <p className='text-base md:text-lg text-gray-600'>
-    Layer by layer, oil paintings unveil a world of depth and emotion, capturing the essence of life’s beauty in vibrant and lasting hues.
-    </p>
+          <h2 className='text-2xl md:text-3xl font-bold font-Quicksand text-gray-800 dark:text-gray-200 mb-4'>Where Lights Meets Emotion</h2>
+          <p className='text-base md:text-lg text-gray-600 dark:text-gray-300'>
+            From hidden paths to open skies, follow the lens through stories of wanderlust and timeless connection.
+          </p>
         </div>
         {/* The divider section */}
-      <div className="max-w-7xl mx-auto px-4 py-12 bg-gray-100 dark:bg-gray-900">
+
+            {/* Landscape Painting Info Section */}
+           <div className="max-w-7xl mx-auto px-4 py-12 bg-gray-100 dark:bg-gray-900">
            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
            {cards.map((card, index) => (
            <InfoCard
@@ -428,7 +363,7 @@ const handleUnfollow = async (followId) => {
             </div>
             </div>
 
-        {/* Image Grid Section */}
+        {/* Image Grid Section  */}
         <section>
           <section ref={contentRef} className="py-12 bg-gray-100 dark:bg-gray-900 w-full">
         {loading ? (
@@ -441,7 +376,7 @@ const handleUnfollow = async (followId) => {
           </div>
         ) : filteredImages.length === 0 ? (
           <div className="text-center text-gray-600 dark:text-gray-300 p-4">
-            No Portrait images found.
+            No Photography images found.
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-4 max-w-7xl mx-auto">
@@ -453,27 +388,41 @@ const handleUnfollow = async (followId) => {
                 transition={{ type: 'spring', stiffness: 400, damping: 10 }}
               >
                 {/* Profile Section */}
-                <div className="flex items-center p-4 border-b border-gray-200 dark:border-gray-700">
-                  <Link to={"/Account"}>
-                   {profileImage ? (
-                       <img 
-                       src={profileImage} 
-                       alt="Profile" 
-                       className=" h-10 w-10 rounded-full object-cover" 
-                       />
-                       ) : (
-                       <FaUser className="text-3xl text-white" />
-                        )}
-                      </Link>
-                  <div className="ml-3">
-                    <p className="text-sm font-semibold text-gray-800 dark:text-gray-200 font-Quicksand">
-                      {profile.username || 'Unknown Artist'}
-                    </p>
-                  </div>
-                  <div className=' pl-3'>
-                    <FollowButton targetUserId={image.user?.id || image.$id} />
-                  </div>
-                </div>
+<div className="flex items-center p-4 border-b border-gray-200 dark:border-gray-700">
+  <Link 
+    to={`/Account/${image.userId}`}
+    className="flex items-center group flex-1 min-w-0"
+  >
+    {userProfiles[image.userId]?.profileImage ? (
+      <img
+        src={userProfiles[image.userId].profileImage}
+        className="h-10 w-10 rounded-full object-cover"
+        alt={userProfiles[image.userId].name}
+        onError={(e) => {
+          e.target.onerror = null;
+          e.target.src = '';
+          e.target.className = 'h-10 w-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-white';
+          e.target.textContent = userProfiles[image.userId]?.name?.charAt(0) || 'U';
+        }}
+      />
+    ) : (
+      <div className="h-10 w-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-white">
+        {userProfiles[image.userId]?.name?.charAt(0) || 'U'}
+      </div>
+    )}
+    <div className="ml-3 min-w-0">
+      <p className="text-sm font-semibold text-gray-800 dark:text-gray-200 truncate group-hover:underline">
+        {userProfiles[image.userId]?.name || 'Unknown Artist'}
+      </p>
+      {userProfiles[image.userId]?.title && (
+        <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+          {userProfiles[image.userId].title}
+        </p>
+      )}
+    </div>
+  </Link>
+  <FollowButton targetUserId={image.userId} />
+</div>
                 {/* Image */}
                 <img
                   src={image.url}
@@ -568,8 +517,8 @@ const handleUnfollow = async (followId) => {
               exit="exit"
             >
               <img
-                src={oilImages[lightbox.index].url}
-                alt={oilImages[lightbox.index].title || 'Landscape image'}
+                src={photographyImages[lightbox.index].url}
+                alt={photographyImages[lightbox.index].title || 'Landscape image'}
                 className="w-full h-auto max-h-[80vh] object-contain rounded-lg"
               />
               <button
@@ -591,10 +540,10 @@ const handleUnfollow = async (followId) => {
                 <FaArrowRight/>
               </button>
               <div className="absolute bottom-4 left-0 right-0 text-center text-white font-Quicksand">
-                <p>{oilImages[lightbox.index].title || 'Untitled'}</p>
-                <p className="text-sm">{lightbox.index + 1} / {oilImages.length}</p>
-               <div className="absolute top-4 left-4">
-                    <ArtworkViewTracker artworkId={landscapeImages[lightbox.index].$id} />
+                <p>{photographyImages[lightbox.index].title || 'Untitled'}</p>
+                <p className="text-sm">{lightbox.index + 1} / {photographyImages.length}</p>
+                  <div className="absolute top-4 left-4">
+                    <ArtworkViewTracker artworkId={photographyImages[lightbox.index].$id} />
                   </div>
               </div>
             </motion.div>

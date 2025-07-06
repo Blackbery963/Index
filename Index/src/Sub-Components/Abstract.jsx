@@ -18,6 +18,7 @@ import LikeButton from '../EngagementService/likeButton';
 import ArtworkViewTracker from '../Views/viewsTracker';
 import ShareButton from '../Share/ShareFunction';
 import DownloadService from '../Downloads/downloadService';
+import { fetchUserProfile, } from '../Components/Account/ProfileServixe';
 
 
 
@@ -37,64 +38,72 @@ function Abstract() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [profileImage, setProfileImage] = useState(null);
+  const [userProfiles, setUserProfiles] = useState({});
+
   const [profile, setProfile] = useState({
     username: '',
     email: '',
+    profileImage:null
   });
 
   useEffect(() => {
-    const savedProfile = JSON.parse(localStorage.getItem('userProfile')) || {};
-    const savedProfileImage = localStorage.getItem('profileImage');
-    setProfile((prev) => ({
-      ...prev,
-      ...savedProfile
-    }));
-    if (savedProfileImage) {
-      setProfileImage(savedProfileImage);
-    }
-  }, []);
+  const loadProfile = async () => {
+    const profileData = await fetchUserProfile();
+    setProfile(profileData);
+  };
+  
+  loadProfile();
+}, []);
 
   useEffect(() => {
-    const fetchAbstractImages = async () => {
-      try {
-        setLoading(true);
-        
-        const response = await databases.listDocuments(
-          DATABASE_ID,
-          COLLECTION_ID,
-          [Query.equal('tag', 'Abstract')]
-        );
+  const fetchAbstractImages = async () => {
+    try {
+      setLoading(true);
+      
+      // Fetch landscape artworks
+      const response = await databases.listDocuments(
+        DATABASE_ID,
+        COLLECTION_ID,
+        [Query.equal('tag', 'Abstract')]
+      );
 
-        const imagesWithUrls = await Promise.all(
-          response.documents.map(async (doc) => {
-            if (!doc.fileId) {
-              console.warn(`Document ${doc.$id} is missing fileId`);
-              return null;
-            }
-            try {
-              const url = storage.getFileView(BUCKET_ID, doc.fileId);
-              return {
-                ...doc,
-                url
-              };
-            } catch (urlError) {
-              console.error(`Error getting URL for fileId ${doc.fileId}:`, urlError);
-              return null;
-            }
-          })
-        );
-        
-        setAbstractImages(imagesWithUrls.filter(image => image !== null));
-      } catch (err) {
-        console.error('Error fetching images:', err);
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+      // Get image URLs
+      const imagesWithUrls = await Promise.all(
+        response.documents.map(async (doc) => {
+          try {
+            const url = storage.getFileView(BUCKET_ID, doc.fileId);
+            return { ...doc, url };
+          } catch (err) {
+            console.error(`Error getting URL for ${doc.fileId}:`, err);
+            return null;
+          }
+        })
+      );
 
-    fetchAbstractImages();
-  }, []);
+      const validImages = imagesWithUrls.filter(img => img !== null);
+      setAbstractImages(validImages);
+
+      // Fetch all unique user profiles
+      const uniqueUserIds = [...new Set(validImages.map(img => img.userId))];
+      const profiles = {};
+      
+      await Promise.all(
+        uniqueUserIds.map(async userId => {
+          profiles[userId] = await fetchUserProfile(userId);
+        })
+      );
+
+      setUserProfiles(profiles);
+    } catch (err) {
+      console.error('Error fetching data:', err);
+      setError(err.message || 'Failed to load landscape images');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchAbstractImages();
+}, []);
 
   // Real-time updates for view counts
   useEffect(() => {
@@ -273,7 +282,7 @@ function Abstract() {
                   <span className="ml-1">Account</span>
                 </button>
               </Link>
-              <Link to='/Landscape'>
+              <Link to='/Gallery'>
                 <button 
                   className={`px-2 py-1 rounded-md transition-all bg-blue-500 text-white flex items-center justify-center gap-1 ${activeButton === 'landscape' ? 'bg-blue-600' : ''}`}
                   onClick={() => setActiveButton('landscape')}
@@ -320,7 +329,7 @@ function Abstract() {
                     Account
                   </button>
                 </Link>
-                <Link to='/Landscape' onClick={() => { setActiveButton('landscape'); toggleMenu(); }}>
+                <Link to='/Gallery' onClick={() => { setActiveButton('landscape'); toggleMenu(); }}>
                   <button className={`w-full py-2 px-4 flex items-center justify-center gap-2 bg-blue-500 text-white hover:bg-blue-600 rounded-lg`}>
                     <FaPalette />
                     Gallery
@@ -388,35 +397,50 @@ function Abstract() {
                 No Abstract images found.
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-4 max-w-7xl mx-auto">
-                {filteredImages.map((image, index) => (
-                  <motion.div
-                    key={image.$id}
-                    className="relative overflow-visible rounded-xl shadow-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700"
-                    whileHover={{ scale: 1.00, shadow: '0 10px 20px rgba(0,0,0,0.2)' }}
-                    transition={{ type: 'spring', stiffness: 400, damping: 10 }}
-                  >
-                    <div className="flex items-center p-4 border-b border-gray-200 dark:border-gray-700">
-                      <Link to={"/Account"}>
-                        {profileImage ? (
-                          <img 
-                            src={profileImage} 
-                            alt="Profile" 
-                            className="h-10 w-10 rounded-full object-cover" 
-                          />
-                        ) : (
-                          <FaUserCircle className="text-3xl text-gray-500 dark:text-gray-400" />
-                        )}
-                      </Link>
-                      <div className="ml-3">
-                        <p className="text-sm font-semibold text-gray-800 dark:text-gray-200 font-Quicksand">
-                          {profile.username || 'Unknown Artist'}
-                        </p>
-                      </div>
-                      <div className='pl-3'>
-                        <FollowButton targetUserId={image.user?.id || image.$id} />
-                      </div>
-                    </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-4 max-w-7xl mx-auto">
+            {filteredImages.map((image, index) => (
+              <motion.div
+                key={image.$id}
+                className="relative overflow-hidden rounded-xl shadow-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700"
+                whileHover={{ scale: 1.00, shadow: '0 10px 20px rgba(0,0,0,0.2)' }}
+                transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+              >
+                {/* Profile Section */}
+<div className="flex items-center p-4 border-b border-gray-200 dark:border-gray-700">
+  <Link 
+    to={`/Account/${image.userId}`}
+    className="flex items-center group flex-1 min-w-0"
+  >
+    {userProfiles[image.userId]?.profileImage ? (
+      <img
+        src={userProfiles[image.userId].profileImage}
+        className="h-10 w-10 rounded-full object-cover"
+        alt={userProfiles[image.userId].name}
+        onError={(e) => {
+          e.target.onerror = null;
+          e.target.src = '';
+          e.target.className = 'h-10 w-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-white';
+          e.target.textContent = userProfiles[image.userId]?.name?.charAt(0) || 'U';
+        }}
+      />
+    ) : (
+      <div className="h-10 w-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-white">
+        {userProfiles[image.userId]?.name?.charAt(0) || 'U'}
+      </div>
+    )}
+    <div className="ml-3 min-w-0">
+      <p className="text-sm font-semibold text-gray-800 dark:text-gray-200 truncate group-hover:underline">
+        {userProfiles[image.userId]?.name || 'Unknown Artist'}
+      </p>
+      {userProfiles[image.userId]?.title && (
+        <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+          {userProfiles[image.userId].title}
+        </p>
+      )}
+    </div>
+  </Link>
+  <FollowButton targetUserId={image.userId} />
+</div>
                     <img
                       src={image.url}
                       alt={image.title || 'Abstract image'}

@@ -1,9 +1,11 @@
-import { lazy, Suspense, useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useState, } from 'react';
+import { useParams } from 'react-router-dom';
 import './App.css';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { trackPageview, initGA } from '../Analytics.js';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { account,databases } from './appwriteConfig.js';
 import Header from './Components/Header/Header';
 import Footer from './Components/Footer/Footer';
 // Lazy load components
@@ -17,6 +19,7 @@ const Visual = lazy(() => import('./Components/Visual/Visual'));
 const Review = lazy(() => import('./Components/Review/Review'));
 // Other imports remain the same...
 import Account from './Components/Account/Account';
+// import Profile from './Components/Account/Profile.jsx';
 import Upload from './Components/Upload/Upload.jsx';
 import Signup from './Components/Signup/Signup';
 import VerifyMFA from './Components/Signup/VerifyMFA.jsx';
@@ -66,8 +69,16 @@ import DiaryCollection from './Components/Diaryland/DiaryCollection.jsx';
 // The commecial part starts from here 
 import Artstore from './Arteva/Artstore.jsx';
 
+const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
+const COLLECTION_ID = import.meta.env.VITE_APPWRITE_METADATA_COLLECTION_ID;
+const BUCKET_ID = import.meta.env.VITE_APPWRITE_BUCKET_ID;
+const USER_COLLECTION_ID = import.meta.env.VITE_APPWRITE_USERS_COLLECTION_ID;
+
 
 function App() {
+const { userId } = useParams();
+
+
   useEffect(() => {
     AOS.init({
       duration: 600,
@@ -84,6 +95,56 @@ function App() {
     trackPageview(window.location.pathname);
   }, []);
 const [diaryEntries, setDiaryEntries] = useState([]);
+
+useEffect(() => {
+  const checkAuth = async () => {
+    try {
+      const currentUser = await account.get();
+      console.log('Logged in user:', currentUser);
+      // Save to state or context
+    } catch {
+      console.log('No active session');
+      navigate('/login'); // Or show a guest view
+    }
+  };
+
+  checkAuth();
+}, []);
+
+  const [profileData, setProfileData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+    const fetchProfile = async () => {
+      setIsLoading(true);
+      try {
+        if (userId) {
+          // Load another user's profile from your database
+          const userDoc = await databases.getDocument(
+            DATABASE_ID,
+            USER_COLLECTION_ID,
+            userId
+          );
+          setProfileData(userDoc);
+        } else {
+          // Load your own profile from Appwrite account
+          const currentUser = await account.get();
+          const userDoc = await databases.getDocument(
+            DATABASE_ID,
+            USER_COLLECTION_ID,
+            currentUser.$id
+          );
+          setProfileData(userDoc);
+        }
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, [userId]);
   
   return (
     <Router>
@@ -129,7 +190,9 @@ const [diaryEntries, setDiaryEntries] = useState([]);
           }
         />
         {/* Other routes remain the same */}
-        <Route path="/Account" element={<Account />} />
+        <Route path='/Account' element={<Account isOwnProfile={true}/>}/>
+        {/* <Route path="/profile/:userId" element={<Profile />} /> */}
+        <Route path='/Account/:userId' element={<Account isOwnProfile={false}/>}/>
         <Route path="/signup" element={<Signup />} />
         <Route path='/Signup/Multi-Factor_Authentication' element={<VerifyMFA/>}/>
         <Route path="/login" element={<Login />} />
@@ -185,3 +248,5 @@ const [diaryEntries, setDiaryEntries] = useState([]);
 }
 
 export default App;
+
+

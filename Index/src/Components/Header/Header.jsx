@@ -116,22 +116,22 @@
 //     setFilteredResults(results);
 //   };
 
-  // const [profile, setProfile] = useState({
-  //   username: '',
-  //   email: '',
-  // });
+//   const [profile, setProfile] = useState({
+//     username: '',
+//     email: '',
+//   });
 
-  // useEffect(() => {
-  //   const savedProfile = JSON.parse(localStorage.getItem('userProfile')) || {};
-  //   const savedProfileImage = localStorage.getItem('profileImage');
-  //   setProfile((prev) => ({
-  //     ...prev,
-  //     ...savedProfile
-  //   }));
-  //   if (savedProfileImage) {
-  //     setProfileImage(savedProfileImage);
-  //   }
-  // }, []);
+//   useEffect(() => {
+//     const savedProfile = JSON.parse(localStorage.getItem('userProfile')) || {};
+//     const savedProfileImage = localStorage.getItem('profileImage');
+//     setProfile((prev) => ({
+//       ...prev,
+//       ...savedProfile
+//     }));
+//     if (savedProfileImage) {
+//       setProfileImage(savedProfileImage);
+//     }
+//   }, []);
 
 //   useEffect(() => {
 //     setIsMounted(true);
@@ -299,12 +299,12 @@
 //           IMMERSE YOURSELF IN ART
 //         </h1>
 //         <p className="font-markazi text-base md:text-lg lg:text-2xl font-semibold text-cyan-900 dark:text-cyan-300 mt-4 lg:px-12 px-4 leading-relaxed animate-slideInUp delay-150">
-          // <span className="md:hidden block">
-          //   Discover a curated collection of exceptional art from talented artists worldwide. Whether you're an artist or a collector, our platform connects creators and enthusiasts for browsing, buying, and exploring art.
-          // </span>
-          // <span className="hidden md:block">
-          //   Explore a curated collection of exceptional paintings from talented artists worldwide. Our website is designed to bring art enthusiasts and creators together, providing a seamless experience for browsing, purchasing, and learning about art. Whether you're an artist seeking exposure or a collector looking for the perfect piece, our platform offers something special for everyone.
-          // </span>
+//           <span className="md:hidden block">
+//             Discover a curated collection of exceptional art from talented artists worldwide. Whether you're an artist or a collector, our platform connects creators and enthusiasts for browsing, buying, and exploring art.
+//           </span>
+//           <span className="hidden md:block">
+//             Explore a curated collection of exceptional paintings from talented artists worldwide. Our website is designed to bring art enthusiasts and creators together, providing a seamless experience for browsing, purchasing, and learning about art. Whether you're an artist seeking exposure or a collector looking for the perfect piece, our platform offers something special for everyone.
+//           </span>
 //         </p>
 //         <form
 //           onSubmit={(e) => {
@@ -430,6 +430,7 @@ import { BiCategoryAlt } from "react-icons/bi";
 import { ImBlog } from "react-icons/im";
 import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
+import { databases, account } from "../../appwriteConfig";
 
 
 // Dark Mode Context
@@ -469,6 +470,9 @@ export const DarkModeProvider = ({ children }) => {
     </DarkModeContext.Provider>
   );
 };
+
+const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
+const USER_COLLECTION_ID = import.meta.env.VITE_APPWRITE_USERS_COLLECTION_ID;
 
 const Header = () => {
   const backgroundImages = [
@@ -541,19 +545,51 @@ const Header = () => {
   const [profile, setProfile] = useState({
     username: '',
     email: '',
+    profileImage:null
   });
 
-  useEffect(() => {
-    const savedProfile = JSON.parse(localStorage.getItem('userProfile')) || {};
-    const savedProfileImage = localStorage.getItem('profileImage');
-    setProfile((prev) => ({
-      ...prev,
-      ...savedProfile
-    }));
-    if (savedProfileImage) {
-      setProfileImage(savedProfileImage);
+useEffect(() => {
+  const fetchUserProfile = async () => {
+    try {
+      // Get current user session
+      const userSession = await account.get();
+      const userId = userSession.$id;
+
+      // Fetch profile data from database
+      const userDoc = await databases.getDocument(
+        DATABASE_ID,
+        USER_COLLECTION_ID,
+        userId
+      );
+
+      // Set profile state from database
+      setProfile(prev => ({
+        ...prev,
+        ...userDoc,
+        nickname: userDoc.nickname || '',
+        username: userDoc.username || '',
+        bio: userDoc.bio || '',
+        // Add other fields as needed
+      }));
+
+      // Set profile image from database if available
+      if (userDoc.profileImageUrl) {
+        setProfileImage(userDoc.profileImageUrl);
+      }
+
+    } catch (error) {
+      console.error("Error fetching user profile:", error);
+      // Fallback to localStorage if database fetch fails
+      const savedProfile = JSON.parse(localStorage.getItem('userProfile')) || {};
+      const savedProfileImage = localStorage.getItem('profileImage');
+      setProfile(prev => ({ ...prev, ...savedProfile }));
+      if (savedProfileImage) setProfileImage(savedProfileImage);
     }
-  }, []);
+  };
+
+  fetchUserProfile();
+}, []);
+
 
   // Enhanced animations
   const navbarVariants = {

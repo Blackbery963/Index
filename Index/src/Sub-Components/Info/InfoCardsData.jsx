@@ -567,6 +567,39 @@ historical: [
     ]
   }
 ],
+// Photography
+photography: [
+  {
+    title: "Exploring Photography as Art",
+    gradient: gradient_1,
+    type: "paragraphs",
+    content: [
+      "Photography captures reality through a unique lens, blending technical skill with artistic vision.",
+      "It ranges from documentary truth to abstract expression, making it one of the most versatile art forms."
+    ]
+  },
+  {
+    title: "Modern Photography Practices",
+    gradient: gradient_2,
+    type: "paragraphs",
+    content: [
+      "Digital tools and editing software have expanded the creative possibilities of photography.",
+      "Contemporary photographers often experiment with composition, color grading, and conceptual themes."
+    ]
+  },
+  {
+    title: "Photography Tips",
+    gradient: gradient_3,
+    type: "list",
+    content: [
+      "Understand lighting and exposure basics",
+      "Experiment with different focal lengths",
+      "Develop a consistent editing style",
+      "Focus on storytelling through your images",
+      "Practice patience to capture decisive moments"
+    ]
+  }
+]
 
 
 

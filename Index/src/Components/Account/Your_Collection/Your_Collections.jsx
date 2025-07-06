@@ -46,7 +46,9 @@ function AppwriteImage({ fileId, bucketId, alt, className, ...props }) {
   );
 }
 
-function Your_Collections() {
+function Your_Collections({userId}) {
+
+
   const navigate = useNavigate();
   const [activeButton, setActiveButton] = useState("Photos");
   const [uploads, setUploads] = useState([]);
@@ -76,8 +78,8 @@ function Your_Collections() {
         setLoading(true);
         setError(null);
 
-        const user = await account.get();
-        const userId = user.$id;
+        // const user = await account.get();
+        // const userId = user.$id;
 
         const mediumFilters = {
           Photos: [
@@ -89,10 +91,11 @@ function Your_Collections() {
             "Data Visualization Art", "Calligraphy", "Typography Design", "Sculpture", "Ceramic",
             "Installation Art", "Kinetic Art", "Light Art", "Performance Art", "Sound Art", "Bio Art",
             "Graphic Design", "Industrial Design", "Fashion Design", "Interior Design",
-            "Architectural Drawing", "Game Design", "Other"
+            "Architectural Drawing", "Game Design",  "Portrait Photography","Landscape Photography","Street Photography",
+            "Conceptual Photography","Documentary Photography","Micro Photography","Other"
           ],
           Videos: ["Video"],
-          Diary: ["Other"],
+          // Diary: ["Other"],
           Masterpiece:["Masterpiece"]
 
         };

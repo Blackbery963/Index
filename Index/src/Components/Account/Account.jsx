@@ -1,884 +1,191 @@
-// import React, { useState, useEffect, useRef } from 'react';
-// import { Link } from 'react-router-dom';
-// import { FaUserEdit, FaFacebook, FaInstagram, FaLinkedin, FaPalette, FaGlobe } from 'react-icons/fa';
-// import Your_Collections from './Your_Collection/Your_Collections';
-// import { MdClose, MdOutlineDashboardCustomize, MdOutlinePhotoCameraBack, MdSettings, MdHistory, MdLocationOn } from "react-icons/md";
-// import { FiUpload, FiEdit } from 'react-icons/fi';
-// import { IoIosLogOut } from 'react-icons/io';
-// import { CiEdit, CiMenuFries } from 'react-icons/ci';
-// import { FaXTwitter } from 'react-icons/fa6';
-// import { ImBlog } from 'react-icons/im';
-// import { BiCategoryAlt } from 'react-icons/bi';
-// import { IoMdHelpCircleOutline } from 'react-icons/io';
-// import { MdOutlineFeedback } from 'react-icons/md';
-// import { FaHome, FaUsers, FaUser, FaImages, FaHandsHelping } from "react-icons/fa";
-// import { motion } from 'framer-motion';
-// import { Query } from 'appwrite';
-// import { account, databases } from '../../appwriteConfig';
-// import { toast, ToastContainer } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
-
-// const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
-// const USER_COLLECTION_ID = import.meta.env.VITE_APPWRITE_USERS_COLLECTION_ID;
-
-// function Account() {
-//   const [isMenuOpen, setIsMenuOpen] = useState(false);
-//   const [image, setImage] = useState(null);
-//   const [showButton, setShowButton] = useState(true);
-//   const [profileImage, setProfileImage] = useState(null);
-//   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-//   const [followerCount, setFollowerCount] = useState(null);
-//   const [profileUserId, setProfileUserId] = useState('');
-//   const [user, setUser] = useState(null);
-//   const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 1024);
-//   const [profile, setProfile] = useState({
-//     username: '',
-//     email: '',
-//     bio: '',
-//     location: '',
-//     artStyle: '',
-//     portfolio: '',
-//     facebook: '',
-//     instagram: '',
-//     twitter: '',
-//     linkedin: '',
-//   });
-//   const dropdownRef = useRef(null);
-//   const timeoutRef = useRef(null);
-
-//   // Art styles for display
-//   const artStyles = [
-//     'Abstract', 'Realism', 'Impressionism', 'Expressionism', 
-//     'Surrealism', 'Cubism', 'Pop Art', 'Minimalism', 
-//     'Contemporary', 'Digital Art', 'Watercolor', 'Oil Painting'
-//   ];
-
-//     useEffect(() => {
-//     const loadProfileData = async () => {
-//       setIsLoading(true);
-//       try {
-//         // 1. Get current user session
-//         const currentUser = await account.get();
-//         setUser(currentUser);
-//         setProfileUserId(currentUser.$id);
-        
-//         // 2. Try to fetch from database first
-//         const dbProfile = await databases.getDocument(
-//           DATABASE_ID,
-//           USER_COLLECTION_ID,
-//           currentUser.$id
-//         );
-
-//         // 3. Update state with database data
-//         setProfile({
-//           nickname: dbProfile.nickname || currentUser.name || '',
-//           username: dbProfile.username || currentUser.name || '',
-//           email: dbProfile.email || currentUser.email || '',
-//           bio: dbProfile.bio || '',
-//           location: dbProfile.location || '',
-//           artStyle: dbProfile.artStyle || '',
-//           portfolio: dbProfile.portfolio || '',
-//           facebook: dbProfile.facebook || '',
-//           instagram: dbProfile.instagram || '',
-//           twitter: dbProfile.twitter || '',
-//           linkedin: dbProfile.linkedin || ''
-//         });
-
-//         // 4. Load images from localStorage (cache)
-//         const savedProfileImage = localStorage.getItem('profileImage');
-//         const savedCoverImage = localStorage.getItem('coverImage');
-//         if (savedProfileImage) setProfileImage(savedProfileImage);
-//         if (savedCoverImage) {
-//           setImage(savedCoverImage);
-//           setShowButton(false);
-//         }
-
-//       } catch (error) {
-//         console.error("Error loading profile:", error);
-        
-//         // Fallback to localStorage if database fails
-//         const savedProfile = JSON.parse(localStorage.getItem('userProfile')) || {};
-//         setProfile(prev => ({
-//           ...prev,
-//           ...savedProfile
-//         }));
-//       } finally {
-//         setIsLoading(false);
-//       }
-//     };
-
-//     loadProfileData();
-//   }, []);
-
-//   // Enhanced logout function
-//   const handleLogout = async () => {
-//     if (window.confirm('Are you sure you want to log out? Your session will be cleared but your account will remain.')) {
-//       try {
-//         // 1. Clear session
-//         await account.deleteSession('current');
-        
-//         // 2. Reset sensitive data in database (keep only essential fields)
-//         await databases.updateDocument(
-//           DATABASE_ID,
-//           USER_COLLECTION_ID,
-//           profileUserId,
-//           {
-//             nickname:'',
-//             bio: '',
-//             location: '',
-//             artStyle: '',
-//             portfolio: '',
-//             facebook: '',
-//             instagram: '',
-//             twitter: '',
-//             linkedin: '',
-//             lastLogout: new Date().toISOString()
-//           }
-//         );
-        
-//         // 3. Clear local storage
-//         localStorage.removeItem('userProfile');
-//         localStorage.removeItem('profileImage');
-//         localStorage.removeItem('coverImage');
-        
-//         // 4. Reset state
-//         setProfile({
-//           nickname:'',
-//           username: '',
-//           email: '',
-//           bio: '',
-//           location: '',
-//           artStyle: '',
-//           portfolio: '',
-//           facebook: '',
-//           instagram: '',
-//           twitter: '',
-//           linkedin: ''
-//         });
-//         setImage(null);
-//         setProfileImage(null);
-//         setShowButton(true);
-        
-//         // 5. Redirect to login
-//         window.location.href = '/login';
-//         toast.success('Logged out successfully');
-//       } catch (error) {
-//         console.error('Logout error:', error);
-//         toast.error('Failed to complete logout');
-//       }
-//     }
-//   };
-
-//   // Load profile data, profile image, and cover image from localStorage on mount
-//   useEffect(() => {
-//     const savedProfile = JSON.parse(localStorage.getItem('userProfile')) || {};
-//     const savedProfileImage = localStorage.getItem('profileImage');
-//     const savedCoverImage = localStorage.getItem('coverImage');
-    
-//     setProfile((prev) => ({
-//       ...prev,
-//       ...savedProfile
-//     }));
-    
-//     if (savedProfile?.$id) {
-//       setProfileUserId(savedProfile.$id);
-//     }
-    
-//     if (savedProfileImage) {
-//       setProfileImage(savedProfileImage);
-//     }
-//     if (savedCoverImage) {
-//       setImage(savedCoverImage);
-//       setShowButton(false);
-//     }
-//   }, []);
-
-//   useEffect(() => {
-//     const handleResize = () => {
-//       setIsLargeScreen(window.innerWidth >= 1024);
-//     };
-//     window.addEventListener("resize", handleResize);
-//     return () => window.removeEventListener("resize", handleResize);
-//   }, []);
-
-//   useEffect(() => {
-//     const handleOutsideClick = (event) => {
-//       if (dropdownRef.current && !dropdownRef.current.contains(event.target) && !isLargeScreen) {
-//         setIsDropdownOpen(false);
-//       }
-//     };
-//     document.addEventListener('click', handleOutsideClick);
-//     return () => document.removeEventListener('click', handleOutsideClick);
-//   }, [isLargeScreen]);
-
-//   const handleMouseEnter = () => {
-//     if (isLargeScreen) {
-//       clearTimeout(timeoutRef.current);
-//       setIsDropdownOpen(true);
-//     }
-//   };
-
-//   const handleMouseLeave = () => {
-//     if (isLargeScreen) {
-//       timeoutRef.current = setTimeout(() => {
-//         setIsDropdownOpen(false);
-//       }, 300);
-//     }
-//   };
-
-//   const toggleDropdown = () => {
-//     setIsDropdownOpen(!isDropdownOpen);
-//   };
-
-//   useEffect(() => {
-//     return () => clearTimeout(timeoutRef.current);
-//   }, []);
-
-//   const routes = {
-//     Home: "/",
-//     Gallery: "/gallery",
-//     Category: "/category",
-//     "My Account": "/account",
-//     History: "/History",
-//     Community: "/community",
-//     Blog: "/blog",
-//     FAQs: "/FAQs",
-//     Help: "/Resources/Help",
-//     Feedback: "/Resources/Feedback",
-//   };
-
-//   const routeIcons = {
-//     Home: <FaHome />,
-//     Gallery: <FaImages />,
-//     Category: <BiCategoryAlt />,
-//     "My Account": <FaUser />,
-//     History: <MdHistory/>,
-//     Community: <FaUsers />,
-//     Blog: <ImBlog />,
-//     FAQs: <IoMdHelpCircleOutline />,
-//     Help: <FaHandsHelping />,
-//     Feedback: <MdOutlineFeedback />,
-//   };
-
-//   const handleImage = (e) => {
-//     const file = e.target.files[0];
-//     if (file) {
-//       if (file.size >= 5 * 1024 * 1024) {
-//         toast.error('File size must be less than 5MB');
-//         return;
-//       }
-//       const reader = new FileReader();
-//       reader.onloadend = () => {
-//         const base64String = reader.result;
-//         try {
-//           setImage(base64String);
-//           localStorage.setItem('coverImage', base64String);
-//           setShowButton(false);
-//           toast.success('Cover image updated!');
-//         } catch (error) {
-//           console.error('Error saving cover image:', error);
-//           toast.error('Failed to save the image');
-//         }
-//       };
-//       reader.onerror = () => {
-//         toast.error('Failed to process the image');
-//       };
-//       reader.readAsDataURL(file);
-//     }
-//   };
-
-//   const handleProfileImageUpload = (event) => {
-//     const file = event.target.files[0];
-//     if (file) {
-//       if (file.size >= 5 * 1024 * 1024) {
-//         toast.error('File size must be less than 5MB');
-//         return;
-//       }
-//       const reader = new FileReader();
-//       reader.onloadend = () => {
-//         const base64String = reader.result;
-//         try {
-//           setProfileImage(base64String);
-//           localStorage.setItem('profileImage', base64String);
-//           toast.success('Profile picture updated!');
-//         } catch (error) {
-//           console.error('Error saving profile image:', error);
-//           toast.error('Failed to save the image');
-//         }
-//       };
-//       reader.onerror = () => {
-//         toast.error('Failed to process the image');
-//       };
-//       reader.readAsDataURL(file);
-//     }
-//   };
-
-  // const menuVariants = {
-  //   open: { x: 0, opacity: 1, transition: { duration: 0.5, ease: 'easeInOut' } },
-  //   closed: { x: '-100%', opacity: 0, transition: { duration: 0.5, ease: 'easeInOut' } },
-  // };
-
-//   const buttonVariants = {
-//     hover: { scale: 1.05, transition: { duration: 0.2 } },
-//     tap: { scale: 0.95 },
-//   };
-
-//   const coverVariants = {
-//     hidden: { opacity: 0 },
-//     visible: { opacity: 1, transition: { duration: 0.8 } },
-//   };
-
-//   // getting followers
-//   const getFollowerCount = async () => {
-//     if (!profileUserId) return;
-    
-//     try {
-//       const res = await databases.listDocuments(
-//         DATABASE_ID, 
-//         USER_COLLECTION_ID, 
-//         [Query.equal("followingId", profileUserId)]
-//       );
-//       setFollowerCount(res.total);
-//     } catch (error) {
-//       console.error("Error fetching followers:", error);
-//       setFollowerCount(0);
-//     }
-//   };
-
-//   useEffect(() => {
-//     if (profileUserId) {
-//       getFollowerCount();
-//     }
-//   }, [profileUserId]);
-
-//   // Animation variants for buttons and cards
-// const cardVariants = {
-//   hover: { scale: 1.05, boxShadow: '0 8px 16px rgba(0, 0, 0, 0.1)' },
-//   tap: { scale: 0.95 },
-// };
-
-// const buttonVariants1 = {
-//   hover: { scale: 1.05, background: 'linear-gradient(to right, #2563eb, #1e40af)' },
-//   tap: { scale: 0.95 },
-// };
-
-// // function ProfileStatsSection({ followerCount }) {
-//   const [isLoading, setIsLoading] = useState(true);
-
-//   useEffect(() => {
-//     // Simulate fetching follower count
-//     const timer = setTimeout(() => setIsLoading(false), 1000);
-//     return () => clearTimeout(timer);
-//   }, []);
-
-//   return (
-//      <div className="w-full min-h-screen flex flex-col pb-6 overflow-x-hidden bg-gray-100 dark:bg-[#040d12]">
-//       <ToastContainer position="top-center" autoClose={3000} />
-      
-//       {/* Header */}
-//       <header className="w-full h-[80px] bg-gradient-to-l from-[#0f172acc] via-[#1e293bcc] to-[#334155cc] dark:from-[#020617cc] dark:via-[#0f172acc] dark:to-[#1e293bcc] flex items-center justify-between px-6 z-50 fixed">
-//         <div
-//           className="sm:py-2 sm:px-2 px-1 py-1 bg-slate-700/60 hover:bg-slate-600/80 dark:bg-slate-800/60 dark:hover:bg-slate-700/80 rounded-md flex items-center justify-center cursor-pointer border border-slate-300 dark:border-slate-600 transition-all hover:rotate-180 duration-300"
-//           onClick={() => setIsMenuOpen(!isMenuOpen)}
-//         >
-//           <button className="h-full w-full flex items-center justify-center">
-//             <CiMenuFries className="text-xl block text-white" />
-//           </button>
-//         </div>
-
-//         <div
-//           className="relative group"
-//           ref={dropdownRef}
-//           onMouseEnter={handleMouseEnter}
-//           onMouseLeave={handleMouseLeave}
-//         >
-//           <button
-//             className="sm:px-2 px-1 md:px-3 sm:py-2 py-1 border border-gray-400 dark:border-gray-600 rounded-md flex items-center gap-2 transition-all duration-200 bg-slate-700/60 hover:bg-slate-600/80 dark:bg-slate-800/60 dark:hover:bg-slate-700/80 text-slate-100"
-//             onClick={toggleDropdown}
-//           >
-//             <span className="text-sm md:text-base md:block hidden text-white font-Playfair">Settings</span>
-//             <MdSettings className="text-xl md:text-2xl block text-white" />
-//           </button>
-
-//           <div
-//             className={`absolute top-full right-0 mt-2 w-[180px] bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 rounded-md shadow-lg transition-all duration-200 z-50 sm:p-2 font-Playfair
-//               ${isDropdownOpen ? 'opacity-100 visible pointer-events-auto' : 'opacity-0 invisible pointer-events-none'}`}
-//           >
-//             <Link to={'/Account/Edit_Profile'}>
-//               <button
-//                 className="w-full px-4 py-3 text-left hover:bg-violet-100 dark:hover:bg-violet-900 text-gray-800 dark:text-gray-100 flex items-center gap-2 text-sm"
-//                 onClick={() => setIsDropdownOpen(false)}
-//               >
-//                 <CiEdit className="text-lg" />
-//                 Edit Profile
-//               </button>
-//             </Link>
-
-//             <Link to={'/Account/Dashboard'}>
-//               <button
-//                 className="w-full px-4 py-3 text-left hover:bg-violet-100 dark:hover:bg-violet-900 text-gray-800 dark:text-gray-100 flex items-center gap-2 text-sm"
-//                 onClick={() => setIsDropdownOpen(false)}
-//               >
-//                 <MdOutlineDashboardCustomize className="text-lg" />
-//                 Dashboard
-//               </button>
-//             </Link>
-
-//             <button
-//               className="w-full px-4 py-3 text-left hover:bg-violet-100 dark:hover:bg-violet-900 text-gray-800 dark:text-gray-100 flex items-center gap-2 text-sm"
-//               onClick={handleLogout}
-//             >
-//               <IoIosLogOut className="text-lg" />
-//               Logout
-//             </button>
-//           </div>
-//         </div>
-//       </header>
-
-//       {/* Sliding Menu */}
-//       <motion.div
-//         className="fixed top-0 left-0 w-80 sm:w-96 h-full bg-white dark:bg-gray-900 shadow-2xl z-[9999] overflow-y-auto"
-//         variants={menuVariants}
-//         initial="closed"
-//         animate={isMenuOpen ? 'open' : 'closed'}
-//       >
-//         {/* Profile section */}
-//         <div className="h-48 bg-slate-700 dark:bg-gray-800 p-4 flex items-center justify-between">
-          // <div className="h-24 w-24 sm:h-28 sm:w-28 bg-white dark:bg-gray-700 rounded-full overflow-hidden flex items-center justify-center">
-          //   {profileImage ? (
-          //     <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
-          //   ) : (
-          //     <FaUser className="text-4xl text-gray-400 dark:text-gray-300" />
-          //   )}
-          // </div>
-//           <div className="flex-1 ml-4">
-//             <h1 className="text-white dark:text-gray-200 font-playfair text-lg sm:text-xl">{profile.nickname || 'Username'}</h1>
-//             <p className="text-white dark:text-gray-300 font-Playfair text-sm">{profile.email || 'xyz123@email.com'}</p>
-//             <p className="text-white dark:text-gray-300 font-newsreader text-sm">Followers: {followerCount !== null ? followerCount : 'Loading...'}</p>
-//           </div>
-//           <motion.button
-//             className="absolute top-4 right-4 text-white dark:text-gray-200 text-xl font-Playfair"
-//             onClick={() => setIsMenuOpen(false)}
-//             variants={buttonVariants}
-//             whileHover="hover"
-//             whileTap="tap"
-//           >
-//             <MdClose />
-//           </motion.button>
-//         </div>
-        
-//         {/* Menu items section */}
-//         <div className="p-4 bg-gray-100 dark:bg-gray-950 h-[calc(100%-12rem)]">
-//           {Object.keys(routes).map((item) => (
-//             <Link
-//               to={routes[item]}
-//               key={item}
-//               className="flex items-center gap-3 px-4 py-3 text-gray-800 dark:text-gray-200 font-newsreader text-base hover:bg-slate-200 dark:hover:bg-gray-800 rounded-md font-Playfair"
-//               onClick={() => setIsMenuOpen(false)}
-//             >
-//               {routeIcons[item]}
-//               <span>{item}</span>
-//             </Link>
-//           ))}
-//         </div>
-//       </motion.div>
-
-//       {/* Cover Image Section */}
-//       <motion.div
-//         className="lg:w-[80%] w-[98%] mx-auto h-[400px] md:h-[500px] relative mt-[85px] overflow-hidden rounded-b-xl"
-//         variants={coverVariants}
-//         initial="hidden"
-//         animate="visible"
-//       >
-//         {showButton ? (
-//           <label
-//             htmlFor="file-upload"
-//             className="w-full h-full flex items-center justify-center cursor-pointer bg-gradient-to-t from-slate-200 to-slate-700 dark:from-slate-700 dark:to-gray-800 text-lg font-playfair font-semibold hover:bg-rose-500 transition"
-//           >
-//             Add a Cover Image
-//             <input
-//               type="file"
-//               id="file-upload"
-//               accept="image/*"
-//               className="hidden"
-//               onChange={handleImage}
-//             />
-//           </label>
-//         ) : (
-//           <div className="relative w-full h-full">
-//             <img className="h-full w-full object-cover" src={image} alt="Cover" loading="lazy" />
-//             <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
-//             <motion.button
-//               className="absolute bottom-4 right-4 bg-white/80 text-rose-700 p-2 rounded-full shadow hover:bg-white"
-//               onClick={() => {
-//                 setImage(null);
-//                 localStorage.removeItem('coverImage');
-//                 setShowButton(true);
-//               }}
-//               variants={buttonVariants}
-//               whileHover="hover"
-//               whileTap="tap"
-//             >
-//               <FiEdit className="text-lg" />
-//             </motion.button>
-//           </div>
-//         )}
-//       </motion.div>
-      
-//       {/* Profile Section */}
-//       <div className="relative w-full flex flex-col items-center justify-center mt-[100px] px-4">
-//         {/* Profile Picture */}
-//         <div
-//           className="absolute flex items-start justify-center"
-//           style={{
-//             width: "clamp(180px, 250px, 280px)",
-//             height: "clamp(180px, 250px, 280px)",
-//             top: "-90%",
-//             left: "50%",
-//             transform: "translateX(-50%)",
-//           }}
-//         >
-//           <div className="rounded-full border-[5px] dark:border-white border-gray-900 flex items-center justify-center bg-black overflow-hidden w-full h-full">
-//             {profileImage ? (
-//               <img
-//                 src={profileImage}
-//                 alt="Uploaded"
-//                 className="w-full h-full object-cover"
-//               />
-//             ) : (
-//               <span className="text-white font-serif">No Image</span>
-//             )}
-//           </div>
-//           <label
-//             htmlFor="upload"
-//             className="absolute bottom-1 right-12 bg-[#0c080a70] text-white hover:text-[#ffffff] rounded-2xl cursor-pointer hover:bg-[#74626859] px-2 py-2"
-//             style={{ backdropFilter: "blur(5px)", opacity: 1 }}
-//           >
-//             {profileImage ? <FaUserEdit size={22} /> : <MdOutlinePhotoCameraBack size={22} />}
-//           </label>
-//           <input
-//             type="file"
-//             accept="image/*"
-//             onChange={handleProfileImageUpload}
-//             className="hidden"
-//             id="upload"
-//           />
-//         </div>
-        
-//         {/* User Info */}
-//         <div className="flex flex-col items-center mt-[110px] w-full max-w-3xl">
-//           <h1 className="text-3xl md:text-4xl font-bold font-Quicksand text-gray-800 dark:text-white">
-//             {profile.username || 'Username'}
-//           </h1>
-//           <h3 className="text-sm md:text-lg font-bold font-Quicksand text-gray-800 dark:text-white">
-//             {profile.nickname || 'Nickname'}
-//           </h3>
-           
-          
-//           {profile.artStyle && (
-//             <div className="mt-2 px-4 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm font-medium">
-//               {profile.artStyle}
-//             </div>
-//           )}
-          
-//           <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 mt-4 text-center max-w-2xl">
-//             {profile.bio || 'No bio yet. Add one in your profile settings!'}
-//           </p>
-          
-//           {/* Additional Info */}
-//           <div className="flex flex-wrap justify-center gap-4 mt-6">
-//             {profile.location && (
-//               <div className="flex items-center text-gray-700 dark:text-gray-300">
-//                 <MdLocationOn className="mr-2 text-xl" />
-//                 <span>{profile.location}</span>
-//               </div>
-//             )}
-            
-//             {profile.portfolio && (
-//               <a 
-//                 href={profile.portfolio} 
-//                 target="_blank" 
-//                 rel="noopener noreferrer"
-//                 className="flex items-center text-blue-600 dark:text-blue-400 hover:underline"
-//               >
-//                 <FaGlobe className="mr-2 text-xl" />
-//                 <span>Portfolio</span>
-//               </a>
-//             )}
-//           </div>
-//         </div>
-//       </div>
-
-//       {/* Social Media Buttons */}
-//       <div className="flex gap-4 mx-auto mt-6">
-//         {[
-//           {
-//             platform: 'facebook',
-//             icon: <FaFacebook className="hover:text-blue-600" />,
-//             url: profile.facebook ? `https://www.facebook.com/${profile.facebook}` : null
-//           },
-//           {
-//             platform: 'instagram',
-//             icon: <FaInstagram className="hover:text-pink-900" />,
-//             url: profile.instagram ? `https://www.instagram.com/${profile.instagram}` : null
-//           },
-//           {
-//             platform: 'twitter',
-//             icon: <FaXTwitter className="hover:text-blue-400" />,
-//             url: profile.twitter ? `https://twitter.com/${profile.twitter}` : null
-//           },
-//           {
-//             platform: 'linkedin',
-//             icon: <FaLinkedin className="hover:text-blue-300" />,
-//             url: profile.linkedin ? `https://www.linkedin.com/${profile.linkedin}` : null
-//           }
-//         ].map((social) => (
-//           <a
-//             key={social.platform}
-//             href={social.url || '#'}
-//             target={social.url ? "_blank" : "_self"}
-//             rel={social.url ? "noopener noreferrer" : ""}
-//             className={`w-8 h-8 flex items-center justify-center rounded-lg text-white bg-gray-700 hover:bg-gray-900 transition ${!social.url ? 'opacity-50 cursor-not-allowed' : ''}`}
-//             title={social.url ? `${social.platform}` : `No ${social.platform} linked`}
-//           >
-//             {social.icon}
-//           </a>
-//         ))}
-//       </div>
-
-//       {/* Stats and Actions */}
-//       <div className="flex flex-wrap justify-center gap-4 px-4 mt-8">
-//         <div className="px-3 py-1 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 shadow-sm hover:shadow-md transition-all flex items-center gap-2">
-//           <span className="text-gray-600 dark:text-gray-300 font-medium font-Quicksand">Followers:</span>
-//           <span className="text-lg font-bold text-blue-600 dark:text-blue-400">
-//             {followerCount !== null ? followerCount : '--'}
-//           </span>
-//         </div>
-        
-//         <div className="px-3 py-1 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 shadow-sm hover:shadow-md transition-all flex items-center gap-1">
-//           <span className="text-gray-600 dark:text-gray-300 font-medium font-Quicksand">Following:</span>
-//           <span className="text-lg font-bold text-blue-600 dark:text-blue-400">1.2K</span>
-//         </div>
-        
-//         <div className="px-3 py-1 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 shadow-sm hover:shadow-md transition-all flex items-center gap-2">
-//           <span className="text-gray-600 dark:text-gray-300 font-medium font-Quicksand">Artworks:</span>
-//           <span className="text-lg font-bold text-blue-600 dark:text-blue-400">48</span>
-//         </div>
-        
-//         <Link to={'/Account/Upload'}>
-//           <motion.button
-//             className="px-3 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white shadow-sm hover:shadow-md transition-all flex items-center gap-2"
-//             variants={buttonVariants}
-//             whileHover="hover"
-//             whileTap="tap"
-//           >
-//             <span className='font-medium font-Quicksand'>Upload Art</span>
-//             <FiUpload className="" />
-//           </motion.button>
-//         </Link>
-//       </div>
-//         {/* Followers Card */}
-        
-      
-//       {/* Collections Section */}
-//       <div className="mt-12 px-4 w-full max-w-7xl mx-auto">
-//         <h2 className="text-2xl font-bold font-Eagle text-gray-800 dark:text-white mb-6">
-//           Your Collections
-//         </h2>
-//         <Your_Collections />
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default Account;
-
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { FaUserEdit, FaFacebook, FaInstagram, FaPalette, FaGlobe,  } from 'react-icons/fa';
-import { FaLinkedin } from 'react-icons/fa';
-import {CiEdit} from 'react-icons/ci'
-import { FiUpload, FiEdit } from 'react-icons/fi';
-import { IoIosLogOut } from 'react-icons/io';
-import { FiMenu } from 'react-icons/fi';
+import { useParams, Link } from 'react-router-dom';
+import { account, databases,storage,ID } from '../../appwriteConfig';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Query } from 'appwrite';
+import { followService } from '../../Follow/FollowService';
+import { getCollectionCount } from './getUploadArt';
+import Your_Collections from './Your_Collection/Your_Collections';
+import FollowButton from '../../Follow/FollowButton';
+import { uploadImage } from './uploadImage';
+import { updateUserImages } from './uploadImage';
+// Icons
+import { FaUserEdit, FaFacebook, FaInstagram, FaPalette, FaGlobe, FaLinkedin, } from 'react-icons/fa';
 import { FaXTwitter } from 'react-icons/fa6';
+import { CiEdit } from 'react-icons/ci';
+import { FiUpload, FiEdit, FiMenu } from 'react-icons/fi';
+import { IoIosLogOut } from 'react-icons/io';
 import { ImBlog } from 'react-icons/im';
 import { BiCategoryAlt } from 'react-icons/bi';
 import { IoMdHelpCircleOutline } from 'react-icons/io';
-import { MdOutlineFeedback, MdHistory, MdOutlinePhotoCameraBack,MdLocationOn,MdClose, MdOutlineDashboardCustomize } from 'react-icons/md';
+import { MdOutlineFeedback, MdHistory, MdOutlinePhotoCameraBack, MdLocationOn, MdClose, MdOutlineDashboardCustomize } from 'react-icons/md';
 import { FaHome, FaUsers, FaUser, FaImages, FaHandsHelping } from 'react-icons/fa';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Query } from 'appwrite';
-import { account, databases } from '../../appwriteConfig';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import Your_Collections from './Your_Collection/Your_Collections';
-import { followService } from '../../Follow/FollowService';
-import FollowButton from '../../Follow/FollowButton';
-import { getCollectionCount } from './getUploadArt';
-
-
-
-
 
 const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
 const USER_COLLECTION_ID = import.meta.env.VITE_APPWRITE_USERS_COLLECTION_ID;
+const PROFILE_BUCKET = import.meta.env.VITE_APPWRITE_PROFILE_BUCKET_ID;
+const COVER_BUCKET = import.meta.env.VITE_APPWRITE_COVER_BUCKET_ID;
 
-function Account() {
+
+function Account({ isOwnProfile = true }) {
+  const { userId: viewedUserId } = useParams();
+  const [currentUser, setCurrentUser] = useState(null);
+  const [profileData, setProfileData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
+  // UI states
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [image, setImage] = useState(null);
-  const [showButton, setShowButton] = useState(true);
-  const [profileImage, setProfileImage] = useState(null);
+  const [activeTab, setActiveTab] = useState('collections');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  // const [followerCount, setFollowerCount] = useState(null);
-  const [profileUserId, setProfileUserId] = useState('');
-  const [user, setUser] = useState(null);
   const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 1024);
-  const [profile, setProfile] = useState({
-    username: '',
-    email: '',
-    bio: '',
-    location: '',
-    artStyle: '',
-    portfolio: '',
-    facebook: '',
-    instagram: '',
-    twitter: '',
-    linkedin: '',
-  });
+  
+  // Images
+  const [coverImage, setCoverImage] = useState(null);
+  const [showCoverButton, setShowCoverButton] = useState(true);
+  const [profileImage, setProfileImage] = useState(null);
+  
+  // Social stats
+  const [followerCount, setFollowerCount] = useState(0);
+  const [followingCount, setFollowingCount] = useState(0);
+  const [collectionCount, setCollectionCount] = useState(0);
+  
+  // Refs
   const dropdownRef = useRef(null);
   const timeoutRef = useRef(null);
-  const [activeTab, setActiveTab] = useState('collections');
 
-  // Art styles for display
-  const artStyles = [
-    'Abstract', 'Realism', 'Impressionism', 'Expressionism',
-    'Surrealism', 'Cubism', 'Pop Art', 'Minimalism',
-    'Contemporary', 'Digital Art', 'Watercolor', 'Oil Painting'
-  ];
+  // Fetch user data
 
   useEffect(() => {
-    const loadProfileData = async () => {
+    const fetchData = async () => {
       try {
-        const currentUser = await account.get();
-        setUser(currentUser);
-        setProfileUserId(currentUser.$id);
-
-        const dbProfile = await databases.getDocument(
+        setLoading(true);
+        
+        const userSession = await account.get();
+        setCurrentUser(userSession);
+        const targetUserId = isOwnProfile ? userSession.$id : viewedUserId;
+        
+        if (!targetUserId) throw new Error('User not found');
+        
+        const userDoc = await databases.getDocument(
           DATABASE_ID,
           USER_COLLECTION_ID,
-          currentUser.$id
+          targetUserId
         );
-
-        setProfile({
-          nickname: dbProfile.nickname || currentUser.name || '',
-          username: dbProfile.username || currentUser.name || '',
-          email: dbProfile.email || currentUser.email || '',
-          bio: dbProfile.bio || '',
-          location: dbProfile.location || '',
-          artStyle: dbProfile.artStyle || '',
-          portfolio: dbProfile.portfolio || '',
-          facebook: dbProfile.facebook || '',
-          instagram: dbProfile.instagram || '',
-          twitter: dbProfile.twitter || '',
-          linkedin: dbProfile.linkedin || ''
+        
+        setProfileData({
+          ...userDoc,
+          nickname: userDoc.nickname || userDoc.name || '',
+          username: userDoc.username || userDoc.name || '',
+          bio: userDoc.bio || '',
+          artStyle: userDoc.artStyle || '',
+          location: userDoc.location || '',
+          portfolio: userDoc.portfolio || '',
+          facebook: userDoc.facebook || '',
+          instagram: userDoc.instagram || '',
+          twitter: userDoc.twitter || '',
+          linkedin: userDoc.linkedin || ''
         });
 
-        const savedProfileImage = localStorage.getItem('profileImage');
-        const savedCoverImage = localStorage.getItem('coverImage');
-        if (savedProfileImage) setProfileImage(savedProfileImage);
-        if (savedCoverImage) {
-          setImage(savedCoverImage);
-          setShowButton(false);
+        // Load images from database for all users
+        if (userDoc.profileImageUrl) setProfileImage(userDoc.profileImageUrl);
+        if (userDoc.coverImageUrl) {
+          setCoverImage(userDoc.coverImageUrl);
+          setShowCoverButton(false);
         }
-      } catch (error) {
-        console.error("Error loading profile:", error);
-        const savedProfile = JSON.parse(localStorage.getItem('userProfile')) || {};
-        setProfile(prev => ({
-          ...prev,
-          ...savedProfile
-        }));
+        
+        // Load social stats
+        const [followers, following, collections] = await Promise.all([
+          followService.getFollowerCount(targetUserId),
+          followService.getFollowingCount(targetUserId),
+          getCollectionCount(targetUserId)
+        ]);
+        
+        setFollowerCount(followers);
+        setFollowingCount(following);
+        setCollectionCount(collections);
+        
+      } catch (err) {
+        setError(err.message);
+        console.error("Error loading profile:", err);
+      } finally {
+        setLoading(false);
       }
     };
-
-    loadProfileData();
-  }, []);
+    
+    fetchData();
+  }, [isOwnProfile, viewedUserId]);
 
   const handleLogout = async () => {
-    if (window.confirm('Are you sure you want to log out? Your session will be cleared but your account will remain.')) {
+    if (window.confirm('Are you sure you want to log out?')) {
       try {
         await account.deleteSession('current');
-        await databases.updateDocument(
-          DATABASE_ID,
-          USER_COLLECTION_ID,
-          profileUserId,
-          {
-            nickname: '',
-            bio: '',
-            location: '',
-            artStyle: '',
-            portfolio: '',
-            facebook: '',
-            instagram: '',
-            twitter: '',
-            linkedin: '',
-            lastLogout: new Date().toISOString()
-          }
-        );
-
-        localStorage.removeItem('userProfile');
-        localStorage.removeItem('profileImage');
-        localStorage.removeItem('coverImage');
-
-        setProfile({
-          nickname: '',
-          username: '',
-          email: '',
-          bio: '',
-          location: '',
-          artStyle: '',
-          portfolio: '',
-          facebook: '',
-          instagram: '',
-          twitter: '',
-          linkedin: ''
-        });
-        setImage(null);
-        setProfileImage(null);
-        setShowButton(true);
-
+        localStorage.clear();
         window.location.href = '/login';
         toast.success('Logged out successfully');
       } catch (error) {
+        toast.error('Logout failed');
         console.error('Logout error:', error);
-        toast.error('Failed to complete logout');
       }
     }
   };
 
-  useEffect(() => {
-    const savedProfile = JSON.parse(localStorage.getItem('userProfile')) || {};
-    const savedProfileImage = localStorage.getItem('profileImage');
-    const savedCoverImage = localStorage.getItem('coverImage');
+  const handleCoverImage = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
 
-    setProfile((prev) => ({
-      ...prev,
-      ...savedProfile
-    }));
-
-    if (savedProfile?.$id) {
-      setProfileUserId(savedProfile.$id);
+    if (!file.type.startsWith('image/')) {
+      toast.error('Only image files are allowed');
+      return;
     }
 
-    if (savedProfileImage) {
-      setProfileImage(savedProfileImage);
+    if (file.size >= 5 * 1024 * 1024) {
+      toast.error('File size must be less than 5MB');
+      return;
     }
-    if (savedCoverImage) {
-      setImage(savedCoverImage);
-      setShowButton(false);
-    }
-  }, []);
 
+    try {
+      toast.info('Uploading cover image...');
+      const coverUrl = await uploadImage(file, COVER_BUCKET);
+      await updateUserImages(currentUser.$id, { coverImageUrl: coverUrl });
+      setCoverImage(coverUrl);
+      setShowCoverButton(false);
+      toast.success('Cover image updated!');
+    } catch (error) {
+      toast.error(error.message || 'Failed to update cover image');
+      console.error(error);
+    }
+  };
+
+  const handleProfileImageUpload = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      toast.error('Only image files are allowed');
+      return;
+    }
+
+    if (file.size >= 5 * 1024 * 1024) {
+      toast.error('File size must be less than 5MB');
+      return;
+    }
+
+    try {
+      toast.info('Uploading profile image...');
+      const profileUrl = await uploadImage(file, PROFILE_BUCKET);
+      await updateUserImages(currentUser.$id, { profileImageUrl: profileUrl });
+      setProfileImage(profileUrl);
+      toast.success('Profile picture updated!');
+    } catch (error) {
+      toast.error(error.message || 'Failed to update profile picture');
+      console.error(error);
+    }
+  };
+  
+  // Responsive handlers
   useEffect(() => {
     const handleResize = () => {
       setIsLargeScreen(window.innerWidth >= 1024);
@@ -920,6 +227,7 @@ function Account() {
     return () => clearTimeout(timeoutRef.current);
   }, []);
 
+  // Navigation routes
   const routes = {
     Home: "/",
     Gallery: "/gallery",
@@ -946,59 +254,7 @@ function Account() {
     Feedback: <MdOutlineFeedback />,
   };
 
-  const handleImage = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      if (file.size >= 5 * 1024 * 1024) {
-        toast.error('File size must be less than 5MB');
-        return;
-      }
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64String = reader.result;
-        try {
-          setImage(base64String);
-          localStorage.setItem('coverImage', base64String);
-          setShowButton(false);
-          toast.success('Cover image updated!');
-        } catch (error) {
-          console.error('Error saving cover image:', error);
-          toast.error('Failed to save the image');
-        }
-      };
-      reader.onerror = () => {
-        toast.error('Failed to process the image');
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleProfileImageUpload = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      if (file.size >= 5 * 1024 * 1024) {
-        toast.error('File size must be less than 5MB');
-        return;
-      }
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64String = reader.result;
-        try {
-          setProfileImage(base64String);
-          localStorage.setItem('profileImage', base64String);
-          toast.success('Profile picture updated!');
-        } catch (error) {
-          console.error('Error saving profile image:', error);
-          toast.error('Failed to save the image');
-        }
-      };
-      reader.onerror = () => {
-        toast.error('Failed to process the image');
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
+  // Animation variants
   const menuVariants = {
     open: { x: 0, opacity: 1, transition: { duration: 0.5, ease: 'easeInOut' } },
     closed: { x: '-100%', opacity: 0, transition: { duration: 0.5, ease: 'easeInOut' } },
@@ -1019,49 +275,35 @@ function Account() {
     visible: { opacity: 1, y: 0, transition: { duration: 0.3 } }
   };
 
-const [followerCount, setFollowerCount] = useState(0);
-const [followingCount, setFollowingCount] = useState(0);
-const [currentUserId, setCurrentUserId] = useState(null);
+  if (loading) return (
+    <div className="w-full min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
+    </div>
+  );
 
-// Add this useEffect to load counts
-useEffect(() => {
-  const loadCounts = async () => {
-    try {
-      const userId = await followService.getCurrentUserId();
-      setCurrentUserId(userId);
-      
-      // Get counts for the profile being viewed (profileUserId)
-      if (profileUserId) {
-        const followers = await followService.getFollowerCount(profileUserId);
-        const following = await followService.getFollowingCount(profileUserId);
-        setFollowerCount(followers);
-        setFollowingCount(following);
-      }
-    } catch (error) {
-      console.error("Error loading counts:", error);
-    }
-  };
-  
-  loadCounts();
-}, [profileUserId]); // Add profileUserId as dependency
+  if (error) return (
+    <div className="w-full min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+      <div className="text-center p-6 max-w-md">
+        <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-2">Error loading profile</h2>
+        <p className="text-gray-600 dark:text-gray-300">{error}</p>
+        <Link 
+          to="/" 
+          className="mt-4 inline-block px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors"
+        >
+          Go Home
+        </Link>
+      </div>
+    </div>
+  );
 
-
-// getting Uploaded Collection
-const [collectionCount, setCollectionCount] = useState('');
-
-useEffect(() => {
-  const fetchCollections = async () => {
-    try {
-      const user = await account.get();
-      const count = await getCollectionCount(user.$id);
-      setCollectionCount(count);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  fetchCollections();
-}, []);
-
+  if (!profileData) return (
+    <div className="w-full min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+      <div className="text-center p-6 max-w-md">
+        <h2 className="text-xl font-semibold text-gray-800 dark:text-white">Profile not found</h2>
+        <p className="text-gray-600 dark:text-gray-300 mt-2">The requested profile could not be loaded.</p>
+      </div>
+    </div>
+  );
 
   return (
     <div className="w-full min-h-screen flex flex-col pb-6 overflow-x-hidden bg-gray-50 dark:bg-gray-900">
@@ -1076,66 +318,70 @@ useEffect(() => {
           >
             <FiMenu className="text-xl text-gray-800 dark:text-gray-200" />
           </button>
-        <h1 className="font-Eagle font-bold lg:text-[32px] md:text-[28px] sm:text-[22px] text-[18px] text-[#001F3F]">
-          Painters' Diary
-        </h1>        
+          <h1 className="font-Eagle font-bold lg:text-[32px] md:text-[28px] sm:text-[22px] text-[18px] text-[#001F3F] dark:text-white">
+            Painters' Diary
+          </h1>        
         </div>
 
-        <div
-          className="relative group"
-          ref={dropdownRef}
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-        >
-          <button
-            className="flex items-center gap-2 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-            onClick={toggleDropdown}
+        {isOwnProfile && (
+          <div
+            className="relative group"
+            ref={dropdownRef}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
           >
-            <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white">
-              {profile.username?.charAt(0) || 'U'}
-            </div>
-            <span className="hidden md:inline text-gray-800 dark:text-gray-200 font-medium font-Playfair">{profile.username || 'User'}</span>
-          </button>
+            <button
+              className="flex items-center gap-2 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              onClick={toggleDropdown}
+            >
+              <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white">
+                {profileData.username?.charAt(0) || 'U'}
+              </div>
+              <span className="hidden md:inline text-gray-800 dark:text-gray-200 font-medium font-Playfair">
+                {profileData.username || 'User'}
+              </span>
+            </button>
 
-          <AnimatePresence>
-            {isDropdownOpen && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 10 }}
-                className="absolute top-full right-0 mt-6 w-48 bg-white/60 dark:bg-gray-800/40 backdrop-blur-md border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50 overflow-hidden"
-              >
-                <Link to={'/Account/Edit_Profile'}>
-                  <button
-                    className="w-full px-4 py-3 text-left hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 flex items-center gap-2 text-sm transition-colors"
-                    onClick={() => setIsDropdownOpen(false)}
-                  >
-                    <CiEdit className="text-lg" />
-                    Edit Profile
-                  </button>
-                </Link>
-
-                <Link to={'/Account/Dashboard'}>
-                  <button
-                    className="w-full px-4 py-3 text-left hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 flex items-center gap-2 text-sm transition-colors"
-                    onClick={() => setIsDropdownOpen(false)}
-                  >
-                    <MdOutlineDashboardCustomize className="text-lg" />
-                    Dashboard
-                  </button>
-                </Link>
-
-                <button
-                  className="w-full px-4 py-3 text-left hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 flex items-center gap-2 text-sm transition-colors"
-                  onClick={handleLogout}
+            <AnimatePresence>
+              {isDropdownOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  className="absolute top-full right-0 mt-6 w-48 bg-white/60 dark:bg-gray-800/40 backdrop-blur-md border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50 overflow-hidden"
                 >
-                  <IoIosLogOut className="text-lg" />
-                  Logout
-                </button>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
+                  <Link to={'/account/edit-profile'}>
+                    <button
+                      className="w-full px-4 py-3 text-left hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 flex items-center gap-2 text-sm transition-colors"
+                      onClick={() => setIsDropdownOpen(false)}
+                    >
+                      <CiEdit className="text-lg" />
+                      Edit Profile
+                    </button>
+                  </Link>
+
+                  <Link to={'/account/dashboard'}>
+                    <button
+                      className="w-full px-4 py-3 text-left hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 flex items-center gap-2 text-sm transition-colors"
+                      onClick={() => setIsDropdownOpen(false)}
+                    >
+                      <MdOutlineDashboardCustomize className="text-lg" />
+                      Dashboard
+                    </button>
+                  </Link>
+
+                  <button
+                    className="w-full px-4 py-3 text-left hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 flex items-center gap-2 text-sm transition-colors"
+                    onClick={handleLogout}
+                  >
+                    <IoIosLogOut className="text-lg" />
+                    Logout
+                  </button>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        )}
       </header>
 
       {/* Sliding Menu */}
@@ -1152,20 +398,15 @@ useEffect(() => {
               <div className="flex items-center gap-4 w-full">
                 <div className="h-24 w-24 sm:h-28 sm:w-28 bg-white dark:bg-gray-700 rounded-full overflow-hidden flex items-center justify-center">
                   {profileImage ? (
-              <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
-            ) : (
-              <FaUser className="text-4xl text-gray-400 dark:text-gray-300" />
-            )}
-          </div>
+                    <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
+                  ) : (
+                    <FaUser className="text-4xl text-gray-400 dark:text-gray-300" />
+                  )}
+                </div>
                 <div>
-                  <h1 className="text-white font-medium">{profile.nickname || 'Username'}</h1>
-                  <p className="text-white/80 text-sm">{profile.email || 'xyz123@email.com'}</p>
-                  {/* <p className="text-white/80 text-sm mt-1">Followers: {followerCount !== null ? followerCount : '--'}</p> */}
-                   {/* <p>Followers: {followerCount}</p>
-                   {currentUserId && user !== currentUserId && (
-                   <FollowButton targetUserId={user} />
-                   )} */}
-
+                  <h1 className="text-white font-medium">{profileData.nickname || 'Username'}</h1>
+                  <p className="text-white/80 text-sm">{profileData.email || 'user@example.com'}</p>
+                  <p className="text-white/80 text-sm mt-1">Followers: {followerCount}</p>
                 </div>
               </div>
               <button
@@ -1202,7 +443,7 @@ useEffect(() => {
           initial="hidden"
           animate="visible"
         >
-          {showButton ? (
+          {showCoverButton && isOwnProfile ? (
             <label
               htmlFor="file-upload"
               className="w-full h-full flex items-center justify-center cursor-pointer bg-gradient-to-r from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 hover:opacity-90 transition-opacity"
@@ -1217,43 +458,53 @@ useEffect(() => {
                 id="file-upload"
                 accept="image/*"
                 className="hidden"
-                onChange={handleImage}
+                onChange={handleCoverImage}
               />
             </label>
           ) : (
             <div className="relative w-full h-full">
-              <img
-                className="h-full w-full object-cover"
-                src={image}
-                alt="Cover"
-                loading="lazy"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
-              <div className="absolute bottom-4 right-4 flex gap-2">
-                <label
-                  htmlFor="file-upload"
-                  className="p-2 bg-white/90 hover:bg-white text-gray-800 rounded-full shadow-md cursor-pointer transition-all"
-                >
-                  <FiEdit className="text-lg" />
-                  <input
-                    type="file"
-                    id="file-upload"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={handleImage}
+              {coverImage ? (
+                <>
+                  <img
+                    className="h-full w-full object-cover"
+                    src={coverImage}
+                    alt="Cover"
+                    loading="lazy"
                   />
-                </label>
-                <button
-                  className="p-2 bg-white/90 hover:bg-white text-gray-800 rounded-full shadow-md transition-all"
-                  onClick={() => {
-                    setImage(null);
-                    localStorage.removeItem('coverImage');
-                    setShowButton(true);
-                  }}
-                >
-                  <MdClose className="text-lg" />
-                </button>
-              </div>
+                  {isOwnProfile && (
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+                  )}
+                </>
+              ) : (
+                <div className="w-full h-full bg-gradient-to-r from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800"></div>
+              )}
+              {isOwnProfile && coverImage && (
+                <div className="absolute bottom-4 right-4 flex gap-2">
+                  <label
+                    htmlFor="file-upload"
+                    className="p-2 bg-white/90 hover:bg-white text-gray-800 rounded-full shadow-md cursor-pointer transition-all"
+                  >
+                    <FiEdit className="text-lg" />
+                    <input
+                      type="file"
+                      id="file-upload"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handleCoverImage}
+                    />
+                  </label>
+                  <button
+                    className="p-2 bg-white/90 hover:bg-white text-gray-800 rounded-full shadow-md transition-all"
+                    onClick={() => {
+                      setCoverImage(null);
+                      localStorage.removeItem('coverImage');
+                      setShowCoverButton(true);
+                    }}
+                  >
+                    <MdClose className="text-lg" />
+                  </button>
+                </div>
+              )}
             </div>
           )}
         </motion.div>
@@ -1276,19 +527,23 @@ useEffect(() => {
                   </div>
                 )}
               </div>
-              <label
-                htmlFor="upload"
-                className="absolute -bottom-2 -right-2 bg-white dark:bg-gray-700 p-2 rounded-full shadow-md border border-gray-200 dark:border-gray-600 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
-              >
-                <FiEdit className="text-gray-700 dark:text-gray-300" />
-              </label>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleProfileImageUpload}
-                className="hidden"
-                id="upload"
-              />
+              {isOwnProfile && (
+                <>
+                  <label
+                    htmlFor="upload"
+                    className="absolute -bottom-2 -right-2 bg-white dark:bg-gray-700 p-2 rounded-full shadow-md border border-gray-200 dark:border-gray-600 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+                  >
+                    <FiEdit className="text-gray-700 dark:text-gray-300" />
+                  </label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleProfileImageUpload}
+                    className="hidden"
+                    id="upload"
+                  />
+                </>
+              )}
             </div>
 
             {/* User Info */}
@@ -1296,71 +551,74 @@ useEffect(() => {
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div>
                   <h1 className="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white font-Quicksand">
-                    {profile.username || 'Username'}
+                    {profileData.username || 'Username'}
                   </h1>
                   <h3 className="text-lg text-gray-600 dark:text-gray-300 font-Playfair">
-                    {profile.nickname || 'Nickname'}
+                    {profileData.nickname || 'Nickname'}
                   </h3>
                 </div>
 
                 <div className="flex gap-3">
-                  {currentUserId && profileUserId && currentUserId !== profileUserId && (
+                  {!isOwnProfile && currentUser && (
                     <FollowButton
-                      targetUserId={profileUserId}
+                      currentUserId={currentUser.$id}
+                      targetUserId={viewedUserId}
                       onFollowChange={(isFollowing) => {
-                        // Update counts when follow status changes
-                        const change = isFollowing ? 1 : -1;
-                        setFollowerCount(prev => prev + change);
+                        setFollowerCount(prev => isFollowing ? prev + 1 : prev - 1);
                       }}
                     />
                   )}
                   
-                  <Link to={'/Account/Upload'}>
-                    <motion.button
-                      className="px-4 py-2 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-sm hover:shadow-md transition-all flex items-center gap-2"
-                      whileHover={{ scale: 1.03 }}
-                      whileTap={{ scale: 0.98 }}
-                    >
-                      <span className='font-medium font-Playfair'>Upload Art</span>
-                      <FiUpload />
-                    </motion.button>
-                  </Link>
+                  {isOwnProfile && (
+                    <>
+                      <Link to={'/account/upload'}>
+                        <motion.button
+                          className="px-4 py-2 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-sm hover:shadow-md transition-all flex items-center gap-2"
+                          whileHover={{ scale: 1.03 }}
+                          whileTap={{ scale: 0.98 }}
+                        >
+                          <span className='font-medium font-Playfair'>Upload Art</span>
+                          <FiUpload />
+                        </motion.button>
+                      </Link>
 
-                  <Link to={'/Account/Edit_Profile'}>
-                    <motion.button
-                      className="px-4 py-2 rounded-md bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 shadow-sm hover:shadow-md transition-all flex items-center gap-2"
-                      whileHover={{ scale: 1.03 }}
-                      whileTap={{ scale: 0.98 }}
-                    >
-                      <span className='font-medium font-Playfair'>Edit Profile</span>
-                      <FiEdit />
-                    </motion.button>
-                  </Link>
+                      <Link to={'/account/edit-profile'}>
+                        <motion.button
+                          className="px-4 py-2 rounded-md bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 shadow-sm hover:shadow-md transition-all flex items-center gap-2"
+                          whileHover={{ scale: 1.03 }}
+                          whileTap={{ scale: 0.98 }}
+                        >
+                          <span className='font-medium font-Playfair'>Edit Profile</span>
+                          <FiEdit />
+                        </motion.button>
+                      </Link>
+                    </>
+                  )}
                 </div>
               </div>
 
-              {profile.artStyle && (
+              {profileData.artStyle && (
                 <div className="mt-2 inline-flex items-center px-3 py-1 bg-purple-100 dark:bg-purple-800/30 text-purple-800 dark:text-purple-200 rounded-full text-sm font-medium border border-purple-200 dark:border-purple-700">
                   <FaPalette className="mr-2" />
-                  {profile.artStyle}
+                  {profileData.artStyle}
                 </div>
               )}
 
               <p className="mt-2 text-gray-600 dark:text-gray-400 font-dmserif">
-                {profile.bio || 'No bio yet. Add one in your profile settings!'}
+                {profileData.bio || 'No bio yet. Add one in your profile settings!'}
               </p>
 
               {/* Additional Info */}
               <div className="flex flex-wrap gap-3 mt-3">
-                {profile.location && (
+                {profileData.location && (
                   <div className="flex items-center text-sm text-gray-700 dark:text-gray-300">
                     <MdLocationOn className="mr-1 text-sm text-purple-600 dark:text-purple-400" />
-                    <span>{profile.location}</span>
+                    <span>{profileData.location}</span>
                   </div>
                 )}
-                {profile.portfolio && (
+                {profileData.portfolio && (
                   <a
-                    href={profile.portfolio}
+                    href={profileData.portfolio}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center text-sm text-purple-600 dark:text-purple-400 hover:underline"
@@ -1377,22 +635,22 @@ useEffect(() => {
                   {
                     platform: 'facebook',
                     icon: <FaFacebook className="text-lg" />,
-                    url: profile.facebook ? `https://www.facebook.com/${profile.facebook}` : null
+                    url: profileData.facebook ? `https://www.facebook.com/${profileData.facebook}` : null
                   },
                   {
                     platform: 'instagram',
                     icon: <FaInstagram className="text-lg" />,
-                    url: profile.instagram ? `https://www.instagram.com/${profile.instagram}` : null
+                    url: profileData.instagram ? `https://www.instagram.com/${profileData.instagram}` : null
                   },
                   {
                     platform: 'twitter',
                     icon: <FaXTwitter className="text-lg" />,
-                    url: profile.twitter ? `https://twitter.com/${profile.twitter}` : null
+                    url: profileData.twitter ? `https://twitter.com/${profileData.twitter}` : null
                   },
                   {
                     platform: 'linkedin',
                     icon: <FaLinkedin className="text-lg" />,
-                    url: profile.linkedin ? `https://www.linkedin.com/${profile.linkedin}` : null
+                    url: profileData.linkedin ? `https://www.linkedin.com/${profileData.linkedin}` : null
                   }
                 ].map((social) => (
                   <a
@@ -1400,7 +658,7 @@ useEffect(() => {
                     href={social.url || '#'}
                     target={social.url ? "_blank" : "_self"}
                     rel={social.url ? "noopener" : ""}
-                    className="flex w-8 h-8 items-center justify-center rounded-md ${social.url ? 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600' : 'bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-500 cursor-not-allowed' transition-colors}"
+                    className={`flex w-8 h-8 items-center justify-center rounded-md ${social.url ? 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600' : 'bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-500 cursor-not-allowed'} transition-colors`}
                     title={social.url ? `${social.platform}` : `No ${social.platform} linked`}
                   >
                     {social.icon}
@@ -1413,16 +671,16 @@ useEffect(() => {
           {/* Stats Section */}
           <div className="mt-4 flex flex-wrap items-center gap-3 font-Playfair">
             {[
-                  { label: 'Followers', value: followerCount },
-                  { label: 'Following', value: followingCount },
-                  { label: 'Artworks', value: '48' },
-                  { label: 'Collections', value: collectionCount }
+              { label: 'Followers', value: followerCount },
+              { label: 'Following', value: followingCount },
+              { label: 'Artworks', value: '48' },
+              { label: 'Collections', value: collectionCount }
             ].map((stat) => (
               <motion.div
                 key={stat.label}
                 className="flex items-center px-3 py-1.5 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 gap-1"
-                whileHover={{ y: 1-2 }}
-                whileTransition={{ duration: 0.2 }}
+                whileHover={{ y: -2 }}
+                transition={{ duration: 0.2 }}
               >
                 <span className="text-[16px] text-gray-600 dark:text-gray-400">{stat.label}:</span>
                 <span className="ml-auto text-sm font-semibold text-purple-600 dark:text-purple-400">{stat.value}</span>
@@ -1461,9 +719,9 @@ useEffect(() => {
                 {activeTab === 'collections' && (
                   <div>
                     <h3 className="text-xl font-semibold text-gray-800 dark:text-white mb-4 font-Eagle">
-                      Your Collections
+                      {isOwnProfile ? 'Your Collections' : 'Collections'}
                     </h3>
-                    <Your_Collections />
+                    <Your_Collections userId={isOwnProfile ? currentUser?.$id : viewedUserId} />
                   </div>
                 )}
 
@@ -1472,7 +730,7 @@ useEffect(() => {
                     <div>
                       <h3 className="text-lg font-semibold text-gray-800 mb-3 dark:text-white font-Quicksand">About</h3>
                       <p className="text-gray-600 dark:text-gray-400 font-Playfair text-[17px]">
-                        {profile.bio || 'No bio information available.'}
+                        {profileData.bio || 'No bio information available.'}
                       </p>
                     </div>
 
@@ -1480,22 +738,22 @@ useEffect(() => {
                       <h3 className="text-lg font-semibold text-gray-800 mb-3 dark:text-white font-Quicksand">Details</h3>
                       <div className="space-y-2">
                         <div className="flex items-center">
-                          <span className="w-24 text-sm text-gray-500 dark:text-gray-400 font-semibold ">Location:</span>
+                          <span className="w-24 text-sm text-gray-500 dark:text-gray-400 font-semibold">Location:</span>
                           <span className="text-sm text-gray-700 dark:text-gray-300">
-                            {profile.location || 'Not specified'}
+                            {profileData.location || 'Not specified'}
                           </span>
                         </div>
                         <div className="flex items-center">
                           <span className="w-24 text-sm text-gray-500 dark:text-gray-400 font-semibold">Art Style:</span>
                           <span className="text-sm text-gray-700 dark:text-gray-300">
-                            {profile.artStyle || 'Not specified'}
+                            {profileData.artStyle || 'Not specified'}
                           </span>
                         </div>
                         <div className="flex items-center">
                           <span className="w-24 text-sm text-gray-500 dark:text-gray-400 font-semibold">Portfolio:</span>
-                          {profile.portfolio ? (
+                          {profileData.portfolio ? (
                             <a
-                              href={profile.portfolio}
+                              href={profileData.portfolio}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="text-sm text-purple-600 dark:text-purple-400 hover:underline"

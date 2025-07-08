@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { FiSearch, FiHeart, FiUserPlus, FiFilter, FiX, FiChevronLeft, FiChevronRight, FiAward, FiMenu } from 'react-icons/fi';
 import { FaPalette, FaBrush, FaDigitalTachograph, FaCamera } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+
+
 const UserDiscoveryPage = () => {
   // Art-specific data (unchanged)
   const artCategories = [

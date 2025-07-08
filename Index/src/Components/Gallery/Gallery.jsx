@@ -222,9 +222,11 @@ function Gallery() {
       
       {/* Header */}
        <header className="lg:h-[80px] h-[70px] w-full backdrop-blur-md shadow-md flex items-center justify-between pl-4 pr-8 fixed top-0 z-50 bg-white/40 dark:bg-gray-800/40">
+       <Link to={'/'}>
         <h1 className="font-Eagle font-bold lg:text-[35px] md:text-[30px] sm:text-[25px] text-[20px] text-[#001F3F] dark:text-white">
           Painters' Diary
         </h1>
+       </Link>
         
         <div className="flex items-center gap-x-2 sm:gap-x-4">
           {isScrolled && (

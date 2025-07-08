@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FaSearch, FaHome, FaInfoCircle, FaUser, FaFacebook, FaInstagram, FaTwitter, FaLinkedin, FaPalette, FaCamera } from 'react-icons/fa';
+import { FaSearch, FaHome, FaInfoCircle, FaUser, FaFacebook, FaInstagram, FaTwitter, FaLinkedin, FaPalette,FaTimes, FaCamera } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import { MdBook, MdMenu, MdClose, MdEmail, MdLocationOn, MdWeb } from 'react-icons/md';
 import { toast, ToastContainer } from 'react-toastify';
@@ -17,11 +17,13 @@ function Edit_Profile() {
   const [query, setQuery] = useState('');
   const [profilePic, setProfilePic] = useState(null);
   const [previewUrl, setPreviewUrl] = useState('');
+  const [selectedInterests, setSelectedInterests] = useState([]);
   const [profile, setProfile] = useState({
     bio: '',
     location: '',
     website: '',
     artStyle: '',
+    interests: '',
     facebook: '',
     instagram: '',
     twitter: '',
@@ -83,10 +85,153 @@ function Edit_Profile() {
   ];
 
   const artStyles = [
-    'Abstract', 'Realism', 'Impressionism', 'Expressionism', 
-    'Surrealism', 'Cubism', 'Pop Art', 'Minimalism', 
-    'Contemporary', 'Digital Art', 'Watercolor', 'Oil Painting','Photography'
+  'Abstract',
+  'Landscape',
+  'Portrait',
+  'StillLife',
+  'Fantasy',
+  'Realism',
+  'Surrealism',
+  'Traditional',
+  'Minimalism',
+  'Expressionism',
+  'Impressionism',
+  'PopArt',
+  'DigitalArt',
+  'Historical',
+  'Modern',
+  'Nature',
+  'Photography',
+  'Oil Painting',
+  'Pastel',
+  'Watercolour',
   ];
+
+    const interestCategories = {
+    'Painting': [
+      "Oil Painting", "Acrylic Painting", "Watercolor Painting", "Ink", 
+      "Charcoal", "Pastel", "Pencil Drawing", "Graphite Drawing",
+      "Tempera", "Fresco Painting", "Abstract", "Landscape", "Portrait"
+    ],
+    'Digital': [
+      "Digital Art", "Digital Painting", "Vector Art", "Pixel Art",
+      "3D Modeling", "AI-Generated Art", "NFT Art", "Augmented Reality Art"
+    ],
+    'Photography': [
+      "Portrait Photography", "Landscape Photography", "Street Photography",
+      "Conceptual Photography", "Documentary Photography", "Micro Photography"
+    ],
+    'Design': [
+      "Graphic Design", "Typography Design", "Fashion Design", 
+      "Interior Design", "Game Design", "Industrial Design"
+    ],
+    'Sculpture': [
+      "Sculpture", "Ceramic", "Installation Art", "Kinetic Art", "Light Art"
+    ],
+    'Other': [
+      "Mixed Media", "Collage", "Printmaking", "Performance Art", "Sound Art"
+    ]
+  };
+
+// Add this near your other state declarations
+const [activeCategory, setActiveCategory] = useState('Painting');
+const [searchTerm, setSearchTerm] = useState('');
+
+// Replace your existing InterestSelector with this properly integrated version
+const InterestSelector = () => {
+  // Toggle interest selection
+  const toggleInterest = (interest) => {
+    setSelectedInterests(prev =>
+      prev.includes(interest)
+        ? prev.filter(i => i !== interest)
+        : [...prev, interest]
+    );
+  };
+
+  // Filter interests based on search term
+  const filteredInterests = interestCategories[activeCategory].filter(interest =>
+    interest.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  return (
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
+      {/* Category Tabs */}
+      <div className="flex overflow-x-auto pb-2 mb-4">
+        {Object.keys(interestCategories).map(category => (
+          <button
+            key={category}
+            type="button"
+            onClick={() => setActiveCategory(category)}
+            className={`px-4 py-2 mr-2 rounded-full text-sm font-medium whitespace-nowrap ${
+              activeCategory === category
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600'
+            }`}
+          >
+            {category}
+          </button>
+        ))}
+      </div>
+
+      {/* Search Input */}
+      <div className="relative mb-4">
+        <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+        <input
+          type="text"
+          placeholder="Search interests..."
+          className="w-full pl-10 pr-4 py-2 rounded-lg bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800 dark:text-white"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
+
+      {/* Selected Interests */}
+      {selectedInterests.length > 0 && (
+        <div className="mb-4">
+          <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Selected:</h3>
+          <div className="flex flex-wrap gap-2">
+            {selectedInterests.map(interest => (
+              <span
+                key={interest}
+                className="flex items-center px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-sm"
+              >
+                {interest}
+                <button
+                  type="button"
+                  onClick={() => toggleInterest(interest)}
+                  className="ml-2 text-blue-500 hover:text-blue-700 dark:hover:text-blue-300"
+                >
+                  <FaTimes size={12} />
+                </button>
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Interest List */}
+      <div className="max-h-60 overflow-y-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          {filteredInterests.map(interest => (
+            <button
+              key={interest}
+              type="button"
+              onClick={() => toggleInterest(interest)}
+              className={`text-left px-4 py-2 rounded-lg border transition-colors ${
+                selectedInterests.includes(interest)
+                  ? 'bg-blue-100 dark:bg-blue-900 border-blue-200 dark:border-blue-800 text-blue-800 dark:text-blue-200'
+                  : 'bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600'
+              }`}
+            >
+              {interest}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 
   //storing the data in the databse collection
   // Edit_Profile.js
@@ -129,6 +274,7 @@ const handleSubmit = async (e) => {
       bio: profile.bio,
       location: profile.location,
       artStyle: profile.artStyle,
+      interests: selectedInterests,
       portfolio: profile.portfolio,
       facebook: profile.facebook,
       instagram: profile.instagram,
@@ -337,6 +483,15 @@ useEffect(() => {
                   ))}
                 </select>
               </div>
+
+              {/* Interests */}
+              <div className="md:col-span-2">
+                <label className="block text-gray-700 dark:text-gray-300 font-Playfair mb-1 flex items-center gap-2">
+                <FaPalette />
+                Artistic Interests
+                </label>
+                <InterestSelector />
+                </div>
             </div>
 
             <div className="md:col-span-2">

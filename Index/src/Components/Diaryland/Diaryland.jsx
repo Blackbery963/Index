@@ -194,7 +194,7 @@ function Diaryland() {
                 aria-label="Search diaries"
               />
             </div>
-            <Link to="/Diaries/New-Entry">
+            <Link to="/january">
               <button className="flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-amber-600 to-amber-800 text-white rounded-lg hover:from-amber-500 hover:to-amber-700 transition-colors">
                 <PlusIcon className="h-5 w-5" />
                 New Diary Entry

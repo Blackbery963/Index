@@ -64,6 +64,7 @@ import Portrait from './Sub-Components/Portrait.jsx';
 import Historical from './Sub-Components/Histoirical';
 import Express from './Sub-Components/Express.jsx';
 import UserDiscoveryPage from './Components/Artisian/userDiscoveryPage.jsx';
+import DiscoverUsers from './Components/Artisian/DiscoverArtists.jsx';
 import DiaryCollection from './Components/Diaryland/DiaryCollection.jsx';
 
 // The commecial part starts from here 
@@ -237,6 +238,7 @@ useEffect(() => {
         <Route path='/Pop-Art' element={<Pop/>}/>
         <Route path='/Expressionism' element={<Express/>}/>
         <Route path='/Artist/discoverartists' element={<UserDiscoveryPage/>}/>
+        <Route path='/Artists/DiscoverUsers' element={<DiscoverUsers/>}/>
         <Route path='/Diaries/Diary-Collection' element={<DiaryCollection/>}/>
         <Route path='/diary/:id' element = {<January/>}/>
 

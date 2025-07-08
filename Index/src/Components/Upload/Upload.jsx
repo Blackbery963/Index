@@ -451,6 +451,77 @@ const UploadSection = () => {
     setEntries([...entries, { title: '', description: '', tag: '', medium: '', file: null }]);
   };
 
+  // Selecting ArtTypes
+
+  const artTypes = [
+  // Traditional & Fine Arts
+  "Oil Painting",
+  "Acrylic Painting",
+  "Watercolor Painting",
+  "Ink",
+  "Charcoal",
+  "Pastel",
+  "Pencil Drawing",
+  "Graphite Drawing",
+  "Tempera",
+  "Fresco Painting",
+  "Mosaic Art",
+  "Glass Art",
+  "Fiber Art",
+  "Sand Art",
+
+  // Digital & Modern Art
+  "Digital Art",
+  "Digital Painting",
+  "Vector Art",
+  "Pixel Art",
+  "3D Modeling",
+  "Photography",
+  "Mixed Media",
+  "Collage",
+  "Printmaking",
+  "AI-Generated Art",
+  "Augmented Reality Art",
+  "Virtual Reality Art",
+  "NFT Art",
+  "Data Visualization Art",
+
+  // Calligraphy & Typography
+  "Calligraphy",
+  "Typography Design",
+
+  // Sculpture & Installation
+  "Sculpture",
+  "Ceramic",
+  "Installation Art",
+  "Kinetic Art",
+  "Light Art",
+
+  // Performance & Experimental
+  "Performance Art",
+  "Sound Art",
+  "Bio Art",
+
+  //Photogrraphy
+  "Portrait Photography",
+  "Landscape Photography",
+  "Street Photography",
+  "Conceptual Photography",
+  "Documentary Photography",
+  "Micro Photography",
+
+  // Design & Applied Arts
+  "Graphic Design",
+  "Industrial Design",
+  "Fashion Design",
+  "Interior Design",
+  "Architectural Drawing",
+  "Game Design",
+
+  // Other
+  "Other",
+];
+
   const updateEntry = (index, field, value) => {
     const newEntries = [...entries];
     newEntries[index][field] = value;
@@ -465,7 +536,14 @@ const UploadSection = () => {
     if (!files || files.length === 0) return;
     const file = files[0];
     const maxSize = 10 * 1024 * 1024; // 10MB
-    const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
+    // const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
+    const validTypes = [
+    'image/jpeg', 
+    'image/jpg', // Add this
+    'image/png', 
+    'image/webp',
+    'image/x-png' // Some browsers use this
+    ];
 
     if (!validTypes.includes(file.type)) {
       toast.error('Please upload a valid image (JPEG, PNG, or WEBP)');
@@ -763,28 +841,6 @@ const UploadSection = () => {
         </div>
       ))}
 
-      {/* <button
-        onClick={addEntry}
-        className="mb-8 p-3 bg-teal-100 dark:bg-teal-600 text-teal-700 dark:text-white rounded-full hover:bg-teal-200 dark:hover:bg-teal-700 transition-all duration-300 shadow-md hover:shadow-lg flex items-center gap-2"
-        title="Add another image"
-        disabled={Object.values(uploadingStates).some((state) => state) || !isInitialized}
-      >
-        <svg
-          className="h-6 w-6"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M12 4v16m8-8H4"
-          />
-        </svg>
-        <span>Add Another Image</span>
-      </button> */}
 
       {Object.values(uploadingStates).some((state) => state) && (
         <div className="w-full max-w-5xl mb-6">
@@ -949,7 +1005,7 @@ const UploadSection = () => {
                       placeholder="Tag"
                       className="w-full p-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-200 font-medium font-Playfair"
                     />
-                    <select
+                    {/* <select
                       value={editForm.medium}
                       onChange={(e) => handleEditChange('medium', e.target.value)}
                       className="w-full p-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-200 font-medium font-Playfair"
@@ -959,7 +1015,20 @@ const UploadSection = () => {
                       <option value="Digital Art">Digital Art</option>
                       <option value="Painting">Painting</option>
                       <option value="Other">Other</option>
-                    </select>
+                    </select> */}
+                              <select
+            value={editForm.medium}
+            onChange={(e) => updateEntry(index, 'medium', e.target.value)}
+            className="w-full p-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-200 font-medium font-Playfair"
+            required
+          >
+            <option value="">Choose Art Type</option>
+               {artTypes.map((type) => (
+               <option key={type} value={type} className=' bg-black text-white '>
+               {type}
+             </option>
+              ))}
+         </select>
                     <div className="flex gap-2">
                       <button
                         onClick={() => handleUpdate(image.$id)}

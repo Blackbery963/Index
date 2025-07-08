@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 // import { followService } from './followService';
 import { followService } from './FollowService';
 import { account } from '../appwriteConfig'; // ✅ Import Appwrite account
+import { FiUserPlus, FiCheck } from 'react-icons/fi';
+import { ImSpinner2 } from 'react-icons/im';
 
 export default function FollowButton({ targetUserId, onFollowChange = () => {} }) {
   const [isFollowing, setIsFollowing] = useState(false);
@@ -72,15 +74,30 @@ export default function FollowButton({ targetUserId, onFollowChange = () => {} }
 
   return (
     <button
-      onClick={handleFollow}
-      disabled={isLoading}
-      className={`px-2 py-1 rounded-md ${
-        isFollowing
-          ? 'bg-gray-200 text-gray-800 hover:bg-gray-300'
-          : 'bg-blue-600 text-white hover:bg-blue-700'
-      } transition-colors`}
-    >
-     {isLoading ? '...' : isFollowing ? 'Following' : 'Follow'}
-    </button>
+  onClick={handleFollow}
+  disabled={isLoading}
+  className={`flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold rounded-full transition-all duration-200 shadow-sm border font-Quicksand
+    ${
+      isFollowing
+        ? 'bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200'
+        : 'bg-blue-600 text-white border-blue-600 hover:bg-blue-700'
+    } 
+    ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}
+  `}
+>
+  {isLoading ? (
+    <ImSpinner2 className="animate-spin text-lg" />
+  ) : isFollowing ? (
+    <>
+      <FiCheck className="text-lg" />
+      Following
+    </>
+  ) : (
+    <>
+      <FiUserPlus className="text-lg" />
+      Follow
+    </>
+  )}
+</button>
   );
 }

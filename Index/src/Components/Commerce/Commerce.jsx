@@ -91,7 +91,7 @@ const Commerce = () => {
         Explore Gallery
        </Link>
        <Link
-        to="/artists"
+        to="/Artists/DiscoverUsers"
         className="px-8 py-4 border border-teal-300 text-white rounded-md font-semibold hover:bg-white/10 transition bg-white/5 backdrop-blur-md font-Quicksand"
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
@@ -107,14 +107,6 @@ const Commerce = () => {
 
         {/* Category Gateway */}
         <section className="py-16 px-4 sm:px-8">
-          {/* <motion.h2 
-            className="text-2xl font-light text-white mb-12 text-center"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-          >
-            Begin Your Art Journey
-          </motion.h2> */}
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             {featuredCategories.map((category) => (

@@ -138,23 +138,6 @@ useEffect(() => {
   const [lightbox, setLightbox] = useState({ open: false, index: 0 });
 
   // Toggle like for an image
-  const toggleLike = (imageId) => {
-    setLikes((prev) => ({
-      ...prev,
-      [imageId]: {
-        liked: !prev[imageId]?.liked,
-        count: (prev[imageId]?.count || 0) + (prev[imageId]?.liked ? -1 : 1),
-      },
-    }));
-  };
-
-  // Toggle follow for a user
-  const toggleFollow = (userId) => {
-    setFollowedUsers((prev) => ({
-      ...prev,
-      [userId]: !prev[userId],
-    }));
-  };
 
   // Handle comment submission (simulated)
   const handleCommentSubmit = (imageId, e) => {
@@ -232,9 +215,11 @@ useEffect(() => {
         {/* Navbar */}
         <header className='fixed top-0 h-[80px] w-full bg-white/20 backdrop-blur-sm flex items-center justify-between px-4 md:px-6 shadow-md z-50'>
           {/* Logo Section */}
+        <Link to={'/'}>
           <div className='flex items-center'>
             <h1 className='lg:text-[35px] md:text-[30px] sm:text-[25px] text-[21px] font-bold font-Eagle text-black'>Painters' Diary</h1>
           </div>
+        </Link>
           {/* Navigation Buttons */}
           <div className='flex items-center gap-x-2 sm:gap-x-4'>
             {/* Search Bar */}

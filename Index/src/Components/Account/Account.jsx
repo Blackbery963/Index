@@ -318,9 +318,11 @@ function Account({ isOwnProfile = true }) {
           >
             <FiMenu className="text-xl text-gray-800 dark:text-gray-200" />
           </button>
+          <Link to={'/'}>
           <h1 className="font-Eagle font-bold lg:text-[32px] md:text-[28px] sm:text-[22px] text-[18px] text-[#001F3F] dark:text-white">
             Painters' Diary
-          </h1>        
+          </h1>
+          </Link>        
         </div>
 
         {isOwnProfile && (
@@ -582,7 +584,7 @@ function Account({ isOwnProfile = true }) {
                         </motion.button>
                       </Link>
 
-                      <Link to={'/account/edit-profile'}>
+                      <Link to={'/account/Edit_profile'}>
                         <motion.button
                           className="px-4 py-2 rounded-md bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 shadow-sm hover:shadow-md transition-all flex items-center gap-2"
                           whileHover={{ scale: 1.03 }}
@@ -673,7 +675,7 @@ function Account({ isOwnProfile = true }) {
             {[
               { label: 'Followers', value: followerCount },
               { label: 'Following', value: followingCount },
-              { label: 'Artworks', value: '48' },
+              // { label: 'Artworks', value: '48' },
               { label: 'Collections', value: collectionCount }
             ].map((stat) => (
               <motion.div

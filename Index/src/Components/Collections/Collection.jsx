@@ -222,7 +222,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FiArrowRight, FiHeart, FiShare2, FiDownload } from 'react-icons/fi';
 import Masonry from 'react-masonry-css'
 
-const featuredImages = [
+const featuredImages1 = [
   { src: '/Image-of-Collection/abstract.jpg', title: 'Abstract Vision', category: 'abstract', featured: true },
   { src: '/Image-of-Collection/pexels-eberhardgross-1367192.jpg', title: 'Mountain Majesty', category: 'landscape', featured: false },
   { src: '/Image-of-Collection/pexels-philippedonn-1133957.jpg', title: 'Forest Serenity', category: 'nature', featured: true },
@@ -234,6 +234,22 @@ const featuredImages = [
   { src: '/Image-of-Collection/pexels-dax-dexter-delada-2150239947-31090348.jpg', title: 'Lonely Road', category: 'travel', featured: true },
   { src: '/Image-of-Collection/pexels-shaosong-sun-503031340-16100671.jpg', title: 'Golden Hour', category: 'landscape', featured: false },
 ];
+
+
+const featuredImages2 = [
+  { src: 'https://cdn.pixabay.com/photo/2022/10/24/09/31/flower-7543035_960_720.jpg', title: 'Abstract Vision', category: 'abstract', featured: true },
+  { src: 'https://cdn.pixabay.com/photo/2025/01/29/11/09/lantern-9367692_1280.jpg', title: 'Mountain Majesty', category: 'landscape', featured: false },
+  { src: 'https://cdn.pixabay.com/photo/2021/11/26/20/45/lantern-6826698_960_720.jpg', title: 'Forest Serenity', category: 'nature', featured: true },
+  { src: 'https://cdn.pixabay.com/photo/2022/10/07/11/02/autumn-7504820_960_720.jpg', title: 'Urban Geometry', category: 'architecture', featured: false },
+  { src: 'https://cdn.pixabay.com/photo/2024/12/26/21/04/firenze-9292733_960_720.jpg', title: 'Street Stories', category: 'street', featured: true },
+  { src: 'https://cdn.pixabay.com/photo/2023/11/25/12/18/sea-8411640_960_720.jpg', title: 'Floral Dreams', category: 'nature', featured: false },
+  { src: 'https://cdn.pixabay.com/photo/2025/06/11/17/18/red-gana-top-9654874_1280.jpg', title: 'Digital Art', category: 'digital', featured: true },
+  { src: 'https://cdn.pixabay.com/photo/2024/01/25/12/30/mountain-8531778_1280.jpg', title: 'Surreal Moment', category: 'conceptual', featured: false },
+  { src: 'https://cdn.pixabay.com/photo/2025/05/31/20/23/trees-9634157_1280.jpg', title: 'Lonely Road', category: 'travel', featured: true },
+  { src: 'https://cdn.pixabay.com/photo/2022/09/08/02/55/pahan-7439926_1280.jpg', title: 'Golden Hour', category: 'landscape', featured: false },
+]
+
+
 
 const features = [
   {
@@ -269,6 +285,19 @@ const Collection = () => {
   640: 1,
 };
 
+
+const batches = [featuredImages1, featuredImages2]
+
+  const [currentBatchIndex, setCurrentBatchIndex] = useState(0);
+  const [images, setImages] = useState(batches[0]);
+
+  const handleLoadMore = () => {
+    const nextIndex = currentBatchIndex + 1;
+    if (nextIndex < batches.length) {
+      setImages(prev => [...prev, ...batches[nextIndex]]);
+      setCurrentBatchIndex(nextIndex);
+    }
+  };
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Hero Section */}
@@ -325,7 +354,7 @@ const Collection = () => {
               Explore Gallery <FiArrowRight className="transition-transform group-hover:translate-x-1" />
             </Link>
             <Link 
-              to="/artists" 
+              to="/Artists/DiscoverUsers" 
               className="px-8 py-4 border-2 border-white text-white rounded-lg font-bold hover:bg-white/10 transition-all"
             >
               Meet Artists
@@ -415,7 +444,7 @@ const Collection = () => {
 
       {/* Masonry Grid Gallery */}
     <section className="py-20 px-6 bg-white dark:bg-gray-900">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto flex flex-col">
         {/* Header */}
               <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -438,7 +467,7 @@ const Collection = () => {
           className="flex gap-6"
           columnClassName="space-y-6"
         >
-          {featuredImages.map((image, index) => (
+          {images.map((image, index) => (
             <motion.div
               key={index}
               className="relative overflow-hidden rounded-xl shadow-lg group"
@@ -476,7 +505,17 @@ const Collection = () => {
             </motion.div>
           ))}
         </Masonry>
-        </div>
+          {currentBatchIndex < batches.length - 1 && (
+        <button
+          onClick={handleLoadMore}
+          className="col-span-2 mt-12 px-6 py-3 bg-blue-600 text-white rounded mx-auto"
+        >
+          Load More
+        </button>
+       )}
+      </div>
+        {/* <button className='text-xl font-Roboto text-gray-900 dark:text-gray-100 shadow-xl bg-gradient-to-br from-violet-400 to-slate-100'> Load More </button> */}
+
         </section>
 
       {/* Final CTA */}

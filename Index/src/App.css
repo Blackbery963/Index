@@ -64,10 +64,6 @@ select.input {
             outline: none;
         }
 }
-
-
-
-
 .input::placeholder {
     color: black;
     font-size: large;
@@ -192,25 +188,6 @@ button svg {
 .transition-transform {
   transition: transform 0.3s ease-in-out;
 }
-
-/* In your CSS file */
-/* .bg-double-image {
-  background-image: url('https://images.pexels.com/photos/31280583/pexels-photo-31280583.jpeg'), url('https://images.pexels.com/photos/32626708/pexels-photo-32626708.jpeg');
-  background-position: left center, right center;
-  background-size: 50% 100%, 50% 100%;
-  background-repeat: no-repeat;
-} */
-
-
-
-
-/* body {
-  height: 80vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-} */
 
 .diaryh1 {
   font-family: "Montserrat Medium";

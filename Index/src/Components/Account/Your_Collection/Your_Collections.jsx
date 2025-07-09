@@ -96,7 +96,7 @@ function Your_Collections({userId}) {
           ],
           Videos: ["Video"],
           // Diary: ["Other"],
-          Masterpiece:["Masterpiece"]
+          Masterpieces:["Masterpieces"]
 
         };
 
@@ -168,6 +168,24 @@ function Your_Collections({userId}) {
     fetchUploads();
   }, [activeButton, navigate]);
 
+
+  //fetching users 
+  const [currentUserId, setCurrentUserId] = useState(null);
+
+useEffect(() => {
+  const fetchCurrentUser = async () => {
+    try {
+      const user = await account.get();
+      setCurrentUserId(user.$id);
+    } catch (error) {
+      console.error("Not logged in or unable to fetch user.");
+    }
+  };
+
+  fetchCurrentUser();
+}, []);
+
+
   const ImagePlaceholder = ({ type }) => (
     <div className="w-full h-full flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-500 p-4 rounded-lg">
       {type === "error" ? (
@@ -223,9 +241,9 @@ function Your_Collections({userId}) {
       <ToastContainer position="top-right" autoClose={5000} theme={document.documentElement.classList.contains('dark') ? 'dark' : 'light'} />
 
       {/* Navigation Tabs */}
-      <nav className="w-full max-w-7xl mx-auto px-4 py-4 bg-white dark:bg-gray-800 shadow-sm">
+      <nav className="w-full max-w-7xl mx-auto px-4 py-4 bg-white dark:bg-gray-800 shadow-sm overflow-auto">
         <div className="flex gap-4">
-          {["Photos", "Videos", "Masterpiece"].map((buttonName) => (
+          {["Photos", "Videos", "Masterpieces"].map((buttonName) => (
             <motion.button
               key={buttonName}
               className={`relative px-4 py-2 flex items-center gap-2 text-sm font-medium font-Quicksand rounded-md transition-colors duration-200 ${
@@ -240,7 +258,7 @@ function Your_Collections({userId}) {
               {buttonName === "Photos" && <MdPhoto className="text-lg" />}
               {buttonName === "Videos" && <MdVideocam className="text-lg" />}
               {/* {buttonName === "Diary" && <MdBook className="text-lg" />} */}
-              {buttonName === "Masterpiece" && <FaTrophy className="text-lg" />}
+              {buttonName === "Masterpieces" && <FaTrophy className="text-lg" />}
               <span>{buttonName}</span>
               {activeButton === buttonName && (
                 <motion.span
@@ -281,14 +299,25 @@ function Your_Collections({userId}) {
             <p className="text-gray-600 dark:text-gray-400 text-lg font-Quicksand mb-4">
               No {activeButton.toLowerCase()} found in your collection.
             </p>
-            <motion.button
+            {/* <motion.button
               onClick={() => navigate("/Account/Upload")}
               className="px-6 py-2 bg-violet-600 text-white rounded-full font-Quicksand hover:bg-violet-700 transition-colors"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
               Upload Your First {activeButton.slice(0, -1)}
+            </motion.button> */}
+            {currentUserId === userId && (
+            <motion.button
+            onClick={() => navigate("/Account/Upload")}
+            className="px-6 py-2 bg-violet-600 text-white rounded-full font-Quicksand hover:bg-violet-700 transition-colors"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            >
+            Upload Your First {activeButton.slice(0, -1)}
             </motion.button>
+           )}
+
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
@@ -336,10 +365,16 @@ function Your_Collections({userId}) {
                   </div>
                   
                   {/* Tag Badge */}
-                  {upload.tag && (
+                  {/* {upload.tag && (
                     <span className="absolute top-2 right-2 bg-violet-600 dark:bg-violet-500 text-white text-xs font-medium px-2 py-1 rounded-full capitalize">
                       {upload.tag}
                     </span>
+                  )} */}
+                  {upload.tag === "Masterpiece" && (
+                  <div className="absolute top-2 left-2 bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded-full flex items-center z-10">
+                  <FaTrophy className="mr-1" />
+                  <span>Masterpiece</span>
+                  </div>
                   )}
                 </div>
                 

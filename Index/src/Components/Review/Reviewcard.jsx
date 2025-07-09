@@ -1,18 +1,17 @@
 
 import React, { useState } from 'react';
 import frontbackground from './Images-of-Review/1646895.jpg';
-// import behindbackground from '/home/swarnadip/Documents/Index/Index/Index/src/Components/Review/Images-of-Review/1177739.jpg';
 import { FaFacebookF, FaInstagram, FaStar } from "react-icons/fa";
 import {FaXTwitter} from 'react-icons/fa6'
 
 
-export default function ReviewCard({ Profileimg, Username, Review }) {
+export default function ReviewCard({ Profileimg, Username, Review,Userdescription }) {
   const [flipped, setFlipped] = useState(false);
 
   return (
     <div className="w-full flex justify-center py-6">
       <div 
-        className="relative w-[350px] md:w-[450px] h-[280px] perspective-1000"
+        className="relative w-[400px] md:w-[450px] h-[285px] perspective-1000"
         onClick={() => setFlipped(!flipped)}
       >
         {/* Card Inner */}
@@ -30,6 +29,7 @@ export default function ReviewCard({ Profileimg, Username, Review }) {
 
             {/* Username */}
             <h1 className="mt-3 text-xl font-Playfair text-gray-300">{Username}</h1>
+              <p className="mt-3 text-sm font-Playfair text-gray-300">{Userdescription}</p>
 
             {/* Star Ratings */}
             <div className="flex mt-2">
@@ -67,3 +67,4 @@ export default function ReviewCard({ Profileimg, Username, Review }) {
     </div>
   );
 }
+ 

@@ -1076,7 +1076,7 @@ useEffect(() => {
             <FaCrown className="text-xl text-blue-500" />
           </motion.button>
         </Link>
-        <Link to="/cart">
+        <Link to="settings/cart">
         <motion.button
         className={`p-1 ${darkMode ? 'bg-gray-800/80' : 'bg-white/80'} backdrop-blur-md rounded-lg shadow-lg border ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}
         whileHover={{ 
@@ -1088,7 +1088,7 @@ useEffect(() => {
         <FaCartPlus className="text-xl text-blue-500" />
         </motion.button>
         </Link>
-        <Link to="/Notifications">
+        <Link to="/Settings/Notification">
         <motion.button
         className={`p-1 ${darkMode ? 'bg-gray-800/80' : 'bg-white/80'} backdrop-blur-md rounded-lg shadow-lg border ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}
         whileHover={{ scale: 1.1,

@@ -384,7 +384,7 @@ const USER_COLLECTION_ID = import.meta.env.VITE_APPWRITE_USERS_COLLECTION_ID;
 
 const DiscoverUsers = () => {
   const [activeButton, setActiveButton] = useState('');
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -651,7 +651,7 @@ const DiscoverUsers = () => {
             </motion.nav>
           )}
         </AnimatePresence>
-      <div className="max-w-7xl mx-auto pt-[100px]">
+      <div className="max-w-7xl mx-auto pt-[100px] px-4 ">
         {/* Hero Section */}
         <div className="text-center mb-16">
           <h1 className="text-5xl font-bold text-gray-900 dark:text-white mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-500 font-Quicksand">

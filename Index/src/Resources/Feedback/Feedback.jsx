@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import FeedBackground from './evaluation-feedback-customer-smiley-response.jpg';
+import FeedBackground from './evaluation-feedback-customer-smiley-response-min.jpg';
 import FeedBackground2 from './9019830.jpg';
 import { FaHome, FaInfoCircle, FaUser, FaBook } from 'react-icons/fa';
 import {MdBook} from 'react-icons/md';
@@ -90,7 +90,7 @@ function Feedback() {
 
       {/* Desktop View */}
       <div
-        className="min-h-screen w-screen bg-center bg-cover flex items-center justify-center lg:block  pt-[250px]"
+        className="min-h-screen w-screen bg-center bg-cover flex items-center justify-center lg:block hidden  pt-[250px]"
         style={{ backgroundImage: `url(${FeedBackground})` }}
       >
         <main className="w-[90%] max-w-2xl h-[70vh] bg-white/20 backdrop-blur-md mx-auto flex items-center justify-center flex-col gap-6 p-6 rounded-2xl shadow-2xl border border-teal-200">

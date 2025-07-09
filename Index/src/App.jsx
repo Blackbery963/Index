@@ -35,7 +35,7 @@ import Modern from './Sub-Components/Modern';
 import Diaryland from './Components/Diaryland/Diaryland';
 import January from './DiaryService/January.jsx';
 import About from './Company/About/About';
-import Favourite from './Months/Favourite';
+import Favourite from './Settings/Favourite.jsx';
 import FAQs from './Resources/FAQs/FAQs';
 import Feedback from './Resources/Feedback/Feedback';
 import Edit_Profile from './Components/Account/Edit_Profile/Edit_Profile';
@@ -46,7 +46,6 @@ import Privacy_Policy from './Legal/Privacy_Policy/Privacy_Policy';
 import Terms_Conditions from './Legal/Terms&Conditipons/Terms_Conditions.jsx';
 import License from './Legal/License.jsx';
 import ResetPassword from './Components/Login/ResetPassword';
-import Cart from './Months/Cart';
 import Help from './Resources/Help/Help.jsx';
 import Artisan from './Components/Artisian/Artisian.jsx';
 import Security from './Product/Security.jsx';
@@ -66,6 +65,8 @@ import Express from './Sub-Components/Express.jsx';
 import UserDiscoveryPage from './Components/Artisian/userDiscoveryPage.jsx';
 import DiscoverUsers from './Components/Artisian/DiscoverArtists.jsx';
 import DiaryCollection from './Components/Diaryland/DiaryCollection.jsx';
+import Notification from './Settings/Notification.jsx';
+import Cart from './Settings/Cart.jsx';
 
 // The commecial part starts from here 
 import Artstore from './Arteva/Artstore.jsx';
@@ -213,6 +214,8 @@ useEffect(() => {
         <Route path="/about" element={<About />} />
         <Route path="/favourite" element={<Favourite />} />
         <Route path="/faqs" element={<FAQs />} />
+        <Route path='/settings/notification' element={<Notification/>}/>
+        <Route path='/settings/cart' element={<Cart/>}/>
         <Route path="/resources/feedback" element={<Feedback />} />
         <Route path="/Account/Edit_profile" element={<Edit_Profile />} />
         <Route path="/Account/dashboard" element={<Dashboard />} />
@@ -237,8 +240,11 @@ useEffect(() => {
         <Route path='/Digital' element={<Digital/>}/>
         <Route path='/Pop-Art' element={<Pop/>}/>
         <Route path='/Expressionism' element={<Express/>}/>
+        {/* discovering artists  */}
         <Route path='/Artist/discoverartists' element={<UserDiscoveryPage/>}/>
         <Route path='/Artists/DiscoverUsers' element={<DiscoverUsers/>}/>
+
+        {/* Diary */}
         <Route path='/Diaries/Diary-Collection' element={<DiaryCollection/>}/>
         <Route path='/diary/:id' element = {<January/>}/>
 

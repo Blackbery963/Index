@@ -288,7 +288,7 @@ function Gallery() {
             variants={dropdownVariants} initial="hidden" animate="visible" exit="hidden">
             <div className="flex flex-col items-center py-4 gap-y-3 font-Playfair font-bold text-black dark:text-gray-100">
               {['home', 'about', 'account', 'landscape'].map((item) => (
-                <Link key={item}  to={item === 'Home' ? '/' : `/${item}`} onClick={() => { setActiveButton(item); toggleMenu(); }}>
+                <Link key={item}  to={item === 'Home' ? '/' : `/${item.toLocaleLowerCase}`} onClick={() => { setActiveButton(item); toggleMenu(); }}>
                   <button className={`w-full py-2 px-4 flex items-center justify-center gap-2 ${
                     activeButton === item ? 'bg-blue-500 text-white' : 'hover:bg-gray-200 dark:hover:bg-gray-700'
                   }`}>

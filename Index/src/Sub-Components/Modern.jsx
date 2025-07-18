@@ -588,10 +588,10 @@ function Modern() {
               </button>
               <div className="absolute bottom-4 left-0 right-0 text-center text-white font-Quicksand">
                 <p>{modernImages[lightbox.index].title || 'Untitled'}</p>
-                
-                 <div className="absolute top-4 left-4">
-                    <ArtworkViewTracker artworkId={landscapeImages[lightbox.index].$id} />
-                  </div><p className="text-sm">{lightbox.index + 1} / {modernImages.length}</p>
+                <p className="text-sm">{lightbox.index + 1} / {modernImages.length}</p>
+               <div className="absolute top-4 left-4">
+                    <ArtworkViewTracker artworkId={modernImages[lightbox.index].$id} />
+                  </div>
               </div>
             </motion.div>
           </motion.div>

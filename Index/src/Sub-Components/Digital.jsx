@@ -587,7 +587,7 @@ useEffect(() => {
                 <p className="text-sm">{lightbox.index + 1} / {digitalImages.length}</p>
               </div>
               <div className="absolute top-4 left-4">
-                <ArtworkViewTracker artworkId={abstractImages[lightbox.index].$id} />
+                <ArtworkViewTracker artworkId={digitalImages[lightbox.index].$id} />
               </div>
             </motion.div>
           </motion.div>

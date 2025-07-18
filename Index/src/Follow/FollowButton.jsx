@@ -82,8 +82,8 @@ export default function FollowButton({ targetUserId, onFollowChange = () => {} }
 };
 
   useEffect(() => {
-  console.log('Current User ID:', currentUserId);
-  console.log('Target User ID:', targetUserId);
+  // console.log('Current User ID:', currentUserId);
+  // console.log('Target User ID:', targetUserId);
   }, [currentUserId, targetUserId]);
 
 

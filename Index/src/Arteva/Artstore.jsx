@@ -160,7 +160,7 @@ const ArtStore = () => {
           <motion.div whileHover={{ scale: 1.05 }} className="flex items-center gap-2">
             <FaPalette className={`text-2xl ${isDarkMode ? 'text-purple-400' : 'text-indigo-600'}`} />
             <h1 className={`text-xl font-bold font-Eagle ${isDarkMode ? 'bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-300' : 'text-indigo-600'}`}>
-              ArtEva
+              Artverse
             </h1>
           </motion.div>
 
@@ -636,7 +636,7 @@ const ArtStore = () => {
       {/* Footer */}
       <footer className={`py-8 ${isDarkMode ? 'bg-gray-900 text-gray-200' : 'bg-gray-100 text-gray-600'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center">
-          <p className="text-sm">© 2025 ArtCube. All rights reserved.</p>
+          <p className="text-sm">© 2025 Artverse. All rights reserved.</p>
           <div className="mt-4 flex justify-center gap-4">
             <a href="#" className={`text-sm ${isDarkMode ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-900'} transition-colors`}>Privacy Policy</a>
             <a href="#" className={`text-sm ${isDarkMode ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-900'} transition-colors`}>Terms of Service</a>

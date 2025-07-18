@@ -64,7 +64,7 @@ function Water_color() {
       const response = await databases.listDocuments(
         DATABASE_ID,
         COLLECTION_ID,
-        [Query.equal('medium', 'Watercolor Images')]
+        [Query.equal('medium', 'Watercolor Painting')]
       );
 
       // Get image URLs
@@ -546,7 +546,7 @@ function Water_color() {
                 <p>{waterImages[lightbox.index].title || 'Untitled'}</p>
                 <p className="text-sm">{lightbox.index + 1} / {waterImages.length}</p>
               <div className="absolute top-4 left-4">
-                    <ArtworkViewTracker artworkId={landscapeImages[lightbox.index].$id} />
+                    <ArtworkViewTracker artworkId={waterImages[lightbox.index].$id} />
                   </div>
               </div>
             </motion.div>

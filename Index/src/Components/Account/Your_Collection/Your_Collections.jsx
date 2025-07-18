@@ -112,7 +112,7 @@ function Your_Collections({userId}) {
           ]
         );
 
-        console.log("Fetched documents:", response.documents);
+        // console.log("Fetched documents:", response.documents);
 
         const uploadsWithMedia = await Promise.all(
           response.documents.map(async (doc) => {

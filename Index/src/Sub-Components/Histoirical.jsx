@@ -591,7 +591,7 @@ function Historical() {
                 <p>{historicalImages[lightbox.index].title || 'Untitled'}</p>
                 <p className="text-sm">{lightbox.index + 1} / {historicalImages.length}</p>
                <div className="absolute top-4 left-4">
-                    <ArtworkViewTracker artworkId={landscapeImages[lightbox.index].$id} />
+                    <ArtworkViewTracker artworkId={historicalImages[lightbox.index].$id} />
                   </div>
               </div>
             </motion.div>

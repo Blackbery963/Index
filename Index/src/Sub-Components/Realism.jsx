@@ -543,7 +543,7 @@ function Realism() {
                 <p>{realismImages[lightbox.index].title || 'Untitled'}</p>
                 <p className="text-sm">{lightbox.index + 1} / {realismImages.length}</p>
               <div className="absolute top-4 left-4">
-                    <ArtworkViewTracker artworkId={landscapeImages[lightbox.index].$id} />
+                    <ArtworkViewTracker artworkId={realismImages[lightbox.index].$id} />
                   </div>
               </div>
             </motion.div>

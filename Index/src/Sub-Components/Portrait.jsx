@@ -620,7 +620,7 @@ function Portrait() {
                 <p>{portraitImages[lightbox.index].title || 'Untitled'}</p>
                 <p className="text-sm">{lightbox.index + 1} / {portraitImages.length}</p>
                <div className="absolute top-4 left-4">
-                    <ArtworkViewTracker artworkId={landscapeImages[lightbox.index].$id} />
+                    <ArtworkViewTracker artworkId={portraitImages[lightbox.index].$id} />
                   </div>
               </div>
             </motion.div>

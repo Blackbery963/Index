@@ -594,7 +594,7 @@ function Minimalism() {
                 <p>{minimalismImages[lightbox.index].title || 'Untitled'}</p>
                 <p className="text-sm">{lightbox.index + 1} / {minimalismImages.length}</p>
                <div className="absolute top-4 left-4">
-                    <ArtworkViewTracker artworkId={landscapeImages[lightbox.index].$id} />
+                    <ArtworkViewTracker artworkId={minimalismImages[lightbox.index].$id} />
                   </div>
               </div>
             </motion.div>

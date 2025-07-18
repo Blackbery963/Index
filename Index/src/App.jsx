@@ -21,6 +21,7 @@ const Review = lazy(() => import('./Components/Review/Review'));
 import Account from './Components/Account/Account';
 // import Profile from './Components/Account/Profile.jsx';
 import Upload from './Components/Upload/Upload.jsx';
+import UploadMasterpiece from './Components/Upload/Masterpiece.jsx';
 import Signup from './Components/Signup/Signup';
 import VerifyMFA from './Components/Signup/VerifyMFA.jsx';
 import Login from './Components/Login/Login';
@@ -49,7 +50,10 @@ import ResetPassword from './Components/Login/ResetPassword';
 import Help from './Resources/Help/Help.jsx';
 import Artisan from './Components/Artisian/Artisian.jsx';
 import Security from './Product/Security.jsx';
-import Community from './Company/Community/Community.jsx';
+import Community from './Community/Community.jsx';
+import CreateCommunityPage from './Community/Create-Community.jsx';
+import ExploreCommunity from './Community/ExploreCommunity.jsx';
+import CommunityDashboard from './Community/CommunityDashboard.jsx';
 import Nature from './Sub-Components/Nature.jsx';
 import Traditional from './Sub-Components/Traditional.jsx';
 import Photography from './Sub-Components/Photography.jsx';
@@ -102,7 +106,7 @@ useEffect(() => {
   const checkAuth = async () => {
     try {
       const currentUser = await account.get();
-      console.log('Logged in user:', currentUser);
+      // console.log('Logged in user:', currentUser);
       // Save to state or context
     } catch {
       console.log('No active session');
@@ -197,18 +201,8 @@ useEffect(() => {
         <Route path='/Account/:userId' element={<Account isOwnProfile={false}/>}/>
         <Route path="/signup" element={<Signup />} />
         <Route path='/Signup/Multi-Factor_Authentication' element={<VerifyMFA/>}/>
-        <Route path="/login" element={<Login />} />
-        <Route path="/gallery" element={<Gallery />} />
+        <Route path="/login" element={<Login />} />    
         <Route path="/category" element={<Category />} />
-        <Route path="/landscape" element={<Landscape />} />
-        <Route path="/portrait" element={<Portrait />} />
-        <Route path="/still-life" element={<Still_life />} />
-        <Route path="/oil_paint" element={<Oil_paint />} />
-        <Route path='/Photography' element={<Photography/>}/>
-        <Route path="/watercolor" element={<Water_color />} />
-        <Route path="/abstract" element={<Abstract />} />
-        <Route path="/historical" element={<Historical />} />
-        <Route path="/modern" element={<Modern />} />
         <Route path="/diaryland" element={<Diaryland />} />
         <Route path="/january" element={<January />} />
         <Route path="/about" element={<About />} />
@@ -220,6 +214,7 @@ useEffect(() => {
         <Route path="/Account/Edit_profile" element={<Edit_Profile />} />
         <Route path="/Account/dashboard" element={<Dashboard />} />
         <Route path="/Account/Upload" element={<Upload />} />
+        <Route path='/Account/Upload/Masterpiece' element={<UploadMasterpiece/>}/>
         <Route path="/collections" element={<Your_Collections />} />
         <Route path="/Journal" element={<Journal />} />
         <Route path="/Legal/Privacy_Policy" element={<Privacy_Policy />} />
@@ -231,6 +226,13 @@ useEffect(() => {
         <Route path='/History' element={<History/>}/>
         <Route path='/Resources/Help' element={<Help/>}/>
         <Route path="/community" element={<Community />} />
+        <Route path="/community/CreateCommunity" element={<CreateCommunityPage />} />
+        <Route path='/community/ExploreCommunity' element={<ExploreCommunity/>}/>
+        <Route path='/community/:slug' element={<CommunityDashboard/>}/>
+        <Route path="/community/:communityId" element={<CommunityDashboard />} />
+
+        {/* The routing of the sub-components */}
+         <Route path="/gallery" element={<Gallery />} />
         <Route path='/Nature' element={<Nature/>}/>
         <Route path='/Traditional' element={<Traditional/>}/>
         <Route path='/Realism' element={<Realism/>}/>
@@ -240,6 +242,16 @@ useEffect(() => {
         <Route path='/Digital' element={<Digital/>}/>
         <Route path='/Pop-Art' element={<Pop/>}/>
         <Route path='/Expressionism' element={<Express/>}/>
+        <Route path="/landscape" element={<Landscape />} />
+        <Route path="/portrait" element={<Portrait />} />
+        <Route path="/still-life" element={<Still_life />} />
+        <Route path="/oil_paint" element={<Oil_paint />} />
+        <Route path='/Photography' element={<Photography/>}/>
+        <Route path="/watercolor" element={<Water_color />} />
+        <Route path="/abstract" element={<Abstract />} />
+        <Route path="/historical" element={<Historical />} />
+        <Route path="/modern" element={<Modern />} />
+
         {/* discovering artists  */}
         <Route path='/Artist/discoverartists' element={<UserDiscoveryPage/>}/>
         <Route path='/Artists/DiscoverUsers' element={<DiscoverUsers/>}/>

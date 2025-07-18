@@ -64,6 +64,8 @@ export default {
       slideInUp: "slideInUp 0.8s ease-out",
         expand: 'expand 1.5s ease-out forwards',
         fadeOut: 'fadeOut 0.8s ease-out forwards',
+        pulseblur: 'pulseBlur 3s infinite',
+  
      
     },
     keyframes: {
@@ -82,6 +84,10 @@ export default {
         fadeOut: {
           '0%': { opacity: 1 },
           '100%': { opacity: 0 },
+        },
+        pulseBlur: {
+          '0%, 100%': { opacity: '0.2' },
+          '50%': { opacity: '0.3' },
         },
      
     },

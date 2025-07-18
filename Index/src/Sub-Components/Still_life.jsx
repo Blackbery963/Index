@@ -592,7 +592,7 @@ function Still_life() {
                      <p>{stillLifeImages[lightbox.index].title || 'Untitled'}</p>
                      <p className="text-sm">{lightbox.index + 1} / {stillLifeImages.length}</p>
                     <div className="absolute top-4 left-4">
-                    <ArtworkViewTracker artworkId={landscapeImages[lightbox.index].$id} />
+                    <ArtworkViewTracker artworkId={stillLifeImages[lightbox.index].$id} />
                   </div>
                    </div>
                  </motion.div>

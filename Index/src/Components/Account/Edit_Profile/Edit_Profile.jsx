@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { MdBook, MdMenu, MdClose, MdEmail, MdLocationOn, MdWeb } from 'react-icons/md';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import {databases, Permission, Role} from '../../../appwriteConfig'
+import {databases, Permission, Role, account} from '../../../appwriteConfig'
 import { ID } from '../../../appwriteConfig';
 
 const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID
@@ -235,32 +235,67 @@ const InterestSelector = () => {
 
   //storing the data in the databse collection
   // Edit_Profile.js
+// const handleSubmit = async (e) => {
+//   e.preventDefault();
+  
+//   try {
+//     // // Get user ID from localStorage
+//     const user = JSON.parse(localStorage.getItem('userProfile'));
+//     if (!user?.$id) throw new Error("User not logged in");
+//     // checking if the user are logged in or not 
+//        try {
+//       await databases.getDocument(DATABASE_ID, USER_COLLECTION_ID, user.$id);
+//     } catch (getDocError) {
+//       if (getDocError.code === 404) {
+//         // Document doesn't exist? Create it now
+//         await databases.createDocument(
+//           DATABASE_ID,
+//           USER_COLLECTION_ID,
+//           user.$id,
+//           {
+//             userId: user.$id,
+//             username: user.username,
+//             email: user.email,
+//             createdAt: new Date().toISOString()
+//           },
+//           [
+//             Permission.read(Role.user(user.$id)),
+//             Permission.update(Role.user(user.$id))
+//           ]
+//         );
+//       } else {
+//         throw getDocError;
+//       }
+//     }
+
+
 const handleSubmit = async (e) => {
   e.preventDefault();
-  
+
   try {
-    // Get user ID from localStorage
-    const user = JSON.parse(localStorage.getItem('userProfile'));
-    if (!user?.$id) throw new Error("User not logged in");
-    // checking if the user are logged in or not 
-       try {
-      await databases.getDocument(DATABASE_ID, USER_COLLECTION_ID, user.$id);
+    // 🔐 Get current user from Appwrite session
+    const user = await account.get();
+    const userId = user.$id;
+
+    // ✅ Check if user document exists
+    try {
+      await databases.getDocument(DATABASE_ID, USER_COLLECTION_ID, userId);
     } catch (getDocError) {
       if (getDocError.code === 404) {
-        // Document doesn't exist? Create it now
+        // 🆕 Create user document if it doesn't exist
         await databases.createDocument(
           DATABASE_ID,
           USER_COLLECTION_ID,
-          user.$id,
+          userId,
           {
-            userId: user.$id,
-            username: user.username,
+            userId: userId,
+            username: user.name,
             email: user.email,
-            createdAt: new Date().toISOString()
+            createdAt: new Date().toISOString(),
           },
           [
-            Permission.read(Role.user(user.$id)),
-            Permission.update(Role.user(user.$id))
+            Permission.read(Role.user(userId)),
+            Permission.update(Role.user(userId)),
           ]
         );
       } else {

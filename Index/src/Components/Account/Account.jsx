@@ -352,7 +352,7 @@ function Account({ isOwnProfile = true }) {
                   exit={{ opacity: 0, y: 10 }}
                   className="absolute top-full right-0 mt-6 w-48 bg-white/60 dark:bg-gray-800/40 backdrop-blur-md border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50 overflow-hidden"
                 >
-                  <Link to={'/account/edit-profile'}>
+                  <Link to={'/account/edit_profile'}>
                     <button
                       className="w-full px-4 py-3 text-left hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 flex items-center gap-2 text-sm transition-colors"
                       onClick={() => setIsDropdownOpen(false)}

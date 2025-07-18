@@ -1090,13 +1090,14 @@ useEffect(() => {
         </Link>
         <Link to="/Settings/Notification">
         <motion.button
-        className={`p-1 ${darkMode ? 'bg-gray-800/80' : 'bg-white/80'} backdrop-blur-md rounded-lg shadow-lg border ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}
+        className={`p-1 relative ${darkMode ? 'bg-gray-800/80' : 'bg-white/80'} backdrop-blur-md rounded-lg shadow-lg border ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}
         whileHover={{ scale: 1.1,
           backgroundColor: darkMode ? 'rgba(55, 65, 81, 0.9)' : 'rgba(255, 255, 255, 0.9)' }}
         whileTap={{ scale: 0.95 }}
         title="Cart"
         >
         <FaBell className="text-xl text-blue-500" />
+        <div className="px-1 bg-red-600 text-white rounded-full absolute top-[-10px] right-[-10px]">0</div>
         </motion.button>
         </Link>
       </motion.div>

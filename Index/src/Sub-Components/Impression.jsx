@@ -592,7 +592,7 @@ function Impression() {
                 <p>{impressionImages[lightbox.index].title || 'Untitled'}</p> 
                <p className="text-sm">{lightbox.index + 1} / {impressionImages.length}</p>
                <div className="absolute top-4 left-4">
-                    <ArtworkViewTracker artworkId={landscapeImages[lightbox.index].$id} />
+                    <ArtworkViewTracker artworkId={impressionImages[lightbox.index].$id} />
                   </div>
               </div>
             </motion.div>

@@ -591,7 +591,7 @@ function Pop() {
                 <p>{popImages[lightbox.index].title || 'Untitled'}</p>
                 <p className="text-sm">{lightbox.index + 1} / {popImages.length}</p>
               <div className="absolute top-4 left-4">
-                    <ArtworkViewTracker artworkId={landscapeImages[lightbox.index].$id} />
+                    <ArtworkViewTracker artworkId={popImages[lightbox.index].$id} />
                   </div>
               </div>
             </motion.div>

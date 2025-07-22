@@ -51,13 +51,24 @@ const Signup = () => {
       if (value && !/^\+?[\d\s-]{10,}$/.test(value)) return 'Invalid phone number';
       return '';
     }
+    // if (name === 'password') {
+    //   if (!value) return 'Password is required';
+    //   if (value.length < 8) return 'Minimum 8 characters';
+    //   return !/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(value)
+    //     ? 'Password must contain at least one letter and one number'
+    //     : '';
+    // }
     if (name === 'password') {
-      if (!value) return 'Password is required';
-      if (value.length < 8) return 'Minimum 8 characters';
-      return !/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(value)
-        ? 'Password must contain at least one letter and one number'
-        : '';
-    }
+  if (!value) return 'Password is required';
+  if (value.length < 8) return 'Minimum 8 characters';
+
+  const strongPasswordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/;
+
+  return !strongPasswordRegex.test(value)
+    ? 'Password must contain at least one letter, one number, and one special character'
+    : '';
+}
+
     if (name === 'confirmPassword') {
       return value !== formData.password ? 'Passwords do not match' : '';
     }

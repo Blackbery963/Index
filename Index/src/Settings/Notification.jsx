@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Databases, Account, Client } from 'appwrite';
+import { Databases, Account, Client, Query } from 'appwrite';
 import { client} from '../appwriteConfig';
 import { FaBell, FaCheck, FaTrash, FaBellSlash, FaPaintBrush, FaHome, FaInfoCircle,FaUser,FaPalette } from 'react-icons/fa';
 import { FiMenu } from 'react-icons/fi';

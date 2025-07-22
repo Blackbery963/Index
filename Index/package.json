@@ -21,6 +21,7 @@
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "framer-motion": "^12.16.0",
+    "gsap": "^3.13.0",
     "js-cookie": "3.0.5",
     "node-appwrite": "^15.0.1",
     "nodemailer": "^7.0.3",

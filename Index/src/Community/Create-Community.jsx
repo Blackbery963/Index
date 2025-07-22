@@ -163,16 +163,25 @@ const CreateCommunityPage = () => {
                   ArtVerse
                 </Link>
                 <div className="hidden md:flex items-center gap-6">
-                  {['Home', 'Community', 'Challenges', 'Resources'].map((item) => (
-                    <motion.a
-                      key={item}
-                      href="#"
-                      whileHover={{ scale: 1.1 }}
-                      className="text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 font-medium relative group font-Playfair"
-                    >
-                      {item}
-                      <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-600 dark:bg-purple-400 transition-all duration-300 group-hover:w-full"></span>
-                    </motion.a>
+                  {[
+                    {name: 'Home', path: '/'},
+                    {name: 'Resources', path:'/resourches'},
+                    {name:'Community', path:'/community'},
+                    {name:'Challenges', path:'/communnity/Challenges'}
+                  ].map((item) => (
+                     <motion.div
+                     key={item.name}
+                     whileHover={{ scale: 1.1 }}
+                     className="relative group"
+                     >
+                     <Link
+                     to={item.path}
+                     className="text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 font-medium font-Playfair"
+                     >
+                     {item.name}
+                     </Link>
+                     <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-600 dark:bg-purple-400 transition-all duration-300 group-hover:w-full"></span>
+                     </motion.div>
                   ))}
                 </div>
                 <button
@@ -196,14 +205,19 @@ const CreateCommunityPage = () => {
                 className="md:hidden overflow-hidden bg-white/40 backdrop-blur-md dark:bg-gray-800/40 rounded-b-lg"
               >
                 <div className="px-4 py-3 space-y-2">
-                  {['Home', 'Community', 'Challenges', 'Resources'].map((item) => (
-                    <a
-                      key={item}
-                      href="#"
-                      className="block text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 font-medium py-2 font-Playfair"
+                  {[
+                    {name: 'Home', path: '/'},
+                    {name: 'Resources', path:'/resourches'},
+                    {name:'Community', path:'/community'},
+                    {name:'Challenges', path:'/communnity/Challenges'}
+                  ].map((item) => (
+                    <Link
+                    key={item.name}
+                    to={item.path}
+                    className="block text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 font-medium py-2 font-Playfair"
                     >
-                      {item}
-                    </a>
+                    {item.name}
+                    </Link>
                   ))}
                 </div>
               </motion.div>

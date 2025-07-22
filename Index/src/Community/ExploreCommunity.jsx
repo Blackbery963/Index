@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useParams } from 'react-router-dom';
 import { databases, Query, account } from '../appwriteConfig'; // Adjust import path
+import { toast, ToastContainer } from 'react-toastify';
+
 
 function ExploreCommunity() {
     const slug = useParams()
@@ -61,16 +63,19 @@ function ExploreCommunity() {
       }
     );
 
-    alert('Join request sent to the owner!');
+    toast.alert('Join request sent to the owner!');
   } catch (err) {
     console.error("Error sending join request:", err);
-    alert('Failed to send join request');
+    toast.alert('Failed to send join request');
   }
 };
 
 
     return (
         <div className='w-full min-h-screen bg-gradient-to-br from-slate-200 via-pink-200 to-purple-200 dark:from-slate-900 dark:to-gray-950 flex items-center justify-center'>
+          <ToastContainer
+          
+          />
            <motion.nav
                         initial={{ y: -50, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}

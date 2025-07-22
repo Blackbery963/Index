@@ -421,18 +421,18 @@ import { useState, useEffect, useRef, useContext, createContext } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   FaUserPlus, FaUser, FaHeart, FaCartPlus, FaSun, FaMoon, FaHome, 
-  FaImages, FaHandsHelping, FaCrown, FaSearch,FaBell, FaBullhorn
+  FaImages, FaHandsHelping, FaCrown, FaSearch,FaBell, FaBullhorn,
+  FaRegBell
 } from "react-icons/fa";
 import { MdGroups3, MdClose, MdOutlineFeedback, MdBook, MdHistory } from "react-icons/md";
 import { IoMdHelpCircleOutline } from "react-icons/io";
-import { CiMenuFries } from "react-icons/ci";
+import { CiBellOn, CiMenuFries } from "react-icons/ci";
 import { BiCategoryAlt } from "react-icons/bi";
 import { ImBlog } from "react-icons/im";
 import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { databases, account } from "../../appwriteConfig";
-
-
+import { CubeIcon, PaperAirplaneIcon } from '@heroicons/react/24/outline';
 // Dark Mode Context
  export const DarkModeContext = createContext();
 
@@ -506,8 +506,8 @@ const Header = () => {
   const searchRef = useRef(null);
   const menuRef = useRef(null);
   const [dropdownOpen, setDropdownOpen] = useState(false)
-
   const [profileImage, setProfileImage] = useState(null);
+  const [cartCount, setCartCount] = useState(0);
 
   // Enhanced background transition effect
   useEffect(() => {
@@ -589,6 +589,13 @@ useEffect(() => {
 
   fetchUserProfile();
 }, []);
+
+
+  useEffect(() => {
+    const storedCart = JSON.parse(localStorage.getItem('cartItems')) || [];
+    const count = storedCart.reduce((total, item) => total + item.quantity, 0);
+    setCartCount(count);
+  }, []);
 
 
   // Enhanced animations
@@ -1086,6 +1093,12 @@ useEffect(() => {
         title="Cart"
         >
         <FaCartPlus className="text-xl text-blue-500" />
+        {/* <div className="px-1 text-sm bg-red-600 text-white rounded-full absolute top-[-10px] right-[-10px]">{cartItemCount}</div> */}
+        {cartCount > 0 && (
+          <span className="px-1 text-sm bg-red-600 text-white rounded-full absolute -top-2 -right-1 font-Playfair">
+            {cartCount}
+          </span>
+        )}
         </motion.button>
         </Link>
         <Link to="/Settings/Notification">
@@ -1096,8 +1109,23 @@ useEffect(() => {
         whileTap={{ scale: 0.95 }}
         title="Cart"
         >
-        <FaBell className="text-xl text-blue-500" />
-        <div className="px-1 bg-red-600 text-white rounded-full absolute top-[-10px] right-[-10px]">0</div>
+        <FaRegBell className="text-xl font-semibold text-blue-500" />
+        <div className="px-1 text-sm bg-red-600 text-white rounded-full absolute top-[-10px] right-[-10px]">0</div>
+        </motion.button>
+        </Link>
+        {/* </Link> */}
+
+        <Link to="/Settings/Order">
+        <motion.button
+        className={`p-1 relative ${darkMode ? 'bg-gray-800/80' : 'bg-white/80'} backdrop-blur-md rounded-lg shadow-lg border ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}
+        whileHover={{ scale: 1.1,
+          backgroundColor: darkMode ? 'rgba(55, 65, 81, 0.9)' : 'rgba(255, 255, 255, 0.9)' }}
+        whileTap={{ scale: 0.95 }}
+        title="Cart"
+        >
+        {/* < className="text-xl text-blue-500" /> */}
+        <CubeIcon className="text-xl text-blue-500" />
+        <div className="px-1 text-sm bg-red-600 text-white rounded-full absolute top-[-10px] right-[-10px]">0</div>
         </motion.button>
         </Link>
       </motion.div>

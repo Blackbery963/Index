@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect, useState, } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Navigate } from 'react-router-dom';
 import './App.css';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
@@ -71,6 +71,7 @@ import DiscoverUsers from './Components/Artisian/DiscoverArtists.jsx';
 import DiaryCollection from './Components/Diaryland/DiaryCollection.jsx';
 import Notification from './Settings/Notification.jsx';
 import Cart from './Settings/Cart.jsx';
+import Order from './Settings/Order.jsx';
 
 // The commecial part starts from here 
 import Artstore from './Arteva/Artstore.jsx';
@@ -110,7 +111,7 @@ useEffect(() => {
       // Save to state or context
     } catch {
       console.log('No active session');
-      navigate('/login'); // Or show a guest view
+      Navigate('/login'); // Or show a guest view
     }
   };
 
@@ -210,6 +211,7 @@ useEffect(() => {
         <Route path="/faqs" element={<FAQs />} />
         <Route path='/settings/notification' element={<Notification/>}/>
         <Route path='/settings/cart' element={<Cart/>}/>
+        <Route path='Settings/Order' element={<Order/>}/>
         <Route path="/resources/feedback" element={<Feedback />} />
         <Route path="/Account/Edit_profile" element={<Edit_Profile />} />
         <Route path="/Account/dashboard" element={<Dashboard />} />
@@ -268,5 +270,3 @@ useEffect(() => {
 }
 
 export default App;
-
-

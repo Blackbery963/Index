@@ -596,6 +596,7 @@ import { Link } from 'react-router-dom';
 import { FaBook, FaInfoCircle, FaHome, FaUser, FaPalette, FaUpload, FaUsers, FaGlobe, FaBrush, FaLightbulb } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiMenu } from 'react-icons/fi';
+import { MdClose } from 'react-icons/md';
 function About() {
   // Framer Motion variants
   const containerVariants = {
@@ -682,10 +683,10 @@ function About() {
   const [activeButton, setActiveButton] = useState('About');
 
   return (
-    <div className="min-h-screen bg-gray-50" style={{ fontFamily: "'Roboto', sans-serif" }}>
+    <div className="min-h-screen max-w-screen bg-gray-50" style={{ fontFamily: "'Roboto', sans-serif" }}>
       {/* Header */}
     
-              <header className='fixed top-0 h-[80px] w-full bg-white/20 backdrop-blur-sm flex items-center justify-between px-4 md:px-6 shadow-md z-50'>
+              <header className='sticky top-0 h-[80px] w-full bg-white/20 backdrop-blur-sm flex items-center justify-between px-4 md:px-6 shadow-md z-50'>
                 {/* Logo Section */}
               <Link to={'/'}>
                 <div className='flex items-center'>

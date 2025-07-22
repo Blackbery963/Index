@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { databases, Query } from '../appwriteConfig';
+import { databases, Query, account } from '../appwriteConfig';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
 
 const CommunityDashboard = () => {
   const { slug } = useParams();
@@ -13,13 +15,162 @@ const CommunityDashboard = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showResourceModal, setShowResourceModal] = useState(false);
   const [requests, setRequests] = useState([]);
+  const [currentUser, setCurrentUser] = useState(null)
+//   useEffect(() => {
+//     const fetchCommunity = async () => {
+//       try {
+//         setLoading(true);
 
+//         // Get community by slug
+//         const response = await databases.listDocuments(
+//           import.meta.env.VITE_APPWRITE_COMMUNITY_DATABASE_ID,
+//           import.meta.env.VITE_APPWRITE_COMMUNITY_COLLECTION_ID,
+//           [Query.equal('slug', slug)]
+//         );
+
+//         if (response.documents.length === 0) {
+//           throw new Error('Community not found');
+//         }
+
+//         const communityData = response.documents[0];
+//         setCommunity(communityData);
+
+//         // Get members by community ID
+//         const membersResponse = await databases.listDocuments(
+//           import.meta.env.VITE_APPWRITE_COMMUNITY_DATABASE_ID,
+//           import.meta.env.VITE_APPWRITE_COMMUNITY_MEMBERS_COLLECTION_ID,
+//           [Query.equal('communityId', communityData.$id)]
+//         );
+
+//         // Fetch usernames from users collection
+//         const membersWithUsernames = await Promise.all(
+//           membersResponse.documents.map(async (member) => {
+//             try {
+//              const userDoc = await databases.getDocument(
+//                 import.meta.env.VITE_APPWRITE_DATABASE_ID,
+//                 import.meta.env.VITE_APPWRITE_USERS_COLLECTION_ID,
+//                 member.userId
+            
+//               ); 
+//               return {
+//                 ...member,
+//                 username: userDoc.username || "Unknown User",
+//               };
+
+//             } catch (error) {
+//               console.error("Failed to fetch user:", error);
+//               return {
+//                 ...member,
+//                 username: "Unknown User",
+//               };
+//             }
+//           })
+//         );
+
+//         setMembers(membersWithUsernames);
+//       } catch (error) {
+//         console.error("Error fetching community:", error.message);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     fetchCommunity();
+//   }, [slug]);
+
+
+//   // getting the requested user 
+//   useEffect(() => {
+//   const fetchRequests = async () => {
+//     try {
+//       const user = await account.get();
+//       const ownerId = user.$id;
+
+//       const response = await databases.listDocuments(
+//         import.meta.env.VITE_APPWRITE_COMMUNITY_DATABASE_ID,
+//         import.meta.env.VITE_APPWRITE_COMMUNITY_REQUEST_COLLECTION_ID,
+//         [
+//           Query.equal('ownerId', ownerId),
+//           Query.equal('status', 'pending')
+//         ]
+//       );
+
+//       setRequests(response.documents);
+//     } catch (error) {
+//       console.error("Error fetching join requests:", error);
+//     }
+//   };
+
+//   fetchRequests();
+// }, []);
+
+// // approving the the requested user 
+// const handleApprove = async (request) => {
+//   try {
+//     // Step 1: Add user to members
+//     await databases.createDocument(
+//       import.meta.env.VITE_APPWRITE_COMMUNITY_DATABASE_ID,
+//       import.meta.env.VITE_APPWRITE_COMMUNITY_MEMBERS_COLLECTION_ID,
+//       'unique()',
+//       {
+//         communityId: request.communityId,
+//         userId: request.userId,
+//         role: 'member', // optional role field
+//         joinedAt: new Date().toISOString()
+//       }
+//     );
+
+//     // Step 2: Update request status
+//     await databases.updateDocument(
+//       import.meta.env.VITE_APPWRITE_COMMUNITY_DATABASE_ID,
+//       import.meta.env.VITE_APPWRITE_COMMUNITY_REQUEST_COLLECTION_ID,
+//       request.$id,
+//       {
+//         status: 'approved'
+//       }
+//     );
+
+//     toast.success("User added to community!");
+//     // Optionally refetch requests
+//   } catch (err) {
+//     console.error("Approval error:", err);
+//     toast.error("Failed to approve request");
+//   }
+// };
+
+
+// // rejecting the the requested user 
+// const handleReject = async (request) => {
+//   try {
+//     await databases.updateDocument(
+//       import.meta.env.VITE_APPWRITE_COMMUNITY_DATABASE_ID,
+//       import.meta.env.VITE_APPWRITE_COMMUNITY_REQUEST_COLLECTION_ID,
+//       request.$id,
+//       { status: 'rejected' }
+//     );
+//     toast("Request rejected");
+//   } catch (err) {
+//     console.error("Rejection error:", err);
+//   }
+// };
+
+useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const user = await account.get();
+        setCurrentUser(user);
+      } catch (error) {
+        console.error("Error fetching user:", error);
+      }
+    };
+    fetchUser();
+  }, []);
+
+  // Fetch community data
   useEffect(() => {
     const fetchCommunity = async () => {
       try {
         setLoading(true);
-
-        // Get community by slug
         const response = await databases.listDocuments(
           import.meta.env.VITE_APPWRITE_COMMUNITY_DATABASE_ID,
           import.meta.env.VITE_APPWRITE_COMMUNITY_COLLECTION_ID,
@@ -33,33 +184,33 @@ const CommunityDashboard = () => {
         const communityData = response.documents[0];
         setCommunity(communityData);
 
-        // Get members by community ID
+        // Fetch members
         const membersResponse = await databases.listDocuments(
           import.meta.env.VITE_APPWRITE_COMMUNITY_DATABASE_ID,
           import.meta.env.VITE_APPWRITE_COMMUNITY_MEMBERS_COLLECTION_ID,
           [Query.equal('communityId', communityData.$id)]
         );
 
-        // Fetch usernames from users collection
+        // Fetch usernames
         const membersWithUsernames = await Promise.all(
           membersResponse.documents.map(async (member) => {
             try {
-             const userDoc = await databases.getDocument(
+              const userDoc = await databases.getDocument(
                 import.meta.env.VITE_APPWRITE_DATABASE_ID,
                 import.meta.env.VITE_APPWRITE_USERS_COLLECTION_ID,
                 member.userId
-            
-              ); 
+              );
               return {
                 ...member,
                 username: userDoc.username || "Unknown User",
+                avatar: userDoc.avatar || null,
               };
-
             } catch (error) {
               console.error("Failed to fetch user:", error);
               return {
                 ...member,
                 username: "Unknown User",
+                avatar: null,
               };
             }
           })
@@ -68,6 +219,7 @@ const CommunityDashboard = () => {
         setMembers(membersWithUsernames);
       } catch (error) {
         console.error("Error fetching community:", error.message);
+        toast.error("Failed to load community data");
       } finally {
         setLoading(false);
       }
@@ -76,82 +228,170 @@ const CommunityDashboard = () => {
     fetchCommunity();
   }, [slug]);
 
-
-  // getting the requested user 
+  // Fetch pending requests
   useEffect(() => {
-  const fetchRequests = async () => {
-    try {
-      const user = await account.get();
-      const ownerId = user.$id;
+    const fetchRequests = async () => {
+      if (!community) return;
+      
+      try {
+        const response = await databases.listDocuments(
+          import.meta.env.VITE_APPWRITE_COMMUNITY_DATABASE_ID,
+          import.meta.env.VITE_APPWRITE_COMMUNITY_REQUEST_COLLECTION_ID,
+          [
+            Query.equal('communityId', community.$id),
+            Query.equal('status', 'pending')
+          ]
+        );
 
-      const response = await databases.listDocuments(
-        import.meta.env.VITE_APPWRITE_COMMUNITY_DATABASE_ID,
-        import.meta.env.VITE_APPWRITE_COMMUNITY_REQUEST_COLLECTION_ID,
-        [
-          Query.equal('ownerId', ownerId),
-          Query.equal('status', 'pending')
-        ]
-      );
+        // Fetch usernames for requests
+        const requestsWithUsernames = await Promise.all(
+          response.documents.map(async (request) => {
+            try {
+              const userDoc = await databases.getDocument(
+                import.meta.env.VITE_APPWRITE_DATABASE_ID,
+                import.meta.env.VITE_APPWRITE_USERS_COLLECTION_ID,
+                request.userId
+              );
+              return {
+                ...request,
+                username: userDoc.username || "Unknown User",
+                avatar: userDoc.avatar || null,
+              };
+            } catch (error) {
+              console.error("Failed to fetch request user:", error);
+              return {
+                ...request,
+                username: "Unknown User",
+                avatar: null,
+              };
+            }
+          })
+        );
 
-      setRequests(response.documents);
-    } catch (error) {
-      console.error("Error fetching join requests:", error);
-    }
-  };
+        setRequests(requestsWithUsernames);
+      } catch (error) {
+        console.error("Error fetching join requests:", error);
+        toast.error("Failed to load join requests");
+      }
+    };
 
-  fetchRequests();
-}, []);
+    fetchRequests();
+  }, [community]);
 
-// approving the the requested user 
-const handleApprove = async (request) => {
+  // // Approve join request
+  // const handleApprove = async (request) => {
+  //   try {
+  //     // 1. Add user to members collection
+  //     const newMember = await databases.createDocument(
+  //       import.meta.env.VITE_APPWRITE_COMMUNITY_DATABASE_ID,
+  //       import.meta.env.VITE_APPWRITE_COMMUNITY_MEMBERS_COLLECTION_ID,
+  //       'unique()',
+  //       {
+  //         communityId: request.communityId,
+  //         userId: request.userId,
+  //         role: 'member',
+  //         joinedAt: new Date().toISOString()
+  //       }
+  //     );
+
+  //     // 2. Update request status to approved
+  //     await databases.updateDocument(
+  //       import.meta.env.VITE_APPWRITE_COMMUNITY_DATABASE_ID,
+  //       import.meta.env.VITE_APPWRITE_COMMUNITY_REQUEST_COLLECTION_ID,
+  //       request.$id,
+  //       { status: 'approved' }
+  //     );
+
+  //     // 3. Update local state
+  //     setRequests(requests.filter(req => req.$id !== request.$id));
+      
+  //     // Add the new member to members list with username
+  //     setMembers([...members, {
+  //       ...newMember,
+  //       username: request.username,
+  //       avatar: request.avatar
+  //     }]);
+
+  //     toast.success(`${request.username} has been added to the community!`);
+  //   } catch (error) {
+  //     console.error("Approval error:", error);
+  //     toast.error("Failed to approve request");
+  //   }
+  // };
+
+
+  const handleApprove = async (request) => {
   try {
-    // Step 1: Add user to members
-    await databases.createDocument(
+    // 1. Add user to members collection
+    const newMember = await databases.createDocument(
       import.meta.env.VITE_APPWRITE_COMMUNITY_DATABASE_ID,
       import.meta.env.VITE_APPWRITE_COMMUNITY_MEMBERS_COLLECTION_ID,
       'unique()',
       {
         communityId: request.communityId,
         userId: request.userId,
-        role: 'member', // optional role field
+        role: 'member',
         joinedAt: new Date().toISOString()
       }
     );
 
-    // Step 2: Update request status
+    // 2. Update community member count
+    await databases.updateDocument(
+      import.meta.env.VITE_APPWRITE_COMMUNITY_DATABASE_ID,
+      import.meta.env.VITE_APPWRITE_COMMUNITY_COLLECTION_ID,
+      community.$id,
+      {
+        memberCount: community.memberCount + 1
+      }
+    );
+
+    // 3. Update request status to approved
     await databases.updateDocument(
       import.meta.env.VITE_APPWRITE_COMMUNITY_DATABASE_ID,
       import.meta.env.VITE_APPWRITE_COMMUNITY_REQUEST_COLLECTION_ID,
       request.$id,
-      {
-        status: 'approved'
-      }
+      { status: 'approved' }
     );
 
-    toast.success("User added to community!");
-    // Optionally refetch requests
-  } catch (err) {
-    console.error("Approval error:", err);
+    // 4. Update local state
+    setRequests(requests.filter(req => req.$id !== request.$id));
+    setMembers([...members, {
+      ...newMember,
+      username: request.username,
+      avatar: request.avatar
+    }]);
+    setCommunity({
+      ...community,
+      memberCount: community.memberCount + 1
+    });
+
+    toast.success(`${request.username} has been added to the community!`);
+  } catch (error) {
+    console.error("Approval error:", error);
     toast.error("Failed to approve request");
   }
 };
 
 
-// rejecting the the requested user 
-const handleReject = async (request) => {
-  try {
-    await databases.updateDocument(
-      import.meta.env.VITE_APPWRITE_COMMUNITY_DATABASE_ID,
-      import.meta.env.VITE_APPWRITE_COMMUNITY_REQUEST_COLLECTION_ID,
-      request.$id,
-      { status: 'rejected' }
-    );
-    toast("Request rejected");
-  } catch (err) {
-    console.error("Rejection error:", err);
-  }
-};
+  // Reject join request
+  const handleReject = async (request) => {
+    try {
+      // Update request status to rejected
+      await databases.updateDocument(
+        import.meta.env.VITE_APPWRITE_COMMUNITY_DATABASE_ID,
+        import.meta.env.VITE_APPWRITE_COMMUNITY_REQUEST_COLLECTION_ID,
+        request.$id,
+        { status: 'rejected' }
+      );
 
+      // Update local state
+      setRequests(requests.filter(req => req.$id !== request.$id));
+      toast.info(`Request from ${request.username} has been rejected`);
+    } catch (error) {
+      console.error("Rejection error:", error);
+      toast.error("Failed to reject request");
+    }
+  };
 
 
   // Animation variants
@@ -322,7 +562,7 @@ const handleReject = async (request) => {
             transition={{ delay: 0.3 }}
             className="flex flex-col md:flex-row items-center gap-6 md:gap-8"
           >
-            <div className="w-24 h-24 md:w-32 md:h-32 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-5xl md:text-6xl shadow-lg">
+            <div className="w-24 h-24 md:w-32 md:h-32 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-5xl md:text-6xl shadow-lg font-Quicksand">
               {community.badge}
             </div>
             <div className="text-center md:text-left">
@@ -330,7 +570,7 @@ const handleReject = async (request) => {
                 initial={{ y: 10, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.4 }}
-                className="text-3xl md:text-4xl font-bold mb-2 drop-shadow-lg"
+                className="text-3xl md:text-4xl font-bold mb-2 drop-shadow-lg font-Quicksand"
               >
                 {community.name}
               </motion.h1>
@@ -338,7 +578,7 @@ const handleReject = async (request) => {
                 initial={{ y: 10, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.5 }}
-                className="text-lg md:text-xl opacity-90 drop-shadow-md"
+                className="text-lg md:text-xl opacity-90 drop-shadow-md font-Playfair"
               >
                 {community.memberCount} members • {community.privacy === 'public' ? 'Public' : 'Private'} community
               </motion.p>
@@ -474,7 +714,7 @@ const handleReject = async (request) => {
               )}
 
               {/* Members Tab */}
-              {activeTab === 'members' && (
+              {/* {activeTab === 'members' && (
                 <motion.div
                   variants={containerVariants}
                   initial="hidden"
@@ -548,7 +788,136 @@ const handleReject = async (request) => {
 
               </div>
                 </motion.div>
-              )}
+              )} */}
+
+              {activeTab === 'members' && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
+            className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden"
+          >
+            {/* Members Table */}
+            <div className="p-6">
+              <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-6">
+                Community Members ({members.length})
+              </h2>
+              
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                  <thead className="bg-gray-50 dark:bg-gray-700">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Member</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Role</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Joined</th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                    {members.map((member) => (
+                      <tr key={member.$id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition">
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center">
+                            <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center overflow-hidden">
+                              {member.avatar ? (
+                                <img src={member.avatar} alt={member.username} className="h-full w-full object-cover" />
+                              ) : (
+                                <span className="text-lg">👤</span>
+                              )}
+                            </div>
+                            <div className="ml-4">
+                              <div className="text-sm font-medium text-gray-900 dark:text-white">
+                                {member.username}
+                              </div>
+                              <div className="text-sm text-gray-500 dark:text-gray-400">
+                                {member.userId === currentUser?.$id ? '(You)' : ''}
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                            member.role === 'admin' || member.role === 'owner'
+                              ? 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200'
+                              : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                          }`}>
+                            {member.role}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                          {new Date(member.joinedAt).toLocaleDateString()}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Pending Requests Section */}
+            {requests.length > 0 && (
+              <div className="border-t border-gray-200 dark:border-gray-700 p-6">
+                <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4">
+                  Pending Join Requests ({requests.length})
+                </h3>
+                
+                <div className="space-y-4">
+                  {requests.map((request) => (
+                    <motion.div
+                      key={request.$id}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg shadow-sm"
+                    >
+                      <div className="flex items-center space-x-4">
+                        <div className="flex-shrink-0 h-12 w-12 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center overflow-hidden">
+                          {request.avatar ? (
+                            <img src={request.avatar} alt={request.username} className="h-full w-full object-cover" />
+                          ) : (
+                            <span className="text-xl">👤</span>
+                          )}
+                        </div>
+                        <div>
+                          <h4 className="font-medium text-gray-800 dark:text-white">
+                            {request.username}
+                          </h4>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">
+                            Requested {new Date(request.$createdAt).toLocaleDateString()}
+                          </p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex space-x-2">
+                        <motion.button
+                          whileHover={{ scale: 1.05, boxShadow: "0 0 0 2px rgba(74, 222, 128, 0.5)" }}
+                          whileTap={{ scale: 0.95 }}
+                          onClick={() => handleApprove(request)}
+                          className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium flex items-center space-x-1 transition"
+                        >
+                          <span>Approve</span>
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                        </motion.button>
+                        
+                        <motion.button
+                          whileHover={{ scale: 1.05, boxShadow: "0 0 0 2px rgba(248, 113, 113, 0.5)" }}
+                          whileTap={{ scale: 0.95 }}
+                          onClick={() => handleReject(request)}
+                          className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium flex items-center space-x-1 transition"
+                        >
+                          <span>Reject</span>
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                            <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                          </svg>
+                        </motion.button>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </motion.div>
+        )}
               {/* Add other tabs content here */}
             </div>
 

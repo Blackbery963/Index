@@ -50,10 +50,20 @@ import ResetPassword from './Components/Login/ResetPassword';
 import Help from './Resources/Help/Help.jsx';
 import Artisan from './Components/Artisian/Artisian.jsx';
 import Security from './Product/Security.jsx';
+// the community section
 import Community from './Community/Community.jsx';
 import CreateCommunityPage from './Community/Create-Community.jsx';
 import ExploreCommunity from './Community/ExploreCommunity.jsx';
 import CommunityDashboard from './Community/CommunityDashboard.jsx';
+import WeeklyChallenge from './Community/CommunityChallenges/WeeklyChallenge.jsx';
+import MonthlyChallenge from './Community/CommunityChallenges/MonthlyChallenge.jsx';
+import VotingGallery from './Community/CommunityChallenges/VotingGallery.jsx';
+import ResourceHub from './Community/Resources/ResourceHub.jsx';
+import ResourceUpload from './Community/Resources/ResourceUpload.jsx';
+
+
+
+
 import Nature from './Sub-Components/Nature.jsx';
 import Traditional from './Sub-Components/Traditional.jsx';
 import Photography from './Sub-Components/Photography.jsx';
@@ -227,11 +237,24 @@ useEffect(() => {
         <Route path="/cart" element={<Cart />} />
         <Route path='/History' element={<History/>}/>
         <Route path='/Resources/Help' element={<Help/>}/>
+        {/* the community  section  */}
         <Route path="/community" element={<Community />} />
         <Route path="/community/CreateCommunity" element={<CreateCommunityPage />} />
         <Route path='/community/ExploreCommunity' element={<ExploreCommunity/>}/>
         <Route path='/community/:slug' element={<CommunityDashboard/>}/>
         <Route path="/community/:communityId" element={<CommunityDashboard />} />
+        <Route path='/community/communitychallenges/weeklychallenge' element={<WeeklyChallenge/>}/>
+        <Route path='/community/communitychallenges/monthlychallenge' element={<MonthlyChallenge/>}/>
+        <Route path='/community/communitychallenges/votinggallery' element={<VotingGallery/>}/>
+        <Route path='/Community/Resources/ResourceHub' element={<ResourceHub/>}/>
+        <Route path='/Community/Resources/ResourceUpload' element={<ResourceUpload/>}/>
+
+
+
+
+
+
+      
 
         {/* The routing of the sub-components */}
          <Route path="/gallery" element={<Gallery />} />

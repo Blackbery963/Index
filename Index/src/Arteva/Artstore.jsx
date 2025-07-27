@@ -174,17 +174,52 @@ useEffect(() => {
   localStorage.setItem('cartItems', JSON.stringify(cartItems));
 }, [cartItems]);
 
+// const addToCart = (art) => {
+//   setCartItems(prev => {
+//     const existingItem = prev.find(item => item.$id === art.$id);
+//     if (existingItem) {
+//       return prev.map(item =>
+//         item.$id === art.$id ? { ...item, quantity: item.quantity + 1 } : item
+//       );
+//     }
+//     return [...prev, { ...art, quantity: 1 }];
+//   });
+// };
+
 const addToCart = (art) => {
-  setCartItems(prev => {
-    const existingItem = prev.find(item => item.$id === art.$id);
-    if (existingItem) {
-      return prev.map(item =>
-        item.$id === art.$id ? { ...item, quantity: item.quantity + 1 } : item
-      );
+  try {
+    // Validate required fields
+    if (!art?.$id || !art?.userId) {
+      throw new Error('Artwork is missing required information');
     }
-    return [...prev, { ...art, quantity: 1 }];
-  });
+
+    setCartItems(prev => {
+      const existingItem = prev.find(item => item.$id === art.$id);
+      
+      const baseCartItem = {
+        ...art,
+        sellerId: art.userId, // Map userId to sellerId
+        quantity: 1
+      };
+
+      if (existingItem) {
+        return prev.map(item => 
+          item.$id === art.$id 
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+      }
+
+      return [...prev, baseCartItem];
+    });
+
+  } catch (error) {
+    console.error('Failed to add to cart:', error);
+    // Optionally show user feedback
+    alert('Could not add item to cart. Please try again.');
+  }
 };
+
 
 const removeFromCart = (id) => {
   setCartItems(prev => prev.filter(item => item.$id !== id));
@@ -652,7 +687,7 @@ const cartTotal = cartItems.reduce((total, item) => total + (item.price * item.q
               ))}
             </motion.div>
           ) : (
-            <div className="space-y-16">
+           <div className="space-y-16">
               {filteredArt.map((art, index) => (
                 <motion.section
                   key={art.$id}
@@ -693,7 +728,7 @@ const cartTotal = cartItems.reduce((total, item) => total + (item.price * item.q
                           <p className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
                             {art.formattedDate || 'Date not available'}
                           </p>
-                        </div>
+                        </div> 
                       </div>
                     </motion.div>
                   </div>
@@ -752,6 +787,7 @@ const cartTotal = cartItems.reduce((total, item) => total + (item.price * item.q
           )}
         </div>
       </div>
+
 
       {/* Art Details Sidebar */}
       <AnimatePresence>
@@ -1137,6 +1173,7 @@ const cartTotal = cartItems.reduce((total, item) => total + (item.price * item.q
         </div>
       </footer>
     </div>
+    
   );
 };
 

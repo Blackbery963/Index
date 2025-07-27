@@ -6,6 +6,8 @@ import { FaHome, FaUser, FaInfoCircle, FaPalette } from 'react-icons/fa';
 import { FiMenu, FiImage } from 'react-icons/fi';
 import { MdClose } from 'react-icons/md';
 import { storage, databases, ID, account } from '../appwriteConfig'
+import { proceedToCheckout } from '../Arteva/Commercial/PlaceOrder';
+
 
 const bucketId = import.meta.env.VITE_APPWRITE_BUCKET_ID
 
@@ -83,56 +85,56 @@ function Cart() {
         0
     );
 
-    const proceedToCheckout = async () => {
-        try {
-            // Verify user is logged in
-            const user = await account.get();
-            if (!user || !user.$id) {
-                throw new Error('User not authenticated');
-            }
+    // const proceedToCheckout = async () => {
+    //     try {
+    //         // Verify user is logged in
+    //         const user = await account.get();
+    //         if (!user || !user.$id) {
+    //             throw new Error('User not authenticated');
+    //         }
 
-            // Verify environment variables
-            if (!import.meta.env.VITE_APPWRITE_COMMERCIAL_DATABASE_ID || 
-                !import.meta.env.VITE_APPWRITE_SELLER_COLLECTION_ID) {
-                throw new Error('Missing required environment variables');
-            }
+    //         // Verify environment variables
+    //         if (!import.meta.env.VITE_APPWRITE_COMMERCIAL_DATABASE_ID || 
+    //             !import.meta.env.VITE_APPWRITE_SELLER_COLLECTION_ID) {
+    //             throw new Error('Missing required environment variables');
+    //         }
 
-            // Create orders
-            const orderPromises = cartItems.map(async (item) => {
-                if (!item.sellerId) {
-                    throw new Error(`Missing sellerId for product ${item.title}`);
-                }
+    //         // Create orders
+    //         const orderPromises = cartItems.map(async (item) => {
+    //             if (!item.sellerId) {
+    //                 throw new Error(`Missing sellerId for product ${item.title}`);
+    //             }
 
-                return await databases.createDocument(
-                    import.meta.env.VITE_APPWRITE_COMMERCIAL_DATABASE_ID,
-                    import.meta.env.VITE_APPWRITE_SELLER_COLLECTION_ID,
-                    ID.unique(),
-                    {
-                        productId: item.$id,
-                        productName: item.title,
-                        buyerId: user.$id,
-                        sellerId: item.sellerId,
-                        quantity: item.quantity,
-                        price: item.price,
-                        status: 'pending',
-                        createdAt: new Date().toISOString()
-                    }
-                );
-            });
+    //             return await databases.createDocument(
+    //                 import.meta.env.VITE_APPWRITE_COMMERCIAL_DATABASE_ID,
+    //                 import.meta.env.VITE_APPWRITE_SELLER_COLLECTION_ID,
+    //                 ID.unique(),
+    //                 {
+    //                     productId: item.$id,
+    //                     productName: item.title,
+    //                     buyerId: user.$id,
+    //                     sellerId: item.sellerId,
+    //                     quantity: item.quantity,
+    //                     price: item.price,
+    //                     status: 'pending',
+    //                     createdAt: new Date().toISOString()
+    //                 }
+    //             );
+    //         });
 
-            await Promise.all(orderPromises);
+    //         await Promise.all(orderPromises);
             
-            // Clear cart
-            setCartItems([]);
-            localStorage.removeItem('cartItems');
+    //         // Clear cart
+    //         setCartItems([]);
+    //         localStorage.removeItem('cartItems');
             
-            toast.success('Order placed successfully! Sellers have been notified.');
+    //         toast.success('Order placed successfully! Sellers have been notified.');
             
-        } catch (error) {
-            console.error('Checkout failed:', error);
-            toast.error(`Failed to complete checkout: ${error.message}`);
-        }
-    };
+    //     } catch (error) {
+    //         console.error('Checkout failed:', error);
+    //         toast.error(`Failed to complete checkout: ${error.message}`);
+    //     }
+    // };
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
@@ -160,7 +162,7 @@ function Cart() {
     }
 
     return (
-        <div className='w-full min-h-screen bg-gray-100 dark:bg-gray-950 flex flex-col items-center justify-center'>
+        <div className='w-full min-h-screen bg-gradient-to-tr from-slate-100 via-red-50 to-blue-100 font-Playfair dark:bg-gray-950 flex flex-col items-center justify-center'>
           <ToastContainer/>
             <header className='fixed top-0 h-[80px] w-full bg-white/20 backdrop-blur-sm flex items-center justify-between px-4 md:px-6 shadow-md z-50'>
                 <Link to={'/'}>
@@ -356,11 +358,15 @@ function Cart() {
                             </div>
                             
                             <button
-                                onClick={proceedToCheckout}
-                                className="w-full mt-6 py-3 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-lg transition-colors"
-                            >
-                                Proceed to Checkout
+                             onClick={() => proceedToCheckout(cartItems, () => {
+                             setCartItems([]);
+                             localStorage.removeItem('cartItems');
+                             })}
+                             className="w-full mt-6 py-3 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-lg transition-colors"
+                             >
+                             Proceed to Checkout
                             </button>
+
                         </div>
                     </div>
                 )}

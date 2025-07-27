@@ -201,7 +201,7 @@ const NotificationsPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-gradient-to-tr from-slate-100 via-red-50 to-blue-100 font-Playfair dark:bg-gray-900">
 
           <header className='fixed top-0 py-4 w-[100%] mx-auto bg-white/20 backdrop-blur-sm flex items-center justify-between px-4 md:px-6 shadow-md z-50'>
           {/* Logo Section */}

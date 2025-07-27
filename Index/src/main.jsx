@@ -7,9 +7,9 @@ import { DarkModeProvider } from './Components/Header/Header.jsx'
 
 
 createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+  // <React.StrictMode>
    <DarkModeProvider>
     <App />
    </DarkModeProvider>
-  </React.StrictMode>,
+  // </React.StrictMode>,
 )

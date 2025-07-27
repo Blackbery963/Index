@@ -87,16 +87,21 @@ function ExploreCommunity() {
                             ArtVerse
                           </Link>
                           <div className="hidden md:flex items-center gap-6">
-                            {['Home', 'Community', 'Challenges', 'Resources'].map((item) => (
-                              <motion.a
+                            {[
+                              {name:'Home', path:"/"},
+                              {name:"Community", path:"/Community"},
+                              {name:"Resources", path:"/Community/Resources"},
+                              {name:"Challenge", path:"/community/communitychallenges/monthlychallenge"}
+                            ].map((item) => (
+                              <Link
                                 key={item}
-                                href="#"
+                                to={item.path}
                                 whileHover={{ scale: 1.1 }}
                                 className="text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 font-medium relative group font-Playfair"
                               >
-                                {item}
+                                {item.name}
                                 <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-600 dark:bg-purple-400 transition-all duration-300 group-hover:w-full"></span>
-                              </motion.a>
+                              </Link>
                             ))}
                           </div>
                           <button

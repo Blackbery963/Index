@@ -1343,6 +1343,7 @@ const UploadEntry = ({ index, entry, updateEntry, removeEntry, handleFileChange,
 
     // Other
     "Other",
+    "Sell"
   ];
 
   const tagOptions = [
@@ -1731,7 +1732,6 @@ const UploadSection = () => {
                 config.databaseId,
                 config.collectionId,
                 'price',
-               
                 false
               ),
               databases.createStringAttribute(

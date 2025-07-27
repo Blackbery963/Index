@@ -431,7 +431,7 @@ import { BiCategoryAlt } from "react-icons/bi";
 import { ImBlog } from "react-icons/im";
 import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
-import { databases, account } from "../../appwriteConfig";
+import { databases, account, Query } from "../../appwriteConfig";
 import { CubeIcon, PaperAirplaneIcon } from '@heroicons/react/24/outline';
 // Dark Mode Context
  export const DarkModeContext = createContext();
@@ -473,6 +473,9 @@ export const DarkModeProvider = ({ children }) => {
 
 const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
 const USER_COLLECTION_ID = import.meta.env.VITE_APPWRITE_USERS_COLLECTION_ID;
+const DB_ID = import.meta.env.VITE_APPWRITE_COMMERCIAL_DATABASE_ID;
+const ORDERS_COLLECTION = import.meta.env.VITE_APPWRITE_SELLER_COLLECTION_ID;
+
 
 const Header = () => {
   const backgroundImages = [
@@ -508,7 +511,8 @@ const Header = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [profileImage, setProfileImage] = useState(null);
   const [cartCount, setCartCount] = useState(0);
-
+  const [orderCount, setOrderCount] = useState();
+  const [loading, setLoading] = useState(null)
   // Enhanced background transition effect
   useEffect(() => {
     const interval = setInterval(() => {
@@ -595,6 +599,26 @@ useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem('cartItems')) || [];
     const count = storedCart.reduce((total, item) => total + item.quantity, 0);
     setCartCount(count);
+  }, []);
+
+
+  // fetching the order number 
+    useEffect(() => {
+    const fetchOrderCount = async () => {
+      try {
+        const user = await account.get();
+        const res = await databases.listDocuments(DB_ID, ORDERS_COLLECTION, [
+          Query.equal('sellerId', user.$id)
+        ]);
+        setOrderCount(res.total); // Appwrite returns total in pagination
+      } catch (err) {
+        console.error('Failed to fetch order count:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrderCount();
   }, []);
 
 
@@ -1125,7 +1149,7 @@ useEffect(() => {
         >
         {/* < className="text-xl text-blue-500" /> */}
         <CubeIcon className="text-xl text-blue-500" />
-        <div className="px-1 text-sm bg-red-600 text-white rounded-full absolute top-[-10px] right-[-10px]">0</div>
+        <div className="px-1 text-sm bg-red-600 text-white rounded-full absolute top-[-10px] right-[-10px]">{orderCount}</div>
         </motion.button>
         </Link>
       </motion.div>

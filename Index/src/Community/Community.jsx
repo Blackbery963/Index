@@ -82,14 +82,14 @@ const Community = () => {
 }, []);
 
    // Handle navigation to community
-  const handleCommunityNavigation = () => {
-    if (!myCommunity) {
-      alert("You don't belong to any community yet");
-      navigate('/explore-communities'); // Redirect to explore if no community
-      return;
-    }
-    navigate(`/community/${myCommunity.slug}`);
-  };
+  // const handleCommunityNavigation = () => {
+  //   if (!myCommunity) {
+  //     alert("You don't belong to any community yet");
+  //     navigate('/explore-communities'); // Redirect to explore if no community
+  //     return;
+  //   }
+  //   navigate(`/community/${myCommunity.slug}`);
+  // };
 
   // Animation variants for staggered children
   const containerVariants = {
@@ -108,7 +108,7 @@ const Community = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 transition-colors duration-300 flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 transition-colors duration-300 flex flex-col font-Playfair">
       {/* Navbar - Enhanced Glassmorphism */}
      
 <motion.nav
@@ -126,7 +126,7 @@ const Community = () => {
     <div className="hidden md:flex items-center gap-6">
       {[
         {name: 'Home', path: '/'},
-        {name: 'Resources', path: '/resources'},
+        {name: 'Resources', path: '/Community/Resources/ResourceHub'},
         {name: 'Explore', path: '/explore-communities'},
         {name: 'Challenges', path: '/community/challenges'}
       ].map((item) => (
@@ -226,7 +226,7 @@ const Community = () => {
           className="relative"
         >
           <h1 className="text-5xl font-bold mb-6 text-gray-800 dark:text-white font-Quicksand">
-            Lets Make It World’s <span className="bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-300">Biggest Art Community</span>
+            Let's Make It World’s <span className="bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-300">Biggest Art Community</span>
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-8 font-Playfair">
             Share, learn, and grow with artists worldwide. Get feedback, monetize your work, and join creative challenges.
@@ -343,16 +343,19 @@ const Community = () => {
                 title: "Weekly Prompt",
                 prize: "$100 Prize Pool",
                 desc: "New theme every Monday. Winners featured on the homepage.",
+                link: '/community/communitychallenges/weeklychallenge'
               },
               {
                 title: "Monthly Masterpiece",
                 prize: "Wacom Tablet + $500",
                 desc: "Submit your best work. Judged by industry pros.",
+                link: "/community/communitychallenges/monthlychallenge"
               },
               {
                 title: "Community Vote",
                 prize: "Exclusive Badge",
                 desc: "Members pick their favorite art each Friday.",
+                link:"/community/communitychallenges/votinggallery"
               },
             ].map((challenge, index) => (
               <motion.div
@@ -366,13 +369,17 @@ const Community = () => {
                   {challenge.prize}
                 </span>
                 <p className="text-gray-600 dark:text-gray-300 mb-4">{challenge.desc}</p>
-                <motion.button
+               <Link 
+               to={challenge.link}
+               >
+                  <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   className="text-sm bg-gradient-to-r from-purple-600 to-blue-500 text-white px-4 py-2 rounded-lg hover:from-purple-700 hover:to-blue-600"
                 >
                   Learn More
                 </motion.button>
+               </Link>
               </motion.div>
             ))}
           </motion.div>
@@ -405,6 +412,7 @@ const Community = () => {
               title: "Share Tutorials",
               desc: "Teach others your techniques—write step-by-step guides or record video demos.",
               buttonText: "Publish a Tutorial →",
+              link:"/Community/Resources/ResourceUpload"
             },
             {
               icon: "💡",
@@ -413,6 +421,7 @@ const Community = () => {
               title: "Inspire Others",
               desc: "Post behind-the-scenes, art struggles, or motivational stories.",
               buttonText: "Start a Blog →",
+              link: '/Journal'
             },
           ].map((card, index) => (
             <motion.div
@@ -426,12 +435,14 @@ const Community = () => {
                 {card.title}
               </h3>
               <p className="text-gray-600 dark:text-gray-300 mb-4">{card.desc}</p>
+              <Link to={card.link}> 
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 className="text-purple-600 dark:text-purple-400 font-medium hover:underline"
               >
                 {card.buttonText}
               </motion.button>
+              </Link>
             </motion.div>
           ))}
         </motion.div>
@@ -595,6 +606,7 @@ const Community = () => {
             </motion.div>
           ))}
         </motion.div>
+        <Link to={"/Community/Resources/ResourceHub"}>       
         <motion.div variants={itemVariants} className="text-center mt-8">
           <motion.button
             whileHover={{ scale: 1.05 }}
@@ -603,6 +615,7 @@ const Community = () => {
             Browse All Resources →
           </motion.button>
         </motion.div>
+        </Link>
       </motion.section>
 
       {/* Critique Exchange */}

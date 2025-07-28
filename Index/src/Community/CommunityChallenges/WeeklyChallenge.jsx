@@ -93,7 +93,7 @@ function WeeklyChallenge() {
         initial={{ y: -50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className="fixed top-4 left-4 right-4 z-50 bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-2xl shadow-2xl"
+        className="fixed top-4 left-4 right-4 z-50 bg-white/40 dark:bg-gray-800/40 backdrop-blur-xl rounded-2xl shadow-2xl"
       >
         <div className="px-6 py-4 flex items-center justify-between ">
           <Link to="/" className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-300 font-Eagle">
@@ -183,12 +183,12 @@ function WeeklyChallenge() {
 
         {/* Tabs */}
         <div className="flex justify-center mb-12">
-          <div className="inline-flex rounded-xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg p-1.5 shadow-lg">
+          <div className="inline-flex rounded-xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg p-1.5 shadow-lg overflow-x-auto">
             {['current', 'upcoming', 'past'].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`px-6 py-3 rounded-lg font-semibold text-lg transition-all duration-300 ${
+                className={`whitespace-nowrap px-6 py-3 rounded-lg font-semibold text-lg transition-all duration-300 ${
                   activeTab === tab 
                     ? 'bg-gradient-to-r from-purple-600 to-blue-500 text-white shadow-md' 
                     : 'text-gray-700 dark:text-gray-200 hover:bg-purple-100 dark:hover:bg-gray-700'
@@ -235,7 +235,7 @@ function WeeklyChallenge() {
                         <span className="text-gray-700 dark:text-gray-300 text-lg">Participants: <span className="font-semibold">{challenges.current.participants.toLocaleString()}</span></span>
                       </div>
                     </div>
-                    
+                    <Link to={"/Community/CommunityChallenges/ChallengeUpload"}>
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
@@ -243,6 +243,7 @@ function WeeklyChallenge() {
                     >
                       Submit Your Sketch
                     </motion.button>
+                    </Link>
                   </div>
                   
                   <div className="lg:w-1/2">
@@ -273,7 +274,7 @@ function WeeklyChallenge() {
                 {challenges.current.topSubmissions.map((submission) => (
                   <motion.div 
                     key={submission.id}
-                    whileHover={{ y: -8, scale: 1.02 }}
+                    // whileHover={{ y: -8, scale: 1.02 }}
                     className="relative group rounded-xl overflow-hidden shadow-lg"
                   >
                     <img 

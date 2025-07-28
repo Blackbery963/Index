@@ -547,6 +547,9 @@ import { FiMenu } from 'react-icons/fi';
 import { databases, storage } from '../../appwriteConfig';
 import { toast } from 'react-toastify';
 import DOMPurify from 'dompurify';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+
 
 const thumbnailDb = import.meta.env.VITE_APPWRITE_COMMUNITY_DATABASE_ID;
 const researchCollection = import.meta.env.VITE_APPWRITE_RESEARCH_COLLECTION_ID;
@@ -629,29 +632,84 @@ function ResourcesHub() {
     return diffDays <= 7; // Consider resources newer than 7 days as "new"
   };
 
+  // const handleDownload = async (resource) => {
+  //   try {
+  //     await databases.updateDocument(thumbnailDb, researchCollection, resource.id, {
+  //       downloads: resource.downloads + 1,
+  //     });
+  //     setResources((prev) =>
+  //       prev.map((r) => (r.id === resource.id ? { ...r, downloads: r.downloads + 1 } : r))
+  //     );
+  //     if (resource.fileId) {
+  //       const downloadUrl = storage.getFileDownload(researchBucket, resource.fileId);
+  //       const link = document.createElement('a');
+  //       link.href = downloadUrl;
+  //       link.download = `${resource.title}.${resource.type.toLowerCase()}`;
+  //       link.click();
+  //     } else {
+  //       window.open(resource.fileUrl, '_blank');
+  //     }
+  //     toast.success('Download started!');
+  //   } catch (error) {
+  //     console.error('Download failed:', error);
+  //     toast.error('Failed to start download');
+  //   }
+  // };
+
+
   const handleDownload = async (resource) => {
-    try {
-      await databases.updateDocument(thumbnailDb, researchCollection, resource.id, {
-        downloads: resource.downloads + 1,
-      });
-      setResources((prev) =>
-        prev.map((r) => (r.id === resource.id ? { ...r, downloads: r.downloads + 1 } : r))
-      );
-      if (resource.fileId) {
-        const downloadUrl = storage.getFileDownload(researchBucket, resource.fileId);
-        const link = document.createElement('a');
-        link.href = downloadUrl;
-        link.download = `${resource.title}.${resource.type.toLowerCase()}`;
-        link.click();
-      } else {
-        window.open(resource.fileUrl, '_blank');
-      }
-      toast.success('Download started!');
-    } catch (error) {
-      console.error('Download failed:', error);
-      toast.error('Failed to start download');
-    }
-  };
+  try {
+    // Update download count
+    await databases.updateDocument(thumbnailDb, researchCollection, resource.id, {
+      downloads: resource.downloads + 1,
+    });
+    setResources((prev) =>
+      prev.map((r) => (r.id === resource.id ? { ...r, downloads: r.downloads + 1 } : r))
+    );
+
+    // Create a hidden HTML element for rendering
+    const element = document.createElement('div');
+    element.style.width = '600px';
+    element.style.padding = '20px';
+    element.style.fontFamily = 'Arial';
+    element.style.backgroundColor = '#fff';
+    element.innerHTML = `
+      <h1 style="font-size: 24px; margin-bottom: 10px;">${resource.title}</h1>
+      <p><strong>Description:</strong> ${resource.description || 'N/A'}</p>
+      <p><strong>Medium:</strong> ${resource.medium || 'N/A'}</p>
+      <p><strong>Tags:</strong> ${resource.tags?.join(', ') || 'N/A'}</p>
+      <img src="${resource.thumbnailUrl || resource.imageUrl}" style="max-width: 100%; margin-top: 15px;" />
+    `;
+    document.body.appendChild(element);
+
+    // Convert to canvas
+    const canvas = await html2canvas(element);
+    const imgData = canvas.toDataURL('image/png');
+
+    // Create PDF
+    const pdf = new jsPDF('p', 'pt', 'a4');
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+    const imgProps = pdf.getImageProperties(imgData);
+    const imgRatio = imgProps.width / imgProps.height;
+    const pdfWidth = pageWidth - 40;
+    const pdfHeight = pdfWidth / imgRatio;
+
+    pdf.addImage(imgData, 'PNG', 20, 20, pdfWidth, pdfHeight);
+    const filename = `${resource.title.replace(/\s+/g, '_')}.pdf`;
+    pdf.save(filename);
+
+    // Cleanup
+    document.body.removeChild(element);
+    toast.success('PDF download started!');
+  } catch (error) {
+    console.error('PDF generation failed:', error);
+    toast.error('Failed to download as PDF');
+  }
+};
+
+
+
 
   const handleShare = (resource) => {
     // Placeholder for share functionality
@@ -900,7 +958,7 @@ function ResourcesHub() {
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
                 onClick={() => setActiveCategory(category.id)}
-                className={`px-4 py-2 rounded-lg font-medium text-sm font-Playfair transition-all duration-200 ${
+                className={` whitespace-nowrap px-4 py-2 rounded-lg font-medium text-sm font-Playfair transition-all duration-200 ${
                   activeCategory === category.id
                     ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-md'
                     : 'bg-white/90 dark:bg-gray-800/90 text-gray-700 dark:text-gray-200 hover:bg-indigo-100 dark:hover:bg-gray-700'

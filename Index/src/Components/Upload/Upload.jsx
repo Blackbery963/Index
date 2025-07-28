@@ -1389,7 +1389,7 @@ const UploadEntry = ({ index, entry, updateEntry, removeEntry, handleFileChange,
   }, [entry.price]);
 
   return (
-    <div className="bg-white dark:bg-gray-800/90 p-6 rounded-xl shadow-lg mb-6 border border-gray-100 dark:border-gray-700 transform hover:scale-100 transition-transform duration-300">
+    <div className="bg-white dark:bg-gray-800/90 p-6 rounded-xl shadow-lg mb-6 border border-gray-100 dark:border-gray-700 transform hover:scale-100 transition-transform duration-300 font-Playfair">
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100">
           Image Entry {index + 1}
@@ -1480,7 +1480,7 @@ const UploadEntry = ({ index, entry, updateEntry, removeEntry, handleFileChange,
         </div>
                 <div>
           <label className="text-base font-semibold text-teal-700 dark:text-teal-400 mb-1 block font-Playfair">
-            Price (in USD)
+            Price (in INR)
           </label>
           <input
             type="number"
@@ -1493,7 +1493,7 @@ const UploadEntry = ({ index, entry, updateEntry, removeEntry, handleFileChange,
           />
           
           {/* Platform Fee Calculation */}
-          {entry.price && (
+          {/* {entry.price && (
             <div className="mt-2 p-3 bg-gray-100 dark:bg-gray-700 rounded-lg">
               <div className="flex justify-between text-sm">
                 <span className="text-gray-600 dark:text-gray-300">Platform Fee:</span>
@@ -1511,7 +1511,7 @@ const UploadEntry = ({ index, entry, updateEntry, removeEntry, handleFileChange,
                 </span>
               </div>
             </div>
-          )}
+          )} */}
         </div>
 
         <div>
@@ -2115,7 +2115,7 @@ const UploadSection = () => {
 };
 
   return (
-    <div className="flex flex-col items-center bg-gradient-to-b from-gray-100 to-white dark:from-[#040d12f5] dark:to-[#1a2630f5] min-h-screen pt-[100px]">
+    <div className="flex flex-col items-center bg-gradient-to-b from-gray-100 to-white dark:from-[#040d12f5] dark:to-[#1a2630f5] min-h-screen pt-[100px] font-Playfair">
       <div className="w-full max-w-5xl mb-8 px-4">
         <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-2 font-Playfair">Masterpiece & Sell</h2>
         <p className="text-gray-600 dark:text-gray-300">Upload your creative masterpieces and list them for sale</p>
@@ -2436,17 +2436,6 @@ const Navbar = () => {
               <span className="hidden sm:inline">Diary</span>
             </motion.button>
           </Link>
-          <Link to="/Masterpiece">
-            <motion.button
-              className="px-2 sm:px-2 py-1 sm:py-1 rounded-md hover:bg-teal-700 dark:bg-teal-600 dark:hover:bg-teal-700 flex items-center gap-2"
-              variants={buttonVariants}
-              whileHover="hover"
-              whileTap="tap"
-            >
-              <FaShoppingCart className="text-lg sm:text-xl" />
-              <span className="hidden sm:inline">Masterpiece & Sell</span>
-            </motion.button>
-          </Link>
         </nav>
         <button
           className="md:hidden text-gray-800 dark:text-gray-200 focus:outline-none"
@@ -2509,17 +2498,7 @@ const Navbar = () => {
                   <span>Diary</span>
                 </motion.button>
               </Link>
-              <Link to="/Masterpiece" onClick={() => setIsMenuOpen(false)}>
-                <motion.button
-                  className="w-full px-4 py-2 hover:bg-teal-700 dark:hover:bg-teal-700 rounded-md flex items-center justify-center gap-2"
-                  variants={buttonVariants}
-                  whileHover="hover"
-                  whileTap="tap"
-                >
-                  <FaShoppingCart className="text-lg" />
-                  <span>Masterpiece</span>
-                </motion.button>
-              </Link>
+             
             </nav>
           </motion.div>
         )}

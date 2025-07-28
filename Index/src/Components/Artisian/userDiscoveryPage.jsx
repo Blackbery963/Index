@@ -154,7 +154,7 @@ const UserDiscoveryPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900">
+    <div className="min-h-screen bg-gray-50 text-gray-900 font-Playfair">
       {/* Improved Header */}
       <header className="bg-white/40 backdrop-blur-md shadow-sm py-5 px-4 sticky top-0 z-10">
         <div className=" mx-auto flex items-center justify-between">

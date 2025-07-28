@@ -1,8 +1,19 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MdClose } from 'react-icons/md';
 import { FiMenu } from 'react-icons/fi';
+import { databases, storage, ID, account, Permission, Role, Query } from '../../appwriteConfig';
+
+
+//Environment variables
+const ChallengeDb = import.meta.env.VITE_APPWRITE_COMMUNITY_DATABASE_ID;
+const ChallengeCollection = import.meta.env.VITE_APPWRITE_CHALLENGE_COLLECTION_ID;
+const ChallengeStorage = import.meta.env.VITE_APPWRITE_CHALLENGE_BUCKET_ID;
+const UserDb = import.meta.env.VITE_APPWRITE_DATABASE_ID;
+const UserCollection = import.meta.env.VITE_APPWRITE_USERS_COLLECTION_ID;
+
+
 
 function VotingGallery() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -10,213 +21,175 @@ function VotingGallery() {
   const [sortBy, setSortBy] = useState('popular');
   const [selectedImage, setSelectedImage] = useState(null);
   const [votedImages, setVotedImages] = useState([]);
+  const [submissions, setSubmissions] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const navigate = useNavigate();
 
-  // Sample data for submissions with Pexels images
-  
+  // Mock challenge metadata (ideally fetched from Appwrite)
   const challenges = {
     monthly: {
-      title: "Summer Vibes Challenge",
-      deadline: "Voting ends in 3 days",
-      description: "Vote for your favorite summer-themed artwork! The top 3 with the most votes will win exciting prizes.",
-      submissions: [
-        {
-          id: 1,
-          title: "Golden Sunset",
-          artist: "Alex Rivera",
-          votes: 892,
-          image: "https://images.pexels.com/photos/853168/pexels-photo-853168.jpeg",
-          comments: 24,
-          timestamp: "2 days ago"
-        },
-        {
-          id: 2,
-          title: "Beach Memories",
-          artist: "Sophie Chen",
-          votes: 765,
-          image: "https://images.pexels.com/photos/457882/pexels-photo-457882.jpeg",
-          comments: 18,
-          timestamp: "3 days ago"
-        },
-        {
-          id: 3,
-          title: "Tropical Paradise",
-          artist: "Jamal Williams",
-          votes: 721,
-          image: "https://images.pexels.com/photos/462024/pexels-photo-462024.jpeg",
-          comments: 15,
-          timestamp: "4 days ago"
-        },
-        {
-          id: 4,
-          title: "Summer Fruits",
-          artist: "Maria Garcia",
-          votes: 689,
-          image: "https://images.pexels.com/photos/1132047/pexels-photo-1132047.jpeg",
-          comments: 12,
-          timestamp: "3 days ago"
-        },
-        {
-          id: 5,
-          title: "Poolside Relaxation",
-          artist: "David Kim",
-          votes: 654,
-          image: "https://images.pexels.com/photos/261403/pexels-photo-261403.jpeg",
-          comments: 10,
-          timestamp: "2 days ago"
-        },
-        {
-          id: 6,
-          title: "Ocean Breeze",
-          artist: "Emma Johnson",
-          votes: 621,
-          image: "https://images.pexels.com/photos/994605/pexels-photo-994605.jpeg",
-          comments: 8,
-          timestamp: "5 days ago"
-        },
-        {
-          id: 7,
-          title: "Summer Festival",
-          artist: "Lucas Smith",
-          votes: 598,
-          image: "https://images.pexels.com/photos/1190298/pexels-photo-1190298.jpeg",
-          comments: 7,
-          timestamp: "4 days ago"
-        },
-        {
-          id: 8,
-          title: "Desert Heat",
-          artist: "Aisha Mohammed",
-          votes: 543,
-          image: "https://images.pexels.com/photos/1632790/pexels-photo-1632790.jpeg",
-          comments: 6,
-          timestamp: "3 days ago"
-        },
-        {
-          id: 9,
-          title: "Mountain Hike",
-          artist: "Ryan Wilson",
-          votes: 512,
-          image: "https://images.pexels.com/photos/1054289/pexels-photo-1054289.jpeg",
-          comments: 5,
-          timestamp: "2 days ago"
-        },
-        {
-          id: 10,
-          title: "Summer Reading",
-          artist: "Olivia Brown",
-          votes: 487,
-          image: "https://images.pexels.com/photos/709552/pexels-photo-709552.jpeg",
-          comments: 4,
-          timestamp: "1 day ago"
-        }
-      ]
+      id: 'monthly-1',
+      title: 'Summer Vibes Challenge',
+      deadline: 'Voting ends in 3 days',
+      description: 'Vote for your favorite summer-themed artwork! The top 3 with the most votes will win exciting prizes.',
     },
     weekly: {
-      title: "Urban Sketch Challenge",
-      deadline: "Voting ends in 1 day",
-      description: "Quick sketches of city life. Vote for your favorite urban artwork!",
-      submissions: [
-        {
-          id: 101,
-          title: "City Lights",
-          artist: "Maria Garcia",
-          votes: 432,
-          image: "https://images.pexels.com/photos/2901581/pexels-photo-2901581.jpeg",
-          comments: 12,
-          timestamp: "1 day ago"
-        },
-        {
-          id: 102,
-          title: "Metro Rush",
-          artist: "David Kim",
-          votes: 387,
-          image: "https://images.pexels.com/photos/1239162/pexels-photo-1239162.jpeg",
-          comments: 8,
-          timestamp: "1 day ago"
-        },
-        {
-          id: 103,
-          title: "Urban Sunset",
-          artist: "Maya Patel",
-          votes: 354,
-          image: "https://images.pexels.com/photos/2341837/pexels-photo-2341837.jpeg",
-          comments: 7,
-          timestamp: "2 days ago"
-        },
-        {
-          id: 104,
-          title: "City Rooftop",
-          artist: "Ethan Brooks",
-          votes: 321,
-          image: "https://images.pexels.com/photos/374710/pexels-photo-374710.jpeg",
-          comments: 6,
-          timestamp: "1 day ago"
-        },
-        {
-          id: 105,
-          title: "Night Alley",
-          artist: "Aria Kim",
-          votes: 298,
-          image: "https://images.pexels.com/photos/1123972/pexels-photo-1123972.jpeg",
-          comments: 5,
-          timestamp: "2 days ago"
-        },
-        {
-          id: 106,
-          title: "Street Vibes",
-          artist: "Noah Evans",
-          votes: 276,
-          image: "https://images.pexels.com/photos/167636/pexels-photo-167636.jpeg",
-          comments: 4,
-          timestamp: "1 day ago"
-        },
-        {
-          id: 107,
-          title: "Urban Glow",
-          artist: "Luna Chen",
-          votes: 245,
-          image: "https://images.pexels.com/photos/771883/pexels-photo-771883.jpeg",
-          comments: 3,
-          timestamp: "2 days ago"
-        },
-        {
-          id: 108,
-          title: "Cityscape",
-          artist: "Kai Nguyen",
-          votes: 210,
-          image: "https://images.pexels.com/photos/2044434/pexels-photo-2044434.jpeg",
-          comments: 2,
-          timestamp: "1 day ago"
-        }
-      ]
+      id: 'weekly-1',
+      title: 'Urban Sketch Challenge',
+      deadline: 'Voting ends in 1 day',
+      description: 'Quick sketches of city life. Vote for your favorite urban artwork!',
+    },
+  };
+
+  // Check authentication status
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        await account.get();
+        setIsAuthenticated(true);
+      } catch {
+        setIsAuthenticated(false);
+      }
+    };
+    checkAuth();
+  }, []);
+
+  // Enhanced fetch submissions with user data
+  const fetchSubmissions = async () => {
+    setIsLoading(true);
+    setError('');
+    
+    try {
+      // 1. Fetch submissions for current challenge
+      const submissionsResponse = await databases.listDocuments(
+        ChallengeDb,
+        ChallengeCollection,
+        [Query.equal('challengeId', challenges[activeChallenge].id)]
+      );
+
+      // 2. Get unique user IDs from submissions
+      const userIds = [...new Set(submissionsResponse.documents.map(s => s.userId))];
+      
+      // 3. Fetch user data in batches if needed (Appwrite limits to 100 docs per query)
+      const userBatches = [];
+      const batchSize = 100;
+      
+      for (let i = 0; i < userIds.length; i += batchSize) {
+        const batch = userIds.slice(i, i + batchSize);
+        userBatches.push(
+          databases.listDocuments(
+            UserDb,
+            UserCollection,
+            [Query.equal('$id', batch)]
+          )
+        );
+      }
+
+      const usersResponses = await Promise.all(userBatches);
+      const usersMap = new Map();
+      
+      usersResponses.forEach(response => {
+        response.documents.forEach(user => {
+          usersMap.set(user.$id, user);
+        });
+      });
+
+      // 4. Process submissions with user data
+      const processedSubmissions = await Promise.all(
+        submissionsResponse.documents.map(async (submission) => {
+          try {
+            const imageUrl = storage.getFilePreview(
+              ChallengeStorage,
+              submission.imageId
+            );
+
+            const user = usersMap.get(submission.userId);
+            
+            return {
+              id: submission.$id,
+              title: submission.title,
+              artist: user?.username || 'Anonymous',
+              artistId: submission.userId,
+              votes: submission.votes || 0,
+              imageUrl,
+              comments: submission.comments?.length || 0,
+              timestamp: submission.$createdAt,
+            };
+          } catch (err) {
+            console.error(`Error processing submission ${submission.$id}:`, err);
+            return null;
+          }
+        })
+      );
+
+      // Filter out any failed submissions
+      setSubmissions(processedSubmissions.filter(sub => sub !== null));
+      
+    } catch (error) {
+      console.error('Fetch error:', error);
+      setError(error.message || 'Failed to load submissions');
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  // Handle vote
-  const handleVote = (submissionId) => {
-    if (votedImages.includes(submissionId)) {
-      setVotedImages(votedImages.filter(id => id !== submissionId));
-      const challengeType = activeChallenge;
-      const submissionIndex = challenges[challengeType].submissions.findIndex(s => s.id === submissionId);
-      if (submissionIndex !== -1) {
-        challenges[challengeType].submissions[submissionIndex].votes -= 1;
-      }
-    } else {
-      setVotedImages([...votedImages, submissionId]);
-      const challengeType = activeChallenge;
-      const submissionIndex = challenges[challengeType].submissions.findIndex(s => s.id === submissionId);
-      if (submissionIndex !== -1) {
-        challenges[challengeType].submissions[submissionIndex].votes += 1;
-      }
+  // Fetch data when challenge changes
+  useEffect(() => {
+    fetchSubmissions();
+  }, [activeChallenge]);
+
+  // Handle voting
+  const handleVote = async (submissionId) => {
+    if (!isAuthenticated) {
+      navigate('/login', { state: { from: '/vote' } });
+      return;
+    }
+
+    try {
+      const user = await account.get();
+      const isUpvote = !votedImages.includes(submissionId);
+      
+      // Optimistic UI update
+      setSubmissions(prev => prev.map(sub => 
+        sub.id === submissionId 
+          ? { ...sub, votes: isUpvote ? sub.votes + 1 : sub.votes - 1 }
+          : sub
+      ));
+      
+      setVotedImages(prev => 
+        isUpvote 
+          ? [...prev, submissionId] 
+          : prev.filter(id => id !== submissionId)
+      );
+
+      // Update in database
+      await databases.updateDocument(
+        ChallengeDb,
+        ChallengeCollection,
+        submissionId,
+        { votes: isUpvote ? 1 : -1 }
+      );
+
+    } catch (error) {
+      console.error('Vote error:', error);
+      // Revert optimistic update on error
+      fetchSubmissions();
+      setError('Failed to record vote. Please try again.');
     }
   };
 
   // Sort submissions
-  const sortedSubmissions = [...challenges[activeChallenge].submissions].sort((a, b) => {
+  const sortedSubmissions = [...submissions].sort((a, b) => {
     if (sortBy === 'popular') return b.votes - a.votes;
     if (sortBy === 'recent') return new Date(b.timestamp) - new Date(a.timestamp);
     return 0;
   });
+
+  if (!isAuthenticated && !isLoading) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 dark:from-gray-900 dark:via-blue-900 dark:to-purple-900 pb-24">
@@ -224,20 +197,22 @@ function VotingGallery() {
       <motion.nav
         initial={{ y: -50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        className="fixed top-4 left-4 right-4 z-50 bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-2xl shadow-2xl"
+        transition={{ duration: 0.6, ease: 'easeOut' }}
+        className="fixed top-4 left-4 right-4 z-50 bg-white/40 dark:bg-gray-800/40 backdrop-blur-xl rounded-2xl shadow-2xl"
       >
         <div className="px-6 py-4 sm:px-8 flex justify-between items-center">
-          <Link to="/" className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-300 font-Eagle">
+          <Link
+            to="/"
+            className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-300 font-Quicksand"
+          >
             ArtVerse
           </Link>
-          
           <div className="hidden md:flex items-center gap-8">
             {[
-              {name: 'Home', path: '/'},
-              {name: 'Challenges', path: '/challenges'},
-              {name: 'Vote', path: '/vote'},
-              {name: 'Submit', path: '/submit'}
+              { name: 'Home', path: '/' },
+              { name: 'Challenges', path: '/challenges' },
+              { name: 'Vote', path: '/vote' },
+              { name: 'Submit', path: '/submit' },
             ].map((item) => (
               <motion.div
                 key={item.name}
@@ -255,34 +230,32 @@ function VotingGallery() {
               </motion.div>
             ))}
           </div>
-          
           <button
             className="md:hidden text-gray-700 dark:text-gray-200"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label="Toggle menu"
           >
-            <div fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               {isMenuOpen ? (
-                <MdClose/>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               ) : (
-                <FiMenu/>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               )}
-            </div>
+            </svg>
           </button>
         </div>
-        
         <motion.div
           initial={{ height: 0, opacity: 0 }}
           animate={{ height: isMenuOpen ? 'auto' : 0, opacity: isMenuOpen ? 1 : 0 }}
-          transition={{ duration: 0.3, ease: "easeInOut" }}
+          transition={{ duration: 0.3, ease: 'easeInOut' }}
           className="md:hidden overflow-hidden bg-white/50 dark:bg-gray-800/50 backdrop-blur-md rounded-b-2xl"
         >
           <div className="px-6 py-4 space-y-3">
             {[
-              {name: 'Home', path: '/'},
-              {name: 'Challenges', path: '/challenges'},
-              {name: 'Vote', path: '/vote'},
-              {name: 'Submit', path: '/submit'}
+              { name: 'Home', path: '/' },
+              { name: 'Challenges', path: '/challenges' },
+              { name: 'Vote', path: '/vote' },
+              { name: 'Submit', path: '/submit' },
             ].map((item) => (
               <Link
                 key={item.name}
@@ -315,16 +288,17 @@ function VotingGallery() {
 
         {/* Challenge Selector */}
         <div className="flex justify-center mb-12">
-          <div className="inline-flex rounded-xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg p-1.5 shadow-lg">
+          <div className="inline-flex rounded-xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg p-1.5 shadow-lg overflow-x-auto">
             {['monthly', 'weekly'].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveChallenge(tab)}
-                className={`px-6 py-3 rounded-lg font-semibold text-lg transition-all duration-300 ${
-                  activeChallenge === tab 
-                    ? 'bg-gradient-to-r from-purple-600 to-blue-500 text-white shadow-md' 
+                className={`whitespace-nowrap px-6 py-3 rounded-lg font-semibold text-lg font-Playfair transition-all duration-300 ${
+                  activeChallenge === tab
+                    ? 'bg-gradient-to-r from-purple-600 to-blue-500 text-white shadow-md'
                     : 'text-gray-700 dark:text-gray-200 hover:bg-purple-100 dark:hover:bg-gray-700'
                 }`}
+                aria-current={activeChallenge === tab ? 'page' : undefined}
               >
                 {tab.charAt(0).toUpperCase() + tab.slice(1)} Challenge
               </button>
@@ -341,7 +315,7 @@ function VotingGallery() {
         >
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
             <div>
-              <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-3 font-Eagle">{challenges[activeChallenge].title}</h2>
+              <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-3 font-Quicksand">{challenges[activeChallenge].title}</h2>
               <p className="text-lg text-gray-600 dark:text-gray-300 font-Playfair leading-relaxed">{challenges[activeChallenge].description}</p>
             </div>
             <div className="bg-gradient-to-r from-purple-100 to-blue-100 dark:from-gray-700 dark:to-gray-800 px-6 py-3 rounded-xl shadow-inner">
@@ -350,99 +324,144 @@ function VotingGallery() {
           </div>
         </motion.div>
 
-        {/* Sorting Options */}
-        <div className="flex justify-between items-center mb-8">
-          <div className="text-gray-600 dark:text-gray-300 text-lg font-Playfair">
-            Showing {sortedSubmissions.length} submissions
-          </div>
-          <div className="flex items-center">
-            <span className="text-gray-600 dark:text-gray-300 mr-3 font-Playfair">Sort by:</span>
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="bg-white/90 dark:bg-gray-800/90 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 text-gray-700 dark:text-gray-200 font-Playfair focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+        {/* Error Message */}
+        {error && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="p-4 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-lg mb-8"
+          >
+            {error}
+          </motion.div>
+        )}
+
+        {/* Loading State */}
+        {isLoading && (
+          <div className="text-center py-12">
+            <svg
+              className="animate-spin h-12 w-12 text-purple-600 dark:text-purple-400 mx-auto"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
             >
-              <option value="popular">Most Popular</option>
-              <option value="recent">Most Recent</option>
-            </select>
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              ></path>
+            </svg>
+            <p className="mt-4 text-gray-600 dark:text-gray-300 font-Playfair">Loading submissions...</p>
           </div>
-        </div>
+        )}
+
+        {/* Sorting Options */}
+        {!isLoading && !error && (
+          <div className="flex justify-between items-center mb-8">
+            <div className="text-gray-600 dark:text-gray-300 text-lg font-Playfair">
+              Showing {sortedSubmissions.length} submissions
+            </div>
+            <div className="flex items-center">
+              <label htmlFor="sortBy" className="text-gray-600 dark:text-gray-300 mr-3 font-Playfair">
+                Sort by:
+              </label>
+              <select
+                id="sortBy"
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="bg-white/90 dark:bg-gray-800/90 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 text-gray-700 dark:text-gray-200 font-Playfair focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+                aria-label="Sort submissions"
+              >
+                <option value="popular">Most Popular</option>
+                <option value="recent">Most Recent</option>
+              </select>
+            </div>
+          </div>
+        )}
 
         {/* Submissions Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-          {sortedSubmissions.map((submission) => (
-            <motion.div
-              key={submission.id}
-              layout
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-              className="relative bg-white/90 dark:bg-gray-800/90 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300"
-            >
-              <div className="relative group">
-                <img
-                  src={submission.image}
-                  alt={submission.title}
-                  className="w-full h-64 object-cover cursor-pointer transition-transform duration-300 group-hover:scale-105"
-                  onClick={() => setSelectedImage(submission)}
-                />
-                <motion.button
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                  onClick={() => handleVote(submission.id)}
-                  className={`absolute top-4 right-4 p-2.5 rounded-full shadow-lg transition-colors duration-300 ${
-                    votedImages.includes(submission.id)
-                      ? 'bg-red-500 text-white'
-                      : 'bg-white/90 dark:bg-gray-800/90 text-gray-800 dark:text-gray-200 hover:bg-red-100 dark:hover:bg-red-900'
-                  }`}
-                  aria-label={votedImages.includes(submission.id) ? "Remove vote" : "Vote for this artwork"}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    fill={votedImages.includes(submission.id) ? "currentColor" : "none"}
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={votedImages.includes(submission.id) ? "0" : "2"}
+        {!isLoading && !error && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            {sortedSubmissions.map((submission) => (
+              <motion.div
+                key={submission.id}
+                layout
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                className="relative bg-white/90 dark:bg-gray-800/90 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300"
+              >
+                <div className="relative group">
+                  <img
+                    src={submission.imageUrl}
+                    alt={submission.title}
+                    className="w-full h-64 object-contain cursor-pointer transition-transform duration-300 group-hover:scale-105"
+                    onClick={() => setSelectedImage(submission)}
+                    onError={(e) => (e.target.src = 'https://via.placeholder.com/800x450?text=Image+Not+Found')}
+                  />
+                  <motion.button
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    onClick={() => handleVote(submission.id)}
+                    className={`absolute top-4 right-4 p-2.5 rounded-full shadow-lg transition-colors duration-300 ${
+                      votedImages.includes(submission.id)
+                        ? 'bg-red-500 text-white'
+                        : 'bg-white/90 dark:bg-gray-800/90 text-gray-800 dark:text-gray-200 hover:bg-red-100 dark:hover:bg-red-900'
+                    }`}
+                    aria-label={votedImages.includes(submission.id) ? 'Remove vote' : 'Vote for this artwork'}
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                    />
-                  </svg>
-                </motion.button>
-              </div>
-              <div className="p-6">
-                <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-2 font-Eagle">{submission.title}</h3>
-                <p className="text-purple-600 dark:text-purple-400 mb-3 font-Playfair">by {submission.artist}</p>
-                <div className="flex justify-between items-center">
-                  <div className="flex items-center">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 text-red-500 mr-1.5"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
+                      className="h-6 w-6"
+                      fill={votedImages.includes(submission.id) ? 'currentColor' : 'none'}
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={votedImages.includes(submission.id) ? '0' : '2'}
                     >
                       <path
-                        fillRule="evenodd"
-                        d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-                        clipRule="evenodd"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
                       />
                     </svg>
-                    <span className="text-gray-600 dark:text-gray-300 font-Playfair">{submission.votes.toLocaleString()} votes</span>
-                  </div>
-                  <div className="flex items-center text-gray-500 dark:text-gray-400">
-                    <svg className="w-5 h-5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                    </svg>
-                    <span className="font-Playfair">{submission.comments} comments</span>
+                  </motion.button>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-2 font-Quicksand">{submission.title}</h3>
+                  <p className="text-purple-600 dark:text-purple-400 mb-3 font-Playfair">by {submission.artist}</p>
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5 text-red-500 mr-1.5"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                      <span className="text-gray-600 dark:text-gray-300 font-Playfair">{submission.votes.toLocaleString()} votes</span>
+                    </div>
+                    <div className="flex items-center text-gray-500 dark:text-gray-400">
+                      <svg className="w-5 h-5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                        />
+                      </svg>
+                      <span className="font-Playfair">{submission.comments} comments</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+              </motion.div>
+            ))}
+          </div>
+        )}
 
         {/* Image Modal */}
         <AnimatePresence>
@@ -464,6 +483,7 @@ function VotingGallery() {
                 <button
                   className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
                   onClick={() => setSelectedImage(null)}
+                  aria-label="Close modal"
                 >
                   <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -472,16 +492,23 @@ function VotingGallery() {
                 <div className="p-6 sm:p-8">
                   <div className="mb-8">
                     <img
-                      src={selectedImage.image}
+                      src={selectedImage.imageUrl}
                       alt={selectedImage.title}
                       className="w-full h-auto max-h-[60vh] object-contain rounded-xl shadow-lg"
+                      onError={(e) => (e.target.src = 'https://via.placeholder.com/800x450?text=Image+Not+Found')}
                     />
                   </div>
                   <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
                     <div>
-                      <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2 font-Eagle">{selectedImage.title}</h2>
+                      <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2 font-Quicksand">{selectedImage.title}</h2>
                       <p className="text-purple-600 dark:text-purple-400 text-lg font-Playfair">by {selectedImage.artist}</p>
-                      <p className="text-gray-600 dark:text-gray-300 mt-1 font-Playfair">{selectedImage.timestamp}</p>
+                      <p className="text-gray-600 dark:text-gray-300 mt-1 font-Playfair">
+                        {new Date(selectedImage.timestamp).toLocaleDateString('en-US', {
+                          month: 'long',
+                          day: 'numeric',
+                          year: 'numeric',
+                        })}
+                      </p>
                     </div>
                     <div className="flex items-center space-x-8">
                       <motion.button
@@ -493,14 +520,15 @@ function VotingGallery() {
                             ? 'bg-red-500 text-white'
                             : 'bg-gradient-to-r from-purple-600 to-blue-500 text-white hover:from-purple-700 hover:to-blue-600'
                         }`}
+                        aria-label={votedImages.includes(selectedImage.id) ? 'Remove vote' : 'Vote for this artwork'}
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           className="h-6 w-6 mr-2"
-                          fill={votedImages.includes(selectedImage.id) ? "currentColor" : "none"}
+                          fill={votedImages.includes(selectedImage.id) ? 'currentColor' : 'none'}
                           viewBox="0 0 24 24"
                           stroke="currentColor"
-                          strokeWidth={votedImages.includes(selectedImage.id) ? "0" : "2"}
+                          strokeWidth={votedImages.includes(selectedImage.id) ? '0' : '2'}
                         >
                           <path
                             strokeLinecap="round"
@@ -512,16 +540,30 @@ function VotingGallery() {
                       </motion.button>
                       <div className="flex items-center text-gray-600 dark:text-gray-300">
                         <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                          />
                         </svg>
                         <span className="font-Playfair">{selectedImage.comments} comments</span>
                       </div>
                     </div>
                   </div>
                   <div className="mt-8">
-                    <h3 className="text-xl font-semibold text-gray-800 dark:text-white mb-4 font-Eagle">Comments</h3>
+                    <h3 className="text-xl font-semibold text-gray-800 dark:text-white mb-4 font-Quicksand">Comments</h3>
                     <div className="bg-gray-50 dark:bg-gray-900 rounded-xl p-6">
-                      <p className="text-gray-600 dark:text-gray-300 italic font-Playfair">Sign in to view and post comments</p>
+                      {isAuthenticated ? (
+                        <p className="text-gray-600 dark:text-gray-300 italic font-Playfair">No comments yet. Be the first to comment!</p>
+                      ) : (
+                        <p className="text-gray-600 dark:text-gray-300 italic font-Playfair">
+                          <Link to="/login" className="text-purple-600 dark:text-purple-400 hover:underline">
+                            Sign in
+                          </Link>{' '}
+                          to view and post comments
+                        </p>
+                      )}
                     </div>
                   </div>
                 </div>

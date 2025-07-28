@@ -60,7 +60,7 @@ import MonthlyChallenge from './Community/CommunityChallenges/MonthlyChallenge.j
 import VotingGallery from './Community/CommunityChallenges/VotingGallery.jsx';
 import ResourceHub from './Community/Resources/ResourceHub.jsx';
 import ResourceUpload from './Community/Resources/ResourceUpload.jsx';
-
+import ChallengeUpload from './Community/CommunityChallenges/ChallengeUpload.jsx';
 
 
 
@@ -248,7 +248,7 @@ useEffect(() => {
         <Route path='/community/communitychallenges/votinggallery' element={<VotingGallery/>}/>
         <Route path='/Community/Resources/ResourceHub' element={<ResourceHub/>}/>
         <Route path='/Community/Resources/ResourceUpload' element={<ResourceUpload/>}/>
-
+        <Route path='/Community/CommunityChallenges/ChallengeUpload' element={<ChallengeUpload/>}/>
 
 
 

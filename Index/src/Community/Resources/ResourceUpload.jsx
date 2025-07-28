@@ -187,7 +187,7 @@ function ResourceUpload() {
         initial={{ y: -50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className="fixed top-4 left-4 right-4 z-50 bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-2xl shadow-2xl"
+        className="fixed top-4 left-4 right-4 z-50 bg-white/40 dark:bg-gray-800/40 backdrop-blur-xl rounded-2xl shadow-2xl"
       >
         <div className="px-6 py-4 sm:px-8 flex justify-between items-center">
           <Link to="/" className="text-3xl font-extrabold bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-300 font-Eagle">
@@ -372,30 +372,71 @@ function ResourceUpload() {
         onInit={(evt, editor) => (editorRef.current = editor)}
         value={formData.description}
         onEditorChange={handleEditorChange}
+        // init={{
+        //   height: 400,
+        //   menubar: false,
+        //   directionality: 'ltr',
+        //   plugins: [
+        //     'advlist autolink lists link image charmap preview anchor',
+        //     'searchreplace visualblocks code fullscreen',
+        //     'insertdatetime media table paste code help wordcount',
+        //     'format'
+        //   ],
+        //   toolbar:
+        //     'undo redo | formatselect fontselect fontsizeselect | ' +
+        //     'bold italic underline strikethrough forecolor backcolor | ' +
+        //     'alignleft aligncenter alignright alignjustify | ' +
+        //     'bullist numlist outdent indent | ' +
+        //     'link image table code fullscreen | removeformat help',
+        //   font_formats:
+        //     'Arial=arial,helvetica,sans-serif; Courier New=courier new,courier; Georgia=georgia,palatino; Times New Roman=times new roman,times;',
+        //   fontsize_formats: '12px 14px 16px 18px 24px 36px',
+        //   content_style:
+        //     'body { font-family: "Playfair Display", serif; font-size:14px; direction: ltr !important; text-align: left !important; }',
+        //   skin: 'oxide-dark', // dark mode
+        //   content_css: 'dark',
+        // }}
         init={{
-          height: 400,
-          menubar: false,
-          directionality: 'ltr',
-          plugins: [
-            'advlist autolink lists link image charmap preview anchor',
-            'searchreplace visualblocks code fullscreen',
-            'insertdatetime media table paste code help wordcount'
-          ],
-          toolbar:
-            'undo redo | formatselect fontselect fontsizeselect | ' +
-            'bold italic underline strikethrough forecolor backcolor | ' +
-            'alignleft aligncenter alignright alignjustify | ' +
-            'bullist numlist outdent indent | ' +
-            'link image table code fullscreen | removeformat help',
-          font_formats:
-            'Arial=arial,helvetica,sans-serif; Courier New=courier new,courier; Georgia=georgia,palatino; Times New Roman=times new roman,times;',
-          fontsize_formats: '12px 14px 16px 18px 24px 36px',
-          content_style:
-            'body { font-family: "Playfair Display", serif; font-size:14px; direction: ltr !important; text-align: left !important; }',
-          skin: 'oxide-dark', // dark mode
-          content_css: 'dark',
-        }}
+          selector: 'textarea', // Adjust this selector to match your HTML
+  // plugins: 'table wordcount', // Add other plugins as needed
+  height: 400,
+  menubar: false,
+  directionality: 'ltr',
+  plugins: [
+    'advlist autolink lists link image charmap preview anchor',
+    'searchreplace visualblocks code fullscreen',
+    'insertdatetime media table paste code help wordcount',
+    'format',
+    'table wordcount'
+  ],
+  toolbar: 'undo redo | styleselect | ' +  // Changed formatselect to styleselect
+    'bold italic underline strikethrough forecolor backcolor | ' +
+    'alignleft aligncenter alignright alignjustify | ' +
+    'bullist numlist outdent indent | ' +
+    'link image table code | removeformat help',
+  style_formats: [  // Add style formats
+    { title: 'Headers', items: [
+      { title: 'h1', block: 'h1' },
+      { title: 'h2', block: 'h2' },
+      { title: 'h3', block: 'h3' },
+      { title: 'h4', block: 'h4' },
+      { title: 'h5', block: 'h5' },
+      { title: 'h6', block: 'h6' }
+
+    ]},
+    { title: 'Inline', items: [
+      { title: 'Bold', icon: 'bold', format: 'bold' },
+      { title: 'Italic', icon: 'italic', format: 'italic' }
+    ]}
+  ],
+  font_formats: 'Arial=arial,helvetica,sans-serif; Courier New=courier new,courier; Georgia=georgia,palatino; Times New Roman=times new roman,times;',
+  fontsize_formats: '12px 14px 16px 18px 24px 36px',
+  content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+  skin: 'oxide-dark',
+  content_css: 'dark'
+}}
       />
+ 
       <p className="mt-1 text-xs text-gray-500 dark:text-gray-400 font-Playfair">
         Provide a detailed description to help others understand your resource.
       </p>

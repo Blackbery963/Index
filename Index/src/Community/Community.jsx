@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { FiMenu } from 'react-icons/fi';
 import { Link, useNavigate } from 'react-router-dom';
 import {Query, account, databases} from '../appwriteConfig'
+import ArtistSpotlight from './CommunityContainer/ArtistSpotlight';
 
 
 const Community = () => {
@@ -115,7 +116,7 @@ const Community = () => {
   initial={{ y: -50, opacity: 0 }}
   animate={{ y: 0, opacity: 1 }}
   transition={{ duration: 0.6 }}
-  className="fixed top-4 left-4 right-4 z-50 bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-lg shadow-lg"
+  className="fixed top-4 left-4 right-4 z-50 bg-white/40 dark:bg-gray-800/40 backdrop-blur-lg rounded-lg shadow-lg"
 >
   <div className="px-4 py-3 sm:px-6 flex justify-between items-center">
     <Link to="/" className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-300 font-Eagle">
@@ -513,7 +514,7 @@ const Community = () => {
       </motion.section>
 
       {/* Artist Spotlight */}
-      <motion.section
+      {/* <motion.section
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
@@ -562,7 +563,8 @@ const Community = () => {
             </div>
           </motion.div>
         </div>
-      </motion.section>
+      </motion.section> */}
+      <ArtistSpotlight/>
 
       {/* Resource Library */}
       <motion.section

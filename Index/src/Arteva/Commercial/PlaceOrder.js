@@ -54,7 +54,7 @@ export const proceedToCheckout = async (onSuccess, onError) => {
     
     // 7. Handle success
     toast.success('Order placed successfully!');
-    onSuccess?.();
+    // onSuccess?.();
 
   } catch (error) {
     console.error('Checkout failed:', error);

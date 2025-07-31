@@ -212,32 +212,32 @@ function Abstract() {
 
   const cards = infoCardsData.Abstract;
 
-  const handleFollow = async () => {
-    try {
-      await databases.createDocument(
-        DATABASE_ID,
-        USER_COLLECTION_ID,
-        ID.unique(),
-        {
-          followerId: currentUserId,
-          followingId: profileUserId,
-        }
-      );
-      console.log("Followed!");
-    } catch (err) {
-      console.error("Error following user:", err);
-    }
-  };
+  // const handleFollow = async () => {
+  //   try {
+  //     await databases.createDocument(
+  //       DATABASE_ID,
+  //       USER_COLLECTION_ID,
+  //       ID.unique(),
+  //       {
+  //         followerId: currentUserId,
+  //         followingId: profileUserId,
+  //       }
+  //     );
+  //     console.log("Followed!");
+  //   } catch (err) {
+  //     console.error("Error following user:", err);
+  //   }
+  // };
 
-  const handleUnfollow = async () => {
-    const followDoc = await databases.listDocuments(DATABASE_ID, "Follows", [
-      Query.equal("followerId", currentUserId),
-      Query.equal("followingId", profileUserId),
-    ]);
-    if (followDoc.total > 0) {
-      await databases.deleteDocument(DATABASE_ID, USER_COLLECTION_ID, followDoc.documents[0].$id);
-    }
-  };
+  // const handleUnfollow = async () => {
+  //   const followDoc = await databases.listDocuments(DATABASE_ID, "Follows", [
+  //     Query.equal("followerId", currentUserId),
+  //     Query.equal("followingId", profileUserId),
+  //   ]);
+  //   if (followDoc.total > 0) {
+  //     await databases.deleteDocument(DATABASE_ID, USER_COLLECTION_ID, followDoc.documents[0].$id);
+  //   }
+  // };
 
   return (
     <div className='h-screen w-screen overflow-x-hidden bg-gray-100 dark:bg-gray-900 font-Playfair'>

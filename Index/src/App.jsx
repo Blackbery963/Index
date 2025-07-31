@@ -76,6 +76,7 @@ import Pop from './Sub-Components/Pop.jsx';
 import Portrait from './Sub-Components/Portrait.jsx';
 import Historical from './Sub-Components/Histoirical';
 import Express from './Sub-Components/Express.jsx';
+// import UserDiscoveryPage from './Components/Artisian/userDiscoveryPage.jsx';
 import UserDiscoveryPage from './Components/Artisian/userDiscoveryPage.jsx';
 import DiscoverUsers from './Components/Artisian/DiscoverArtists.jsx';
 import DiaryCollection from './Components/Diaryland/DiaryCollection.jsx';
@@ -85,6 +86,7 @@ import Order from './Settings/Order.jsx';
 
 // The commecial part starts from here 
 import Artstore from './Arteva/Artstore.jsx';
+import MyCommunity from './Community/MyCommunity.jsx';
 
 const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
 const COLLECTION_ID = import.meta.env.VITE_APPWRITE_METADATA_COLLECTION_ID;
@@ -242,14 +244,14 @@ useEffect(() => {
         <Route path="/community/CreateCommunity" element={<CreateCommunityPage />} />
         <Route path='/community/ExploreCommunity' element={<ExploreCommunity/>}/>
         <Route path='/community/:slug' element={<CommunityDashboard/>}/>
-        <Route path="/community/:communityId" element={<CommunityDashboard />} />
+        {/* <Route path="/community/:communityId" element={<CommunityDashboard />} /> */}
         <Route path='/community/communitychallenges/weeklychallenge' element={<WeeklyChallenge/>}/>
         <Route path='/community/communitychallenges/monthlychallenge' element={<MonthlyChallenge/>}/>
         <Route path='/community/communitychallenges/votinggallery' element={<VotingGallery/>}/>
         <Route path='/Community/Resources/ResourceHub' element={<ResourceHub/>}/>
         <Route path='/Community/Resources/ResourceUpload' element={<ResourceUpload/>}/>
         <Route path='/Community/CommunityChallenges/ChallengeUpload' element={<ChallengeUpload/>}/>
-
+        <Route path='/community/MyCommunity' element={<MyCommunity/>}/>
 
 
 

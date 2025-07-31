@@ -444,7 +444,7 @@ useEffect(() => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 dark:from-gray-900 dark:to-gray-800">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 font-Playfair">
       {/* Floating Navigation */}
       <motion.nav
         initial={{ y: -100 }}
@@ -457,7 +457,7 @@ useEffect(() => {
             <div className="flex items-center">
               <Link 
                 to="/" 
-                className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-300"
+                className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-300 font-Eagle"
               >
                 ArtVerse
               </Link>

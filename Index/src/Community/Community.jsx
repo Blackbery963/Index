@@ -2,12 +2,13 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FiMenu } from 'react-icons/fi';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import {Query, account, databases} from '../appwriteConfig'
 import ArtistSpotlight from './CommunityContainer/ArtistSpotlight';
 
 
 const Community = () => {
+  const {slug} = useParams();
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [myCommunity, setMyCommunity] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -46,41 +47,108 @@ const Community = () => {
   // }, []);
 
 
-  useEffect(() => {
-  const fetchCommunity = async () => {
-    try {
-      setLoading(true);
-      const user = await account.get();
+
+
+
+//   useEffect(() => {
+//   const fetchCommunity = async () => {
+//     try {
+//       setLoading(true);
+//       const user = await account.get();
       
-      // First check members collection for user's membership
-      const memberResponse = await databases.listDocuments(
-        import.meta.env.VITE_APPWRITE_COMMUNITY_DATABASE_ID,
-        import.meta.env.VITE_APPWRITE_COMMUNITY_MEMBERS_COLLECTION_ID, // Note: Changed to members collection
-        [Query.equal('userId', user.$id)]
-      );
+//       // First check members collection for user's membership
+//       const memberResponse = await databases.listDocuments(
+//         import.meta.env.VITE_APPWRITE_COMMUNITY_DATABASE_ID,
+//         import.meta.env.VITE_APPWRITE_COMMUNITY_MEMBERS_COLLECTION_ID, // Note: Changed to members collection
+//         [Query.equal('userId', user.$id)]
+//       );
 
-      if (memberResponse.documents.length === 0) {
-        setMyCommunity(null);
-        return;
+//       if (memberResponse.documents.length === 0) {
+//         setMyCommunity(null);
+//         return;
+//       }
+
+//       const memberDoc = memberResponse.documents[0];
+//       const communityResponse = await databases.getDocument(
+//         import.meta.env.VITE_APPWRITE_COMMUNITY_DATABASE_ID,
+//         import.meta.env.VITE_APPWRITE_COMMUNITY_COLLECTION_ID,
+//         memberDoc.communityId
+//       );
+
+//       setMyCommunity(communityResponse);
+//     } catch (error) {
+//       console.error("Error fetching community:", error);
+//       console.log(myCommunity?.slug); // does it match the actual community slug?
+
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   fetchCommunity();
+// }, []);
+
+// ... other imports ...
+
+  useEffect(() => {
+    const fetchCommunity = async () => {
+      try {
+        setLoading(true);
+        setNotFound(false);
+        
+        // First try to fetch by slug if it exists in URL
+        if (slug) {
+          const response = await databases.listDocuments(
+            import.meta.env.VITE_APPWRITE_COMMUNITY_DATABASE_ID,
+            import.meta.env.VITE_APPWRITE_COMMUNITY_COLLECTION_ID,
+            [Query.equal('slug', slug)]
+          );
+
+          if (response.documents.length > 0) {
+            setMyCommunity(response.documents[0]);
+            return;
+          }
+          setNotFound(true);
+        }
+
+        // If no slug or community not found by slug, try by user membership
+        const user = await account.get();
+        const memberResponse = await databases.listDocuments(
+          import.meta.env.VITE_APPWRITE_COMMUNITY_DATABASE_ID,
+          import.meta.env.VITE_APPWRITE_COMMUNITY_MEMBERS_COLLECTION_ID,
+          [Query.equal('userId', user.$id)]
+        );
+
+        if (memberResponse.documents.length === 0) {
+          setMyCommunity(null);
+          return;
+        }
+
+        const memberDoc = memberResponse.documents[0];
+        const communityResponse = await databases.getDocument(
+          import.meta.env.VITE_APPWRITE_COMMUNITY_DATABASE_ID,
+          import.meta.env.VITE_APPWRITE_COMMUNITY_COLLECTION_ID,
+          memberDoc.communityId
+        );
+
+        setMyCommunity(communityResponse);
+        
+        // If we came here via slug but found via user membership, redirect to correct URL
+        if (slug && communityResponse.slug !== slug) {
+          navigate(`/community/${communityResponse.slug}`, { replace: true });
+        }
+      } catch (error) {
+        console.error("Error fetching community:", error);
+        setNotFound(true);
+      } finally {
+        setLoading(false);
       }
+    };
 
-      const memberDoc = memberResponse.documents[0];
-      const communityResponse = await databases.getDocument(
-        import.meta.env.VITE_APPWRITE_COMMUNITY_DATABASE_ID,
-        import.meta.env.VITE_APPWRITE_COMMUNITY_COLLECTION_ID,
-        memberDoc.communityId
-      );
+    fetchCommunity();
+  }, [slug, navigate]);
 
-      setMyCommunity(communityResponse);
-    } catch (error) {
-      console.error("Error fetching community:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  fetchCommunity();
-}, []);
+  // ... rest of your component code ...
 
    // Handle navigation to community
   // const handleCommunityNavigation = () => {
@@ -128,8 +196,9 @@ const Community = () => {
       {[
         {name: 'Home', path: '/'},
         {name: 'Resources', path: '/Community/Resources/ResourceHub'},
-        {name: 'Explore', path: '/explore-communities'},
-        {name: 'Challenges', path: '/community/challenges'}
+        {name: 'Explore', path: '/community/ExploreCommunity'},
+        {name: 'Challenges', path: '/community/challenges'},
+        {name: 'My Community', path: '/community/MyCommunity'}
       ].map((item) => (
         <motion.div
           key={item.name}
@@ -146,21 +215,6 @@ const Community = () => {
         </motion.div>
       ))}
       
-      {/* Conditionally render My Community link */}
-      {myCommunity && (
-        <motion.div
-          whileHover={{ scale: 1.1 }}
-          className="relative group"
-        >
-          <Link
-            to={`/community/${myCommunity.slug}`}
-            className="text-purple-600 dark:text-purple-400 font-medium font-Playfair"
-          >
-            My Community
-          </Link>
-          <span className="absolute left-0 bottom-0 w-full h-0.5 bg-purple-600 dark:bg-purple-400"></span>
-        </motion.div>
-      )}
     </div>
     
     {/* Mobile Menu Button */}
@@ -188,21 +242,22 @@ const Community = () => {
   >
     <div className="px-4 py-3 space-y-2">
       {[
-        {name: 'Home', path: '/'},
-        {name: 'Resources', path: '/resources'},
-        {name: 'Explore', path: '/explore-communities'},
-        ...(myCommunity ? [{name: 'My Community', path: `/community/${myCommunity.slug}`}] : []),
-        {name: 'Challenges', path: '/community/challenges'}
-      ].map((item) => (
-        <Link
-          key={item.name}
-          to={item.path}
-          className="block text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 font-medium py-2 font-Playfair"
-          onClick={() => setIsMenuOpen(false)}
-        >
-          {item.name}
-        </Link>
-      ))}
+  { name: 'Home', path: '/' },
+  { name: 'Resources', path: '/resources' },
+  { name: 'Explore', path: '/explore-communities' },
+  {name: 'My Community', path: '/community/MyCommunity'},
+  { name: 'Challenges', path: '/community/challenges' }
+].map((item) => (
+  <Link
+    key={item.name}
+    to={item.path}
+    className="block text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 font-medium py-2 font-Playfair"
+    onClick={() => setIsMenuOpen(false)}
+  >
+    {item.name}
+  </Link>
+))}
+
     </div>
   </motion.div>
 </motion.nav>

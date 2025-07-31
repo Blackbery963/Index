@@ -150,13 +150,26 @@ const CreateCommunityPage = () => {
     }
   };
 
+
+  const badges = [
+  '🎨', '🖌️', '👩‍🎨', '🖼️', '🌈', '✨',
+  '🧑‍🎨', '🖍️', '🎭', '🧵', '✏️', '🖋️',
+  '🧑‍🎤', '📸', '🌟', '🌌', '💫', '🌠',
+  '🦋', '🍭', '🖊️', '🧽', '🪡', '🪞',
+  '🎞️', '🪆', '📚', '🧠', '🪄', '🗯️',
+  '🧑‍🏫', '💡', '🤝', '🧩', '🔗', '💬',
+  '🫂', '🏳️‍🌈', '🏆', '📁', '🖥️', '🏷️',
+  '💼', '🪪', '📓', '✍️', '🧾', '🪶', '📖'
+];
+
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden font-Playfair">
         <motion.nav
               initial={{ y: -50, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.6 }}
-              className="fixed top-4 left-4 right-4 z-50 bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-lg shadow-lg"
+              className="fixed top-4 left-4 right-4 z-50 bg-white/40 dark:bg-gray-800/40 backdrop-blur-lg rounded-lg shadow-lg"
             >
               <div className="px-4 py-3 sm:px-6 flex justify-between items-center">
                 <Link to="/" className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-300 font-Eagle">
@@ -340,15 +353,15 @@ const CreateCommunityPage = () => {
             {/* Step 2: Customization */}
             {step === 2 && (
               <div className="space-y-8">
-                <motion.h3
+                {/* <motion.h3
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   className="text-2xl font-bold text-gray-800 dark:text-white mb-4"
                 >
                   Customize Your Community
-                </motion.h3>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                </motion.h3> */}
+                {/* <div>
+                  <label className=" text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
                     Community Badge
                   </label>
                   <div className="flex items-center gap-4 flex-wrap">
@@ -360,14 +373,15 @@ const CreateCommunityPage = () => {
                       {formData.badge}
                     </motion.div>
                     <div className="grid grid-cols-6 gap-2">
-                      {['🎨', '🖌️', '👩‍🎨', '🖼️', '🌈', '✨'].map((emoji) => (
+                      {['🎨', '🖌️', '👩‍🎨', '🖼️', '🌈', '✨','🧑‍🎨', '🖍️', '🎭', '🧵', '✏️', '🖋️', '🧑‍🎤', '📸', '🎨','🌟', '🌌', '💫', '🌠', '🦋', '🍭','🖊️', '🧽', '🪡', '🪞', '🎞️', '🪆','📚', '🧠', '🪄', '🗯️', '🧑‍🏫', '💡','🤝', '🧩', '🔗', '💬', '🫂', '🏳️‍🌈', '🏆', '📁', '🖥️', '🏷️', '💼', '🪪','📓', '✍️', '🧾', '🪶', '📖'
+                        ].map((emoji) => (
                         <motion.button
                           key={emoji}
                           type="button"
                           onClick={() => setFormData((prev) => ({ ...prev, badge: emoji }))}
                           whileHover={{ scale: 1.2 }}
                           whileTap={{ scale: 0.9 }}
-                          className={`w-10 h-10 rounded-full flex items-center justify-center text-xl transition-all ${
+                          className={`w-10 h-10 overflow-x-auto rounded-full flex items-center justify-center text-xl transition-all ${
                             formData.badge === emoji
                               ? 'bg-purple-100 dark:bg-purple-900/50 text-purple-800 dark:text-purple-200'
                               : 'bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600'
@@ -378,7 +392,58 @@ const CreateCommunityPage = () => {
                       ))}
                     </div>
                   </div>
-                </div>
+                </div> */}
+
+                <div className="space-y-8">
+  <motion.h3
+    initial={{ opacity: 0, y: -10 }}
+    animate={{ opacity: 1, y: 0 }}
+    className="text-3xl font-semibold text-gray-800 dark:text-white mb-4"
+  >
+    🎯 Customize Your Community
+  </motion.h3>
+
+  <div className="space-y-4">
+    <label className="text-sm font-medium text-gray-600 dark:text-gray-300">
+      Selected Badge
+    </label>
+    <motion.div
+      animate={{ scale: [1, 1.1, 1] }}
+      transition={{ duration: 2, repeat: Infinity }}
+      className="w-20 h-20 rounded-full shadow-md bg-white dark:bg-gray-800 flex items-center justify-center text-4xl border-2 border-purple-400"
+    >
+      {formData.badge}
+    </motion.div>
+  </div>
+
+  <div className="space-y-2">
+    <label className="text-sm font-medium text-gray-600 dark:text-gray-300">
+      Choose a Community Badge
+    </label>
+    <div className="bg-white dark:bg-gray-900 p-4 rounded-xl shadow-md border dark:border-gray-700">
+      <div className="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 gap-3 max-h-[200px] overflow-y-auto">
+        {badges.map((emoji) => (
+          <motion.button
+            key={emoji}
+            type="button"
+            onClick={() => setFormData((prev) => ({ ...prev, badge: emoji }))}
+            whileHover={{ scale: 1.15 }}
+            whileTap={{ scale: 0.9 }}
+            className={`w-10 h-10 rounded-full flex items-center justify-center text-xl transition-all duration-200 ease-in-out border 
+              ${
+                formData.badge === emoji
+                  ? 'bg-purple-100 dark:bg-purple-800/50 border-purple-500 text-purple-700 dark:text-purple-200'
+                  : 'bg-gray-100 dark:bg-gray-700 border-transparent hover:bg-gray-200 dark:hover:bg-gray-600'
+              }`}
+          >
+            {emoji}
+          </motion.button>
+        ))}
+      </div>
+    </div>
+  </div>
+</div>
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
                     Brand Color

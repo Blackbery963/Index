@@ -9,6 +9,9 @@ import { FaPaintBrush, FaPalette, FaEthereum, FaCamera } from 'react-icons/fa';
 import { databases, storage, account, Query } from '../appwriteConfig';
 import LikeButton from '../EngagementService/likeButton';
 import { Link } from 'react-router-dom';
+import { proceedToCheckout } from './Commercial/PlaceOrder';
+import { MdCurrencyRupee } from 'react-icons/md';
+import { toast, ToastContainer } from 'react-toastify';
 
 const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
 const USER_COLLECTION_ID = import.meta.env.VITE_APPWRITE_USERS_COLLECTION_ID;
@@ -174,17 +177,6 @@ useEffect(() => {
   localStorage.setItem('cartItems', JSON.stringify(cartItems));
 }, [cartItems]);
 
-// const addToCart = (art) => {
-//   setCartItems(prev => {
-//     const existingItem = prev.find(item => item.$id === art.$id);
-//     if (existingItem) {
-//       return prev.map(item =>
-//         item.$id === art.$id ? { ...item, quantity: item.quantity + 1 } : item
-//       );
-//     }
-//     return [...prev, { ...art, quantity: 1 }];
-//   });
-// };
 
 const addToCart = (art) => {
   try {
@@ -299,6 +291,7 @@ const cartTotal = cartItems.reduce((total, item) => total + (item.price * item.q
 
   return (
     <div className={`min-h-screen ${isDarkMode ? 'bg-gray-950 text-white' : 'bg-gray-50 text-gray-900'} overflow-x-hidden relative font-Playfair`} ref={scrollRef}>
+     <ToastContainer/>
       {/* Animated Background */}
       <motion.div
         className={`fixed inset-0 z-0 ${isDarkMode ? 'bg-gradient-to-br from-indigo-900 via-purple-900 to-gray-900' : 'bg-gradient-to-br from-indigo-100 via-blue-100 to-gray-50'}`}
@@ -619,8 +612,8 @@ const cartTotal = cartItems.reduce((total, item) => total + (item.price * item.q
                               <p className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
                                 {art.artist || 'Unknown Artist'}
                               </p>
-                              <p className={`font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-                                ${art.price?.toLocaleString() || '0'}
+                              <p className={`font-bold flex items-center ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                                <MdCurrencyRupee/>{art.price?.toLocaleString() || '0'}
                               </p>
                               <div className="flex items-center gap-1 text-yellow-400">
                                 <FiStar className="text-sm" />
@@ -674,8 +667,8 @@ const cartTotal = cartItems.reduce((total, item) => total + (item.price * item.q
                         </div>
                       </div>
                       <div className="flex justify-between items-center mt-2">
-                        <p className={`text-base font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-                          ${art.price?.toLocaleString() || '0'}
+                        <p className={`text-base flex items-center font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                          <MdCurrencyRupee/>{art.price?.toLocaleString() || '0'}
                         </p>
                         <div className={`text-xs px-2 py-1 rounded-full border ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
                           {art.formattedDate || 'Date not available'}
@@ -758,8 +751,9 @@ const cartTotal = cartItems.reduce((total, item) => total + (item.price * item.q
                       <div className="flex flex-wrap items-center gap-4">
                         <div>
                           <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Price</p>
-                          <p className={`text-xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-                            ${art.price?.toLocaleString() || '0'}
+                          <p className={`text-xl font-bold flex items-center ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                            <MdCurrencyRupee/>
+                            {art.price?.toLocaleString() || '0'}
                           </p>
                         </div>
                         <motion.button
@@ -884,8 +878,8 @@ const cartTotal = cartItems.reduce((total, item) => total + (item.price * item.q
                   <div className="grid grid-cols-2 gap-4 mb-6">
                     <div>
                       <h4 className={`text-sm mb-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Price</h4>
-                      <p className={`font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-                        ${selectedArt.price?.toLocaleString() || '0'}
+                      <p className={`font-bold flex items-center ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                        <MdCurrencyRupee/>{selectedArt.price?.toLocaleString() || '0'}
                       </p>
                     </div>
                     {selectedArt.dimensions && (
@@ -1050,8 +1044,8 @@ const cartTotal = cartItems.reduce((total, item) => total + (item.price * item.q
                                   +
                                 </button>
                               </div>
-                              <p className={`font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-                                ${(item.price * item.quantity)?.toLocaleString() || '0'}
+                              <p className={`font-bold flex items-center ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                                <MdCurrencyRupee/>{(item.price * item.quantity)?.toLocaleString() || '0'}
                               </p>
                               <button
                                 onClick={() => removeFromCart(item.$id)}
@@ -1068,8 +1062,8 @@ const cartTotal = cartItems.reduce((total, item) => total + (item.price * item.q
                     <div className={`mb-6 p-4 rounded-lg ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
                       <div className="flex justify-between items-center mb-2">
                         <span className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Subtotal</span>
-                        <span className={`font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-                          ${cartTotal.toLocaleString()}
+                        <span className={`font-bold flex items-center ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                          <MdCurrencyRupee/>{cartTotal.toLocaleString()}
                         </span>
                       </div>
                       <div className="flex justify-between items-center mb-4">
@@ -1080,11 +1074,16 @@ const cartTotal = cartItems.reduce((total, item) => total + (item.price * item.q
                       </div>
                       <div className="flex justify-between items-center mb-4 pt-2 border-t border-gray-700/50">
                         <span className={`font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Total</span>
-                        <span className={`font-bold text-lg ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-                          ${cartTotal.toLocaleString()}
+                        <span className={`font-bold flex items-center text-lg ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                          <MdCurrencyRupee/>{cartTotal.toLocaleString()}
                         </span>
                       </div>
                       <motion.button
+                        onClick={() => proceedToCheckout(cartItems, () => {
+                        setCartItems([]);
+                        localStorage.removeItem('cartItems');
+                        toast.success("Your Order Proceed Successfully")
+                        })}
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                         className={`w-full py-3 rounded-lg font-medium flex items-center justify-center gap-2 ${isDarkMode ? 'bg-gradient-to-r from-purple-600 to-pink-500 text-white' : 'bg-indigo-600 text-white'}`}

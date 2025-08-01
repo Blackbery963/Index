@@ -282,7 +282,7 @@ const Community = () => {
           className="relative"
         >
           <h1 className="text-5xl font-bold mb-6 text-gray-800 dark:text-white font-Quicksand">
-            Let's Make It World’s <span className="bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-300">Biggest Art Community</span>
+            Art Without Borders. <span className="bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-300">A Community Without Limits.</span>
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-8 font-Playfair">
             Share, learn, and grow with artists worldwide. Get feedback, monetize your work, and join creative challenges.

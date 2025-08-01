@@ -21,7 +21,7 @@ const Review = lazy(() => import('./Components/Review/Review'));
 import Account from './Components/Account/Account';
 // import Profile from './Components/Account/Profile.jsx';
 import Upload from './Components/Upload/Upload.jsx';
-import UploadMasterpiece from './Components/Upload/Masterpiece.jsx';
+// import UploadMasterpiece from './Components/Upload/Masterpiece.jsx';
 import Signup from './Components/Signup/Signup';
 import VerifyMFA from './Components/Signup/VerifyMFA.jsx';
 import Login from './Components/Login/Login';
@@ -86,6 +86,7 @@ import Order from './Settings/Order.jsx';
 
 // The commecial part starts from here 
 import Artstore from './Arteva/Artstore.jsx';
+import OrderHistory from './Arteva/Commercial/OrderHistory.jsx';
 import MyCommunity from './Community/MyCommunity.jsx';
 
 const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
@@ -228,7 +229,7 @@ useEffect(() => {
         <Route path="/Account/Edit_profile" element={<Edit_Profile />} />
         <Route path="/Account/dashboard" element={<Dashboard />} />
         <Route path="/Account/Upload" element={<Upload />} />
-        <Route path='/Account/Upload/Masterpiece' element={<UploadMasterpiece/>}/>
+        {/* <Route path='/Account/Upload/Masterpiece' element={<UploadMasterpiece/>}/> */}
         <Route path="/collections" element={<Your_Collections />} />
         <Route path="/Journal" element={<Journal />} />
         <Route path="/Legal/Privacy_Policy" element={<Privacy_Policy />} />
@@ -283,12 +284,16 @@ useEffect(() => {
         <Route path='/Artist/discoverartists' element={<UserDiscoveryPage/>}/>
         <Route path='/Artists/DiscoverUsers' element={<DiscoverUsers/>}/>
 
+
         {/* Diary */}
         <Route path='/Diaries/Diary-Collection' element={<DiaryCollection/>}/>
         <Route path='/diary/:id' element = {<January/>}/>
 
         {/* the routing of commercial section */}
         <Route path='/Arteva/ArtStore' element = {<Artstore/>}/>
+        <Route path='/Arteva/Commercial/OrderHistory' element = {<OrderHistory/>}/>
+
+
       </Routes>
     </Router>
   );

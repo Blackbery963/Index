@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { account, databases,storage,ID } from '../../appwriteConfig';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -51,6 +52,9 @@ function Account({ isOwnProfile = true }) {
   const [followerCount, setFollowerCount] = useState(0);
   const [followingCount, setFollowingCount] = useState(0);
   const [collectionCount, setCollectionCount] = useState(0);
+
+  //navigation
+    const navigate = useNavigate(); 
   
   // Refs
   const dropdownRef = useRef(null);
@@ -117,6 +121,21 @@ function Account({ isOwnProfile = true }) {
     
     fetchData();
   }, [isOwnProfile, viewedUserId]);
+
+  // checkinl authentication 
+    useEffect(() => {
+    const checkUser = async () => {
+      try {
+        await account.get(); // Tries to get current session
+        setLoading(false);   // If successful, stop loading
+      } catch (err) {
+        setError('User not logged in. Redirecting...');
+        setTimeout(() => navigate('/login'), 2000); // Redirect after 2 seconds
+      }
+    };
+
+    checkUser();
+  }, [navigate]);
 
   const handleLogout = async () => {
     if (window.confirm('Are you sure you want to log out?')) {
@@ -282,18 +301,19 @@ function Account({ isOwnProfile = true }) {
   );
 
   if (error) return (
-    <div className="w-full min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
-      <div className="text-center p-6 max-w-md">
-        <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-2">Error loading profile</h2>
-        <p className="text-gray-600 dark:text-gray-300">{error}</p>
-        <Link 
-          to="/" 
-          className="mt-4 inline-block px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors"
-        >
-          Go Home
-        </Link>
-      </div>
-    </div>
+    // <div className="w-full min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+    //   <div className="text-center p-6 max-w-md">
+    //     <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-2">Error loading profile</h2>
+    //     <p className="text-gray-600 dark:text-gray-300">{error}</p>
+    //     <Link 
+    //       to="/" 
+    //       className="mt-4 inline-block px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors"
+    //     >
+    //       Go Home
+    //     </Link>
+    //   </div>
+    // </div>
+     <div className="min-h-screen flex justify-center items-center text-gray-700 dark:text-gray-200">Checking session...</div>
   );
 
   if (!profileData) return (

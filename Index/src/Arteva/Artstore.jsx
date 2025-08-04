@@ -1620,20 +1620,24 @@ const ArtStore = () => {
             Discover rare artworks from global creators, verified on the blockchain.
           </motion.p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <motion.button
+            <Link to={"/gallery"}>
+              <motion.button
               whileHover={{ scale: 1.05, boxShadow: '0 4px 15px rgba(79, 70, 229, 0.3)' }}
               whileTap={{ scale: 0.95 }}
               className="px-6 py-3 rounded-lg font-medium flex items-center gap-2 bg-indigo-600 dark:bg-gradient-to-r dark:from-purple-600 dark:to-pink-500 text-white"
             >
               Explore Gallery <FiArrowRight />
             </motion.button>
-            <motion.button
+            </Link>
+             <Link to={"/Artists/DiscoverUsers"}>
+              <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="px-6 py-3 border rounded-lg font-medium bg-white/40 dark:bg-gray-900/40 border-indigo-600 dark:border-gray-600 text-indigo-600 dark:text-gray-300 backdrop-blur-lg"
             >
               Meet Artists
             </motion.button>
+             </Link>
           </div>
         </motion.div>
       </motion.section>

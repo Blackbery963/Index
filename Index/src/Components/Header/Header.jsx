@@ -803,13 +803,18 @@ const DB_ID = import.meta.env.VITE_APPWRITE_COMMERCIAL_DATABASE_ID;
 const ORDERS_COLLECTION = import.meta.env.VITE_APPWRITE_SELLER_COLLECTION_ID;
 
 const Header = () => {
-  const backgroundImages = [
-    'https://img.freepik.com/free-photo/warm-colors-vase-with-dark-flowers_23-2151843580.jpg',
-    'https://images.unsplash.com/photo-1541961017774-22349e4a1262',
-    'https://img.freepik.com/free-photo/nature-tranquil-scene-silhouette-pine-tree-generative-ai_188544-12777.jpg',
-    'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5',
-    'https://images.unsplash.com/photo-1531913764164-f85c52e6e654',
-  ];
+
+const backgroundImages = [
+  'https://cdn.pixabay.com/photo/2021/08/11/16/06/mountain-6538890_1280.jpg', // Abstract waves
+  'https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg', // Forest path
+  'https://cdn.pixabay.com/photo/2025/07/30/06/26/deep-learning-9743961_960_720.jpg', // Futuristic building
+  'https://images.unsplash.com/photo-1506744038136-46273834b3fb', // Starry night sky
+  'https://cdn.pixabay.com/photo/2015/06/19/21/24/avenue-815297_1280.jpg', // Tree-lined road
+  'https://images.pexels.com/photos/417173/pexels-photo-417173.jpeg', // Misty lake
+  'https://images.pexels.com/photos/826114/pexels-photo-826114.jpeg', // Geometric pattern
+  'https://images.unsplash.com/photo-1518837695005-2083093ee35b', // Colorful smoke
+  'https://images.pexels.com/photos/1749303/pexels-photo-1749303.jpeg'  // Digital swirl
+];
 
   const routes = {
     Home: { path: "/", icon: <FaHome />, color: "text-blue-500" },
@@ -973,25 +978,22 @@ const Header = () => {
   // Calculate total notifications count for mobile
   const totalNotifications = cartCount + orderCount + notificationCount;
 
+
   return (
     <div className="relative max-h-screen w-full">
       {/* Dynamic Background */}
-      <div className="absolute inset-0 z-0 overflow-hidden">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentImageIndex}
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${backgroundImages[currentImageIndex]})` }}
-            variants={bgImageVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={{ duration: 1.5, ease: "easeInOut" }}
-          >
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-black/30"></div>
-          </motion.div>
-        </AnimatePresence>
-      </div>
+ <div className="absolute inset-0 z-0 grid grid-cols-3 grid-rows-3 rounded-lg gap-1 overflow-hidden">
+  {backgroundImages.map((img, index) => (
+    <motion.div
+      key={index}
+      className="w-full h-full bg-cover bg-center rounded-lg"
+      style={{ backgroundImage: `url(${img})` }}
+    />
+  ))}
+  {/* Dark overlay for readability */}
+  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-black/30 z-10" />
+</div>
+
 
       {/* Navbar */}
       <motion.nav
@@ -1418,9 +1420,10 @@ const Header = () => {
           initial={{ y: 50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6"
+          className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6 font-Roboto"
         >
-          Immerse Yourself in <span className="text-yellow-400">Art</span>
+          {/* Immerse Yourself in <span className="text-yellow-400">Art</span> */}
+          A Journey Through Colors & Imagination
         </motion.h1>
         <motion.p
           initial={{ y: 50, opacity: 0 }}
@@ -1439,13 +1442,13 @@ const Header = () => {
           transition={{ duration: 0.8, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className="flex flex-row gap-4"
         >
-          <Link to="/gallery">
+          <Link to="/community">
             <motion.button
-              className="px-6 py-3 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-medium rounded-lg text-sm sm:text-base transition-colors duration-300"
+              className="px-6 py-3 bg-yellow-400 border-2 border-yellow-400 hover:bg-yellow-500 text-gray-900 font-medium rounded-lg text-sm sm:text-base transition-colors duration-300"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              Explore Gallery
+             Join Community
             </motion.button>
           </Link>
           <Link to="/Arteva/Artstore">

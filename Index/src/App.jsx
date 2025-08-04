@@ -117,7 +117,8 @@ const { userId } = useParams();
       initGA();
     trackPageview(window.location.pathname);
   }, []);
-const [diaryEntries, setDiaryEntries] = useState([]);
+
+// const [diaryEntries, setDiaryEntries] = useState([]);
 
 useEffect(() => {
   const checkAuth = async () => {

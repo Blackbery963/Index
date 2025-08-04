@@ -1,70 +1,58 @@
+// import React from 'react'
 
-import React, { useState } from 'react';
-import frontbackground from './Images-of-Review/1646895.jpg';
-import { FaFacebookF, FaInstagram, FaStar } from "react-icons/fa";
-import {FaXTwitter} from 'react-icons/fa6'
+// function Reviewcard() {
+//   return (
+//     <div className='w-full overflow-auto'>
+//       {/* card container */}
+//       <div className=' w-fit  border '>
+//         {/* profile image box */}
+//         <div className=' h-36 w-36 rounded-full border-2 mt-[-25%] bg-black'>
+//         </div>
+//         {/*  Name and description */}
+//       </div>
+
+//     </div>
+//   )
+// }
+
+// export default Reviewcard
 
 
-export default function ReviewCard({ Profileimg, Username, Review,Userdescription }) {
-  const [flipped, setFlipped] = useState(false);
+// import React from 'react';
+// import { FaStar } from "react-icons/fa";
 
-  return (
-    <div className="w-full flex justify-center py-6">
-      <div 
-        className="relative w-[400px] md:w-[450px] h-[285px] perspective-1000"
-        onClick={() => setFlipped(!flipped)}
-      >
-        {/* Card Inner */}
-        <div className={`relative w-full h-full transition-transform duration-700 transform-style-3d ${flipped ? 'rotate-y-180' : ''}`}>
-          
-          {/* Front Side */}
-          <div 
-            className="absolute w-full h-full bg-cover bg-center flex flex-col items-center justify-center backface-hidden rounded-xl shadow-xl"
-            style={{ backgroundImage: `url(${frontbackground})` }}
-          >
-            {/* Profile Image */}
-            <div className="w-[120px] h-[120px] rounded-full border-4 border-gray-400 overflow-hidden shadow-lg">
-              <img src={Profileimg} alt="Profile" className="w-full h-full object-cover" />
-            </div>
+// export default function ReviewCard({ Profileimg, Username, Userdescription, Review }) {
+//   return (
+//     <div className="w-full flex justify-center items-center py-10 px-4">
+//       <div className="relative max-w-3xl bg-white dark:bg-gray-900 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-gray-700">
+//         {/* Profile Image */}
+//         <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 w-24 h-24 rounded-full border-4 border-white dark:border-gray-800 shadow-md overflow-hidden">
+//           <img src={Profileimg} alt="User" className="w-full h-full object-cover" />
+//         </div>
 
-            {/* Username */}
-            <h1 className="mt-3 text-xl font-Playfair text-gray-300">{Username}</h1>
-              <p className="mt-3 text-sm font-Playfair text-gray-300">{Userdescription}</p>
+//         {/* Content */}
+//         <div className="mt-16 text-center px-2">
+//           <h3 className="text-lg font-semibold text-teal-600 dark:text-teal-400">{Username}</h3>
+//           <p className="text-sm text-gray-500 dark:text-gray-400">{Userdescription}</p>
 
-            {/* Star Ratings */}
-            <div className="flex mt-2">
-              {[...Array(5)].map((_, index) => (
-                <FaStar key={index} className="text-yellow-400 text-md mx-[2px]" />
-              ))}
-            </div>
+//           <div className="flex justify-center mt-4">
+//             <svg className="w-6 h-6 text-teal-400" fill="currentColor" viewBox="0 0 24 24">
+//               <path d="M9 11.75C9 14.0972 7.09721 16 4.75 16H4V14.5H4.75C5.7165 14.5 6.5 13.7165 6.5 12.75V6H3V4H9V11.75ZM21 11.75C21 14.0972 19.0972 16 16.75 16H16V14.5H16.75C17.7165 14.5 18.5 13.7165 18.5 12.75V6H15V4H21V11.75Z" />
+//             </svg>
+//           </div>
 
-            {/* Social Media Icons */}
-            <div className="flex gap-4 mt-4">
-              <a href="#" className="text-gray-400 hover:text-blue-500 transition-all duration-300 border border-gray-500 p-1 rounded-md">
-                <FaFacebookF size={20} />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-pink-500 transition-all duration-300 border border-gray-500 p-1 rounded-md">
-                <FaInstagram size={20} />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-sky-400 transition-all duration-300 border border-gray-500 p-1 rounded-md">
-                <FaXTwitter size={20} />
-              </a>
-            </div>
-          </div>
-          {/* the Back side of the card */}
-            <div
-            className="absolute w-full h-full bg-gradient-to-br from-[#FFEBEE] to-[#E6E6FA] dark:from-[#1E1E3F] dark:to-[#2E1B47] flex items-center justify-center backface-hidden rounded-xl shadow-lg rotate-y-180 border border-gray-200/50 dark:border-gray-700/50"
-            >
-            <div className="lg:h-[80%] lg:w-[80%] w-[90%] h-[90%] bg-white/20 dark:bg-gray-900/30 backdrop-blur-md border border-gray-300/50 dark:border-gray-600/50 rounded-md flex items-center justify-center text-center p-4">
-              <p className="text-[20px] font-Newsreader text-center text-gray-800 dark:text-gray-200 leading-relaxed">
-                "{Review}"
-              </p>
-            </div>
-          </div>
+//           <p className="mt-4 text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+//             {Review}
+//           </p>
 
-        </div>
-      </div>
-    </div>
-  );
-}
- 
+//           {/* Stars */}
+//           <div className="mt-6 flex justify-center gap-1 absolute -bottom-2">
+//             {[...Array(5)].map((_, i) => (
+//               <FaStar key={i} className="text-teal-500" />
+//             ))}
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }

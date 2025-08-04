@@ -75,7 +75,7 @@ function Style() {
   ];
 
   return (
-    <div className="w-[95%] mx-auto px-4 py-12 bg-gray-50 dark:bg-[#040d1200] relative">
+    <div className="w-[95%] mx-auto px-4 py-12 bg-gray-50 dark:bg-[#0a0f14] rounded-xl relative">
       {/* Subtle Background Texture */}
       <div className="absolute inset-0 opacity-10 bg-[url('/path/to/canvas-texture.png')] bg-repeat"></div>
 

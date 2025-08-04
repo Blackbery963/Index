@@ -217,9 +217,7 @@
 
 
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiArrowRight, FiHeart, FiShare2, FiDownload } from 'react-icons/fi';
 import Masonry from 'react-masonry-css'
 
 const featuredImages1 = [
@@ -235,7 +233,6 @@ const featuredImages1 = [
   { src: '/Image-of-Collection/pexels-shaosong-sun-503031340-16100671.jpg', title: 'Golden Hour', category: 'landscape', featured: false },
 ];
 
-
 const featuredImages2 = [
   { src: 'https://cdn.pixabay.com/photo/2022/10/24/09/31/flower-7543035_960_720.jpg', title: 'Abstract Vision', category: 'abstract', featured: true },
   { src: 'https://cdn.pixabay.com/photo/2025/01/29/11/09/lantern-9367692_1280.jpg', title: 'Mountain Majesty', category: 'landscape', featured: false },
@@ -248,8 +245,6 @@ const featuredImages2 = [
   { src: 'https://cdn.pixabay.com/photo/2025/05/31/20/23/trees-9634157_1280.jpg', title: 'Lonely Road', category: 'travel', featured: true },
   { src: 'https://cdn.pixabay.com/photo/2022/09/08/02/55/pahan-7439926_1280.jpg', title: 'Golden Hour', category: 'landscape', featured: false },
 ]
-
-
 
 const features = [
   {
@@ -299,84 +294,10 @@ const batches = [featuredImages1, featuredImages2]
     }
   };
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen max-w-[95%] mx-auto bg-gray-50 dark:bg-[#0a0f14] rounded-lg">
       {/* Hero Section */}
-      <section className="relative h-[75vh] max-w-[95%] mx-auto rounded-lg flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-black/70 z-10"></div>
-        <div className="absolute inset-0">
-          <img 
-            src="/Image-of-Collection/pexels-eberhardgross-1367192.jpg" 
-            alt="Hero background" 
-            className="w-full h-full object-cover animate-fadeInOut"
-          />
-        </div>
-        
-        <motion.div 
-          className="relative z-20 text-center px-6 max-w-4xl font-Quicksand"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          <motion.p 
-            className="text-lg sm:text-xl text-white mb-4 font-medium tracking-widest"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2, duration: 0.8 }}
-          >
-            DISCOVER THE ART OF
-          </motion.p>
-          <motion.h1 
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.8 }}
-          >
-            Visual Storytelling
-          </motion.h1>
-          <motion.p 
-            className="text-lg text-white/90 mb-8 max-w-2xl mx-auto"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5, duration: 0.8 }}
-          >
-            A curated collection of breathtaking visuals from talented creators worldwide
-          </motion.p>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.7, duration: 0.8 }}
-            className="flex flex-wrap justify-center gap-4"
-          >
-            <Link 
-              to="/gallery" 
-              className="px-8 py-4 bg-white text-gray-900 rounded-lg font-bold hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl flex items-center gap-2"
-            >
-              Explore Gallery <FiArrowRight className="transition-transform group-hover:translate-x-1" />
-            </Link>
-            <Link 
-              to="/Artists/DiscoverUsers" 
-              className="px-8 py-4 border-2 border-white text-white rounded-lg font-bold hover:bg-white/10 transition-all"
-            >
-              Meet Artists
-            </Link>
-          </motion.div>
-        </motion.div>
-
-        <motion.div 
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20"
-          animate={{ y: [0, 10, 0] }}
-          transition={{ repeat: Infinity, duration: 2 }}
-        >
-          <div className="w-10 h-10 border-2 border-white rounded-full flex items-center justify-center">
-            <svg className="w-4 h-4 text-white animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-            </svg>
-          </div>
-        </motion.div>
-      </section>
-
       {/* Interactive Features Section */}
-      <section className="py-20 px-6 bg-white dark:bg-gray-800">
+      <section className="py-20 px-6 bg-white dark:bg-gray-950 rounded-xl">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0 }}
@@ -390,11 +311,11 @@ const batches = [featuredImages1, featuredImages2]
                 Why <span className="font-semibold text-red-600 dark:text-red-400">Painters' Diary</span> Matters
               </h2>
               
-              <div className="space-y-6">
+              <div className="space-y-4">
                 {features.map((feature, idx) => (
                   <motion.div
                     key={idx}
-                    className={`p-6 rounded-xl transition-all cursor-pointer ${activeFeature.title === feature.title ? `${feature.color} shadow-md` : 'hover:bg-gray-50 dark:hover:bg-gray-700'}`}
+                    className={`p-4 rounded-xl transition-all cursor-pointer ${activeFeature.title === feature.title ? `${feature.color} shadow-md` : 'hover:bg-gray-50 dark:hover:bg-gray-700'}`}
                     onClick={() => setActiveFeature(feature)}
                     whileHover={{ scale: 1.02 }}
                     transition={{ type: 'spring', stiffness: 400, damping: 10 }}
@@ -424,7 +345,7 @@ const batches = [featuredImages1, featuredImages2]
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
-              className="relative h-96 w-full rounded-2xl overflow-hidden shadow-xl"
+              className="relative h-80 w-full rounded-2xl overflow-hidden shadow-xl"
             >
               <img 
                 src={activeFeature.image} 
@@ -443,7 +364,7 @@ const batches = [featuredImages1, featuredImages2]
       </section>
 
       {/* Masonry Grid Gallery */}
-    <section className="py-20 px-6 bg-white dark:bg-gray-900">
+    <section className="py-12 px-6 bg-white dark:bg-[#040d1200]">
       <div className="max-w-7xl mx-auto flex flex-col">
         {/* Header */}
               <motion.div
@@ -489,66 +410,21 @@ const batches = [featuredImages1, featuredImages2]
                 <h3 className="text-white font-semibold text-lg font-Quicksand">{image.title}</h3>
                 <p className="text-white/80 text-sm font-Roboto">{image.category}</p>
               </div>
-
-              {/* Icons */}
-              <div className="absolute bottom-2 right-2 flex sm:flex-col gap-2 transition-opacity duration-300
-               opacity-100 sm:opacity-0 sm:group-hover:opacity-100">
-                {[FiHeart, FiShare2, FiDownload].map((Icon, i) => (
-                  <button
-                    key={i}
-                    className=" p-1 bg-black/50 hover:bg-black/70 text-white rounded-lg border transition-colors"
-                  >
-                    <Icon className='md:text-[16px] text-[14px]' />
-                  </button>
-                ))}
-              </div>
+             
             </motion.div>
           ))}
         </Masonry>
           {currentBatchIndex < batches.length - 1 && (
         <button
           onClick={handleLoadMore}
-          className="col-span-2 mt-12 px-6 py-3 bg-blue-600 text-white rounded mx-auto"
+          className="col-span-2 mt-12 px-6 py-3 dark:bg-slate-900 dark:text-gray-200 bg-gray-200 text-gray-900 border shadow-inner rounded-xl mx-auto"
         >
           Load More
         </button>
        )}
       </div>
-        {/* <button className='text-xl font-Roboto text-gray-900 dark:text-gray-100 shadow-xl bg-gradient-to-br from-violet-400 to-slate-100'> Load More </button> */}
 
         </section>
-
-      {/* Final CTA */}
-      <section className="lg:py-20 py-10 rounded-lg max-w-[90%] lg:max-w-[95%] mx-auto px-6 bg-gradient-to-r from-purple-500 to-indigo-400">
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="max-w-4xl mx-auto text-center text-white"
-        >
-          <h2 className="text-3xl sm:text-4xl font-bold mb-6 font-Quicksand">
-            Begin Your Artistic Journey
-          </h2>
-          <p className="text-xl mb-8 max-w-2xl mx-auto font-Roboto">
-            Join our community of art lovers and creators today
-          </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <Link 
-              to="/signup" 
-              className="lg:px-8 lg:py-4 px-6 py-3 bg-white text-gray-900 rounded-lg font-bold hover:bg-gray-100 transition-all shadow-xl hover:shadow-2xl"
-            >
-              Create Free Account
-            </Link>
-            <Link 
-              to="/about" 
-              className="lg:px-8 lg:py-4 px-6 py-3 border-2 border-white text-white rounded-lg font-bold hover:bg-white/10 transition-all"
-            >
-              Learn How It Works
-            </Link>
-          </div>
-        </motion.div>
-      </section>
     </div>
   );
 };

@@ -79,6 +79,7 @@ import Express from './Sub-Components/Express.jsx';
 // import UserDiscoveryPage from './Components/Artisian/userDiscoveryPage.jsx';
 import UserDiscoveryPage from './Components/Artisian/userDiscoveryPage.jsx';
 import DiscoverUsers from './Components/Artisian/DiscoverArtists.jsx';
+import ArtistDiscovery from './Components/ArtistDiscovery.jsx';
 import DiaryCollection from './Components/Diaryland/DiaryCollection.jsx';
 import Notification from './Settings/Notification.jsx';
 import Cart from './Settings/Cart.jsx';
@@ -88,6 +89,8 @@ import Order from './Settings/Order.jsx';
 import Artstore from './Arteva/Artstore.jsx';
 import OrderHistory from './Arteva/Commercial/OrderHistory.jsx';
 import MyCommunity from './Community/MyCommunity.jsx';
+import DailyChallenge from './Components/DialyChallenge.jsx';
+import ResearchPapersPage from './Components/ResearchPaperPage.jsx';
 
 const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
 const COLLECTION_ID = import.meta.env.VITE_APPWRITE_METADATA_COLLECTION_ID;
@@ -172,11 +175,14 @@ useEffect(() => {
         <Route
           path="/"
           element={
-            <div className="flex items-center justify-center flex-col gap-y-4 overflow-x-hidden overflow-y-auto bg-gray-100 dark:bg-[#040d12f5] min-h-screen">
+            <div className="flex items-center justify-center flex-col gap-y-4 overflow-x-hidden overflow-y-auto bg-gray-100 dark:bg-[#000705] min-h-screen">
               <Header />
               <Suspense fallback={<div className="text-center py-6 text-blue-600">Loading...</div>}>
                 <div data-aos="fade-left" data-aos-delay="100" className="w-full will-change-transform will-change-opacity">
                   <Style />
+                </div>
+                <div data-aos="fade-right" data-aos-delay="200" className="w-full will-change-transform will-change-opacity">
+                  < ArtistDiscovery />
                 </div>
                 <div data-aos="fade-right" data-aos-delay="200" className="w-full will-change-transform will-change-opacity">
                   <Collection />
@@ -187,9 +193,15 @@ useEffect(() => {
                 <div data-aos="fade-right" data-aos-delay="400" className="w-full will-change-transform will-change-opacity">
                   <Connecting />
                 </div>
-                <div data-aos="fade-left" data-aos-delay="400" className="w-full will-change-transform will-change-opacity">
-                  <Creativity />
+                <div data-aos="fade-left" data-aos-delay="300" className="w-full will-change-transform will-change-opacity">
+                  <ResearchPapersPage />
                 </div>
+                 <div data-aos="fade-right" data-aos-delay="400" className="w-full will-change-transform will-change-opacity">
+                  <DailyChallenge />
+                </div>
+                {/* <div data-aos="fade-left" data-aos-delay="400" className="w-full will-change-transform will-change-opacity">
+                  <Creativity />
+                </div> */}
                 <div data-aos="fade-right" data-aos-delay="600" className="w-full will-change-transform will-change-opacity">
                   <Commerce />
                 </div>

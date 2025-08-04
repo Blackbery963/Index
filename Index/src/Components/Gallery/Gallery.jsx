@@ -287,7 +287,7 @@ function Gallery() {
           <motion.nav className="md:hidden fixed top-[85px] right-2 w-36 bg-white/40 dark:bg-gray-800/40 backdrop-blur-lg shadow-md z-40 rounded-lg"
             variants={dropdownVariants} initial="hidden" animate="visible" exit="hidden">
             <div className="flex flex-col items-center py-4 gap-y-3 font-Playfair font-bold text-black dark:text-gray-100">
-              {['home', 'about', 'account', 'landscape'].map((item) => (
+              {/* {['home', 'about', 'account', 'landscape'].map((item) => (
                 <Link key={item}  to={item === 'Home' ? '/' : `/${item.toLocaleLowerCase}`} onClick={() => { setActiveButton(item); toggleMenu(); }}>
                   <button className={`w-full py-2 px-4 flex items-center justify-center gap-2 ${
                     activeButton === item ? 'bg-blue-500 text-white' : 'hover:bg-gray-200 dark:hover:bg-gray-700'
@@ -299,7 +299,30 @@ function Gallery() {
                     {item.charAt(0).toUpperCase() + item.slice(1)}
                   </button>
                 </Link>
-              ))}
+              ))} */}
+              {['home', 'about', 'account', 'journal'].map((item) => (
+  <Link
+    key={item}
+    to={item === 'home' ? '/' : `/${item.toLowerCase()}`}
+    onClick={() => {
+      setActiveButton(item);
+      toggleMenu();
+    }}
+  >
+    <button
+      className={`w-full py-2 px-4 flex items-center justify-center gap-2 ${
+        activeButton === item ? 'bg-blue-500 text-white' : 'hover:bg-gray-200 dark:hover:bg-gray-700'
+      }`}
+    >
+      {item === 'home' && <FaHome />}
+      {item === 'about' && <FaInfoCircle />}
+      {item === 'account' && <FaUser />}
+      {item === 'journal' && <MdCollections />}
+      {item.charAt(0).toUpperCase() + item.slice(1)}
+    </button>
+  </Link>
+))}
+
             </div>
           </motion.nav>
         )}

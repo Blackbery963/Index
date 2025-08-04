@@ -46,128 +46,258 @@ const UserDiscoveryPage = () => {
   const [loading, setLoading] = useState(true);
   const [profileImage, setProfileImage] = useState(null)
 
- useEffect(() => {
-    const fetchAwardedArtworks = async () => {
-      try {
-        setLoading(true);
-        // First query to get awarded artworks with basic filters
-        let artworkQueries = [
-          Query.isNotNull('awards'), 
-          Query.limit(12), 
-          Query.orderDesc('$createdAt')
-        ];
+//  useEffect(() => {
+//     const fetchAwardedArtworks = async () => {
+//       try {
+//         setLoading(true);
+//         // First query to get awarded artworks with basic filters
+//         let artworkQueries = [
+//           Query.isNotNull('awards'), 
+//           Query.limit(12), 
+//           Query.orderDesc('$createdAt')
+//         ];
 
-        // Fetch the awarded artworks first
-        const awardedImagesResponse = await databases.listDocuments(
-          DATABASE_ID,
-          IMAGE_COLLECTION_ID,
-          artworkQueries
-        );
+//         // Fetch the awarded artworks first
+//         const awardedImagesResponse = await databases.listDocuments(
+//           DATABASE_ID,
+//           IMAGE_COLLECTION_ID,
+//           artworkQueries
+//         );
 
-        const awardedImages = awardedImagesResponse.documents;
-        const uniqueUserIds = [...new Set(awardedImages.map(img => img.userId))];
+//         const awardedImages = awardedImagesResponse.documents;
+//         const uniqueUserIds = [...new Set(awardedImages.map(img => img.userId))];
 
-        // Then fetch user data with filtering
-        let userQueries = [
-          Query.equal('$id', uniqueUserIds),
-          Query.limit(12)
-        ];
+//         // Then fetch user data with filtering
+//         let userQueries = [
+//           Query.equal('$id', uniqueUserIds),
+//           Query.limit(12)
+//         ];
 
-        // Add category filters if any are selected
-        if (selectedCategories.length > 0) {
-          userQueries.push(Query.contains('interests', selectedCategories));
-        }
+//         // Add category filters if any are selected
+//         if (selectedCategories.length > 0) {
+//           userQueries.push(Query.contains('interests', selectedCategories));
+//         }
 
-        // Add style filters if any are selected
-        if (selectedStyles.length > 0) {
-          userQueries.push(Query.contains('artStyle', selectedStyles));
-        }
+//         // Add style filters if any are selected
+//         if (selectedStyles.length > 0) {
+//           userQueries.push(Query.contains('artStyle', selectedStyles));
+//         }
 
-        // Get users with the applied filters
-        const usersResponse = await databases.listDocuments(
-          DATABASE_ID,
-          USER_COLLECTION_ID,
-          userQueries
-        );
+//         // Get users with the applied filters
+//         const usersResponse = await databases.listDocuments(
+//           DATABASE_ID,
+//           USER_COLLECTION_ID,
+//           userQueries
+//         );
 
-        const filteredUserIds = usersResponse.documents.map(user => user.$id);
+//         const filteredUserIds = usersResponse.documents.map(user => user.$id);
 
-        // Now combine the data
-        const artistsWithArt = await Promise.all(
-          filteredUserIds.map(async userId => {
-            try {
-              const user = await databases.getDocument(DATABASE_ID, USER_COLLECTION_ID, userId);
-              const allUserImages = await databases.listDocuments(
-                DATABASE_ID,
-                IMAGE_COLLECTION_ID,
-                [Query.equal('userId', userId), Query.orderDesc('$createdAt')]
-              );
+//         // Now combine the data
+//         const artistsWithArt = await Promise.all(
+//           filteredUserIds.map(async userId => {
+//             try {
+//               const user = await databases.getDocument(DATABASE_ID, USER_COLLECTION_ID, userId);
+//               const allUserImages = await databases.listDocuments(
+//                 DATABASE_ID,
+//                 IMAGE_COLLECTION_ID,
+//                 [Query.equal('userId', userId), Query.orderDesc('$createdAt')]
+//               );
 
-              // fetching the profile image
-                let profileImage = null;
+//               // fetching the profile image
+//                 let profileImage = null;
+//                 if (user.profileImage) {
+//                 profileImage = storage.getFilePreview(PROFILE_BUCKET_ID, user.profileImage);
+//                 }
+
+//               const awardedImage = awardedImages.find(img => img.userId === userId);
+//               const otherArtworks = allUserImages.documents
+//                 .filter(img => img.$id !== awardedImage?.$id)
+//                 .map(img => ({
+//                   id: img.$id,
+//                   title: img.title,
+//                   image: img.fileId,
+//                   awards: img.awards || []
+//                 }));
+
+//               return {
+//                 id: userId,
+//                 userId: userId,
+//                 name: user.username,
+//                 username: user.nickname,
+//                 bio: user.bio || "No bio available",
+//                 profileImage: user.profileImageUrl,
+//                 interests: user.interests || [],
+//                 artStyles: user.artStyle || [],
+//                 followers: user.followers || 0,
+//                 isFollowing: false,
+//                 signatureArt: {
+//                   id: awardedImage?.$id,
+//                   title: awardedImage?.title || '',
+//                   description: awardedImage?.description || 'No description available',
+//                   image: awardedImage?.fileId || '',
+//                   awards: awardedImage?.awards || []
+//                 },
+//                 artworks: otherArtworks
+//               };
+//             } catch (err) {
+//               console.error(`Failed to fetch user ${userId}:`, err);
+//               return null;
+//             }
+//           })
+//         );
+
+//         const filteredArtists = artistsWithArt
+//           .filter(Boolean)
+//           .filter(artist => {
+//             if (!searchTerm) return true;
+//             return (
+//               artist.signatureArt.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+//               artist.username.toLowerCase().includes(searchTerm.toLowerCase())
+//             );
+//           });
+
+//         setArtists(filteredArtists);
+//       } catch (error) {
+//         console.error("Error fetching awarded artworks:", error);
+//         toast.error("Failed to load artworks");
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     fetchAwardedArtworks();
+//   }, [searchTerm, selectedCategories, selectedStyles]);
+
+
+useEffect(() => {
+  const fetchAwardedArtworks = async () => {
+    try {
+      setLoading(true);
+      
+      // First, fetch users with the applied filters
+      let userQueries = [Query.limit(12)];
+      
+      // Add category filters if any are selected
+      if (selectedCategories.length > 0) {
+        userQueries.push(Query.contains('interests', selectedCategories));
+      }
+      
+      // Add style filters if any are selected
+      if (selectedStyles.length > 0) {
+        userQueries.push(Query.contains('artStyle', selectedStyles));
+      }
+      
+      const usersResponse = await databases.listDocuments(
+        DATABASE_ID,
+        USER_COLLECTION_ID,
+        userQueries
+      );
+      
+      // Then for each user, find their awarded artworks
+      const artistsWithArt = await Promise.all(
+        usersResponse.documents.map(async (user) => {
+          try {
+            // Get user's awarded artworks
+            const awardedImagesResponse = await databases.listDocuments(
+              DATABASE_ID,
+              IMAGE_COLLECTION_ID,
+              [
+                Query.equal('userId', user.$id),
+                Query.isNotNull('awards'),
+                Query.limit(1), // Just get one awarded artwork per user
+                Query.orderDesc('$createdAt')
+              ]
+            );
+            
+            // Skip users with no awarded artworks
+            if (awardedImagesResponse.documents.length === 0) {
+              return null;
+            }
+            
+            const awardedImage = awardedImagesResponse.documents[0];
+            
+            // Get user's other artworks
+            const allUserImages = await databases.listDocuments(
+              DATABASE_ID,
+              IMAGE_COLLECTION_ID,
+              [
+                Query.equal('userId', user.$id),
+                Query.orderDesc('$createdAt')
+              ]
+            );
+            
+            // Get profile image URL
+            // let profileImageUrl = null;
+            // if (user.profileImage) {
+            //   profileImageUrl = storage.getFilePreview(
+            //     PROFILE_BUCKET_ID, 
+            //     user.profileImage
+            //   );
+            // }
+             let profileImage = null;
                 if (user.profileImage) {
                 profileImage = storage.getFilePreview(PROFILE_BUCKET_ID, user.profileImage);
                 }
-
-              const awardedImage = awardedImages.find(img => img.userId === userId);
-              const otherArtworks = allUserImages.documents
-                .filter(img => img.$id !== awardedImage?.$id)
-                .map(img => ({
-                  id: img.$id,
-                  title: img.title,
-                  image: img.fileId,
-                  awards: img.awards || []
-                }));
-
-              return {
-                id: userId,
-                userId: userId,
-                name: user.username,
-                username: user.nickname,
-                bio: user.bio || "No bio available",
-                profileImage: user.profileImageUrl,
-                interests: user.interests || [],
-                artStyles: user.artStyle || [],
-                followers: user.followers || 0,
-                isFollowing: false,
-                signatureArt: {
-                  id: awardedImage?.$id,
-                  title: awardedImage?.title || '',
-                  description: awardedImage?.description || 'No description available',
-                  image: awardedImage?.fileId || '',
-                  awards: awardedImage?.awards || []
-                },
-                artworks: otherArtworks
-              };
-            } catch (err) {
-              console.error(`Failed to fetch user ${userId}:`, err);
-              return null;
-            }
-          })
-        );
-
-        const filteredArtists = artistsWithArt
-          .filter(Boolean)
-          .filter(artist => {
-            if (!searchTerm) return true;
-            return (
-              artist.signatureArt.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-              artist.username.toLowerCase().includes(searchTerm.toLowerCase())
-            );
-          });
-
-        setArtists(filteredArtists);
-      } catch (error) {
-        console.error("Error fetching awarded artworks:", error);
-        toast.error("Failed to load artworks");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchAwardedArtworks();
-  }, [searchTerm, selectedCategories, selectedStyles]);
-
+            
+            const otherArtworks = allUserImages.documents
+              .filter(img => img.$id !== awardedImage?.$id)
+              .map(img => ({
+                id: img.$id,
+                title: img.title,
+                image: img.fileId,
+                awards: img.awards || []
+              }));
+            
+            return {
+              id: user.$id,
+              userId: user.$id,
+              name: user.username,
+              username: user.nickname,
+              bio: user.bio || "No bio available",
+              profileImage: user.profileImageUrl,
+              interests: user.interests || [],
+              artStyles: user.artStyle || [],
+              followers: user.followers || 0,
+              isFollowing: false,
+              signatureArt: {
+                id: awardedImage.$id,
+                title: awardedImage.title || '',
+                description: awardedImage.description || 'No description available',
+                image: awardedImage.fileId,
+                awards: awardedImage.awards || []
+              },
+              artworks: otherArtworks
+            };
+          } catch (err) {
+            console.error(`Failed to fetch user ${user.$id}:`, err);
+            return null;
+          }
+        })
+      );
+      
+      // Filter out null entries and apply search term filter
+      const filteredArtists = artistsWithArt
+        .filter(Boolean)
+        .filter(artist => {
+          if (!searchTerm) return true;
+          const searchLower = searchTerm.toLowerCase();
+          return (
+            (artist.signatureArt.title && artist.signatureArt.title.toLowerCase().includes(searchLower)) ||
+            (artist.username && artist.username.toLowerCase().includes(searchLower))
+          );
+        });
+      
+      setArtists(filteredArtists);
+    } catch (error) {
+      console.error("Error fetching awarded artworks:", error);
+      toast.error("Failed to load artworks");
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  fetchAwardedArtworks();
+}, [searchTerm, selectedCategories, selectedStyles]);
 
 
 

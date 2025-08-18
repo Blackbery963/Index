@@ -90,12 +90,15 @@ function Style() {
       </div>
 
       {/* Grid of Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 relative z-10">
+
         {categories.map((category, index) => (
           <CategoryCard
             key={index}
             name={category.name}
             image={category.image}
+            className="flex-shrink-0 w-[calc(100vw-2rem)]
+      sm:w-auto sm:flex-shrink"
             to={category.to}
             data-aos="fade-up"
             data-aos-delay={index * 100}
@@ -120,3 +123,4 @@ function Style() {
 }
 
 export default Style;
+

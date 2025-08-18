@@ -83,7 +83,7 @@ function ExploreCommunity() {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-950 font-Playfair">
-            <ToastContainer position="bottom-right" />
+            <ToastContainer position="top-right" />
             
             {/* Floating Particles Background */}
             <div className="fixed inset-0 overflow-hidden pointer-events-none">
@@ -112,7 +112,7 @@ function ExploreCommunity() {
             </div>
 
             {/* Navigation */}
-<motion.nav
+              <motion.nav
               initial={{ y: -50, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.6 }}

@@ -82,15 +82,24 @@ import DiscoverUsers from './Components/Artisian/DiscoverArtists.jsx';
 import ArtistDiscovery from './Components/ArtistDiscovery.jsx';
 import DiaryCollection from './Components/Diaryland/DiaryCollection.jsx';
 import Notification from './Settings/Notification.jsx';
-import Cart from './Settings/Cart.jsx';
-import Order from './Settings/Order.jsx';
+
 
 // The commecial part starts from here 
 import Artstore from './Arteva/Artstore.jsx';
 import OrderHistory from './Arteva/Commercial/OrderHistory.jsx';
+import Cart from './Settings/Cart.jsx';
+import Order from './Settings/Order.jsx';
+import ArtMarketplace from './Arteva/ArtMarketPlace.jsx';
+
+// the community section
 import MyCommunity from './Community/MyCommunity.jsx';
 import DailyChallenge from './Components/DialyChallenge.jsx';
 import ResearchPapersPage from './Components/ResearchPaperPage.jsx';
+import AboutHandmade from './Company/About/AboutHandmade.jsx';
+import CreateNewChallenge from './Community/CommunityDashboard/CreateNewChallenge.jsx';
+import MemberDiscoveryPage from './Community/DiscoverNewMember/MemberDiscoveryPage.jsx';
+
+
 
 const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
 const COLLECTION_ID = import.meta.env.VITE_APPWRITE_METADATA_COLLECTION_ID;
@@ -253,6 +262,7 @@ useEffect(() => {
         <Route path="/cart" element={<Cart />} />
         <Route path='/History' element={<History/>}/>
         <Route path='/Resources/Help' element={<Help/>}/>
+        <Route path='/Company/About/AboutHandmade' element={<AboutHandmade/>}/>
         {/* the community  section  */}
         <Route path="/community" element={<Community />} />
         <Route path="/community/CreateCommunity" element={<CreateCommunityPage />} />
@@ -266,14 +276,15 @@ useEffect(() => {
         <Route path='/Community/Resources/ResourceUpload' element={<ResourceUpload/>}/>
         <Route path='/Community/CommunityChallenges/ChallengeUpload' element={<ChallengeUpload/>}/>
         <Route path='/community/MyCommunity' element={<MyCommunity/>}/>
-
-
+        <Route path='/Community/CommunityDashboard/CreateNewChallenge' element={<CreateNewChallenge/>}/>
+        <Route path='/Community/DiscoverNewMember/MemberDiscoveryPage' element={<MemberDiscoveryPage/>}/>
 
 
       
 
         {/* The routing of the sub-components */}
-         <Route path="/gallery" element={<Gallery />} />
+        <Route path="/gallery" element={<Gallery />} />
+        <Route path='/gallery/:id' element={<Gallery />} />
         <Route path='/Nature' element={<Nature/>}/>
         <Route path='/Traditional' element={<Traditional/>}/>
         <Route path='/Realism' element={<Realism/>}/>
@@ -305,7 +316,7 @@ useEffect(() => {
         {/* the routing of commercial section */}
         <Route path='/Arteva/ArtStore' element = {<Artstore/>}/>
         <Route path='/Arteva/Commercial/OrderHistory' element = {<OrderHistory/>}/>
-
+        <Route path='/Arteva/ArtMarketplace' element={<ArtMarketplace />} />
 
       </Routes>
     </Router>

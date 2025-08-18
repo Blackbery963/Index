@@ -42,7 +42,7 @@ useEffect(() => {
       {/* ... other content ... */}
       <button 
         onClick={handleDownload}
-        className="download-btn text-gray-400 hover:text-blue-800 transition"
+        className="download-btn text-gray-500 hover:text-blue-800 transition"
         title="Download"
       >
         <FiDownload size={16} />
@@ -53,3 +53,12 @@ useEffect(() => {
 };
 
 export default DownloadService;
+
+
+
+
+
+
+
+
+

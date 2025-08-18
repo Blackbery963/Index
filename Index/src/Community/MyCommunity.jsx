@@ -303,9 +303,11 @@ const MyCommunities = () => {
                       </div>
                     )}
                     <div className="flex-1">
-                      <h3 className="font-bold text-lg text-gray-900 dark:text-white line-clamp-1">
+                      <Link to={`/community/${community.slug}`}>
+                      <h3 className="font-bold text-lg text-gray-900 dark:text-white line-clamp-1 hover:underline transition-transform duration-500">
                         {community.name}
                       </h3>
+                      </Link>
                       <div className="flex items-center mt-1">
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200">
                           {community.category || 'General'}

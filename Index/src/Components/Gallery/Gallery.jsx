@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useRef } from 'react';
 import bg from './pexels-scottwebb-305821.jpg';
 import { FaHome, FaInfoCircle, FaUser, FaPalette, FaRegComment, FaSearch, FaRegEye } from 'react-icons/fa';
@@ -15,6 +16,9 @@ import DownloadService from '../../Downloads/downloadService';
 import FollowButton from '../../Follow/FollowButton';
 import LikeButton from '../../EngagementService/likeButton';
 import ArtworkViewTracker from '../../Views/viewsTracker';
+
+// const bg =  "https://images.unsplash.com/photo-1627037558426-c2d07beda3af?q=80&w=1575&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+
 
 const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
 const COLLECTION_ID = import.meta.env.VITE_APPWRITE_METADATA_COLLECTION_ID;
@@ -221,139 +225,90 @@ function Gallery() {
         theme={document.documentElement.classList.contains('dark') ? 'dark' : 'light'} />
       
       {/* Header */}
-       <header className="lg:h-[80px] h-[70px] w-full backdrop-blur-md shadow-md flex items-center justify-between pl-4 pr-8 fixed top-0 z-50 bg-white/40 dark:bg-gray-800/40">
-       <Link to={'/'}>
-        <h1 className="font-Eagle font-bold lg:text-[35px] md:text-[30px] sm:text-[25px] text-[20px] text-[#001F3F] dark:text-white">
-          Painters' Diary
-        </h1>
-       </Link>
-        
-        <div className="flex items-center gap-x-2 sm:gap-x-4">
-          {isScrolled && (
-            <motion.div className="relative w-48 sm:w-64" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Search paintings..."
-                className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white text-sm"
-              />
-              <FaSearch className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400" />
-              
-              {suggestions.length > 0 && (
-                <motion.ul className="absolute top-full left-0 right-0 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg mt-1 z-50"
-                  variants={dropdownVariants} initial="hidden" animate="visible">
-                  {suggestions.map((suggestion, index) => (
-                    <li key={index} className="px-4 py-2 text-sm text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
-                      onClick={() => handleSuggestionClick(suggestion)}>
-                      {suggestion}
-                    </li>
-                  ))}
-                </motion.ul>
-              )}
-            </motion.div>
-          )}
-          
-          <div className="md:flex hidden gap-x-2 sm:gap-x-4 text-gray-800 dark:text-gray-200 font-playfair font-semibold">
-            {['Home', 'About', 'Account', 'Journal'].map((item) => (
-              <Link key={item}  to={item === 'Home' ? '/' : `/${item.toLowerCase()}`}>
-                <motion.button
-                  className="px-2 sm:px-2 py-1 sm:py-1 rounded-md hover:bg-green-700 flex items-center gap-2"
-                  variants={buttonVariants}
-                  whileHover="hover"
-                  whileTap="tap"
-                >
-                  {item === 'Home' && <FaHome className="text-lg sm:text-xl" />}
-                  {item === 'About' && <FaInfoCircle className="text-lg sm:text-xl" />}
-                  {item === 'Account' && <FaUser className="text-lg sm:text-xl" />}
-                  {item === 'Journal' && <MdCollections className="text-lg sm:text-xl" />}
-                  <span className="hidden sm:inline">{item}</span>
-                </motion.button>
-              </Link>
-            ))}
-          </div>
-          
-          <button className="md:hidden p-2 text-black dark:text-white hover:text-gray-800 dark:hover:text-gray-300 transition-all duration-300"
-            onClick={toggleMenu} aria-label="Toggle menu">
-            {isMenuOpen ? <MdClose size={24} /> : <FiMenu size={24} />}
-          </button>
-        </div>
-      </header> 
+       <header className="fixed top-3 rounded-xl left-0 w-full max-w-[96%] ml-[2%] z-50 bg-white/70 dark:bg-gray-900/70 backdrop-blur-md border-b border-gray-200 dark:border-gray-700">
+  <div className=" mx-auto px-4 sm:px-6 lg:px-8 h-[64px] flex items-center justify-between">
+    
+    {/* Logo */}
+    <Link to="/" className="flex items-center">
+      <h1 className="font-Eagle text-xl sm:text-2xl font-bold text-gray-900 dark:text-white tracking-tight">
+        Painters' Diary
+      </h1>
+    </Link>
 
+    {/* Desktop Nav */}
+    <nav className="hidden md:flex items-center gap-6 text-[16px] font-medium text-gray-700 dark:text-gray-300">
+      {['Home', 'About', 'Account', 'Journal'].map((item) => (
+        <Link
+          key={item}
+          to={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
+          className="hover:text-green-600 transition-colors"
+        >
+          {item}
+        </Link>
+      ))}
+    </nav>
 
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {isMenuOpen && (
-          <motion.nav className="md:hidden fixed top-[85px] right-2 w-36 bg-white/40 dark:bg-gray-800/40 backdrop-blur-lg shadow-md z-40 rounded-lg"
-            variants={dropdownVariants} initial="hidden" animate="visible" exit="hidden">
-            <div className="flex flex-col items-center py-4 gap-y-3 font-Playfair font-bold text-black dark:text-gray-100">
-              {/* {['home', 'about', 'account', 'landscape'].map((item) => (
-                <Link key={item}  to={item === 'Home' ? '/' : `/${item.toLocaleLowerCase}`} onClick={() => { setActiveButton(item); toggleMenu(); }}>
-                  <button className={`w-full py-2 px-4 flex items-center justify-center gap-2 ${
-                    activeButton === item ? 'bg-blue-500 text-white' : 'hover:bg-gray-200 dark:hover:bg-gray-700'
-                  }`}>
-                    {item === 'home' && <FaHome />}
-                    {item === 'about' && <FaInfoCircle />}
-                    {item === 'account' && <FaUser />}
-                    {item === 'landscape' && <FaPalette />}
-                    {item.charAt(0).toUpperCase() + item.slice(1)}
-                  </button>
-                </Link>
-              ))} */}
-              {['home', 'about', 'account', 'journal'].map((item) => (
-  <Link
-    key={item}
-    to={item === 'home' ? '/' : `/${item.toLowerCase()}`}
-    onClick={() => {
-      setActiveButton(item);
-      toggleMenu();
-    }}
-  >
+    {/* Mobile Menu Button */}
     <button
-      className={`w-full py-2 px-4 flex items-center justify-center gap-2 ${
-        activeButton === item ? 'bg-blue-500 text-white' : 'hover:bg-gray-200 dark:hover:bg-gray-700'
-      }`}
+      className="md:hidden p-2 text-gray-600 dark:text-gray-300"
+      onClick={toggleMenu}
+      aria-label="Toggle menu"
     >
-      {item === 'home' && <FaHome />}
-      {item === 'about' && <FaInfoCircle />}
-      {item === 'account' && <FaUser />}
-      {item === 'journal' && <MdCollections />}
-      {item.charAt(0).toUpperCase() + item.slice(1)}
+      {isMenuOpen ? <MdClose size={22} /> : <FiMenu size={22} />}
     </button>
-  </Link>
-))}
+  </div>
 
-            </div>
-          </motion.nav>
-        )}
-      </AnimatePresence>
+  {/* Mobile Menu */}
+  <AnimatePresence>
+    {isMenuOpen && (
+      <motion.div
+        className="md:hidden bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 px-4 py-3 space-y-3"
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -10 }}
+      >
+        {['Home', 'About', 'Account', 'Journal'].map((item) => (
+          <Link
+            key={item}
+            to={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
+            onClick={toggleMenu}
+            className="block text-gray-700 dark:text-gray-300 hover:text-green-600 transition-colors"
+          >
+            {item}
+          </Link>
+        ))}
+      </motion.div>
+    )}
+  </AnimatePresence>
+</header>
 
-      {/* Hero Section */}
-      <div className="h-[100vh] w-full bg-center bg-cover flex flex-col items-center justify-center relative" style={{ backgroundImage: `url(${bg})` }}>
-        <section className="mx-auto lg:w-[50%] w-[90%] p-6 rounded-xl border border-gray-300 dark:border-gray-700 shadow-2xl bg-white/40 dark:bg-gray-900/50 backdrop-blur-md transition-colors duration-300 animate-fadeIn">
-          <h1 className="font-Quicksand font-bold text-center text-[#6A1E55] dark:text-[#E1A4C6] text-[24px] sm:text-[28px] md:text-[32px] lg:text-[40px] animate-slideInUp">
-            Palette of Dreams: A Showcase of Artistic Brilliance
-          </h1>
+{/* Hero Section */}
+{/* <section
+  className="relative flex items-center justify-center min-h-screen bg-center bg-cover px-4"
+  style={{ backgroundImage: `url(${bg})` }}
+>
+  <div className="max-w-3xl text-center bg-white/50 dark:bg-gray-900/50 backdrop-blur-md rounded-xl p-6 sm:p-10 border border-gray-200 dark:border-gray-700">
+    <h1 className="font-Quicksand text-2xl sm:text-4xl font-bold text-gray-900 dark:text-white leading-tight">
+      Palette of Dreams: A Showcase of Artistic Brilliance
+    </h1>
+    <p className="mt-4 text-sm sm:text-base text-gray-700 dark:text-gray-300 leading-relaxed">
+      From stunning landscapes to abstract wonders, each brushstroke tells a story—
+      a celebration of art's beauty and deep connection to the human spirit.
+    </p>
 
-          <h5 className="font-Playfair italic text-center text-gray-800 dark:text-gray-300 text-[16px] sm:text-[18px] md:text-[20px] lg:text-[23px] mt-4 animate-slideInUp">
-            {window.innerWidth >= 1024 ? 
-              "From timeless landscapes to mesmerizing abstract wonders, delve into the rich tapestry of stories, emotions, and creative inspirations woven into every brushstroke—a celebration of art's boundless beauty and its profound connection to the human spirit." :
-              "From stunning landscapes to abstract wonders, each brushstroke tells a story—a celebration of art's beauty and deep connection to the human spirit."}
-          </h5>
+    Search Bar
+    <div className="mt-6 flex justify-center">
+      <div className="relative w-full max-w-md">
+        <input
+          type="text"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Search paintings..."
+          className="w-full rounded-full px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white/80 dark:bg-gray-800/80 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500 shadow-sm"
+        />
+        <FaSearch className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500" />
 
-          {!isScrolled && (
-            <div className="max-w-2xl mx-auto mt-6">
-              <div className="relative flex items-center">
-                <input
-                  type="text"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  placeholder="Search paintings..."
-                  className="w-full px-4 py-2 md:py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white/60 dark:bg-gray-800/60 backdrop-blur-md text-gray-900 dark:text-white pl-10 focus:outline-none focus:ring-2 focus:ring-green-500 transition"
-                />
-                <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400" />
-
-                <AnimatePresence>
+               <AnimatePresence>
                   {suggestions.length > 0 && (
                     <motion.ul className="absolute top-full left-0 right-0 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg mt-1 z-50"
                       variants={dropdownVariants} initial="hidden" animate="visible" exit="hidden">
@@ -365,18 +320,87 @@ function Gallery() {
                       ))}
                     </motion.ul>
                   )}
-                </AnimatePresence>
-              </div>
-
+        </AnimatePresence>
+      </div>
               {searchTerm && (
-                <div className="mt-2 text-sm text-gray-700 dark:text-gray-400">
+                <div className="mt-2 pl-4 text-sm text-gray-700 dark:text-gray-400">
                   Found {filteredImages.length} {filteredImages.length === 1 ? 'result' : 'results'}
                 </div>
               )}
-            </div>
+    </div>
+        
+
+  </div>
+</section> */}
+
+<section
+  className="relative flex items-center justify-center min-h-screen bg-center bg-cover px-4"
+  style={{ backgroundImage: `url(${bg})` }}
+>
+  <div className="max-w-3xl w-full text-center bg-white/60 dark:bg-gray-900/60 backdrop-blur-lg rounded-2xl p-8 sm:p-12 border border-gray-200 dark:border-gray-700 shadow-lg">
+    
+    {/* Heading */}
+    <h1 className="font-Quicksand text-3xl sm:text-5xl font-bold text-gray-900 dark:text-white leading-tight">
+      Palette of Dreams: 
+      <span className="block mt-1 text-green-600 dark:text-green-400">A Showcase of Artistic Brilliance</span>
+    </h1>
+
+    {/* Subtitle */}
+    <p className="mt-5 text-base sm:text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
+      From stunning landscapes to abstract wonders, each brushstroke tells a story—
+      a celebration of art's beauty and deep connection to the human spirit.
+    </p>
+
+    {/* Search Section */}
+    <div className="mt-8 flex flex-col items-center gap-3">
+      <div className="relative w-full max-w-md group">
+        <input
+          type="text"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Search paintings..."
+          className="w-full rounded-full px-5 py-3 border border-gray-300 dark:border-gray-600 
+            bg-white/80 dark:bg-gray-800/80 text-gray-900 dark:text-white 
+            focus:outline-none focus:ring-2 focus:ring-green-500 shadow-md transition-all duration-200"
+        />
+        <FaSearch className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 group-hover:text-green-500 transition-colors" />
+
+        {/* Suggestions Dropdown */}
+        <AnimatePresence>
+          {suggestions.length > 0 && (
+            <motion.ul
+              className="absolute top-full left-0 right-0 bg-white dark:bg-gray-800 border 
+                border-gray-300 dark:border-gray-600 rounded-xl shadow-lg mt-2 z-50 overflow-hidden"
+              variants={dropdownVariants}
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+            >
+              {suggestions.map((suggestion, index) => (
+                <li
+                  key={index}
+                  className="px-4 py-2 text-sm text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer transition-colors"
+                  onClick={() => handleSuggestionClick(suggestion)}
+                >
+                  {suggestion}
+                </li>
+              ))}
+            </motion.ul>
           )}
-        </section>
+        </AnimatePresence>
       </div>
+
+      {/* Search Results Count */}
+      {searchTerm && (
+        <div className="text-sm text-gray-700 dark:text-gray-400">
+          Found <span className="font-medium">{filteredImages.length}</span> {filteredImages.length === 1 ? 'result' : 'results'}
+        </div>
+      )}
+    </div>
+
+  </div>
+</section>
+
 
       {/* Gallery Content */}
       <div ref={contentRef} className="py-12 bg-gray-100 dark:bg-gray-900 w-full">
@@ -391,127 +415,69 @@ function Gallery() {
             {searchTerm ? 'No matching paintings found' : 'No paintings available'}
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-4 max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-4 lg:max-w-[80%] max-w-[95%] mx-auto">
             {filteredImages.map((image, index) => (
               <motion.div
-                key={image.$id}
-                className="relative overflow-hidden rounded-xl shadow-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700"
-                whileHover={{ scale: 1.02 }}
-                transition={{ type: 'spring', stiffness: 400, damping: 10 }}
-              >
-                {/* User Profile Header */}
-                <div className="flex items-center p-4 border-b border-gray-200 dark:border-gray-700">
-                  <Link 
-                    to={`/Account/${image.userId}`}
-                    className="flex items-center group flex-1 min-w-0"
-                  >
-                    {userProfiles[image.userId]?.profileImage ? (
-                      <img
-                        src={userProfiles[image.userId].profileImage}
-                        className="h-10 w-10 rounded-full object-cover"
-                        alt={userProfiles[image.userId].name}
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src = '';
-                          e.target.className = 'h-10 w-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-white';
-                          e.target.textContent = userProfiles[image.userId]?.name?.charAt(0) || 'U';
-                        }}
-                      />
-                    ) : (
-                      <div className="h-10 w-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-white">
-                        {userProfiles[image.userId]?.name?.charAt(0) || 'U'}
-                      </div>
-                    )}
-                    <div className="ml-3 min-w-0">
-                      <p className="text-sm font-semibold text-gray-800 dark:text-gray-200 truncate group-hover:underline">
-                        {userProfiles[image.userId]?.name || 'Unknown Artist'}
-                      </p>
-                      {userProfiles[image.userId]?.title && (
-                        <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
-                          {userProfiles[image.userId].title}
-                        </p>
-                      )}
-                    </div>
-                  </Link>
-                  <FollowButton targetUserId={image.userId} />
-                </div>
+  key={image.$id}
+  className="relative rounded-xl overflow-hidden"
+  transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+>
+  {/* Image */}
+  <img
+    src={image.url}
+    alt={image.title || 'Artwork'}
+    className="w-full h-80 object-cover cursor-pointer"
+    loading="lazy"
+    onClick={() => openLightbox(index)}
+  />
 
-                {/* Artwork Image */}
-                <img
-                  src={image.url}
-                  alt={image.title || 'Artwork'}
-                  className="w-full h-64 object-cover cursor-pointer"
-                  loading="lazy"
-                  onClick={() => openLightbox(index)}
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = 'https://via.placeholder.com/150';
-                  }}
-                />
+  {/* Top Header Overlay */}
+  <div className="absolute top-0 left-0 right-0 flex items-center justify-between p-3 bg-gradient-to-b from-black/40 to-transparent">
+    <Link to={`/Account/${image.userId}`} className="flex items-center space-x-2">
+      {userProfiles[image.userId]?.profileImage ? (
+        <img
+          src={userProfiles[image.userId].profileImage}
+          alt={userProfiles[image.userId].name}
+          className="w-8 h-8 rounded-full object-cover border border-white"
+        />
+      ) : (
+        <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-white text-xs">
+          {userProfiles[image.userId]?.name?.charAt(0) || 'U'}
+        </div>
+      )}
+      <span className="text-sm font-semibold text-white">
+        {userProfiles[image.userId]?.name || 'Username'}
+      </span>
+    </Link>
+    <FollowButton targetUserId={image.userId} />
+  </div>
+  {/* Bottom Actions Overlay */}
+  <div className=" right-0 flex justify-between items-center px-3 py-2 text-sm">
+    <div className="flex items-center space-x-4">
+      <div className="flex items-center space-x-1">
+        <FaRegEye className="text-[18px]" />
+        <span>{image.viewCount || 0}</span>
+      </div>
+      <LikeButton targetId={image.$id} className="text-white" />
+    </div>
+    <div className="flex items-center space-x-2">
+      <DownloadService artwork={image} />
+      <ShareButton artwork={image} />
+    </div>
+  </div>
+  {/* Title & description outside image */}
+  <div className="mt-2 px-4 pb-4 ">
+    <h3 className="text-base font-semibold text-gray-800 dark:text-gray-200">
+      {image.title || 'Title'}
+    </h3>
+    {image.description && (
+      <p className="text-sm text-gray-500 dark:text-gray-400">
+        {image.description}
+      </p>
+    )}
+  </div>
+</motion.div>
 
-                {/* Artwork Actions */}
-                <div className="flex justify-between items-center p-4">
-                  <div className="flex space-x-4">
-                    <div className="flex items-center space-x-1 text-gray-500 dark:text-gray-400">
-                      <FaRegEye className="text-[20px]" />
-                      <span className="text-sm font-Quicksand">{image.viewCount || 0}</span>
-                    </div>
-                    <LikeButton targetId={image.$id} />
-                    <button
-                      onClick={() => setShowComments(showComments === image.$id ? null : image.$id)}
-                      className="flex items-center space-x-1 text-gray-500 dark:text-gray-400 hover:text-blue-500 transition-colors"
-                    >
-                      <FaRegComment />
-                      <span className="text-sm font-Quicksand">0</span>
-                    </button>
-                  </div>
-                  <div className="flex space-x-2">
-                    <DownloadService artwork={image} />
-                    <ShareButton artwork={image} />
-                  </div>
-                </div>
-
-                {/* Comments Section */}
-                <AnimatePresence>
-                  {showComments === image.$id && (
-                    <motion.div
-                      className="p-4 bg-gray-50 dark:bg-gray-700 border-t border-gray-200 dark:border-gray-600"
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <form onSubmit={(e) => handleCommentSubmit(image.$id, e)} className="flex flex-col">
-                        <textarea
-                          value={newComment}
-                          onChange={(e) => setNewComment(e.target.value)}
-                          placeholder="Add a comment..."
-                          className="w-full p-2 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 resize-none"
-                          rows={3}
-                        />
-                        <button
-                          type="submit"
-                          className="mt-2 px-4 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600 font-Quicksand"
-                        >
-                          Post
-                        </button>
-                      </form>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-
-                {/* Artwork Info */}
-                <div className="p-4 border-t border-gray-200 dark:border-gray-700">
-                  <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 font-Quicksand truncate">
-                    {image.title || 'Untitled'}
-                  </h3>
-                  {image.description && (
-                    <p className="text-gray-600 dark:text-gray-400 text-sm mt-1 line-clamp-2">
-                      {image.description}
-                    </p>
-                  )}
-                </div>
-              </motion.div>
             ))}
           </div>
         )}

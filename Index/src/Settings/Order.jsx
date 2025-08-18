@@ -114,7 +114,7 @@ export default function SellerDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-tr from-slate-100 via-red-50 to-blue-100 dark:bg-gray-950 flex flex-col items-center font-Playfair">
+    <div className="min-h-screen bg-gradient-to-tr from-slate-100 via-red-50 to-blue-100 dark:from-gray-950 dark:to-slate-900 flex flex-col items-center font-Playfair">
       <header className="fixed top-0 h-20 w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-md flex items-center justify-between px-4 md:px-8 shadow-sm z-50 border-b border-gray-200 dark:border-gray-800">
         <Link to="/">
           <div className="flex items-center gap-2">

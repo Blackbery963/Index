@@ -18,13 +18,13 @@ export const uploadImage = async (file, bucketId) => {
     }
 
     const uploadedFile = await storage.createFile(
-      bucketId, // Use the parameter, not hardcoded PROFILE_BUCKET_ID
+      COVER_BUCKET_ID, // Use the parameter, not hardcoded PROFILE_BUCKET_ID
       ID.unique(),
       file
     );
 
     // Use /preview for images (not /view)
-    const fileUrl = `https://fra.cloud.appwrite.io/v1/storage/buckets/${bucketId}/files/${uploadedFile.$id}/preview?project=${import.meta.env.VITE_APPWRITE_PROJECT_ID}`;
+    const fileUrl = `https://nyc.cloud.appwrite.io/v1/storage/buckets/${bucketId}/files/${uploadedFile.$id}/preview?project=${import.meta.env.VITE_APPWRITE_PROJECT_ID}`;
 
 
     return fileUrl;

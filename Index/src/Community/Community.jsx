@@ -5,7 +5,7 @@ import { FiMenu } from 'react-icons/fi';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import {Query, account, databases} from '../appwriteConfig'
 import ArtistSpotlight from './CommunityContainer/ArtistSpotlight';
-
+import MainCalenderService from './CalenderService/MainCalenderService';
 
 const Community = () => {
   const {slug} = useParams();
@@ -292,7 +292,7 @@ const Community = () => {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="bg-gradient-to-r from-purple-600 to-blue-500 text-white px-6 py-3 rounded-full font-medium shadow-lg shadow-purple-500/20 dark:shadow-purple-400/10"
+              className="bg-gradient-to-r from-purple-600 to-blue-500 text-white px-6 py-3 rounded-xl font-medium shadow-lg shadow-purple-500/20 dark:shadow-purple-400/10"
             >
               Sign Up Free
             </motion.button>
@@ -301,7 +301,7 @@ const Community = () => {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 px-6 py-3 rounded-full font-medium hover:bg-gray-100 dark:hover:bg-gray-800/50 transition"
+              className="border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 px-6 py-3 rounded-xl font-medium hover:bg-gray-100 dark:hover:bg-gray-800/50 transition"
             >
               Explore Galleries
             </motion.button>
@@ -742,74 +742,8 @@ const Community = () => {
       </motion.section>
 
       {/* Event Calendar */}
-      <motion.section
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        className="max-w-7xl mx-auto px-4 py-16"
-      >
-        <motion.h2
-          variants={itemVariants}
-          className="text-4xl font-bold text-center mb-12 text-gray-800 dark:text-white font-Quicksand"
-        >
-          Upcoming Events
-        </motion.h2>
-        <motion.div
-          variants={itemVariants}
-          whileHover={{ scale: 1.02 }}
-          className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-lg overflow-hidden border border-gray-100 dark:border-gray-700"
-        >
-          <div className="md:flex">
-            <div className="md:w-1/3 bg-gradient-to-b from-purple-600 to-purple-700 text-white p-8">
-              <h3 className="text-xl font-semibold mb-6">July Highlights</h3>
-              <ul className="space-y-4">
-                {[
-                  { event: "Live Portrait Workshop", date: "Jul 15 | 4PM UTC" },
-                  { event: "AI Art Debate Panel", date: "Jul 22 | 6PM UTC" },
-                  { event: "Community Exhibition", date: "Jul 30 | All Day" },
-                ].map((event, i) => (
-                  <motion.li
-                    key={i}
-                    whileHover={{ x: 5 }}
-                    className="pb-4 border-b border-purple-400"
-                  >
-                    <p className="font-medium">{event.event}</p>
-                    <p className="text-purple-200">{event.date}</p>
-                  </motion.li>
-                ))}
-              </ul>
-            </div>
-            <div className="md:w-2/3 p-8">
-              <div className="grid grid-cols-7 gap-2 mb-6">
-                {["S", "M", "T", "W", "T", "F", "S"].map((day, i) => (
-                  <div key={i} className="text-center font-medium text-gray-500 dark:text-gray-400">{day}</div>
-                ))}
-                {Array.from({ length: 31 }).map((_, i) => (
-                  <motion.div
-                    key={i}
-                    whileHover={{ scale: 1.2 }}
-                    className={`p-2 text-center rounded-full cursor-pointer ${
-                      i === 14
-                        ? 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200'
-                        : 'text-gray-800 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
-                    }`}
-                  >
-                    {i + 1}
-                  </motion.div>
-                ))}
-              </div>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="w-full bg-gradient-to-r from-purple-600 to-blue-500 text-white py-3 rounded-lg hover:from-purple-700 hover:to-blue-600"
-              >
-                View Full Calendar
-              </motion.button>
-            </div>
-          </div>
-        </motion.div>
-      </motion.section>
+      <MainCalenderService/>
+
 
       {/* Footer */}
       <footer className="bg-gray-800 dark:bg-gray-950 text-gray-300 py-12">

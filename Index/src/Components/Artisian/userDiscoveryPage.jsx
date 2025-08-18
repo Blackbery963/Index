@@ -214,7 +214,8 @@ useEffect(() => {
               return null;
             }
             
-            const awardedImage = awardedImagesResponse.documents[0];
+            // const awardedImage = awardedImagesResponse.documents[0];
+            const awardedImage = awardedImagesResponse.documents.find(img => img.awards?.length > 0);
             
             // Get user's other artworks
             const allUserImages = await databases.listDocuments(

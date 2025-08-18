@@ -7,6 +7,7 @@ import { FiMenu } from 'react-icons/fi';
 import { MdClose } from 'react-icons/md';
 import { storage, Query, databases } from '../appwriteConfig';
 import { FaHeart, FaComment, FaDownload, FaPlus, FaUserCircle } from 'react-icons/fa';
+import { FaRegEye } from 'react-icons/fa';
 import InfoCard from './Info/InfoCards';
 import { infoCardsData } from './Info/InfoCardsData';
 import { IoClose } from 'react-icons/io5';
@@ -111,7 +112,7 @@ function Still_life() {
         const response = await databases.listDocuments(
           DATABASE_ID,
           COLLECTION_ID,
-          [Query.equal('medium', 'StillLife')]
+          [Query.equal('tag', 'StillLife')]
         );
   
         // Get image URLs
@@ -245,12 +246,11 @@ function Still_life() {
     exit: { opacity: 0, scale: 0.8, transition: { duration: 0.3 } },
   };
 
-      useEffect(() => {
-    // Load from Appwrite or static source
+ useEffect(() => {
     const fetchImages = async () => {
-      const data = await getImagesFromAppwrite();
-      setImages(data);
-      setFilteredImages(fetchStillLifeImages); // show all initially
+      const response = await databases.listDocuments(DATABASE_ID, COLLECTION_ID);
+      setImages(response.documents);
+      setFilteredImages(fetchStillLifeImages);
     };
     fetchImages();
   }, []);

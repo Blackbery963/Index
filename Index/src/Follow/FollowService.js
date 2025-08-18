@@ -104,8 +104,6 @@
 //   }
 // };
 
-// import { databases, account, Query, ID } from '../appwriteConfig';
-
 
 
 import { databases, account, Query, ID } from '../appwriteConfig';

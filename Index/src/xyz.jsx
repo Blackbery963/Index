@@ -1279,3 +1279,161 @@
  
  
  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <header className="lg:h-[80px] h-[70px] w-full backdrop-blur-md shadow-md flex items-center justify-between pl-4 pr-8 fixed top-0 z-50 bg-white/40 dark:bg-gray-800/40">
+       <Link to={'/'}>
+        <h1 className="font-Eagle font-bold lg:text-[35px] md:text-[30px] sm:text-[25px] text-[20px] text-[#001F3F] dark:text-white">
+          Painters' Diary
+        </h1>
+       </Link>
+        
+        <div className="flex items-center gap-x-2 sm:gap-x-4">
+          {isScrolled && (
+            <motion.div className="relative w-48 sm:w-64" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Search paintings..."
+                className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white text-sm"
+              />
+              <FaSearch className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400" />
+              
+              {suggestions.length > 0 && (
+                <motion.ul className="absolute top-full left-0 right-0 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg mt-1 z-50"
+                  variants={dropdownVariants} initial="hidden" animate="visible">
+                  {suggestions.map((suggestion, index) => (
+                    <li key={index} className="px-4 py-2 text-sm text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
+                      onClick={() => handleSuggestionClick(suggestion)}>
+                      {suggestion}
+                    </li>
+                  ))}
+                </motion.ul>
+              )}
+            </motion.div>
+          )}
+          
+          <div className="md:flex hidden gap-x-2 sm:gap-x-4 text-gray-800 dark:text-gray-200 font-playfair font-semibold">
+            {['Home', 'About', 'Account', 'Journal'].map((item) => (
+              <Link key={item}  to={item === 'Home' ? '/' : `/${item.toLowerCase()}`}>
+                <motion.button
+                  className="px-2 sm:px-2 py-1 sm:py-1 rounded-md hover:bg-green-700 flex items-center gap-2"
+                  variants={buttonVariants}
+                  whileHover="hover"
+                  whileTap="tap"
+                >
+                  {item === 'Home' && <FaHome className="text-lg sm:text-xl" />}
+                  {item === 'About' && <FaInfoCircle className="text-lg sm:text-xl" />}
+                  {item === 'Account' && <FaUser className="text-lg sm:text-xl" />}
+                  {item === 'Journal' && <MdCollections className="text-lg sm:text-xl" />}
+                  <span className="hidden sm:inline">{item}</span>
+                </motion.button>
+              </Link>
+            ))}
+          </div>
+          
+          <button className="md:hidden p-2 text-black dark:text-white hover:text-gray-800 dark:hover:text-gray-300 transition-all duration-300"
+            onClick={toggleMenu} aria-label="Toggle menu">
+            {isMenuOpen ? <MdClose size={24} /> : <FiMenu size={24} />}
+          </button>
+        </div>
+      </header> 
+
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.nav className="md:hidden fixed top-[85px] right-2 w-36 bg-white/40 dark:bg-gray-800/40 backdrop-blur-lg shadow-md z-40 rounded-lg"
+            variants={dropdownVariants} initial="hidden" animate="visible" exit="hidden">
+            <div className="flex flex-col items-center py-4 gap-y-3 font-Playfair font-bold text-black dark:text-gray-100">
+            
+              {['home', 'about', 'account', 'journal'].map((item) => (
+  <Link
+    key={item}
+    to={item === 'home' ? '/' : `/${item.toLowerCase()}`}
+    onClick={() => {
+      setActiveButton(item);
+      toggleMenu();
+    }}
+  >
+    <button
+      className={`w-full py-2 px-4 flex items-center justify-center gap-2 ${
+        activeButton === item ? 'bg-blue-500 text-white' : 'hover:bg-gray-200 dark:hover:bg-gray-700'
+      }`}
+    >
+      {item === 'home' && <FaHome />}
+      {item === 'about' && <FaInfoCircle />}
+      {item === 'account' && <FaUser />}
+      {item === 'journal' && <MdCollections />}
+      {item.charAt(0).toUpperCase() + item.slice(1)}
+    </button>
+  </Link>
+))}
+
+            </div>
+          </motion.nav>
+        )}
+      </AnimatePresence>
+
+      {/* Hero Section */}
+      <div className="h-[100vh] w-full bg-center bg-cover flex flex-col items-center justify-center relative" style={{ backgroundImage: `url(${bg})` }}>
+        <section className="mx-auto lg:w-[50%] w-[90%] p-6 rounded-xl border border-gray-300 dark:border-gray-700 shadow-2xl bg-white/40 dark:bg-gray-900/50 backdrop-blur-md transition-colors duration-300 animate-fadeIn">
+          <h1 className="font-Quicksand font-bold text-center text-[#6A1E55] dark:text-[#E1A4C6] text-[24px] sm:text-[28px] md:text-[32px] lg:text-[40px] animate-slideInUp">
+            Palette of Dreams: A Showcase of Artistic Brilliance
+          </h1>
+
+          <h5 className="font-Playfair italic text-center text-gray-800 dark:text-gray-300 text-[16px] sm:text-[18px] md:text-[20px] lg:text-[23px] mt-4 animate-slideInUp">
+            {window.innerWidth >= 1024 ? 
+              "From timeless landscapes to mesmerizing abstract wonders, delve into the rich tapestry of stories, emotions, and creative inspirations woven into every brushstroke—a celebration of art's boundless beauty and its profound connection to the human spirit." :
+              "From stunning landscapes to abstract wonders, each brushstroke tells a story—a celebration of art's beauty and deep connection to the human spirit."}
+          </h5>
+
+          {!isScrolled && (
+            <div className="max-w-2xl mx-auto mt-6">
+              <div className="relative flex items-center">
+                <input
+                  type="text"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder="Search paintings..."
+                  className="w-full px-4 py-2 md:py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white/60 dark:bg-gray-800/60 backdrop-blur-md text-gray-900 dark:text-white pl-10 focus:outline-none focus:ring-2 focus:ring-green-500 transition"
+                />
+                <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400" />
+
+                <AnimatePresence>
+                  {suggestions.length > 0 && (
+                    <motion.ul className="absolute top-full left-0 right-0 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg mt-1 z-50"
+                      variants={dropdownVariants} initial="hidden" animate="visible" exit="hidden">
+                      {suggestions.map((suggestion, index) => (
+                        <li key={index} className="px-4 py-2 text-sm text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
+                          onClick={() => handleSuggestionClick(suggestion)}>
+                          {suggestion}
+                        </li>
+                      ))}
+                    </motion.ul>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {searchTerm && (
+                <div className="mt-2 text-sm text-gray-700 dark:text-gray-400">
+                  Found {filteredImages.length} {filteredImages.length === 1 ? 'result' : 'results'}
+                </div>
+              )}
+            </div>
+          )}
+        </section>
+      </div>

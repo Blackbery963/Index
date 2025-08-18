@@ -458,7 +458,7 @@ const Artisan = () => {
           {/* Navigation Arrows - Positioned on sides */}
           <button
             onClick={prevSlide}
-            className="absolute left-0 top-1/2 lg:block hidden -translate-y-1/2 z-10 bg-white dark:bg-gray-800 p-3 rounded-full shadow-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+            className="absolute left-0 top-1/3 mt-14 lg:mt-0 lg:top-1/2 -translate-y-1/2 z-10 bg-white dark:bg-gray-800 p-3 rounded-full shadow-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
             aria-label="Previous"
           >
             <FaChevronLeft className="text-gray-700 dark:text-gray-300 text-lg" />
@@ -466,7 +466,7 @@ const Artisan = () => {
 
           <button
             onClick={nextSlide}
-            className="absolute right-0 top-1/2 lg:block hidden -translate-y-1/2 z-10 bg-white dark:bg-gray-800 p-3 rounded-full shadow-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+            className="absolute right-0 top-1/3  mt-14 lg:mt-0 lg:top-1/2  -translate-y-1/2 z-10 bg-white dark:bg-gray-800 p-3 rounded-full shadow-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
             aria-label="Next"
           >
             <FaChevronRight className="text-gray-700 dark:text-gray-300 text-lg" />

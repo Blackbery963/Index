@@ -166,7 +166,7 @@ const featuredPapers = [
     title: "Digital Brushstrokes: AI in Contemporary Art",
     authors: "M. Chen, A. Rodriguez",
     excerpt: "Exploring how neural networks are transforming artistic creation",
-    image: "https://images.unsplash.com/photo-1541961017774-22349e4a1262",
+    image: "https://images.pexels.com/photos/1158394/pexels-photo-1158394.jpeg",
   },
   {
     id: 2,

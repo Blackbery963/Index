@@ -452,7 +452,7 @@ const DiaryTemplate = () => {
           <p className="text-sm text-gray-600 dark:text-gray-300 mb-6">
             Start your diary today and let your thoughts flow freely, capturing moments that matter.
           </p>
-          <Link to="/january">
+          <Link to="">
             <button className="px-4 py-2 bg-yellow-500 text-gray-900 font-medium rounded-md hover:bg-yellow-600 transition-colors">
               Start Writing
             </button>

@@ -278,30 +278,6 @@ const communities = [
     color: "from-emerald-100 to-emerald-50 dark:from-emerald-900/30 dark:to-emerald-800/20",
     image: image6
   },
-  // {
-  //   name: "Frame by Frame",
-  //   type: "Cinemagraph & Motion Artists",
-  //   icon: "🎞️",
-  //   members: "11.8K",
-  //   color: "from-teal-100 to-teal-50 dark:from-teal-900/30 dark:to-teal-800/20",
-  //   image: "https://images.pexels.com/photos/10992937/pexels-photo-10992937.jpeg"
-  // },
-  // {
-  //   name: "Canvas Realms",
-  //   type: "Realism & Portrait Painters",
-  //   icon: "🧑‍🎨",
-  //   members: "19.7K",
-  //   color: "from-sky-100 to-sky-50 dark:from-sky-900/30 dark:to-sky-800/20",
-  //   image: "https://images.pexels.com/photos/1056251/pexels-photo-1056251.jpeg"
-  // },
-  // {
-  //   name: "Dream Doodlers",
-  //   type: "Concept Artists",
-  //   icon: "🌌",
-  //   members: "14.6K",
-  //   color: "from-fuchsia-100 to-fuchsia-50 dark:from-fuchsia-900/30 dark:to-fuchsia-800/20",
-  //   image: "https://images.pexels.com/photos/1809644/pexels-photo-1809644.jpeg"
-  // },
 ];
 
 const features = [

@@ -512,3 +512,296 @@ const DiscoverUsers = () => {
 };
 
 export default DiscoverUsers;
+
+
+
+
+// import React, { useState, useEffect } from 'react';
+// import { databases, Query } from '../../appwriteConfig';
+// import { motion, AnimatePresence } from 'framer-motion';
+// import { Link } from 'react-router-dom';
+// import { FiSearch, FiX, FiUser, FiHome, FiInfo,  } from 'react-icons/fi';
+// import { FaPalette } from 'react-icons/fa';
+// import { FaPaintBrush, FaCamera, FaVectorSquare } from 'react-icons/fa';
+
+// const DiscoverUsers = () => {
+//   const [users, setUsers] = useState([]);
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState(null);
+//   const [searchTerm, setSearchTerm] = useState('');
+//   const [selectedInterests, setSelectedInterests] = useState([]);
+//   const [activeCategory, setActiveCategory] = useState('all');
+
+//   // Simplified interest categories
+//   const interestCategories = {
+//     'all': { icon: <FaPalette />, items: [] },
+//     'Painting': { icon: <FaPaintBrush />, items: ["Oil", "Acrylic", "Watercolor", "Abstract"] },
+//     'Digital': { icon: <FaVectorSquare />, items: ["3D Art", "Digital Painting", "NFT"] },
+//     'Photography': { icon: <FaCamera />, items: ["Portrait", "Landscape", "Street"] },
+//     'Design': { icon: <FaVectorSquare />, items: ["Graphic", "Typography", "UI/UX"] },
+//     'Other': { icon: <FaPalette />, items: ["Mixed Media", "Collage", "Sculpture"] }
+//   };
+
+//   // Fetch users
+//   useEffect(() => {
+//     const fetchUsers = async () => {
+//       try {
+//         const response = await databases.listDocuments(
+//           import.meta.env.VITE_APPWRITE_DATABASE_ID,
+//           import.meta.env.VITE_APPWRITE_USERS_COLLECTION_ID,
+//           [Query.select(['$id', 'username', 'profileImageUrl', 'bio', 'interests'])]
+//         );
+//         setUsers(response.documents);
+//       } catch (err) {
+//         setError(err.message);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+//     fetchUsers();
+//   }, []);
+
+//   const toggleInterest = (interest) => {
+//     setSelectedInterests(prev => 
+//       prev.includes(interest) 
+//         ? prev.filter(i => i !== interest) 
+//         : [...prev, interest]
+//     );
+//   };
+
+//   const filteredUsers = users.filter(user => {
+//     const matchesSearch = user.username.toLowerCase().includes(searchTerm.toLowerCase());
+//     const matchesInterests = selectedInterests.length === 0 || 
+//       (user.interests && user.interests.some(i => selectedInterests.includes(i)));
+//     const matchesCategory = activeCategory === 'all' || 
+//       (user.interests && user.interests.some(i => 
+//         interestCategories[activeCategory]?.items.includes(i)));
+//     return matchesSearch && matchesInterests && matchesCategory;
+//   });
+
+//   if (loading) return <LoadingSpinner />;
+//   if (error) return <ErrorDisplay error={error} />;
+
+//   return (
+//     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+//       {/* Minimal Header */}
+//       <header className="sticky top-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-b border-gray-100 dark:border-gray-800">
+//         <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+//           <Link to="/" className="text-xl font-medium text-gray-900 dark:text-white">
+//             ArtConnect
+//           </Link>
+//           <div className="flex items-center space-x-4">
+//             <Link to="/" className="hidden sm:block text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">
+//               <FiHome size={20} />
+//             </Link>
+//             <Link to="/account" className="hidden sm:block text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">
+//               <FiUser size={20} />
+//             </Link>
+//           </div>
+//         </div>
+//       </header>
+
+//       <main className="max-w-7xl mx-auto px-4 py-8">
+//         {/* Hero Section */}
+//         <div className="text-center mb-12">
+//           <h1 className="text-3xl font-light text-gray-900 dark:text-white mb-3">
+//             Discover <span className="font-medium">Creatives</span>
+//           </h1>
+//           <p className="text-gray-500 dark:text-gray-400 max-w-md mx-auto">
+//             Find and connect with talented artists across all mediums
+//           </p>
+//         </div>
+
+//         {/* Search and Filter */}
+//         <div className="mb-8">
+//           <div className="relative max-w-md mx-auto mb-6">
+//             <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+//             <input
+//               type="text"
+//               placeholder="Search artists..."
+//               className="w-full pl-10 pr-4 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-gray-800 dark:text-white"
+//               value={searchTerm}
+//               onChange={(e) => setSearchTerm(e.target.value)}
+//             />
+//             {searchTerm && (
+//               <button 
+//                 onClick={() => setSearchTerm('')}
+//                 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+//               >
+//                 <FiX size={18} />
+//               </button>
+//             )}
+//           </div>
+
+//           {/* Category Tabs */}
+//           <div className="flex flex-wrap justify-center gap-2 mb-6">
+//             {Object.keys(interestCategories).map(category => (
+//               <button
+//                 key={category}
+//                 onClick={() => setActiveCategory(category)}
+//                 className={`flex items-center px-4 py-2 rounded-full text-sm transition-colors ${
+//                   activeCategory === category
+//                     ? 'bg-blue-500 text-white'
+//                     : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700'
+//                 }`}
+//               >
+//                 <span className="mr-2">{interestCategories[category].icon}</span>
+//                 {category}
+//               </button>
+//             ))}
+//           </div>
+
+//           {/* Selected Interests */}
+//           {selectedInterests.length > 0 && (
+//             <div className="flex flex-wrap justify-center gap-2 mb-6">
+//               {selectedInterests.map(interest => (
+//                 <button
+//                   key={interest}
+//                   onClick={() => toggleInterest(interest)}
+//                   className="flex items-center px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-sm"
+//                 >
+//                   {interest}
+//                   <FiX className="ml-2" size={14} />
+//                 </button>
+//               ))}
+//               <button 
+//                 onClick={() => setSelectedInterests([])}
+//                 className="text-sm text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300"
+//               >
+//                 Clear all
+//               </button>
+//             </div>
+//           )}
+//         </div>
+
+//         {/* Interest Suggestions */}
+//         {selectedInterests.length === 0 && activeCategory !== 'all' && (
+//           <div className="mb-8 text-center">
+//             <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">
+//               Popular in {activeCategory}
+//             </h3>
+//             <div className="flex flex-wrap justify-center gap-2">
+//               {interestCategories[activeCategory].items.map(interest => (
+//                 <button
+//                   key={interest}
+//                   onClick={() => toggleInterest(interest)}
+//                   className="px-3 py-1 rounded-full bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700 text-sm"
+//                 >
+//                   {interest}
+//                 </button>
+//               ))}
+//             </div>
+//           </div>
+//         )}
+
+//         {/* Results */}
+//         <div className="mb-4 text-sm text-gray-500 dark:text-gray-400 text-center">
+//           {filteredUsers.length} {filteredUsers.length === 1 ? 'artist' : 'artists'} found
+//         </div>
+
+//         {/* User Grid */}
+//         {filteredUsers.length === 0 ? (
+//           <div className="text-center py-12">
+//             <FiSearch size={48} className="mx-auto text-gray-300 dark:text-gray-600 mb-4" />
+//             <h3 className="text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">
+//               No results found
+//             </h3>
+//             <p className="text-gray-500 dark:text-gray-400 mb-4">
+//               Try adjusting your search or filters
+//             </p>
+//             <button
+//               onClick={() => {
+//                 setSearchTerm('');
+//                 setSelectedInterests([]);
+//                 setActiveCategory('all');
+//               }}
+//               className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 text-sm"
+//             >
+//               Reset filters
+//             </button>
+//           </div>
+//         ) : (
+//           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+//             {filteredUsers.map(user => (
+//               <UserCard key={user.$id} user={user} />
+//             ))}
+//           </div>
+//         )}
+//       </main>
+//     </div>
+//   );
+// };
+
+// // Minimal User Card Component
+// const UserCard = ({ user }) => (
+//   <motion.div 
+//     whileHover={{ y: -5 }}
+//     className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm border border-gray-100 dark:border-gray-700"
+//   >
+//     <div className="p-4">
+//       <div className="flex items-center space-x-3">
+//         <img
+//           src={user.profileImageUrl || 'https://i.pravatar.cc/150?img=random'}
+//           alt={user.username}
+//           className="w-12 h-12 rounded-full object-cover border-2 border-white dark:border-gray-800"
+//           onError={(e) => {
+//             e.target.src = 'https://i.pravatar.cc/150?img=random';
+//           }}
+//         />
+//         <div>
+//           <Link to={`/account/${user.$id}`} className="font-medium text-gray-900 dark:text-white hover:text-blue-500">
+//             {user.username}
+//           </Link>
+//           {user.interests?.[0] && (
+//             <p className="text-xs text-blue-500 dark:text-blue-400">{user.interests[0]}</p>
+//           )}
+//         </div>
+//       </div>
+//       {user.bio && (
+//         <p className="mt-3 text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
+//           {user.bio}
+//         </p>
+//       )}
+//       {user.interests && (
+//         <div className="mt-3 flex flex-wrap gap-1">
+//           {user.interests.slice(0, 3).map((tag, i) => (
+//             <span key={i} className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded">
+//               {tag}
+//             </span>
+//           ))}
+//         </div>
+//       )}
+//       <button className="mt-4 w-full py-2 text-sm bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-lg transition-colors">
+//         Follow
+//       </button>
+//     </div>
+//   </motion.div>
+// );
+
+// // Minimal Loading Spinner
+// const LoadingSpinner = () => (
+//   <div className="min-h-screen flex items-center justify-center">
+//     <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+//   </div>
+// );
+
+// // Minimal Error Display
+// const ErrorDisplay = ({ error }) => (
+//   <div className="min-h-screen flex items-center justify-center">
+//     <div className="text-center p-6 max-w-md">
+//       <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-red-100 dark:bg-red-900 flex items-center justify-center">
+//         <FiX className="text-red-500 dark:text-red-300" size={24} />
+//       </div>
+//       <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">Error loading artists</h3>
+//       <p className="text-gray-600 dark:text-gray-400 mb-4">{error}</p>
+//       <button 
+//         onClick={() => window.location.reload()}
+//         className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 text-sm"
+//       >
+//         Try again
+//       </button>
+//     </div>
+//   </div>
+// );
+
+// export default DiscoverUsers;

@@ -66,7 +66,7 @@ useEffect(() => {
       const response = await databases.listDocuments(
         DATABASE_ID,
         COLLECTION_ID,
-        [Query.equal('tag', 'Photography')]
+        [Query.equal('medium', 'Photography')]
       );
 
       // Get image URLs
@@ -178,7 +178,7 @@ useEffect(() => {
     const fetchImages = async () => {
       const response = await databases.listDocuments(DATABASE_ID, COLLECTION_ID);
       setAllImages(response.documents);
-      setFilteredImages(fetchPhotographymages);
+      setFilteredImages(fetchPhotographyImages);
     };
     fetchImages();
   }, []);

@@ -289,3 +289,15 @@ span:nth-child(18) {
     filter: blur(0);
   }
 }
+
+/* optional: src/index.css */
+/* .ql-toolbar.ql-snow {
+  border-top-left-radius: 0.75rem;
+  border-top-right-radius: 0.75rem;
+}
+.ql-container.ql-snow {
+  border-bottom-left-radius: 0.75rem;
+  border-bottom-right-radius: 0.75rem;
+  min-height: 220px;
+} */
+ /* comfortable canvas */

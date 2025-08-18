@@ -537,26 +537,90 @@
 
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import CrImg1 from './CraftsImages/cr1.jpeg'
+import CrImg2 from './CraftsImages/cr2.jpeg'
+import CrImg3 from './CraftsImages/cr3.jpeg'
+import CrImg4 from './CraftsImages/cr4.jpeg'
+import CrImg5 from './CraftsImages/cr5.jpeg'
+import CrImg6 from './CraftsImages/cr6.jpeg'
+import CrImg7 from './CraftsImages/cr7.jpeg'
+import CrImg8 from './CraftsImages/cr8.jpeg'
+
+
+
+
+
+
 const Items = [
-  { id: 1, title: 'Modern Chair', price: 180, image: 'https://images.pexels.com/photos/1350789/pexels-photo-1350789.jpeg', category: 'furniture' },
-  { id: 2, title: 'Minimalistic Plant Pot', price: 18, image: 'https://images.pexels.com/photos/1084188/pexels-photo-1084188.jpeg', category: 'home decor' },
-  { id: 3, title: 'Abstract Canvas Art', price: 220, image: 'https://images.pexels.com/photos/167699/pexels-photo-167699.jpeg', category: 'wall art' },
-  { id: 4, title: 'Night Stand', price: 180, image: 'https://images.pexels.com/photos/133919/pexels-photo-133919.jpeg', category: 'furniture' },
-  { id: 5, title: 'Handcrafted Pottery', price: 32, image: 'https://images.pexels.com/photos/894092/pexels-photo-894092.jpeg', category: 'home decor' },
-  { id: 6, title: 'Floral Wall Art', price: 150, image: 'https://images.pexels.com/photos/167699/pexels-photo-167699.jpeg', category: 'wall art' },
-  { id: 7, title: 'Modern Rocking Chair', price: 318, image: 'https://images.pexels.com/photos/276583/pexels-photo-276583.jpeg', category: 'furniture' },
-  { id: 8, title: 'Wooden Sculpture', price: 120, image: 'https://images.pexels.com/photos/279618/pexels-photo-279618.jpeg', category: 'sculpture' },
+  {
+    id: 1,
+    title: 'Handwoven Basket',
+    price: 45,
+    image: CrImg1,
+    category: 'basketry',
+  },
+  {
+    id: 2,
+    title: 'Ceramic Clay Pot',
+    price: 60,
+    image: CrImg2,
+    category: 'pottery',
+  },
+  {
+    id: 3,
+    title: 'Macramé Wall Hanging',
+    price: 80,
+    image: CrImg3,
+    category: 'wall decor',
+  },
+  {
+    id: 4,
+    title: 'Hand-Carved Wooden items',
+    price: 25,
+    image: CrImg4,
+    category: 'woodwork',
+  },
+  {
+    id: 5,
+    title: 'Natural Dye Textile',
+    price: 95,
+    image: CrImg5,
+    category: 'textile',
+  },
+  {
+    id: 6,
+    title: 'Pressed Floral Frame',
+    price: 30,
+    image: CrImg6,
+    category: 'paper craft',
+  },
+  {
+    id: 7,
+    title: 'Handcrafted Leather Pouch',
+    price: 55,
+    image: CrImg7,
+    category: 'leather craft',
+  },
+  {
+    id: 8,
+    title: 'Beaded Jewelry Set',
+    price: 40,
+    image: CrImg8,
+    category: 'jewelry',
+  },
 ];
+
+
 
 const Visual = () => {
   const [hoveredItem, setHoveredItem] = useState(null);
 
   return (
-    <div className="min-h-screen max-w-[95%] bg-white dark:bg-[#0a0f14] mx-auto transition-colors duration-300">
+    <div className="min-h-screen max-w-[95%] rounded-xl bg-white dark:bg-[#0a0f14] mx-auto transition-colors duration-300">
       {/* Header Section */}
       <div className="px-6 py-24 text-center">
         <h1 className="text-5xl md:text-5xl font-Quicksand font-light text-black dark:text-white tracking-tight mb-4">
-          Curated
+         The Art of Handmade Elegance
         </h1>
         <p className="text-lg text-gray-500 dark:text-gray-400 font-light max-w-md mx-auto">
           Handpicked pieces for contemporary living

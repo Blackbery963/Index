@@ -752,12 +752,21 @@ import {
 import { MdGroups3, MdClose, MdOutlineFeedback, MdBook, MdHistory, MdMenu, MdOutlineAccountCircle } from "react-icons/md";
 import { IoMdHelpCircleOutline, IoMdMore, IoMdSettings } from "react-icons/io";
 import { BiCategoryAlt } from "react-icons/bi";
-import { ImBlog } from "react-icons/im";
+import { Im500Px, ImBlog } from "react-icons/im";
 import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { databases, account, Query } from "../../appwriteConfig";
 import { CubeIcon } from '@heroicons/react/24/outline';
 import { FiMenu } from "react-icons/fi";
+ import image1 from './Header-Images/no1.jpg'
+ import image2 from './Header-Images/no2.jpeg'
+ import image3 from './Header-Images/no3.webp'
+ import image4 from './Header-Images/no4.jpeg'
+ import image5 from './Header-Images/no5.jpg'
+ import image6 from './Header-Images/no6.jpeg'
+ import image7 from './Header-Images/no7.jpeg'
+ import image8 from './Header-Images/no8.jpeg'
+ import image9 from './Header-Images/no9.jpg'
 
 // Dark Mode Context
 export const DarkModeContext = createContext();
@@ -805,15 +814,7 @@ const ORDERS_COLLECTION = import.meta.env.VITE_APPWRITE_SELLER_COLLECTION_ID;
 const Header = () => {
 
 const backgroundImages = [
-  'https://cdn.pixabay.com/photo/2021/08/11/16/06/mountain-6538890_1280.jpg', // Abstract waves
-  'https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg', // Forest path
-  'https://cdn.pixabay.com/photo/2025/07/30/06/26/deep-learning-9743961_960_720.jpg', // Futuristic building
-  'https://images.unsplash.com/photo-1506744038136-46273834b3fb', // Starry night sky
-  'https://cdn.pixabay.com/photo/2015/06/19/21/24/avenue-815297_1280.jpg', // Tree-lined road
-  'https://images.pexels.com/photos/417173/pexels-photo-417173.jpeg', // Misty lake
-  'https://images.pexels.com/photos/826114/pexels-photo-826114.jpeg', // Geometric pattern
-  'https://images.unsplash.com/photo-1518837695005-2083093ee35b', // Colorful smoke
-  'https://images.pexels.com/photos/1749303/pexels-photo-1749303.jpeg'  // Digital swirl
+image1,image2,image3,image4,image5,image6,image7,image8,image9
 ];
 
   const routes = {
@@ -847,6 +848,32 @@ const backgroundImages = [
   const [orderCount, setOrderCount] = useState(0);
   const [notificationCount, setNotificationCount] = useState(0);
   const menuRef = useRef(null);
+
+const useScrollDirection = () => {
+  const [scrollDir, setScrollDir] = useState("up");
+
+  useEffect(() => {
+    let lastScrollY = window.scrollY;
+
+    const updateScrollDir = () => {
+      const currentScrollY = window.scrollY;
+      if (Math.abs(currentScrollY - lastScrollY) < 4) return;
+
+      setScrollDir(currentScrollY > lastScrollY ? "down" : "up");
+      lastScrollY = currentScrollY > 0 ? currentScrollY : 0;
+    };
+
+    window.addEventListener("scroll", updateScrollDir);
+    return () => window.removeEventListener("scroll", updateScrollDir);
+  }, []);
+
+  return scrollDir;
+};
+
+const scrollDirection = useScrollDirection();
+
+
+
 
   // Close dropdowns when clicking outside
   useEffect(() => {
@@ -997,11 +1024,19 @@ const backgroundImages = [
 
       {/* Navbar */}
       <motion.nav
-        className={`fixed top-0 left-0 w-full z-[1000] py-2 backdrop-blur-lg ${darkMode ? 'bg-gray-900/95 text-gray-100' : 'bg-white/95 text-gray-900'}`}
-        initial="initial"
+        className={` fixed top-2 rounded-lg w-[96%] mx-auto ml-[2%] z-[1000] py-2 backdrop-blur-lg ${darkMode ? 'bg-gray-900/95 text-gray-100' : 'bg-white/40 text-gray-900'}`}
+        initial= {true}
         animate={isScrolled ? "scrolled" : ["animate", "unscrolled"]}
         variants={navbarVariants}
       >
+      {/* <motion.nav
+  className={`fixed top-0 left-0 w-full z-[1000] py-3 px-6 rounded-b-xl backdrop-blur-md transition-all duration-500 ${
+    darkMode ? "bg-gray-900/40 text-white" : "bg-white/40 text-black"
+  }`}
+  initial={{ y: -100 }}
+  animate={{ y: scrollDirection === "down" ? 0 : -100 }}
+  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+> */}
         <div className="mx-auto w-full max-w-full px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             {/* Logo */}
@@ -1033,7 +1068,7 @@ const backgroundImages = [
   <motion.button
     className={`
       relative group px-3 py-1.5 text-sm font-medium
-      ${darkMode ? 'text-gray-100' : 'text-gray-300'}
+      ${darkMode ? 'text-gray-100' : 'text-gray-900'}
       transition-colors duration-300 font-semibold 
     `}
     whileTap={{ scale: 0.97 }}

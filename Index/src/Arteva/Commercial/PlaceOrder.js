@@ -199,8 +199,7 @@ export const proceedToCheckout = async (onSuccess, onError) => {
         status: 'pending',
         // Additional useful fields
         itemCount: cartItems.reduce((sum, item) => sum + item.quantity, 0),
-        // shippingAddress: '', // You might want to add this
-        // paymentMethod: '' // And this
+        
       }
     );
 

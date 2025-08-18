@@ -182,7 +182,8 @@ const Commerce = () => {
       description: "Original artwork crafted by skilled hands",
       link: "/handmade-paintings",
       accentColor: "bg-amber-100 dark:bg-amber-800",
-      hoverColor: "hover:bg-amber-200 dark:hover:bg-amber-700"
+      hoverColor: "hover:bg-amber-200 dark:hover:bg-amber-700",
+      image:"https://images.pexels.com/photos/3358727/pexels-photo-3358727.jpeg"
     },
     {
       id: 2,
@@ -190,7 +191,8 @@ const Commerce = () => {
       description: "Unique items to beautify your home and space",
       link: "/decor-crafts",
       accentColor: "bg-teal-100 dark:bg-teal-800",
-      hoverColor: "hover:bg-teal-200 dark:hover:bg-teal-700"
+      hoverColor: "hover:bg-teal-200 dark:hover:bg-teal-700",
+      image:"https://images.pexels.com/photos/33297461/pexels-photo-33297461.jpeg"
     },
     {
       id: 3,
@@ -198,7 +200,8 @@ const Commerce = () => {
       description: "Art inspired by traditional roots and culture",
       link: "/cultural-creations",
       accentColor: "bg-purple-100 dark:bg-purple-800",
-      hoverColor: "hover:bg-purple-200 dark:hover:bg-purple-700"
+      hoverColor: "hover:bg-purple-200 dark:hover:bg-purple-700",
+      image:"https://images.pexels.com/photos/3772488/pexels-photo-3772488.jpeg"
     },
   ];
 
@@ -236,34 +239,38 @@ const Commerce = () => {
         </motion.div>
 
         {/* Categories */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {featuredCategories.map((cat) => (
-            <motion.div
-              key={cat.id}
-              whileHover={{ y: -5 }}
-              transition={{ type: "spring", stiffness: 300 }}
-            >
-              <Link
-                to={cat.link}
-                className={`block h-full p-1 rounded-xl ${cat.hoverColor} transition-colors group`}
-              >
-                <div className={`h-40 ${cat.accentColor} rounded-lg mb-4 overflow-hidden`}>
-                  <div className="w-full h-full bg-gradient-to-br from-transparent to-black/10 dark:to-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-                </div>
-                <div className="px-2 pb-4">
-                  <h3 className="text-xl font-medium mb-2 text-gray-900 dark:text-white group-hover:text-gray-800 dark:group-hover:text-gray-100 transition-colors">
-                    {cat.title}
-                  </h3>
-                  <p className="text-gray-700 dark:text-gray-300 mb-4">{cat.description}</p>
-                  <div className="flex items-center text-gray-500 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-gray-200 transition-colors">
-                    <span className="text-sm font-medium">Browse collection</span>
-                    <FiArrowRight className="ml-2 transition-transform group-hover:translate-x-1" />
-                  </div>
-                </div>
-              </Link>
-            </motion.div>
-          ))}
+<div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+  {featuredCategories.map((cat) => (
+    <motion.div
+      key={cat.id}
+      whileHover={{ scale: 1.03 }}
+      transition={{ type: "spring", stiffness: 200, damping: 15 }}
+      className="relative rounded-xl overflow-hidden shadow-lg group cursor-pointer"
+      style={{
+        backgroundImage: `url(${cat.image})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        height: "250px",
+      }}
+    >
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent transition-opacity duration-300 group-hover:from-black/80"></div>
+
+      {/* Content */}
+      <Link to={cat.link} className="absolute inset-0 flex flex-col justify-end p-5">
+        <h3 className="text-2xl font-semibold text-white mb-1 group-hover:text-purple-300 transition-colors">
+          {cat.title}
+        </h3>
+        <p className="text-gray-200 text-sm mb-3">{cat.description}</p>
+        <div className="flex items-center text-purple-300 font-medium group-hover:text-white transition-colors">
+          <span>Browse Collection</span>
+          <FiArrowRight className="ml-2 transition-transform group-hover:translate-x-1" />
         </div>
+      </Link>
+    </motion.div>
+  ))}
+</div>
+
 
         {/* Purpose Card */}
         <motion.div
@@ -280,7 +287,7 @@ const Commerce = () => {
               Every purchase supports an artist directly. You're not just buying decor—you're preserving craftsmanship and enabling creativity.
             </p>
             <Link
-              to="/about"
+              to="/Company/About/AboutHandmade"
               className="inline-flex items-center text-teal-700 dark:text-teal-400 hover:text-teal-600 dark:hover:text-teal-300 font-medium group"
             >
               Learn about our artists

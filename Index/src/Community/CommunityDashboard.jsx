@@ -16,143 +16,6 @@ const CommunityDashboard = () => {
   const [showResourceModal, setShowResourceModal] = useState(false);
   const [requests, setRequests] = useState([]);
   const [currentUser, setCurrentUser] = useState(null)
-//   useEffect(() => {
-//     const fetchCommunity = async () => {
-//       try {
-//         setLoading(true);
-
-//         // Get community by slug
-//         const response = await databases.listDocuments(
-//           import.meta.env.VITE_APPWRITE_COMMUNITY_DATABASE_ID,
-//           import.meta.env.VITE_APPWRITE_COMMUNITY_COLLECTION_ID,
-//           [Query.equal('slug', slug)]
-//         );
-
-//         if (response.documents.length === 0) {
-//           throw new Error('Community not found');
-//         }
-
-//         const communityData = response.documents[0];
-//         setCommunity(communityData);
-
-//         // Get members by community ID
-//         const membersResponse = await databases.listDocuments(
-//           import.meta.env.VITE_APPWRITE_COMMUNITY_DATABASE_ID,
-//           import.meta.env.VITE_APPWRITE_COMMUNITY_MEMBERS_COLLECTION_ID,
-//           [Query.equal('communityId', communityData.$id)]
-//         );
-
-//         // Fetch usernames from users collection
-//         const membersWithUsernames = await Promise.all(
-//           membersResponse.documents.map(async (member) => {
-//             try {
-//              const userDoc = await databases.getDocument(
-//                 import.meta.env.VITE_APPWRITE_DATABASE_ID,
-//                 import.meta.env.VITE_APPWRITE_USERS_COLLECTION_ID,
-//                 member.userId
-            
-//               ); 
-//               return {
-//                 ...member,
-//                 username: userDoc.username || "Unknown User",
-//               };
-
-//             } catch (error) {
-//               console.error("Failed to fetch user:", error);
-//               return {
-//                 ...member,
-//                 username: "Unknown User",
-//               };
-//             }
-//           })
-//         );
-
-//         setMembers(membersWithUsernames);
-//       } catch (error) {
-//         console.error("Error fetching community:", error.message);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-
-//     fetchCommunity();
-//   }, [slug]);
-
-
-//   // getting the requested user 
-//   useEffect(() => {
-//   const fetchRequests = async () => {
-//     try {
-//       const user = await account.get();
-//       const ownerId = user.$id;
-
-//       const response = await databases.listDocuments(
-//         import.meta.env.VITE_APPWRITE_COMMUNITY_DATABASE_ID,
-//         import.meta.env.VITE_APPWRITE_COMMUNITY_REQUEST_COLLECTION_ID,
-//         [
-//           Query.equal('ownerId', ownerId),
-//           Query.equal('status', 'pending')
-//         ]
-//       );
-
-//       setRequests(response.documents);
-//     } catch (error) {
-//       console.error("Error fetching join requests:", error);
-//     }
-//   };
-
-//   fetchRequests();
-// }, []);
-
-// // approving the the requested user 
-// const handleApprove = async (request) => {
-//   try {
-//     // Step 1: Add user to members
-//     await databases.createDocument(
-//       import.meta.env.VITE_APPWRITE_COMMUNITY_DATABASE_ID,
-//       import.meta.env.VITE_APPWRITE_COMMUNITY_MEMBERS_COLLECTION_ID,
-//       'unique()',
-//       {
-//         communityId: request.communityId,
-//         userId: request.userId,
-//         role: 'member', // optional role field
-//         joinedAt: new Date().toISOString()
-//       }
-//     );
-
-//     // Step 2: Update request status
-//     await databases.updateDocument(
-//       import.meta.env.VITE_APPWRITE_COMMUNITY_DATABASE_ID,
-//       import.meta.env.VITE_APPWRITE_COMMUNITY_REQUEST_COLLECTION_ID,
-//       request.$id,
-//       {
-//         status: 'approved'
-//       }
-//     );
-
-//     toast.success("User added to community!");
-//     // Optionally refetch requests
-//   } catch (err) {
-//     console.error("Approval error:", err);
-//     toast.error("Failed to approve request");
-//   }
-// };
-
-
-// // rejecting the the requested user 
-// const handleReject = async (request) => {
-//   try {
-//     await databases.updateDocument(
-//       import.meta.env.VITE_APPWRITE_COMMUNITY_DATABASE_ID,
-//       import.meta.env.VITE_APPWRITE_COMMUNITY_REQUEST_COLLECTION_ID,
-//       request.$id,
-//       { status: 'rejected' }
-//     );
-//     toast("Request rejected");
-//   } catch (err) {
-//     console.error("Rejection error:", err);
-//   }
-// };
 
 useEffect(() => {
     const fetchUser = async () => {
@@ -277,47 +140,6 @@ useEffect(() => {
 
     fetchRequests();
   }, [community]);
-
-  // // Approve join request
-  // const handleApprove = async (request) => {
-  //   try {
-  //     // 1. Add user to members collection
-  //     const newMember = await databases.createDocument(
-  //       import.meta.env.VITE_APPWRITE_COMMUNITY_DATABASE_ID,
-  //       import.meta.env.VITE_APPWRITE_COMMUNITY_MEMBERS_COLLECTION_ID,
-  //       'unique()',
-  //       {
-  //         communityId: request.communityId,
-  //         userId: request.userId,
-  //         role: 'member',
-  //         joinedAt: new Date().toISOString()
-  //       }
-  //     );
-
-  //     // 2. Update request status to approved
-  //     await databases.updateDocument(
-  //       import.meta.env.VITE_APPWRITE_COMMUNITY_DATABASE_ID,
-  //       import.meta.env.VITE_APPWRITE_COMMUNITY_REQUEST_COLLECTION_ID,
-  //       request.$id,
-  //       { status: 'approved' }
-  //     );
-
-  //     // 3. Update local state
-  //     setRequests(requests.filter(req => req.$id !== request.$id));
-      
-  //     // Add the new member to members list with username
-  //     setMembers([...members, {
-  //       ...newMember,
-  //       username: request.username,
-  //       avatar: request.avatar
-  //     }]);
-
-  //     toast.success(`${request.username} has been added to the community!`);
-  //   } catch (error) {
-  //     console.error("Approval error:", error);
-  //     toast.error("Failed to approve request");
-  //   }
-  // };
 
 
   const handleApprove = async (request) => {
@@ -714,81 +536,6 @@ useEffect(() => {
               )}
 
               {/* Members Tab */}
-              {/* {activeTab === 'members' && (
-                <motion.div
-                  variants={containerVariants}
-                  initial="hidden"
-                  animate="visible"
-                  className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden"
-                >
-                  <div className="p-6 sm:p-8">
-                    <div className="flex justify-between items-center mb-6">
-                      <h2 className="text-xl font-bold text-gray-800 dark:text-white">Community Members</h2>
-                      <button className="text-sm text-purple-600 dark:text-purple-400 hover:underline">
-                        Invite Members
-                      </button>
-                    </div>
-                    
-                    <div className="overflow-hidden">
-                      <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                        <thead className="bg-gray-50 dark:bg-gray-700">
-                          <tr>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Member</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Role</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Joined</th>
-                          </tr>
-                        </thead>
-                        <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                          {members.map((member) => (
-                            <motion.tr
-                              key={member.$id}
-                              variants={itemVariants}
-                              whileHover={{ backgroundColor: 'rgba(243, 244, 246, 0.5)' }}
-                              className="transition"
-                            >
-                              <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="flex items-center">
-                                  <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-                                    👤
-                                  </div>
-                                  <div className="ml-4">
-                                    <div className="text-sm font-medium text-gray-900 dark:text-white">
-                                      {member.username}
-                                    </div>
-                                  </div>
-                                </div>
-                              </td>
-                              <td className="px-6 py-4 whitespace-nowrap">
-                                <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                                  member.role === 'owner' 
-                                    ? 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200'
-                                    : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                                }`}>
-                                  {member.role}
-                                </span>
-                              </td>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                                {new Date(member.joinedAt).toLocaleDateString()}
-                              </td>
-                            </motion.tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                  <div>
-                  {requests.map((req) => (
-                  <div key={req.$id} className="border p-4 rounded mb-2">
-                  <p>User ID: {req.userId}</p>
-                  <p>Community: {req.communityName}</p>
-                  <button onClick={() => handleApprove(req)} className="text-green-600 mr-4">Approve</button>
-                  <button onClick={() => handleReject(req)} className="text-red-600">Reject</button>
-                  </div>
-                ))}
-
-              </div>
-                </motion.div>
-              )} */}
 
               {activeTab === 'members' && (
           <motion.div
@@ -851,8 +598,7 @@ useEffect(() => {
                   </tbody>
                 </table>
               </div>
-            </div>
-
+             </div>
             {/* Pending Requests Section */}
             {requests.length > 0 && (
               <div className="border-t border-gray-200 dark:border-gray-700 p-6">
@@ -919,6 +665,10 @@ useEffect(() => {
           </motion.div>
         )}
               {/* Add other tabs content here */}
+              <Link to={"/Community/DiscoverNewMember/MemberDiscoveryPage"}>
+             <div>
+              find new member
+             </div></Link>
             </div>
 
             {/* Right Column - Sidebar */}
@@ -984,6 +734,7 @@ useEffect(() => {
                       <span className="text-gray-800 dark:text-white">Start Live Session</span>
                       <span className="text-purple-600 dark:text-purple-400 text-xl">🎥</span>
                     </motion.button>
+                    <Link to={"/Community/CommunityDashboard/CreateNewChallenge"}>                  
                     <motion.button
                       variants={itemVariants}
                       whileHover={{ scale: 1.02 }}
@@ -993,6 +744,7 @@ useEffect(() => {
                       <span className="text-gray-800 dark:text-white">Create Challenge</span>
                       <span className="text-purple-600 dark:text-purple-400 text-xl">🎨</span>
                     </motion.button>
+                      </Link>
                     <motion.button
                       variants={itemVariants}
                       whileHover={{ scale: 1.02 }}

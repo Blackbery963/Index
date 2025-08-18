@@ -114,7 +114,7 @@ function Oil_paint() {
         const response = await databases.listDocuments(
           DATABASE_ID,
           COLLECTION_ID,
-          [Query.equal('tag', 'Oil Painting')]
+          [Query.equal('medium', 'Oil Painting')]
         );
   
         // Get image URLs

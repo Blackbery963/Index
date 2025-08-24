@@ -309,10 +309,10 @@ function Impression() {
                   <span className="ml-1">Account</span>
                 </button>
               </Link>
-              <Link to='/Landscape'>
+              <Link to='/Gallery'>
                 <button 
-                  className={`px-2 py-1 rounded-md transition-all bg-blue-500 text-white flex items-center justify-center gap-1 ${activeButton === 'landscape' ? 'bg-blue-600' : ''}`}
-                  onClick={() => setActiveButton('landscape')}
+                  className={`px-2 py-1 rounded-md transition-all bg-blue-500 text-white flex items-center justify-center gap-1 ${activeButton === 'Gallery' ? 'bg-blue-600' : ''}`}
+                  onClick={() => setActiveButton('Gallery')}
                 >
                   <FaPalette />
                   <span className="ml-1">Gallery</span>
@@ -358,7 +358,7 @@ function Impression() {
                     Account
                   </button>
                 </Link>
-                <Link to='/Landscape' onClick={() => { setActiveButton('landscape'); toggleMenu(); }}>
+                <Link to='/Gallery' onClick={() => { setActiveButton('Gallery'); toggleMenu(); }}>
                   <button className={`w-full py-2 px-4 flex items-center justify-center gap-2 bg-blue-500 text-white hover:bg-blue-600 rounded-lg`}>
                     <FaPalette />
                     Gallery
@@ -388,14 +388,14 @@ function Impression() {
         </div>
       </div>
       {/* Content Section */}
-      <section ref={contentRef} className='w-[85%] py-12 bg-gray-100 dark:bg-gray-900  mx-auto'>
-    <div className='max-w-7xl mx-auto text-center mb-8'>
+      <section ref={contentRef} className='lg:w-[85%] w-[96%] py-4 bg-gray-100 dark:bg-gray-900  mx-auto'>
+    <div className='max-w-7xl mx-auto text-center mb-0'>
   <h2 className='text-2xl md:text-3xl font-bold font-Quicksand text-gray-800 dark:text-gray-200 mb-4'>Experience the Light of Impressionism</h2>
   <p className='text-base md:text-lg text-gray-600 dark:text-gray-300'>
     Impressionism captures life’s fleeting beauty through vibrant strokes and natural light. Relive the movement that changed art forever.
   </p>
 </div>
-
+</section>
         {/* The divider section */}
       <div className="max-w-7xl mx-auto px-4 py-12 bg-gray-100 dark:bg-gray-900">
            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -428,122 +428,68 @@ function Impression() {
             No Impression images found.
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-4 max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-4 lg:max-w-[85%] mx-auto">
             {filteredImages.map((image, index) => (
               <motion.div
-                key={image.$id}
-                className="relative overflow-hidden rounded-xl shadow-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700"
-                whileHover={{ scale: 1.00, shadow: '0 10px 20px rgba(0,0,0,0.2)' }}
-                transition={{ type: 'spring', stiffness: 400, damping: 10 }}
-              >
-                {/* Profile Section */}
-              <div className="flex items-center p-4 border-b border-gray-200 dark:border-gray-700">
-               <Link 
-               to={`/Account/${image.userId}`}
-               className="flex items-center group flex-1 min-w-0"
-               >
-               {userProfiles[image.userId]?.profileImage ? (
-               <img
-               src={userProfiles[image.userId].profileImage}
-               className="h-10 w-10 rounded-full object-cover"
-               alt={userProfiles[image.userId].name}
-               onError={(e) => {
-               e.target.onerror = null;
-               e.target.src = '';
-               e.target.className = 'h-10 w-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-white';
-               e.target.textContent = userProfiles[image.userId]?.name?.charAt(0) || 'U';
-               }}
-               />
-               ) : (
-               <div className="h-10 w-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-white">
-               {userProfiles[image.userId]?.name?.charAt(0) || 'U'}
-               </div>
-               )}
-               <div className="ml-3 min-w-0">
-               <p className="text-sm font-semibold text-gray-800 dark:text-gray-200 truncate group-hover:underline">
-               {userProfiles[image.userId]?.name || 'Unknown Artist'}
-               </p>
-                {userProfiles[image.userId]?.title && (
-               <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
-               {userProfiles[image.userId].title}
-               </p>
-                )}
-               </div>
-               </Link>
-               <FollowButton targetUserId={image.userId} />
-              </div>
-                {/* Image */}
-                <img
-                  src={image.url}
-                  alt={image.title || 'Landscape image'}
-                  className="w-full h-64 object-cover cursor-pointer"
-                  loading="lazy"
-                  onError={(e) => (e.target.src = 'https://via.placeholder.com/150')}
-                  onClick={() => openLightbox(index)}
-                />
-                {/* Actions */}
-                <div className="flex justify-between items-center p-4">
-                  <div className="flex space-x-4">
-                  <div className="flex items-center space-x-1 text-gray-500 dark:text-gray-400">
-                    <FaRegEye className='text-[20px]'/>
-                      <span className="text-sm font-Quicksand">{image.viewCount || 0}</span>
-                    </div>
-                    <LikeButton targetId={image.$id}/>
-                    <button
-                      onClick={() => setShowComments(showComments === image.$id ? null : image.$id)}
-                      className="flex items-center space-x-1 text-gray-500 dark:text-gray-400 hover:text-blue-500 transition-colors"
-                    >
-                      <FaRegComment />
-                      <span className="text-sm font-Quicksand">0</span>
-                    </button>
-                    <div>
-                      <DownloadService artwork={image} />
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <ShareButton artwork={image} />
-                    </div>
-                  </div>
-                </div>
-                {/* Comment Section */}
-                <AnimatePresence>
-                  {showComments === image.$id && (
-                    <motion.div
-                      className="p-4 bg-gray-50 dark:bg-gray-700 border-t border-gray-200 dark:border-gray-600"
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <form onSubmit={(e) => handleCommentSubmit(image.$id, e)} className="flex flex-col">
-                        <textarea
-                          value={newComment}
-                          onChange={(e) => setNewComment(e.target.value)}
-                          placeholder="Add a comment..."
-                          className="w-full p-2 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 resize-none"
-                          rows={3}
-                        />
-                        <button
-                          type="submit"
-                          className="mt-2 px-4 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600 font-Quicksand"
-                        >
-                          Post
-                        </button>
-                      </form>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-                {/* Image Details */}
-                <div className="p-4 border-t border-gray-200 dark:border-gray-700">
-                  <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 font-Quicksand truncate">
-                    {image.title || 'Untitled'}
-                  </h3>
-                  {image.description && (
-                    <p className="text-gray-600 dark:text-gray-400 text-sm mt-1 line-clamp-2">
-                      {image.description}
-                    </p>
-                  )}
-                </div>
-              </motion.div>
+                                key={image.$id}
+                                className="relative rounded-xl overflow-hidden"
+                                transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+                              >
+                                <img
+                                  src={image.url}
+                                  alt={image.title || 'Artwork'}
+                                  className="w-full h-80 object-cover cursor-pointer"
+                                  loading="lazy"
+                                  onClick={() => openLightbox(index)}
+                                />
+                                <div className="absolute top-0 left-0 right-0 flex items-center justify-between p-3 bg-gradient-to-b from-black/40 to-transparent">
+                                  <Link to={`/Account/${image.userId}`} className="flex items-center space-x-2">
+                                    {userProfiles[image.userId]?.profileImage ? (
+                                      <img
+                                        src={userProfiles[image.userId].profileImage}
+                                        alt={userProfiles[image.userId].name}
+                                        className="w-8 h-8 rounded-full object-cover border border-white"
+                                      />
+                                    ) : (
+                                      <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-white text-xs">
+                                        {userProfiles[image.userId]?.name?.charAt(0) || 'U'}
+                                      </div>
+                                    )}
+                                    <span className="text-sm font-semibold text-white">
+                                      {userProfiles[image.userId]?.name || 'Username'}
+                                    </span>
+                                  </Link>
+                                  <FollowButton targetUserId={image.userId} />
+                                </div>
+                                {image.tag && (
+                                  <div className="absolute bottom-0 right-0 m-2 px-2 py-1 rounded-md shadow-inner border dark:text-white text-gray-800 border-neutral-500 text-xs font-medium">
+                                    {image.medium}
+                                  </div>
+                                )}
+                                <div className=" right-0 flex justify-between items-center px-3 py-2 text-sm">
+                                    <div className="flex items-center space-x-4">
+                                      <div className="flex items-center space-x-1">
+                                        <FaRegEye className="text-[18px] text-gray-500 dark:text-gray-400" />
+                                        <span className='text-gray-500 dark:text-gray-400'>{image.viewCount || 0}</span>
+                                      </div>
+                                      <LikeButton targetId={image.$id} className="text-white" />
+                                    </div>
+                                    <div className="flex items-center space-x-2">
+                                      <DownloadService artwork={image} />
+                                      <ShareButton artwork={image} />
+                                    </div>
+                                  </div>
+                                <div className="mt-2 px-4 pb-4">
+                                  <h3 className="text-base font-semibold text-gray-800 dark:text-gray-200">
+                                    {image.title || 'Title'}
+                                  </h3>
+                                  {image.description && (
+                                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                                      {image.description}
+                                    </p>
+                                  )}
+                                </div>
+                              </motion.div>
             ))}
           </div>
         )}
@@ -600,7 +546,6 @@ function Impression() {
         )}
       </AnimatePresence>
         </section>
-      </section>
     </div>
   );
 }

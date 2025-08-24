@@ -1299,85 +1299,149 @@ const UploadEntry = ({ index, entry, updateEntry, removeEntry, handleFileChange,
   const [finalPrice, setFinalPrice] = useState(0);
   const [currentStep, setCurrentStep] = useState(1);
 
-  const artAndCraftTypes = [
-    // Traditional & Fine Arts
-    "Oil Painting",
-    "Acrylic Painting",
-    "Watercolor Painting",
-    "Ink Drawing",
-    "Charcoal Drawing",
-    "Pastel Art",
-    "Pencil Sketch",
-    "Mixed Media",
+//   const artAndCraftTypes = [
+//     // Traditional & Fine Arts
+//     "Oil Painting",
+//     "Acrylic Painting",
+//     "Watercolor Painting",
+//     "Ink Drawing",
+//     "Charcoal Drawing",
+//     "Pastel Art",
+//     "Pencil Sketch",
+//     "Mixed Media",
     
-    // Digital Art
-    "Digital Art",
-    "Digital Painting",
-    "3D Modeling",
-    "Photography",
+//     // Digital Art
+//     "Digital Art",
+//     "Digital Painting",
+//     "3D Modeling",
+//     "Photography",
     
-    // Crafts
-    "Pottery",
-    "Ceramics",
-    "Glass Art",
-    "Jewelry Making",
-    "Textile Art",
-    "Fabric Painting",
-    "Embroidery",
-    "Knitting/Crochet",
-    "Woodworking",
-    "Metal Crafts",
-    "Paper Crafts",
-    "Origami",
-    "Scrapbooking",
-    "Candle Making",
-    "Soap Making",
-    "Basket Weaving",
-    "Leather Craft",
-    "Beadwork",
+//     // Crafts
+//     "Pottery",
+//     "Ceramics",
+//     "Glass Art",
+//     "Jewelry Making",
+//     "Textile Art",
+//     "Fabric Painting",
+//     "Embroidery",
+//     "Knitting/Crochet",
+//     "Woodworking",
+//     "Metal Crafts",
+//     "Paper Crafts",
+//     "Origami",
+//     "Scrapbooking",
+//     "Candle Making",
+//     "Soap Making",
+//     "Basket Weaving",
+//     "Leather Craft",
+//     "Beadwork",
     
-    // Sculpture
-    "Sculpture",
-    "Clay Modeling",
-    "Stone Carving",
+//     // Sculpture
+//     "Sculpture",
+//     "Clay Modeling",
+//     "Stone Carving",
     
-    // Other
-    "Other"
-  ];
+//     // Other
+//     "Other"
+//   ];
 
-const tagOptions = [
-  // 🎨 Styles
-  "Abstract", "Realism", "Impressionism", "Surrealism", "Minimalism", "Modern", "Vintage",
+// const tagOptions = [
+//   // 🎨 Styles
+//   "Abstract", "Realism", "Impressionism", "Surrealism", "Minimalism", "Modern", "Vintage",
   
-  // 🌍 Themes
-  "Portrait", "Landscape", "Nature", "Fantasy", "Cultural", "Spiritual", "Still Life", "Urban", "Traditional",
+//   // 🌍 Themes
+//   "Portrait", "Landscape", "Nature", "Fantasy", "Cultural", "Spiritual", "Still Life", "Urban", "Traditional",
   
-  // 🖌 Mediums
-  "Digital", "Photography", "Mixed Media", "Textile", "Wood", "Ceramic", "Paper",
+//   // 🖌 Mediums
+//   "Digital", "Photography", "Mixed Media", "Textile", "Wood", "Ceramic", "Paper",
   
-  // 🏠 Purpose
-  "Home Decor", "Wearable", "Gift Item", "Poster & Prints", "Handmade"
-];
-
-
-
-
-//   const tagOptions = [
-//   // 🎨 Fine Art Styles
-//   'Abstract', 'Realism', 'Impressionism', 'Expressionism', 'Surrealism', 'Minimalism', 'StillLife',
-  
-//   // 🌍 Themes & Subjects
-//   'Landscape', 'Portrait', 'Nature', 'Fantasy', 'Historical', 'Pop Art',
-  
-//   // 🖌 Mediums & Techniques
-//   'Digital Art', 'Traditional', 'Photography', 'Mixed Media', 'Watercolour', 'Oil Painting',
-  
-//   // 🏠 Functional & Commercial
-//   'Home Decor', 'Wearable Art', 'Functional Art', 'Stationery', 'Prints & Posters', 'Vintage',
-  
-//   // 💡 Contemporary & Trend-Driven
-//   'Modern', 'Street Art', 'Conceptual Art', 'Handmade', 'Sculpture', 'Installation Art'
+//   // 🏠 Purpose
+//   "Home Decor", "Wearable", "Gift Item", "Poster & Prints", "Handmade"
 // ];
+
+const artCategories = {
+  showcase: {
+    types: [
+      // Traditional & Fine Arts
+      "Oil Painting",
+      "Acrylic Painting",
+      "Watercolor Painting",
+      "Ink Drawing",
+      "Charcoal Drawing",
+      "Pastel Art",
+      "Pencil Sketch",
+      "Mixed Media",
+
+      // Digital Art
+      "Digital Art",
+      "Digital Painting",
+      "3D Modeling",
+
+      // Photography
+      "Portrait Photography",
+      "Landscape Photography",
+      "Portrait Photography",
+      "Street Photography",
+      "Wildlife Photography",
+      "Fashion Photography",
+      "Micro Photography",
+      "Architectural Photography",
+      "Astrophotography",
+
+      // Sculpture
+      "Sculpture",
+      "Clay Modeling",
+      "Stone Carving",
+
+      // Other
+      "Other"
+    ],
+    tags: [
+      // 🎨 Styles
+      "Abstract", "Realism", "Impressionism", "Surrealism", "Minimalism", "Modern", "Vintage","Photography",
+
+
+      // 🌍 Themes
+      "Portrait", "Landscape", "Nature", "Fantasy", "Cultural", "Spiritual", "StillLife", "Urban", "Traditional",
+
+      // 🖌 Mediums
+      "Digital", "Photography", "Mixed Media", "Paper"
+    ]
+  },
+
+  commercial: {
+    types: [
+      // Crafts
+      "Pottery",
+      "Ceramics",
+      "Glass Art",
+      "Jewelry Making",
+      "Textile Art",
+      "Fabric Painting",
+      "Embroidery",
+      "Knitting/Crochet",
+      "Woodworking",
+      "Metal Crafts",
+      "Paper Crafts",
+      "Origami",
+      "Scrapbooking",
+      "Candle Making",
+      "Soap Making",
+      "Basket Weaving",
+      "Leather Craft",
+      "Beadwork"
+    ],
+    tags: [
+      // 🖌 Mediums
+      "Textile", "Wood", "Ceramic",
+
+      // 🏠 Purpose
+      "Home Decor", "Wearable", "Gift Item", "Poster & Prints", "Handmade"
+    ]
+  }
+};
+
+
 
 
   // const tagOptions = [
@@ -1573,7 +1637,7 @@ const tagOptions = [
       {/* Step 2: Categories */}
       {currentStep === 2 && (
         <div className="space-y-4">
-          <div>
+          {/* <div>
             <label className="text-base font-semibold text-teal-700 dark:text-teal-400 mb-1 block font-Playfair">
               Category Tag *
             </label>
@@ -1609,7 +1673,74 @@ const tagOptions = [
                 </option>
               ))}
             </select>
-          </div>
+          </div> */}
+
+          {/* Category Tag */}
+<div>
+  <label className="text-base font-semibold text-teal-700 dark:text-teal-400 mb-1 block font-Playfair">
+    Category Tag *
+  </label>
+  <select
+    value={entry.tag}
+    onChange={(e) => updateEntry(index, 'tag', e.target.value)}
+    className="w-full p-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-200 font-medium font-Playfair"
+    required
+  >
+    <option value="">Choose a Category Tag</option>
+
+    <optgroup label="Artistic Styles">
+      {artCategories.showcase.tags.map((tag) => (
+        <option key={tag} value={tag}>
+          {tag}
+        </option>
+      ))}
+    </optgroup>
+
+    <optgroup label="Crafts & Creation">
+      {artCategories.commercial.tags.map((tag) => (
+        <option key={tag} value={tag}>
+          {tag}
+        </option>
+      ))}
+    </optgroup>
+  </select>
+</div>
+
+{/* Art/Craft Type */}
+<div>
+  <label className="text-base font-semibold text-teal-700 dark:text-teal-400 mb-1 block font-Playfair">
+    Art/Craft Type *
+  </label>
+  <select
+    value={entry.medium}
+    onChange={(e) => updateEntry(index, 'medium', e.target.value)}
+    className="w-full p-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-200 font-medium font-Playfair"
+    required
+  >
+    <option value="">Choose Art/Craft Type</option>
+
+    <optgroup label="Artistic Styles">
+      {artCategories.showcase.types.map((type) => (
+        <option key={type} value={type}>
+          {type}
+        </option>
+      ))}
+    </optgroup>
+
+    <optgroup label="Crafts & Creation">
+      {artCategories.commercial.types.map((type) => (
+        <option key={type} value={type}>
+          {type}
+        </option>
+      ))}
+    </optgroup>
+  </select>
+</div>
+
+
+
+
+
 
           <div className="flex justify-between">
             <button
@@ -1984,13 +2115,21 @@ const UploadSection = () => {
     if (!files || files.length === 0) return;
     const file = files[0];
     const maxSize = 10 * 1024 * 1024;
-    const validTypes = [
-      'image/jpeg', 
-      'image/jpg',
-      'image/png', 
-      'image/webp',
-      'image/x-png'
-    ];
+  const validTypes = [
+  // 🖼 Images
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/webp",
+  "image/x-png",
+
+  // 🎥 Videos
+  "video/mp4",
+  "video/webm",
+  "video/ogg",
+  "video/quicktime" // for .mov files
+];
+
 
     if (!validTypes.includes(file.type)) {
       toast.error('Please upload a valid image (JPEG, PNG, or WEBP)');
@@ -2537,8 +2676,9 @@ const Navbar = () => {
       className="fixed top-3 left-[2.5%] -translate-x-1/2 z-50 w-[95%] bg-white/40 dark:bg-gray-900/40 backdrop-blur-md rounded-xl shadow-md px-4 py-3 flex items-center justify-between"
     >
       {/* Logo */}
-      <h1 className="text-2xl font-bold text-teal-800 dark:text-teal-200 font-Eagle">Painters' Diary</h1>
-
+      <Link to="/">
+        <h1 className="text-2xl font-bold text-teal-800 dark:text-teal-200 font-Eagle">Painters' Diary</h1>
+      </Link>
       {/* Desktop Nav */}
       <nav className="hidden md:flex space-x-6 text-gray-700 dark:text-gray-200 font-medium">
         {navLinks.map((link) => (

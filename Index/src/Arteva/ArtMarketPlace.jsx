@@ -99,19 +99,6 @@ const ArtMarketplace = () => {
     },
   ];
 
-
-  // const categories = [
-    // { id: 'all', name: 'All Items' },
-  //   { id: 'paintings', name: 'Paintings' },
-  //   { id: 'ceramics', name: 'Ceramics' },
-  //   { id: 'textiles', name: 'Textiles' },
-  //   { id: 'woodwork', name: 'Woodwork' },
-  //   { id: 'jewelry', name: 'Jewelry' },
-  //   { id: 'papergoods', name: 'Paper Goods' },
-  // ];
-
-
-
   const categories = [
   // { id: 'trending', name: 'Trending', },
       { id: 'all', name: 'All Items' },

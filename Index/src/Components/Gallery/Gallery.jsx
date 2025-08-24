@@ -451,12 +451,19 @@ function Gallery() {
     </Link>
     <FollowButton targetUserId={image.userId} />
   </div>
+
+  {image.tag && (
+    <div className=" absolute bottom-0 right-0 m-2 px-2 py-1 rounded-md shadow-inner border dark:text-white text-gray-800 border-neutral-500 text-xs font-medium">
+      {image.tag}
+    </div>
+  )}
+
   {/* Bottom Actions Overlay */}
   <div className=" right-0 flex justify-between items-center px-3 py-2 text-sm">
     <div className="flex items-center space-x-4">
       <div className="flex items-center space-x-1">
-        <FaRegEye className="text-[18px]" />
-        <span>{image.viewCount || 0}</span>
+        <FaRegEye className="text-[18px] text-gray-500 dark:text-gray-400" />
+        <span className='text-gray-500 dark:text-gray-400'>{image.viewCount || 0}</span>
       </div>
       <LikeButton targetId={image.$id} className="text-white" />
     </div>

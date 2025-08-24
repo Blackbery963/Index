@@ -1,108 +1,164 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { databases } from '../../appwriteConfig'; // 👈 import Appwrite config
+import { ID } from "appwrite"; // for unique document IDs
 import FeedBackground from './evaluation-feedback-customer-smiley-response-min.jpg';
 import FeedBackground2 from './9019830.jpg';
-import { FaHome, FaInfoCircle, FaUser, FaBook } from 'react-icons/fa';
-import {MdBook} from 'react-icons/md';
+import { FaHome, FaInfoCircle, FaUser } from 'react-icons/fa';
+import { MdBook } from 'react-icons/md';
 import { motion } from 'framer-motion';
+import { HiMenu, HiX } from "react-icons/hi";
+import { toast, ToastContainer } from 'react-toastify';
+
 
 function Feedback() {
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
+  const [username, setUsername] = useState("");
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   // Colorful emotions with emoji and text
   const emojiReactions = {
-    1: { text: '😞 Very Bad', color: '#ff4d4d' }, // Red
-    2: { text: '🙁 Bad', color: '#ff8c1a' },      // Orange
-    3: { text: '😐 Okay', color: '#ffd700' },     // Yellow
-    4: { text: '🙂 Good', color: '#00cc00' },     // Green
-    5: { text: '😄 Excellent!', color: '#00ced1' }, // Dark Turquoise
+    1: { text: '😞 Very Bad', color: '#ff4d4d' },
+    2: { text: '🙁 Bad', color: '#ff8c1a' },
+    3: { text: '😐 Okay', color: '#ffd700' },
+    4: { text: '🙂 Good', color: '#00cc00' },
+    5: { text: '😄 Excellent!', color: '#00ced1' },
   };
 
   const handleClick = (star) => {
     setRating(star);
   };
 
-  // Fallback for emoji rendering (replace with twemoji.parse if imported)
+  // Submit Feedback
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!username || !message || rating === 0) {
+      alert("Please fill all fields and give a rating!");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      await databases.createDocument(
+        import.meta.env.VITE_APPWRITE_DATABASE_ID, // replace with your DB ID
+        import.meta.env.VITE_APPWRITE_FEEDBACK_COLLECTION_ID, // replace with your Collection ID
+        ID.unique(),
+        {
+          username,
+          rating,
+          message,
+        }
+      );
+      toast.success("💡 Thanks for sharing! Your voice makes Painters' Diary better.");
+      setUsername("");
+      setMessage("");
+      setRating(0);
+    } catch (error) {
+      console.error("Error submitting feedback:", error);
+      toast.error("❌ Something went wrong, try again!");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const renderEmoji = (text) => text;
 
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const buttonVariants = {
-    hover: { scale: 1.1, backgroundColor: '#A4C6EB', transition: { duration: 0.3 } },
+    hover: { scale: 1.1, backgroundColor: "#ffffff33", transition: { duration: 0.3 } },
     tap: { scale: 0.95 },
   };
 
+  const navLinks = [
+    { to: "/", label: "Home", icon: <FaHome /> },
+    { to: "/About", label: "About", icon: <FaInfoCircle /> },
+    { to: "/Account", label: "Account", icon: <FaUser /> },
+    { to: "/Journal", label: "Diary", icon: <MdBook /> },
+  ];
 
   return (
     <>
-      {/* Header */}
-      <header className="h-[80px] w-full bg-gradient-to-l from-[#10002bad] to-[#dec9e9a9] backdrop-blur-md flex items-center justify-between px-4 md:px-6 shadow-xl text-white fixed top-0 z-50">
-      <h1 className="lg:text-[35px] md:text-[30px] sm:text-[25px] text-[20px] font-bold font-Eagle">Painters' Diary</h1>
-        <div className="flex gap-x-2 sm:gap-x-4 text-gray-800 font-playfair font-semibold">
-            <Link to="/">
-              <motion.button
-                className="px-2 sm:px-2 py-1 sm:py-1 rounded-md hover:bg-rose-100 flex items-center gap-2"
-                variants={buttonVariants}
-                whileHover="hover"
-                whileTap="tap"
-              >
-                <FaHome className="text-lg sm:text-xl" />
-                <span className="hidden sm:inline">Home</span>
-              </motion.button>
-            </Link>
-            <Link to="/About">
-              <motion.button
-                className="px-2 sm:px-2 py-1 sm:py-1 rounded-md hover:bg-rose-100  flex items-center gap-2"
-                variants={buttonVariants}
-                whileHover="hover"
-                whileTap="tap"
-              >
-                <FaInfoCircle className="text-lg sm:text-xl" />
-                <span className="hidden sm:inline">About</span>
-              </motion.button>
-            </Link>
-            <Link to="/Account">
-              <motion.button
-                className="px-2 sm:px-2 py-1 sm:py-1 rounded-md hover:bg-rose-100 flex items-center gap-2"
-                variants={buttonVariants}
-                whileHover="hover"
-                whileTap="tap"
-              >
-                <FaUser className="text-lg sm:text-xl" />
-                <span className="hidden sm:inline">Account</span>
-              </motion.button>
-            </Link>
-            <Link to="/Journal">
-              <motion.button
-                className="px-2 sm:px-2 py-1 sm:py-1 rounded-md hover:bg-rose-100 flex items-center gap-2"
-                variants={buttonVariants}
-                whileHover="hover"
-                whileTap="tap"
-              >
-                <MdBook className="text-lg sm:text-xl" />
-                <span className="hidden sm:inline">Diary</span>
-              </motion.button>           
-               </Link>
-           
-          </div>
-      </header>
+     <ToastContainer/>
+        <header className=" py-2 max-w-[96%] w-full fixed top-2 ml-[2%] rounded-xl z-50 bg-white/20 backdrop-blur-lg shadow-lg flex items-center justify-between px-4 md:px-8">
+      {/* Title */}
+      <Link to={"/"}>
+      <h1 className="lg:text-[35px] md:text-[28px] sm:text-[24px] text-[20px] font-bold font-Eagle drop-shadow-lg text-yellow-800">
+        Painters' Diary
+      </h1>
+      </Link>
 
-      {/* Desktop View */}
+      {/* Desktop Nav */}
+      
+      <nav className="hidden md:flex gap-x-6 font-playfair font-semibold">
+  {navLinks.map((link, i) => (
+    <Link key={i} to={link.to} className="relative group">
+      <motion.div
+        className="px-2 py-2 text-white/90 group-hover:text-white flex items-center gap-2"
+        variants={buttonVariants}
+        whileTap="tap"
+      >
+        {link.icon}
+        <span>{link.label}</span>
+      </motion.div>
+      {/* Underline */}
+      <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-white transition-all duration-500 group-hover:w-full"></span>
+    </Link>
+  ))}
+</nav>
+
+
+      {/* Mobile Hamburger */}
+      <div className="md:hidden flex items-center">
+        <button
+          onClick={() => setMenuOpen(!menuOpen)}
+          className="text-gray-800 text-3xl focus:outline-none"
+        >
+          {menuOpen ? <HiX /> : <HiMenu />}
+        </button>
+      </div>
+
+      {/* Mobile Dropdown */}
+      {menuOpen && (
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          className="absolute top-[80px] right-0 w-48 bg-white backdrop-blur-md rounded-xl shadow-xl p-4 flex flex-col gap-3 md:hidden"
+        >
+          {navLinks.map((link, i) => (
+            <Link
+              key={i}
+              to={link.to}
+              onClick={() => setMenuOpen(false)}
+              className="text-gray-800 font-semibold px-2 py-2 rounded-md hover:bg-white/20 flex items-center gap-2"
+            >
+              {link.icon}
+              {link.label}
+            </Link>
+          ))}
+        </motion.div>
+      )}
+    </header>
+
+      {/* Example for desktop form */}
       <div
-        className="min-h-screen w-screen bg-center bg-cover flex items-center justify-center lg:block hidden  pt-[250px]"
+        className="min-h-screen w-screen bg-center bg-cover flex items-center justify-center lg:block hidden pt-[250px]"
         style={{ backgroundImage: `url(${FeedBackground})` }}
       >
         <main className="w-[90%] max-w-2xl h-[70vh] bg-white/20 backdrop-blur-md mx-auto flex items-center justify-center flex-col gap-6 p-6 rounded-2xl shadow-2xl border border-teal-200">
           <h1 className="text-4xl text-center font-serif text-teal-900 font-semibold drop-shadow-md">
             Your Opinion Shapes Us!
           </h1>
-          <form className="flex flex-col gap-6 w-full max-w-md">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-6 w-full max-w-md">
             <div>
               <label className="text-lg font-semibold text-teal-800 mb-2 block font-serif">Your Name</label>
               <input
-                id="FeedInput"
-                className="w-full p-3 rounded-lg bg-white/30 text-teal-900 outline-none border border-teal-300 focus:ring-2 focus:ring-teal-500 transition-all duration-200 placeholder-teal-600 font-medium"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="w-full p-3 rounded-lg bg-white/30 text-teal-900 outline-none border border-teal-300"
                 type="text"
                 placeholder="Enter your name"
               />
@@ -134,15 +190,18 @@ function Feedback() {
             <div>
               <label className="text-lg font-semibold text-teal-800 mb-2 block font-serif">Share Your Thoughts</label>
               <textarea
-                className="w-full h-32 p-4 rounded-lg bg-white/30 border border-teal-300 focus:ring-2 focus:ring-teal-500 text-teal-900 placeholder-teal-600 font-serif resize-none shadow-md transition-all duration-200"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                className="w-full h-32 p-4 rounded-lg bg-white/30 border border-teal-300"
                 placeholder="Write your feedback here..."
               ></textarea>
             </div>
             <button
               type="submit"
-              className="w-full py-3 bg-gradient-to-r from-teal-600 to-blue-500 text-white rounded-lg hover:from-teal-700 hover:to-blue-600 transition-all duration-200 shadow-lg hover:shadow-xl font-serif text-lg"
+              disabled={loading}
+              className="w-full py-3 bg-gradient-to-r from-teal-600 to-blue-500 text-white rounded-lg hover:from-teal-700 hover:to-blue-600 transition-all duration-200 shadow-lg"
             >
-              Submit Feedback
+              {loading ? "Submitting..." : "Submit Feedback"}
             </button>
           </form>
         </main>

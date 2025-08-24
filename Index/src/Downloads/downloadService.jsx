@@ -42,12 +42,12 @@ useEffect(() => {
       {/* ... other content ... */}
       <button 
         onClick={handleDownload}
-        className="download-btn text-gray-500 hover:text-blue-800 transition"
+        className="download-btn text-gray-500 dark:text-gray-400 hover:text-blue-800 transition"
         title="Download"
       >
         <FiDownload size={16} />
       </button>
-      <span>{downloadCount}</span>
+      <span className="text-gray-500 dark:text-gray-400">{downloadCount}</span>
     </div>
   );
 };

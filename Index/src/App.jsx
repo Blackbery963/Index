@@ -21,10 +21,13 @@ const Review = lazy(() => import('./Components/Review/Review'));
 import Account from './Components/Account/Account';
 // import Profile from './Components/Account/Profile.jsx';
 import Upload from './Components/Upload/Upload.jsx';
-// import UploadMasterpiece from './Components/Upload/Masterpiece.jsx';
-import Signup from './Components/Signup/Signup';
-import VerifyMFA from './Components/Signup/VerifyMFA.jsx';
-import Login from './Components/Login/Login';
+
+// Authentication Service 
+import Signup from './Components/Authentication/Signup/Signup.jsx';
+import Login from './Components/Authentication/Login/Login.jsx';
+import ResetPassword from './Components/Authentication/Login/ResetPassword.jsx';
+import EmailVerification from './Components/Authentication/Verification/EmailVErification.jsx';
+
 import Gallery from './Components/Gallery/Gallery';
 import Category from './Components/Category/Category';
 import Landscape from './Sub-Components/Landscape';
@@ -46,7 +49,6 @@ import Journal from './Components/Journal/Journal';
 import Privacy_Policy from './Legal/Privacy_Policy/Privacy_Policy';
 import Terms_Conditions from './Legal/Terms&Conditipons/Terms_Conditions.jsx';
 import License from './Legal/License.jsx';
-import ResetPassword from './Components/Login/ResetPassword';
 import Help from './Resources/Help/Help.jsx';
 import Artisan from './Components/Artisian/Artisian.jsx';
 import Security from './Product/Security.jsx';
@@ -235,9 +237,13 @@ useEffect(() => {
         <Route path='/Account' element={<Account isOwnProfile={true}/>}/>
         {/* <Route path="/profile/:userId" element={<Profile />} /> */}
         <Route path='/Account/:userId' element={<Account isOwnProfile={false}/>}/>
+
+        {/* Authentication Routes */}
         <Route path="/signup" element={<Signup />} />
-        <Route path='/Signup/Multi-Factor_Authentication' element={<VerifyMFA/>}/>
-        <Route path="/login" element={<Login />} />    
+        <Route path="/login" element={<Login />} />  
+        <Route path="/Login/ResetPassword" element={<ResetPassword />} />
+        <Route path="/Authentication/Verification/EmailVerification" element={<EmailVerification />} />
+
         <Route path="/category" element={<Category />} />
         <Route path="/diaryland" element={<Diaryland />} />
         <Route path="/january" element={<January />} />
@@ -258,7 +264,7 @@ useEffect(() => {
         <Route path="/Legal/Terms_Conditions" element={<Terms_Conditions />} />
         <Route path="/Legal/License" element={<License />} />
         <Route path='/Product/Security' element={<Security/>}/>
-        <Route path="/Login/ResetPassword" element={<ResetPassword />} />
+  
         <Route path="/cart" element={<Cart />} />
         <Route path='/History' element={<History/>}/>
         <Route path='/Resources/Help' element={<Help/>}/>
@@ -278,7 +284,7 @@ useEffect(() => {
         <Route path='/community/MyCommunity' element={<MyCommunity/>}/>
         <Route path='/Community/CommunityDashboard/CreateNewChallenge' element={<CreateNewChallenge/>}/>
         <Route path='/Community/DiscoverNewMember/MemberDiscoveryPage' element={<MemberDiscoveryPage/>}/>
-
+        
 
       
 

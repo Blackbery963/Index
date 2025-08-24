@@ -435,8 +435,6 @@ const ArtStore = () => {
           <div className="absolute inset-0 z-10 bg-gradient-to-t from-gray-50/80 dark:from-gray-950 to-transparent" />
           <motion.img
           src='https://images.pexels.com/photos/5485173/pexels-photo-5485173.jpeg'
-
-            // src="https://images.pexels.com/photos/2512282/pexels-photo-2512282.jpeg"
             alt="Featured Artwork"
             className="w-full h-full object-cover"
             initial={{ scale: 1.2 }}
@@ -599,11 +597,6 @@ const ArtStore = () => {
     </div>
   </div>
 </motion.div>
-
-
-
-
-
 
         {/* Art Display */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 mt-8">

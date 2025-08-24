@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Functions, Account } from 'appwrite';
-import {client } from "../../appwriteConfig"
+import {client } from "../../../appwriteConfig"
 import { useNavigate } from 'react-router-dom';
 
 function ResetPassword() {

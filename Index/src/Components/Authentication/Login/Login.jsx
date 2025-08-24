@@ -375,7 +375,8 @@
 import { useState, useEffect } from 'react';
 import Background from './Image/background.jpg';
 import { Link, useNavigate } from 'react-router-dom';
-import { account } from '../../appwriteConfig';
+// import { account } from '../../appwriteConfig';
+import { account } from '../../../appwriteConfig';
 import { motion } from 'framer-motion';
 import { FaEnvelope, FaLock, FaPalette, FaBrush } from 'react-icons/fa';
 import { ToastContainer, toast } from 'react-toastify';

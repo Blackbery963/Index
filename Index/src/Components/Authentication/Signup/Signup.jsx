@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import { FaUser, FaEnvelope, FaPhone, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { Client, Account, ID } from 'appwrite';
 import backgroundImage from './Image/pexels-eberhardgross-31979793.jpg'
-import { databases, Permission, Role } from '../../appwriteConfig';
+import { databases, Permission, Role } from '../../../appwriteConfig';
 
 const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
 const USER_COLLECTION_ID = import.meta.env.VITE_APPWRITE_USERS_COLLECTION_ID;
@@ -51,21 +51,16 @@ const Signup = () => {
       if (value && !/^\+?[\d\s-]{10,}$/.test(value)) return 'Invalid phone number';
       return '';
     }
-    // if (name === 'password') {
-    //   if (!value) return 'Password is required';
-    //   if (value.length < 8) return 'Minimum 8 characters';
-    //   return !/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(value)
-    //     ? 'Password must contain at least one letter and one number'
-    //     : '';
-    // }
-    if (name === 'password') {
+  
+  if (name === 'password') {
   if (!value) return 'Password is required';
-  if (value.length < 8) return 'Minimum 8 characters';
+  if (value.length < 12) return 'Minimum 12 characters';
 
-  const strongPasswordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/;
+  // const strongPasswordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/;
+  const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{12,}$/;
 
   return !strongPasswordRegex.test(value)
-    ? 'Password must contain at least one letter, one number, and one special character'
+    ? 'Password must be at least 12 characters and include uppercase, lowercase, number, and special characters'
     : '';
 }
 
@@ -86,12 +81,104 @@ const Signup = () => {
   };
 
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     setIsLoading(true);
 
-    // Validate all fields
-    const newErrors = {
+//     // Validate all fields
+    // const newErrors = {
+    //   name: validateField('name', formData.name, formData),
+    //   email: validateField('email', formData.email, formData),
+    //   phone: validateField('phone', formData.phone, formData),
+    //   password: validateField('password', formData.password, formData),
+    //   confirmPassword: validateField('confirmPassword', formData.confirmPassword, formData),
+    //   agreeToTerms: validateField('agreeToTerms', formData.agreeToTerms, formData),
+    // };
+
+    // setErrors(newErrors);
+    // if (Object.values(newErrors).some((error) => error)) {
+    //   toast.error('Please fix the errors in the form');
+    //   setIsLoading(false);
+    //   return;
+    // }
+
+//     try {
+//       const user = await account.create(
+//         ID.unique(),
+//         formData.email,
+//         formData.password,
+//         formData.name);
+//       await account.createEmailPasswordSession(formData.email, formData.password);
+       
+      
+//       const userData = {
+//       userId: user.$id,
+//       username: formData.name,
+//       email: formData.email,
+//       createdAt: new Date().toISOString()
+//       };
+
+
+//       // Store minimal user data in localStorage
+//        localStorage.setItem('userProfile', JSON.stringify({
+//        $id: user.$id,
+//        username: formData.name,
+//        email: formData.email
+//        }));
+
+//       toast.success('Account created successfully!', { autoClose: 3000 });
+//       navigate('/Account');
+//       // After successful signup
+   
+
+
+//       // 1. Store in database (via Appwrite)
+
+//       try {
+//         await databases.createDocument(
+//           DATABASE_ID,
+//           USER_COLLECTION_ID,
+//           user.$id,// Using user ID as document ID
+//           {
+//           userId: user.$id,
+//           username: formData.name,
+//           email: formData.email,
+//           otp: otp,
+//           isVerified: false,
+//           createdAt: new Date().toISOString()
+//           },
+//           // userData,
+//           [
+//             Permission.read(Role.user(user.$id)),
+//             Permission.update(Role.user(user.$id)),
+//             Permission.delete(Role.user(user.$id))
+//           ]
+//   );
+
+//     } catch (dbErr) {
+//       console.error('Database error:', dbErr);
+//   toast.error('Account created but failed to store profile.');
+// }
+
+//     } catch (err) {
+//       console.error('Appwrite error:', err);
+//       const errorMessage =
+//         err.code === 409 ? 'Email already exists' : err.message || 'Failed to create account';
+//       toast.error(errorMessage, { autoClose: 3000 });
+//     } finally {
+//       setIsLoading(false);
+//     }
+//   };     
+
+
+// In your signup component, update the handleSubmit function:
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setIsLoading(true);
+
+  // ... validation code remains the same ...
+      const newErrors = {
       name: validateField('name', formData.name, formData),
       email: validateField('email', formData.email, formData),
       phone: validateField('phone', formData.phone, formData),
@@ -107,71 +194,78 @@ const Signup = () => {
       return;
     }
 
-    try {
-      const user = await account.create(
-        ID.unique(),
-        formData.email,
-        formData.password,
-        formData.name);
-      await account.createEmailPasswordSession(formData.email, formData.password);
-       
-      
-      const userData = {
-      userId: user.$id,
+
+  try {
+    const user = await account.create(
+      ID.unique(),
+      formData.email,
+      formData.password,
+      formData.name
+    );
+    
+    // Create session but don't navigate to account page yet
+    await account.createEmailPasswordSession(formData.email, formData.password);
+    
+    // Create verification - this will send the email
+    // await account.createVerification('https://thepaintersdiary.com/verify');
+    // await account.createVerification('http://localhost:5173/verify');
+    await account.createVerification('http://www.thepaintersdiary.com/Authentication/Verification/EmailVerification');
+
+
+
+    // Store minimal user data in localStorage
+    localStorage.setItem('userProfile', JSON.stringify({
+      $id: user.$id,
       username: formData.name,
       email: formData.email,
-      createdAt: new Date().toISOString()
-      };
+      isVerified: false // Mark as not verified yet
+    }));
 
-
-      // Store minimal user data in localStorage
-       localStorage.setItem('userProfile', JSON.stringify({
-       $id: user.$id,
-       username: formData.name,
-       email: formData.email
-       }));
-
-      toast.success('Account created successfully!', { autoClose: 3000 });
-      navigate('/Account');
-      // After successful signup
-   
-
-
-      // 1. Store in database (via Appwrite)
-
-      try {
-        await databases.createDocument(
-          DATABASE_ID,
-          USER_COLLECTION_ID,
-          user.$id,// Using user ID as document ID
-          {
+    // Store user data in database
+    try {
+      await databases.createDocument(
+        DATABASE_ID,
+        USER_COLLECTION_ID,
+        user.$id,
+        {
           userId: user.$id,
           username: formData.name,
           email: formData.email,
+          isVerified: false, // Important: mark as not verified
           createdAt: new Date().toISOString()
-          },
-          // userData,
-          [
-            Permission.read(Role.user(user.$id)),
-            Permission.update(Role.user(user.$id)),
-            Permission.delete(Role.user(user.$id))
-          ]
-  );
-
+        },
+        [
+          Permission.read(Role.user(user.$id)),
+          Permission.update(Role.user(user.$id)),
+          Permission.delete(Role.user(user.$id))
+        ]
+      );
     } catch (dbErr) {
-        console.error('Database error:', dbErr);
-  toast.error('Account created but failed to store profile.');
-}
-
-    } catch (err) {
-      console.error('Appwrite error:', err);
-      const errorMessage =
-        err.code === 409 ? 'Email already exists' : err.message || 'Failed to create account';
-      toast.error(errorMessage, { autoClose: 3000 });
-    } finally {
-      setIsLoading(false);
+      console.error('Database error:', dbErr);
+      toast.error('Account created but failed to store profile.');
     }
-  };        
+
+    // Redirect to verification page with user info
+    navigate('/Authentication/Verification/EmailVerification', { 
+      state: { 
+        email: formData.email, 
+        userId: user.$id 
+      } 
+    });
+    
+    toast.success('Account created! Please check your email for verification code.', { autoClose: 5000 });
+
+  } catch (err) {
+    console.error('Appwrite error:', err);
+    const errorMessage =
+      err.code === 409 ? 'Email already exists' : err.message || 'Failed to create account';
+    toast.error(errorMessage, { autoClose: 3000 });
+  } finally {
+    setIsLoading(false);
+  }
+};
+  
+  
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: { opacity: 1, transition: { staggerChildren: 0.2 } },

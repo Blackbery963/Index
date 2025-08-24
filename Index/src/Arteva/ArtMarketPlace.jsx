@@ -135,6 +135,70 @@ const ArtMarketplace = () => {
     { id: 'rating', name: 'Top Rated' },
   ];
 
+  // Adding to cart 
+
+    const addToCart = (art) => {
+      try {
+        if (!art?.$id || !art?.userId) {
+          throw new Error('Artwork is missing required information');
+        }
+  
+        setCartItems(prev => {
+          const existingItem = prev.find(item => item.$id === art.$id);
+          
+          const baseCartItem = {
+            ...art,
+            sellerId: art.userId,
+            quantity: 1
+          };
+  
+          if (existingItem) {
+            return prev.map(item => 
+              item.$id === art.$id 
+                ? { ...item, quantity: item.quantity + 1 }
+                : item
+            );
+          }
+  
+          return [...prev, baseCartItem];
+        });
+        toast.success('Added to cart!');
+      } catch (error) {
+        console.error('Failed to add to cart:', error);
+        toast.error('Could not add item to cart. Please try again.');
+      }
+    };
+  
+    const removeFromCart = (id) => {
+      setCartItems(prev => prev.filter(item => item.$id !== id));
+      toast.info('Item removed from cart');
+    };
+  
+    const updateCartItemQuantity = (id, newQuantity) => {
+      if (newQuantity < 1) {
+        removeFromCart(id);
+        return;
+      }
+      setCartItems(prev => 
+        prev.map(item => 
+          item.$id === id ? { ...item, quantity: newQuantity } : item
+        )
+      );
+    };
+  
+    const clearCart = () => {
+      setCartItems([]);
+      localStorage.removeItem('cartItems');
+      toast.info('Cart cleared');
+    };
+  
+    // const cartItemCount = cartItems.reduce((total, item) => total + item.quantity, 0);
+    // const cartTotal = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+
+
+
+// Filtering products 
+
   const filteredProducts = products
     .filter(product => 
       (activeCategory === 'all' || product.category === activeCategory) &&
@@ -484,7 +548,9 @@ const ArtMarketplace = () => {
               </div>
               
               <div className="space-y-3">
-                <button className="w-full py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-md font-medium hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors">
+                <button
+                 onClick={() => addToCart(selectedProduct)}
+                 className="w-full py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-md font-medium hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors">
                   Add to Cart - ${selectedProduct.price}
                 </button>
                 <button className="w-full py-3 border border-gray-900 dark:border-white text-gray-900 dark:text-white rounded-md font-medium hover:bg-gray-50 dark:hover:bg-gray-900/50 transition-colors">

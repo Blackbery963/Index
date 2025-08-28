@@ -172,6 +172,7 @@ const Signup = () => {
 
 
 // In your signup component, update the handleSubmit function:
+// In your signup component, update the handleSubmit function:
 
 const handleSubmit = async (e) => {
   e.preventDefault();
@@ -194,7 +195,6 @@ const handleSubmit = async (e) => {
       return;
     }
 
-
   try {
     const user = await account.create(
       ID.unique(),
@@ -206,13 +206,6 @@ const handleSubmit = async (e) => {
     // Create session but don't navigate to account page yet
     await account.createEmailPasswordSession(formData.email, formData.password);
     
-    // Create verification - this will send the email
-    // await account.createVerification('https://thepaintersdiary.com/verify');
-    // await account.createVerification('http://localhost:5173/verify');
-    await account.createVerification('http://www.thepaintersdiary.com/Authentication/Verification/EmailVerification');
-
-
-
     // Store minimal user data in localStorage
     localStorage.setItem('userProfile', JSON.stringify({
       $id: user.$id,
@@ -221,7 +214,7 @@ const handleSubmit = async (e) => {
       isVerified: false // Mark as not verified yet
     }));
 
-    // Store user data in database
+    // Store user data in database with verification field
     try {
       await databases.createDocument(
         DATABASE_ID,
@@ -231,7 +224,9 @@ const handleSubmit = async (e) => {
           userId: user.$id,
           username: formData.name,
           email: formData.email,
+          phone: formData.phone || '',
           isVerified: false, // Important: mark as not verified
+          verificationCode: null, // Will be set when we send the email
           createdAt: new Date().toISOString()
         },
         [

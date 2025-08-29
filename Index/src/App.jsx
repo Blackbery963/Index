@@ -26,7 +26,7 @@ import Upload from './Components/Upload/Upload.jsx';
 import Signup from './Components/Authentication/Signup/Signup.jsx';
 import Login from './Components/Authentication/Login/Login.jsx';
 import ResetPassword from './Components/Authentication/Login/ResetPassword.jsx';
-import EmailVerification from './Components/Authentication/Verification/EmailVErification.jsx';
+import EmailVerification from './Components/Authentication/Verification/EmailVerification.jsx';
 
 import Gallery from './Components/Gallery/Gallery';
 import Category from './Components/Category/Category';

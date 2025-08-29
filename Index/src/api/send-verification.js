@@ -155,16 +155,18 @@ function initializeTransporter() {
     transporter = nodemailer.createTransport({
       host: process.env.EMAIL_HOST,
       port: Number(process.env.EMAIL_PORT),
-      secure: process.env.EMAIL_SECURE === "true",
+      secure: process.env.EMAIL_SECURE === "false",
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
       },
+      logger: true,  // enable logging
+      debug: true,   // show connection details
       // Better connection settings
       pool: true, // Use connection pooling
       maxConnections: 5,
       maxMessages: 100,
-      connectionTimeout: 30000, // 30 seconds
+      connectionTimeout: 100000, // 30 seconds
       greetingTimeout: 30000,
       socketTimeout: 30000,
       // Retry mechanism

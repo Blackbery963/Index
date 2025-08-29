@@ -605,3 +605,439 @@ const handleSubmit = async (e) => {
 
 export default Signup;
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import React, { useState } from 'react';
+// import { Link, useNavigate } from 'react-router-dom';
+// import { toast, ToastContainer } from 'react-toastify';
+// import 'react-toastify/dist/ReactToastify.css';
+// import { motion } from 'framer-motion';
+// import { FaUser, FaEnvelope, FaPhone, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
+// import { Client, Account, ID } from 'appwrite';
+// import backgroundImage from './Image/pexels-eberhardgross-31979793.jpg';
+// import { databases, Permission, Role } from '../../../appwriteConfig';
+
+// const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
+// const USER_COLLECTION_ID = import.meta.env.VITE_APPWRITE_USERS_COLLECTION_ID;
+
+// // Initialize Appwrite Client
+// const client = new Client()
+//   .setEndpoint(import.meta.env.VITE_APPWRITE_ENDPOINT)
+//   .setProject(import.meta.env.VITE_APPWRITE_PROJECT_ID);
+
+// const account = new Account(client);
+
+// const Signup = () => {
+//   const navigate = useNavigate();
+//   const [formData, setFormData] = useState({
+//     name: '',
+//     email: '',
+//     phone: '',
+//     password: '',
+//     confirmPassword: '',
+//     agreeToTerms: false,
+//   });
+//   const [errors, setErrors] = useState({
+//     name: '',
+//     email: '',
+//     phone: '',
+//     password: '',
+//     confirmPassword: '',
+//     agreeToTerms: '',
+//   });
+//   const [isLoading, setIsLoading] = useState(false);
+//   const [showPassword, setShowPassword] = useState(false);
+
+//   const validateField = (name, value, formData) => {
+//     if (name === 'name') {
+//       return !value.trim() ? 'Name is required' : '';
+//     }
+//     if (name === 'email') {
+//       if (!value.trim()) return 'Email is required';
+//       return !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ? 'Invalid email format' : '';
+//     }
+//     if (name === 'phone') {
+//       if (value && !/^\+?[\d\s-]{10,}$/.test(value)) return 'Invalid phone number';
+//       return '';
+//     }
+  
+//     if (name === 'password') {
+//       if (!value) return 'Password is required';
+//       if (value.length < 12) return 'Minimum 12 characters';
+  
+//       const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{12,}$/;
+  
+//       return !strongPasswordRegex.test(value)
+//         ? 'Password must be at least 12 characters and include uppercase, lowercase, number, and special characters'
+//         : '';
+//     }
+  
+//     if (name === 'confirmPassword') {
+//       return value !== formData.password ? 'Passwords do not match' : '';
+//     }
+//     if (name === 'agreeToTerms') {
+//       return !value ? 'You must agree to the terms' : '';
+//     }
+//     return '';
+//   };
+  
+//   const handleChange = (e) => {
+//     const { name, value, type, checked } = e.target;
+//     const newValue = type === 'checkbox' ? checked : value;
+//     setFormData((prev) => ({ ...prev, [name]: newValue }));
+//     setErrors((prev) => ({ ...prev, [name]: validateField(name, newValue, { ...formData, [name]: newValue }) }));
+//   };
+  
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     setIsLoading(true);
+  
+//     const newErrors = {
+//       name: validateField('name', formData.name, formData),
+//       email: validateField('email', formData.email, formData),
+//       phone: validateField('phone', formData.phone, formData),
+//       password: validateField('password', formData.password, formData),
+//       confirmPassword: validateField('confirmPassword', formData.confirmPassword, formData),
+//       agreeToTerms: validateField('agreeToTerms', formData.agreeToTerms, formData),
+//     };
+  
+//     setErrors(newErrors);
+//     if (Object.values(newErrors).some((error) => error)) {
+//       toast.error('Please fix the errors in the form');
+//       setIsLoading(false);
+//       return;
+//     }
+  
+//     try {
+//       const user = await account.create(
+//         ID.unique(),
+//         formData.email,
+//         formData.password,
+//         formData.name
+//       );
+      
+//       // Create session but don't navigate to account page yet
+//       await account.createEmailPasswordSession(formData.email, formData.password);
+      
+//       // Store minimal user data in localStorage
+//       localStorage.setItem('userProfile', JSON.stringify({
+//         $id: user.$id,
+//         username: formData.name,
+//         email: formData.email,
+//         isVerified: false // Mark as not verified yet
+//       }));
+  
+//       // Store user data in database with verification field
+//       try {
+//         await databases.createDocument(
+//           DATABASE_ID,
+//           USER_COLLECTION_ID,
+//           user.$id,
+//           {
+//             userId: user.$id,
+//             username: formData.name,
+//             email: formData.email,
+//             phone: formData.phone || '',
+//             isVerified: false, // Important: mark as not verified
+//             verificationCode: null, // Will be set when we send the email
+//             createdAt: new Date().toISOString()
+//           },
+//           [
+//             Permission.read(Role.user(user.$id)),
+//             Permission.update(Role.user(user.$id)),
+//             Permission.delete(Role.user(user.$id))
+//           ]
+//         );
+//       } catch (dbErr) {
+//         console.error('Database error:', dbErr);
+//         toast.error('Account created but failed to store profile.');
+//       }
+  
+//       // Redirect to verification page with user info
+//       navigate('/Authentication/Verification/EmailVerification', { 
+//         state: { 
+//           email: formData.email, 
+//           userId: user.$id 
+//         } 
+//       });
+      
+//       toast.success('Account created! Please check your email for verification code.', { autoClose: 5000 });
+  
+//     } catch (err) {
+//       console.error('Appwrite error:', err);
+//       const errorMessage =
+//         err.code === 409 ? 'Email already exists' : err.message || 'Failed to create account';
+//       toast.error(errorMessage, { autoClose: 3000 });
+//     } finally {
+//       setIsLoading(false);
+//     }
+//   };
+    
+//   const containerVariants = {
+//     hidden: { opacity: 0 },
+//     visible: { opacity: 1, transition: { staggerChildren: 0.15 } },
+//   };
+
+//   const fieldVariants = {
+//     hidden: { opacity: 0, y: 15 },
+//     visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' } },
+//   };
+
+//   const textVariants = {
+//     hidden: { opacity: 0, y: 20 },
+//     visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
+//   };
+
+//   return (
+//     <div
+//       className="min-h-screen flex items-center justify-center p-4 sm:p-6 bg-green-50/50 dark:bg-green-950/50"
+//       style={{
+//         backgroundImage: `url(${backgroundImage || 'https://via.placeholder.com/1920x1080'})`,
+//         backgroundSize: 'cover',
+//         backgroundPosition: 'center',
+//         backgroundAttachment: 'fixed',
+//       }}
+//     >
+//       <motion.div
+//         initial={{ opacity: 0, scale: 0.97 }}
+//         animate={{ opacity: 1, scale: 1 }}
+//         transition={{ duration: 0.5, ease: 'easeOut' }}
+//         className="w-full max-w-5xl lg:max-w-6xl flex flex-col lg:flex-row rounded-2xl overflow-hidden shadow-xl bg-white/80 dark:bg-green-900/80 backdrop-blur-md border border-green-200 dark:border-green-700"
+//       >
+//         {/* Left Side - Greeting Section */}
+//         <motion.div
+//           initial={{ opacity: 0, x: -30 }}
+//           animate={{ opacity: 1, x: 0 }}
+//           transition={{ duration: 0.6, delay: 0.1 }}
+//           className="w-full lg:w-1/2 p-8 lg:p-12 flex flex-col justify-center bg-gradient-to-br from-green-600/90 to-green-800/90 text-white rounded-t-2xl lg:rounded-l-2xl lg:rounded-tr-none"
+//         >
+//           <motion.h1 
+//             variants={textVariants}
+//             className="text-3xl lg:text-4xl font-bold mb-4"
+//           >
+//             Painters' Diary
+//           </motion.h1>
+//           <motion.h2 
+//             variants={textVariants}
+//             className="text-4xl lg:text-5xl font-semibold mb-4 leading-tight"
+//           >
+//             The Canvas Awaits Your First Stroke
+//           </motion.h2>
+//           <motion.p 
+//             variants={textVariants}
+//             className="text-lg lg:text-xl"
+//           >
+//             Join our creative community to share your artistic journey with like-minded painters.
+//           </motion.p>
+//         </motion.div>
+
+//         {/* Right Side - Signup Form */}
+//         <motion.div
+//           initial={{ opacity: 0, x: 30 }}
+//           animate={{ opacity: 1, x: 0 }}
+//           transition={{ duration: 0.6, delay: 0.1 }}
+//           className="w-full lg:w-1/2 p-8 lg:p-12 flex flex-col justify-center bg-white/90 dark:bg-green-900/90 rounded-b-2xl lg:rounded-r-2xl lg:rounded-bl-none"
+//         >
+//           <motion.h1 
+//             variants={textVariants}
+//             className="text-3xl font-bold text-green-700 dark:text-green-300 mb-8"
+//           >
+//             Create Your Account
+//           </motion.h1>
+//           <motion.form
+//             onSubmit={handleSubmit}
+//             className="space-y-5"
+//             variants={containerVariants}
+//             initial="hidden"
+//             animate="visible"
+//           >
+//             <motion.div variants={fieldVariants}>
+//               <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-green-200 mb-1">Name</label>
+//               <div className="relative">
+//                 <FaUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-green-500 h-5 w-5" />
+//                 <input
+//                   type="text"
+//                   id="name"
+//                   name="name"
+//                   value={formData.name}
+//                   onChange={handleChange}
+//                   placeholder="Your Name"
+//                   className={`w-full pl-10 pr-4 py-3 rounded-lg border ${errors.name ? 'border-red-500' : 'border-green-300'} focus:border-green-500 focus:ring-2 focus:ring-green-500/50 dark:bg-green-800 dark:text-white dark:border-green-600 shadow-sm`}
+//                   required
+//                   disabled={isLoading}
+//                 />
+//               </div>
+//               {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
+//             </motion.div>
+
+//             <motion.div variants={fieldVariants}>
+//               <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-green-200 mb-1">Email Address</label>
+//               <div className="relative">
+//                 <FaEnvelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-green-500 h-5 w-5" />
+//                 <input
+//                   type="email"
+//                   id="email"
+//                   name="email"
+//                   value={formData.email}
+//                   onChange={handleChange}
+//                   placeholder="Your Email"
+//                   className={`w-full pl-10 pr-4 py-3 rounded-lg border ${errors.email ? 'border-red-500' : 'border-green-300'} focus:border-green-500 focus:ring-2 focus:ring-green-500/50 dark:bg-green-800 dark:text-white dark:border-green-600 shadow-sm`}
+//                   required
+//                   disabled={isLoading}
+//                 />
+//               </div>
+//               {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
+//             </motion.div>
+
+//             <motion.div variants={fieldVariants}>
+//               <label htmlFor="phone" className="block text-sm font-medium text-gray-700 dark:text-green-200 mb-1">Phone Number</label>
+//               <div className="relative">
+//                 <FaPhone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-green-500 h-5 w-5" />
+//                 <input
+//                   type="tel"
+//                   id="phone"
+//                   name="phone"
+//                   value={formData.phone}
+//                   onChange={handleChange}
+//                   placeholder="Your Phone Number"
+//                   className={`w-full pl-10 pr-4 py-3 rounded-lg border ${errors.phone ? 'border-red-500' : 'border-green-300'} focus:border-green-500 focus:ring-2 focus:ring-green-500/50 dark:bg-green-800 dark:text-white dark:border-green-600 shadow-sm`}
+//                   disabled={isLoading}
+//                 />
+//               </div>
+//               {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
+//             </motion.div>
+
+//             <motion.div variants={fieldVariants}>
+//               <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-green-200 mb-1">Password</label>
+//               <div className="relative">
+//                 <FaLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-green-500 h-5 w-5" />
+//                 <input
+//                   type={showPassword ? 'text' : 'password'}
+//                   id="password"
+//                   name="password"
+//                   value={formData.password}
+//                   onChange={handleChange}
+//                   placeholder="Create a Password"
+//                   className={`w-full pl-10 pr-12 py-3 rounded-lg border ${errors.password ? 'border-red-500' : 'border-green-300'} focus:border-green-500 focus:ring-2 focus:ring-green-500/50 dark:bg-green-800 dark:text-white dark:border-green-600 shadow-sm`}
+//                   required
+//                   disabled={isLoading}
+//                 />
+//                 <button
+//                   type="button"
+//                   onClick={() => setShowPassword(!showPassword)}
+//                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-green-500"
+//                 >
+//                   {showPassword ? <FaEyeSlash className="h-5 w-5" /> : <FaEye className="h-5 w-5" />}
+//                 </button>
+//               </div>
+//               {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
+//             </motion.div>
+
+//             <motion.div variants={fieldVariants}>
+//               <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 dark:text-green-200 mb-1">Confirm Password</label>
+//               <div className="relative">
+//                 <FaLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-green-500 h-5 w-5" />
+//                 <input
+//                   type={showPassword ? 'text' : 'password'}
+//                   id="confirmPassword"
+//                   name="confirmPassword"
+//                   value={formData.confirmPassword}
+//                   onChange={handleChange}
+//                   placeholder="Confirm Password"
+//                   className={`w-full pl-10 pr-12 py-3 rounded-lg border ${errors.confirmPassword ? 'border-red-500' : 'border-green-300'} focus:border-green-500 focus:ring-2 focus:ring-green-500/50 dark:bg-green-800 dark:text-white dark:border-green-600 shadow-sm`}
+//                   required
+//                   disabled={isLoading}
+//                 />
+//                 <button
+//                   type="button"
+//                   onClick={() => setShowPassword(!showPassword)}
+//                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-green-500"
+//                 >
+//                   {showPassword ? <FaEyeSlash className="h-5 w-5" /> : <FaEye className="h-5 w-5" />}
+//                 </button>
+//               </div>
+//               {errors.confirmPassword && <p className="text-red-500 text-xs mt-1">{errors.confirmPassword}</p>}
+//             </motion.div>
+
+//             <motion.div variants={fieldVariants} className="flex items-center">
+//               <input
+//                 id="agreeToTerms"
+//                 name="agreeToTerms"
+//                 type="checkbox"
+//                 checked={formData.agreeToTerms}
+//                 onChange={handleChange}
+//                 className="h-4 w-4 text-green-600 focus:ring-green-500 border-green-300 rounded dark:bg-green-800"
+//                 disabled={isLoading}
+//               />
+//               <label htmlFor="agreeToTerms" className="ml-2 block text-sm text-gray-900 dark:text-green-200">
+//                 I agree to the{' '}
+//                 <Link to="/Legal/Terms_Conditions" className="text-green-600 hover:underline dark:text-green-400">
+//                   terms of service
+//                 </Link>{' '}
+//                 and{' '}
+//                 <Link to="/Legal/Privacy_Policy" className="text-green-600 hover:underline dark:text-green-400">
+//                   privacy policy
+//                 </Link>
+//               </label>
+//             </motion.div>
+//             {errors.agreeToTerms && <p className="text-red-500 text-xs mt-1">{errors.agreeToTerms}</p>}
+
+//             <motion.button
+//               variants={fieldVariants}
+//               whileHover={{ scale: 1.03, boxShadow: '0 4px 15px rgba(34, 197, 94, 0.3)' }}
+//               whileTap={{ scale: 0.97 }}
+//               type="submit"
+//               disabled={isLoading}
+//               className={`w-full bg-green-600 text-white py-3 rounded-lg font-medium hover:bg-green-700 transition-shadow duration-300 shadow-md ${isLoading ? 'opacity-75 cursor-not-allowed' : ''}`}
+//             >
+//               {isLoading ? (
+//                 <div className="flex items-center justify-center">
+//                   <svg className="animate-spin h-5 w-5 mr-3 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+//                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+//                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+//                   </svg>
+//                   Creating Account...
+//                 </div>
+//               ) : (
+//                 'SIGN UP'
+//               )}
+//             </motion.button>
+
+//             <motion.div variants={fieldVariants} className="text-center text-sm text-gray-600 dark:text-green-300 mt-6">
+//               Already a member?{' '}
+//               <Link to="/login" className="text-green-600 hover:underline dark:text-green-400">
+//                 Log in
+//               </Link>
+//             </motion.div>
+//           </motion.form>
+//         </motion.div>
+//       </motion.div>
+//       <ToastContainer
+//         position="top-right"
+//         autoClose={3000}
+//         hideProgressBar={false}
+//         newestOnTop={false}
+//         closeOnClick
+//         rtl={false}
+//         pauseOnFocusLoss
+//         draggable
+//         pauseOnHover
+//         theme="colored"
+//       />
+//     </div>
+//   );
+// }
+
+// export default Signup;

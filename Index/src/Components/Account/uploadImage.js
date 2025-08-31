@@ -18,7 +18,7 @@ export const uploadImage = async (file, bucketId) => {
     }
 
     const uploadedFile = await storage.createFile(
-      COVER_BUCKET_ID, // Use the parameter, not hardcoded PROFILE_BUCKET_ID
+      bucketId, // Use the parameter, not hardcoded PROFILE_BUCKET_ID
       ID.unique(),
       file
     );
@@ -52,4 +52,5 @@ export const updateUserImages = async (userId, { profileImageUrl, coverImageUrl 
     throw error;
   }
 };
+
 

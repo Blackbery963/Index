@@ -55,16 +55,30 @@ self.addEventListener('fetch', event => {
       }
 
       // Otherwise, fetch from network
+      // return fetch(event.request)
+      //   .then(networkResponse => {
+      //     // Save a copy in dynamic cache (only for valid responses)
+      //     if (networkResponse && networkResponse.status === 200) {
+      //       caches.open(DYNAMIC_CACHE).then(cache => {
+      //         cache.put(event.request, networkResponse.clone());
+      //       });
+      //     }
+      //     return networkResponse;
+
+      //   })
+      
       return fetch(event.request)
-        .then(networkResponse => {
-          // Save a copy in dynamic cache (only for valid responses)
-          if (networkResponse && networkResponse.status === 200) {
-            caches.open(DYNAMIC_CACHE).then(cache => {
-              cache.put(event.request, networkResponse.clone());
-            });
-          }
-          return networkResponse;
-        })
+  .then(networkResponse => {
+    if (networkResponse && networkResponse.status === 200) {
+      const responseClone = networkResponse.clone(); // 👈 create a clone
+
+      caches.open(DYNAMIC_CACHE).then(cache => {
+        cache.put(event.request, responseClone);
+      });
+    }
+    return networkResponse; // return the untouched response
+  })
+
         .catch(() => {
           // If offline and request was HTML page → return offline fallback
           if (event.request.headers.get('accept').includes('text/html')) {

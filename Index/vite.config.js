@@ -74,6 +74,9 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
+      workbox: {
+      maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5 MB
+      },
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
       manifest: {
@@ -83,17 +86,17 @@ export default defineConfig({
         theme_color: '#ffffff',
         icons: [
           {
-            src: 'pwa-192x192.png',
+            src: '/logo_pd_192x192.png',
             sizes: '192x192',
             type: 'image/png'
           },
           {
-            src: 'pwa-512x512.png',
+            src: '/logo_pd_512x512.png',
             sizes: '512x512',
             type: 'image/png'
           },
           {
-            src: 'pwa-512x512.png',
+            src: '/logo_pd_512x512.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'any maskable'

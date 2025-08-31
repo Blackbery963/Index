@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -210,6 +211,9 @@ const EmailVerification = () => {
         backgroundAttachment: 'fixed',
       }}
     >
+      <Link to="/account" className="absolute top-2 left-2 text-sm text-gray-500 hover:underline">
+        Skip For Now
+      </Link>
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}

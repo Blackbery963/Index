@@ -71,7 +71,8 @@
     "rollup-plugin-visualizer": "^6.0.3",
     "sass-embedded": "^1.90.0",
     "tailwindcss": "^3.4.17",
-    "vite": "^6.0.5"
+    "vite": "^6.0.5",
+    "vite-plugin-pwa": "^1.0.3"
   },
   "engines": {
     "node": "20.x"

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>painters' Diary Web App</title>
+    <meta name="theme-color" content="#4caf50">
+    <link rel="manifest" href="manifest.json">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #4caf50;
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            margin-bottom: 10px;
+        }
+        
+        .container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        
+        @media (min-width: 600px) {
+            .container {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card h2 {
+            color: #4caf50;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+        }
+        
+        button {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #388e3c;
+        }
+        
+        #installButton {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+        }
+        
+        .status {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 4px;
+            background-color: #e8f5e9;
+            text-align: center;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            color: #757575;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>My PWA Demo</h1>
+        <p>A simple Progressive Web App example</p>
+    </header>
+    
+    <div class="container">
+        <div class="card">
+            <h2>What is a PWA?</h2>
+            <p>Progressive Web Apps are web applications that use modern web capabilities to deliver an app-like experience to users.</p>
+        </div>
+        
+        <div class="card">
+            <h2>PWA Features</h2>
+            <ul>
+                <li>Works offline</li>
+                <li>Fast loading</li>
+                <li>Installable</li>
+                <li>Push notifications</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h2>Network Status</h2>
+            <p id="networkStatus">Checking network...</p>
+        </div>
+        
+        <div class="card">
+            <h2>Cache Management</h2>
+            <p>This content can be available offline.</p>
+            <button id="clearCache">Clear Cache</button>
+        </div>
+    </div>
+    
+    <button id="installButton">Install App</button>
+    
+    <div class="status">
+        <p>App is <strong id="statusIndicator">checking...</strong></p>
+    </div>
+    
+    <footer>
+        <p>© 2023 My PWA Demo | Built with HTML, CSS, and JavaScript</p>
+    </footer>
+
+    <script>
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/service.js')
+                .then(function(registration) {
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    document.getElementById('statusIndicator').textContent = 'ready for offline use';
+                    document.getElementById('statusIndicator').style.color = '#4caf50';
+                })
+                .catch(function(error) {
+                    console.log('ServiceWorker registration failed: ', error);
+                    document.getElementById('statusIndicator').textContent = 'offline not supported';
+                    document.getElementById('statusIndicator').style.color = '#f44336';
+                });
+            });
+        }
+        
+        // Network status detection
+        window.addEventListener('online', function() {
+            document.getElementById('networkStatus').textContent = 'You are online!';
+            document.getElementById('networkStatus').style.color = '#4caf50';
+        });
+        
+        window.addEventListener('offline', function() {
+            document.getElementById('networkStatus').textContent = 'You are offline!';
+            document.getElementById('networkStatus').style.color = '#f44336';
+        });
+        
+        // Check initial network status
+        if (navigator.onLine) {
+            document.getElementById('networkStatus').textContent = 'You are online!';
+            document.getElementById('networkStatus').style.color = '#4caf50';
+        } else {
+            document.getElementById('networkStatus').textContent = 'You are offline!';
+            document.getElementById('networkStatus').style.color = '#f44336';
+        }
+        
+        // Install prompt
+        let deferredPrompt;
+        const installButton = document.getElementById('installButton');
+        
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installButton.style.display = 'block';
+        });
+        
+        installButton.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    installButton.style.display = 'none';
+                }
+                deferredPrompt = null;
+            }
+        });
+        
+        // Clear cache
+        document.getElementById('clearCache').addEventListener('click', async () => {
+            if ('caches' in window) {
+                const cacheNames = await caches.keys();
+                for (const name of cacheNames) {
+                    await caches.delete(name);
+                }
+                alert('Cache cleared! The page will reload.');
+                window.location.reload();
+            }
+        });
+    </script>
+</body>
+</html>

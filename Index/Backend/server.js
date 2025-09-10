@@ -107,7 +107,7 @@ app.get("/api/health", (_req, res) => res.json({
 const isValidEmail = (email) => /\S+@\S+\.\S+/.test(email);
 
 // Email verification endpoint with rate limiting
-app.post("/api/send-verification", emailLimiter, async (req, res) => {
+app.post("./api/send-verification", emailLimiter, async (req, res) => {
   try {
     const { to, code, username } = req.body || {};
 

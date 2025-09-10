@@ -9,6 +9,19 @@
     <meta property="og:image" content={artwork.mediaUrl} />
     <meta property="og:url" content={shareUrl} />
     <meta property="og:type" content="website" />
+    <!-- For better mobile behavior -->
+     <!-- In your index.html or equivalent -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Painters Diary">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <!-- Add this to your HTML to help with caching -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <link rel="manifest" href="./public/manifest.json">
     <title>Painters' Diary</title>
     <style>

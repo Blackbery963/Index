@@ -1007,9 +1007,9 @@ const scrollDirection = useScrollDirection();
 
 
   return (
-    <div className="relative max-h-screen w-full">
+    <div className="relative lg:h-[100vh] h-[80vh] w-full flex items-center justify-center">
       {/* Dynamic Background */}
- <div className="absolute inset-0 z-0 grid grid-cols-3 grid-rows-3 rounded-lg gap-1 overflow-hidden">
+ {/* <div className="absolute inset-0 z-0 grid grid-cols-3 grid-rows-3 rounded-lg gap-1 overflow-hidden">
   {backgroundImages.map((img, index) => (
     <motion.div
       key={index}
@@ -1017,9 +1017,48 @@ const scrollDirection = useScrollDirection();
       style={{ backgroundImage: `url(${img})` }}
     />
   ))}
-  {/* Dark overlay for readability */}
+  // Dark overlay for readability
   <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-black/30 z-10" />
+</div> */}
+<div className="absolute inset-0 z-0 rounded-lg overflow-hidden">
+  {/* Single background image for mobile (performance) */}
+  <motion.div 
+    className="w-full h-full bg-cover bg-center sm:hidden"
+    style={{ backgroundImage: `url(${backgroundImages[0]})` }}
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    transition={{ duration: 0.8 }}
+  />
+  
+  {/* 2x2 grid for tablets */}
+  <div className="hidden sm:grid md:hidden grid-cols-2 grid-rows-2 gap-1 h-full">
+    {backgroundImages.slice(0, 4).map((img, index) => (
+      <div
+        key={index}
+        className="w-full h-full bg-cover bg-center rounded-lg"
+        style={{ backgroundImage: `url(${img})` }}
+      />
+    ))}
+  </div>
+  
+  {/* 3x3 grid for desktop */}
+  <div className="hidden md:grid md:grid-cols-3 md:grid-rows-3 gap-1 h-full">
+    {backgroundImages.map((img, index) => (
+      <div
+        key={index}
+        className="w-full h-full bg-cover bg-center rounded-lg"
+        style={{ backgroundImage: `url(${img})` }}
+      />
+    ))}
+  </div>
+  
+  {/* Adaptive overlay */}
+  <div className="absolute inset-0 z-10 
+                  bg-black/50 
+                  sm:bg-gradient-to-t sm:from-black/70 sm:via-black/40 sm:to-black/20 
+                  md:bg-gradient-to-t md:from-black/60 md:via-black/30 md:to-black/10" />
 </div>
+
 
 
       {/* Navbar */}
@@ -1226,14 +1265,13 @@ const scrollDirection = useScrollDirection();
                 {/* Primary Menu Dropdown */}
                 <div className="relative">
                   <motion.button
-                   // className={`p-2 ${darkMode ? 'bg-gray-800/90 hover:bg-gray-700/90' : 'bg-white/60 hover:bg-white/90'} rounded-lg border ${darkMode ? 'border-gray-700' : 'border-gray-200'} transition-all duration-300`}
-                                      className="  border p-1 rounded-lg"                    
-
-                   onClick={() => toggleDropdown('primary')}
+                  //  className={`p-2 ${darkMode ? 'bg-gray-800/90 hover:bg-gray-700/90' : 'bg-white/60 hover:bg-white/90'} rounded-lg border ${darkMode ? 'border-gray-700' : 'border-gray-200'} transition-all duration-300`}
+                    className={`border p-1 rounded-lg ${darkMode ? 'border-gray-200' : 'border-gray-800'}`}
+                    onClick={() => toggleDropdown('primary')}
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    <MdOutlineAccountCircle className={`text-lg ${darkMode ? 'text-gray-200' : 'text-gray-200'}`} />
+                    <MdOutlineAccountCircle className={`text-lg ${darkMode ? 'text-gray-200' : 'text-gray-800'}`} />
                   </motion.button>
                   
                   <AnimatePresence>
@@ -1299,13 +1337,13 @@ const scrollDirection = useScrollDirection();
                 <div className="relative">
                   <motion.button
                     // className={`p-2 ${darkMode ? 'bg-gray-800/80 hover:bg-gray-700/90' : 'bg-white/80 hover:bg-white/90'} rounded-lg border ${darkMode ? 'border-gray-700' : 'border-gray-200'} transition-all duration-300 relative`}
-                    className="  border p-1 rounded-lg"                    
+                    className={`border p-1 rounded-lg ${darkMode ? 'border-gray-200' : 'border-gray-800'}`}                    
 
                     onClick={() => toggleDropdown('user')}
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    <IoMdSettings className={`text-lg ${darkMode ? 'text-gray-200' : 'text-gray-200'}`} />
+                    <IoMdSettings className={`text-lg ${darkMode ? 'text-gray-200' : 'text-gray-800'}`} />
                     {totalNotifications > 0 && (
                       <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                         {totalNotifications}
@@ -1401,13 +1439,13 @@ const scrollDirection = useScrollDirection();
                 <div className="relative">
                   <motion.button
                     // className={`p-2 ${darkMode ? 'bg-gray-800/80 hover:bg-gray-700/90' : 'bg-white/80 hover:bg-white/90'} rounded-lg border ${darkMode ? 'border-gray-700' : 'border-gray-200'} transition-all duration-300`}
-                   className="  border p-1 rounded-lg"                    
+                   className={`border p-1 rounded-lg ${darkMode ? 'border-gray-200' : 'border-gray-800'}`}                    
 
                     onClick={() => toggleDropdown('more')}
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    <FiMenu className={`text-lg ${darkMode ? 'text-gray-200' : 'text-gray-200'}`} />
+                    <FiMenu className={`text-lg ${darkMode ? 'text-gray-200' : 'text-gray-800'}`} />
                   </motion.button>
                   
                   <AnimatePresence>

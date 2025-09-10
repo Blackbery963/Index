@@ -368,7 +368,7 @@ import Header from './Components/Header/Header';
 import Footer from './Components/Footer/Footer';
 
 // Lazy load components
-const Style = lazy(() => import('./Components/Style/Style'));
+const ArtCategories = lazy(() => import('./Components/Style/ArtCategories'));
 const Collection = lazy(() => import('./Components/Collections/Collection'));
 const Diarytemp = lazy(() => import('./Components/Diarytemp/Diarytemp'));
 const Connecting = lazy(() => import('./Components/Connecting/Connecting'));
@@ -382,7 +382,6 @@ import InstallPrompt from './MainApp.jsx'
 // Other imports remain the same...
 import Account from './Components/Account/Account';
 import Upload from './Components/Upload/Upload.jsx';
-
 // Authentication Service 
 import Signup from './Components/Authentication/Signup/Signup.jsx';
 import Login from './Components/Authentication/Login/Login.jsx';
@@ -413,7 +412,7 @@ import License from './Legal/License.jsx';
 import Help from './Resources/Help/Help.jsx';
 import Artisan from './Components/Artisian/Artisian.jsx';
 import Security from './Product/Security.jsx';
-
+import FeedbackPrompt from './Resources/Feedback/FeedBackPrompt.jsx';
 // the community section
 import Community from './Community/Community.jsx';
 import CreateCommunityPage from './Community/Create-Community.jsx';
@@ -444,6 +443,9 @@ import ArtistDiscovery from './Components/ArtistDiscovery.jsx';
 import DiaryCollection from './Components/Diaryland/DiaryCollection.jsx';
 import Notification from './Settings/Notification.jsx';
 
+// Implemeting Chatbot
+// import Chatbot from './ChatBot/Chatbot.jsx';
+import Chatbot from './Chatbot/Chatbot.jsx';
 // The commecial part starts from here 
 import Artstore from './Arteva/Artstore.jsx';
 import OrderHistory from './Arteva/Commercial/OrderHistory.jsx';
@@ -458,6 +460,13 @@ import ResearchPapersPage from './Components/ResearchPaperPage.jsx';
 import AboutHandmade from './Company/About/AboutHandmade.jsx';
 import CreateNewChallenge from './Community/CommunityDashboard/CreateNewChallenge.jsx';
 import MemberDiscoveryPage from './Community/DiscoverNewMember/MemberDiscoveryPage.jsx';
+// Temporary Share View
+import TemporaryShareView from './Share/TemporaryShareView.jsx';
+
+// Homemade Online Status Indicator
+import HandmadePaintingsGallery from './Components/Homemade_Crafts/HandmadePaintingsGallery.jsx';
+import DecorCraftsGallery from './Components/Homemade_Crafts/DecorCraftsGallery.jsx';
+import CulturalCreationsGallery from './Components/Homemade_Crafts/CulturalCreationsGallery.jsx';
 
 const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
 const COLLECTION_ID = import.meta.env.VITE_APPWRITE_METADATA_COLLECTION_ID;
@@ -568,9 +577,14 @@ function App() {
               <Suspense fallback={<div className="text-center py-6 text-blue-600">Loading...</div>}>
                 {/* Install Prompt Component */}
                 <InstallPrompt />
+                 <div>
+                {/* Your page content */}
+                <FeedbackPrompt />
+                <Chatbot/>
+               </div>
                 
                 <div data-aos="fade-left" data-aos-delay="100" className="w-full will-change-transform will-change-opacity">
-                  <Style />
+                  <ArtCategories />
                 </div>
                 <div data-aos="fade-right" data-aos-delay="200" className="w-full will-change-transform will-change-opacity">
                   < ArtistDiscovery />
@@ -681,6 +695,10 @@ function App() {
         <Route path="/historical" element={<Historical />} />
         <Route path="/modern" element={<Modern />} />
 
+        {/* Homemade Crafts Gallery */}
+        <Route path="/Components/Homemade_Crafts/HandmadePaintingsGallery" element={<HandmadePaintingsGallery />} />
+        <Route path='/Components/Homemade_Crafts/DecorCraftsGallery' element={<DecorCraftsGallery/>}/>
+        <Route path='/Components/Homemade_Crafts/CulturalCreationGallery' element={<CulturalCreationsGallery/>}/>
         {/* discovering artists  */}
         <Route path='/Artist/discoverartists' element={<UserDiscoveryPage/>}/>
         <Route path='/Artists/DiscoverUsers' element={<DiscoverUsers/>}/>
@@ -693,6 +711,8 @@ function App() {
         <Route path='/Arteva/ArtStore' element = {<Artstore/>}/>
         <Route path='/Arteva/Commercial/OrderHistory' element = {<OrderHistory/>}/>
         <Route path='/Arteva/ArtMarketplace' element={<ArtMarketplace />} />
+        {/* Temporary Share View */}
+        <Route path="/share/:token" element={<TemporaryShareView />} />
 
       </Routes>
     </Router>

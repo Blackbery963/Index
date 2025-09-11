@@ -592,7 +592,7 @@ const Chatbot = () => {
     setConnectionError(false);
     
     try {
-      const response = await fetch('http://localhost:3001/chat', {
+      const response = await fetch('https://www.thepaintersdiary.com/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

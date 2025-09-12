@@ -355,7 +355,6 @@
 // export default App;
 
 
-
 import { lazy, Suspense, useEffect, useState } from 'react';
 import { useParams, Navigate } from 'react-router-dom';
 import './App.css';
@@ -483,7 +482,7 @@ function App() {
     AOS.init({
       duration: 600,
       once: true,
-      disable: 'mobile',
+      disable: false,
       easing: 'ease-out',
       offset: 100,
     });
@@ -572,17 +571,17 @@ function App() {
         <Route
           path="/"
           element={
-            <div className="flex items-center justify-center flex-col gap-y-4 overflow-x-hidden overflow-y-auto bg-gray-100 dark:bg-[#000705] min-h-screen">
+            <div className="flex items-center justify-center flex-col gap-y-4 overflow-x-hidden bg-gray-100 dark:bg-[#000705] min-h-[60vh] md:min-h-screen">
               <Header />
               <Suspense fallback={<div className="text-center py-6 text-blue-600">Loading...</div>}>
                 {/* Install Prompt Component */}
-                <InstallPrompt />
                  <div>
+                  <InstallPrompt />
                 {/* Your page content */}
                 <FeedbackPrompt />
                 <Chatbot/>
                </div>
-                
+                {/* Landing page components */}
                 <div data-aos="fade-left" data-aos-delay="100" className="w-full will-change-transform will-change-opacity">
                   <ArtCategories />
                 </div>

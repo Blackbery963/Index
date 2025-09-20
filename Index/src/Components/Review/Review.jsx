@@ -214,7 +214,7 @@ const reviews = [
 // Review Card Component
 const ReviewCard = ({ profileImg, username, userDescription, review }) => {
   return (
-     <div className="w-full flex justify-center px-4 py-6">
+     <div className=" flex justify-center px-4 py-6">
       <div className="relative w-full max-w-md bg-white dark:bg-gray-900 rounded-3xl shadow-xl pt-16 pb-10 px-6 sm:px-10 border border-gray-100 dark:border-gray-800 text-center">
         {/* Profile Image */}
         <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 w-24 h-24 rounded-full border-4 border-white dark:border-gray-900 shadow-lg overflow-hidden">
@@ -256,7 +256,7 @@ const Review = () => {
   };
 
   return (
-    <div className="py-8 max-w-[95%] bg-gray-50 dark:bg-[#0a0f14] transition-colors">
+    <div className="py-8 xl:max-w-7xl max-w-full sm:max-w-[85%] bg-gray-50 dark:bg-[#0a0f14] transition-colors">
       <div className=" max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div

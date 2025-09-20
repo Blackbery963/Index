@@ -406,7 +406,7 @@ const DiaryTemplate = () => {
   };
 
   return (
-    <div className="py-12 max-w-[95%] mx-auto bg-gray-50 dark:bg-[#0a0f14] transition-colors">
+    <div className="py-12 xl:max-w-7xl max-w-full sm:max-w-[85%] mx-auto bg-gray-50 dark:bg-[#0a0f14] transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div

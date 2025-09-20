@@ -441,7 +441,7 @@ const Artisan = () => {
   const goToSlide = (index) => setCurrentSlide(index);
 
   return (
-    <div className="py-12 bg-white dark:bg-[#0a0f14] max-w-[95%] rounded-xl mx-auto overflow-hidden relative">
+    <div className="py-12 bg-white dark:bg-[#0a0f14] xl:max-w-7xl max-w-full sm:max-w-[85%] rounded-xl mx-auto overflow-hidden relative">
       <div className=" mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12">

@@ -206,7 +206,7 @@ const Commerce = () => {
   ];
 
   return (
-    <div className="max-w-[95%] mx-auto bg-white text-gray-800 dark:bg-[#0a0f14] dark:text-white rounded-xl transition-colors duration-300">
+    <div className="  mx-auto bg-white text-gray-800 xl:max-w-7xl max-w-full sm:max-w-[85%] dark:bg-[#0a0f14] dark:text-white rounded-xl transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 py-12">
 
         {/* Header */}

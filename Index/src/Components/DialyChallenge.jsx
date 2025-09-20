@@ -61,7 +61,7 @@ const DailyChallenge = () => {
 
   return (
 
-    <div className="max-w-[95%] mx-auto rounded-xl px-4 py-8 bg-white dark:bg-[#0a0f14] text-gray-800 dark:text-gray-100 transition-colors">
+    <div className="xl:max-w-7xl max-w-full sm:max-w-[85%] mx-auto rounded-xl px-4 py-8 bg-white dark:bg-[#0a0f14] text-gray-800 dark:text-gray-100 transition-colors">
   <div className="w-full max-w-7xl mx-auto">
     <div className="flex flex-col lg:flex-row gap-8">
       {/* Main Challenge Area */}

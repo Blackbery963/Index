@@ -31,7 +31,15 @@
   
 }
 
+.sticky-nav {
+  transition: all 0.3s ease-in-out;
+  backdrop-filter: blur(10px);
+}
 
+/* Ensure content doesn't jump when nav becomes fixed */
+main {
+  scroll-margin-top: 80px; /* Height of your sticky nav */
+}
 
 .input {
     height: 40px; 

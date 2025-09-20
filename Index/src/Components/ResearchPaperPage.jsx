@@ -186,7 +186,7 @@ const featuredPapers = [
 
 const ArtResearchPage = () => {
   return (
-    <div className="min-h-screen bg-white dark:bg-[#0a0f14] max-w-[95%] mx-auto px-4 py-12 text-gray-800 dark:text-gray-200">
+    <div className="min-h-screen bg-white dark:bg-[#0a0f14] xl:max-w-7xl max-w-full sm:max-w-[85%] mx-auto px-4 py-12 text-gray-800 dark:text-gray-200">
       {/* Header */}
       <div className="max-w-3xl mx-auto text-center mb-16">
         <motion.h1 

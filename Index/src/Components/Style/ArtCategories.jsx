@@ -135,6 +135,7 @@ import Pic_4 from "../Category/Category-images/oil.jpg";
 import Pic_5 from "../Category/Category-images/water.jpg";
 import Pic_6 from "../Category/Category-images/abstract.jpg";
 
+import GlassSidebar from "../Sidebar";
 const ArtCategories = () => {
   // Art categories data
   const categories = [
@@ -184,8 +185,8 @@ const ArtCategories = () => {
   ];
 
   return (
-    <div className="bg-white dark:bg-[#0a0f14] max-w-[95%] mx-auto rounded-lg py-12 px-4 sm:px-6 lg:px-8">
-      <div className="lg:max-w-[80%] max-w-[95%] mx-auto">
+    <div className="bg-white dark:bg-[#0a0f14] xl:max-w-7xl max-w-full sm:max-w-[85%] flex lg:flex-row flex-col mx-auto rounded-lg py-12 px-4 sm:px-6 lg:px-8 relative">
+      <div className=" max-w-[100%] mx-auto">
         {/* Header */}
       <div className="mb-10 lg:text-center text-left relative z-10">
         <h2 className="lg:text-4xl text-2xl font-serif lg:font-medium font-bold text-gray-800 dark:text-white mb-3 tracking-wide">
@@ -253,6 +254,9 @@ const ArtCategories = () => {
           display: none;
         }
       `}</style>
+      {/* <div className=" absolute">
+      <GlassSidebar/>
+      </div> */}
     </div>
   );
 };

@@ -284,7 +284,7 @@ const Collection = () => {
   }, [page]);
 
   return (
-    <div className="min-h-screen max-w-[95%] mx-auto bg-gray-50 dark:bg-[#0a0f14] rounded-lg">
+    <div className="min-h-screen xl:max-w-7xl max-w-full sm:max-w-[85%] mx-auto bg-gray-50 dark:bg-[#0a0f14] rounded-lg">
       <section className="py-12 px-6 bg-white dark:bg-[#040d1200]">
         <div className="max-w-7xl mx-auto flex flex-col">
           {/* Header */}

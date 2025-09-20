@@ -367,27 +367,27 @@
 //   };
 
 //   // Resizable sidebarr
-  // const [width, setWidth] = useState(384); // default 96 = md:w-96
-  // const sidebarRef = useRef(null);
+//   const [width, setWidth] = useState(384); // default 96 = md:w-96
+//   const sidebarRef = useRef(null);
 
-  // const startResize = (e) => {
-  //   e.preventDefault();
-  //   const startX = e.clientX;
-  //   const startWidth = width;
+//   const startResize = (e) => {
+//     e.preventDefault();
+//     const startX = e.clientX;
+//     const startWidth = width;
 
-  //   const onMouseMove = (e) => {
-  //     const newWidth = startWidth - (e.clientX - startX);
-  //     setWidth(Math.min(Math.max(newWidth, 280), 700)); // clamp between 280px and 700px
-  //   };
+//     const onMouseMove = (e) => {
+//       const newWidth = startWidth - (e.clientX - startX);
+//       setWidth(Math.min(Math.max(newWidth, 280), 700)); // clamp between 280px and 700px
+//     };
 
-  //   const onMouseUp = () => {
-  //     window.removeEventListener("mousemove", onMouseMove);
-  //     window.removeEventListener("mouseup", onMouseUp);
-  //   };
+//     const onMouseUp = () => {
+//       window.removeEventListener("mousemove", onMouseMove);
+//       window.removeEventListener("mouseup", onMouseUp);
+//     };
 
-  //   window.addEventListener("mousemove", onMouseMove);
-  //   window.addEventListener("mouseup", onMouseUp);
-  // };
+//     window.addEventListener("mousemove", onMouseMove);
+//     window.addEventListener("mouseup", onMouseUp);
+//   };
 
 //   return (
 //     <>
@@ -424,10 +424,10 @@
 //             style={{ width: width }}
 //           >
 //             {/* resize part */}
-          //  <div
-          //  onMouseDown={startResize}
-          //  className="hidden md:block absolute top-0 left-0 h-full w-1 cursor-ew-resize bg-transparent hover:bg-gray-300/30 dark:hover:bg-gray-600/30"
-          //  />
+//            <div
+//            onMouseDown={startResize}
+//            className="hidden md:block absolute top-0 left-0 h-full w-1 cursor-ew-resize bg-transparent hover:bg-gray-300/30 dark:hover:bg-gray-600/30"
+//            />
 //             {/* Header */}
 //             <div className="bg-gradient-to-br from-pink-500 to-orange-500 text-white p-4 flex items-center justify-between">
 //               <div className="flex items-center gap-3">
@@ -731,7 +731,7 @@
 
 
 import React, { useState, useRef, useEffect } from 'react';
-import { FaRobot, FaTimes, FaPaperPlane, FaUser, FaLightbulb, FaLaugh, FaQuoteLeft, FaCloudSun, FaPalette, FaExclamationTriangle, FaRedo, FaRegCopy, FaRegThumbsDown, FaRegThumbsUp, FaHistory, FaTrash, FaCheck, FaInfoCircle } from 'react-icons/fa';
+import { FaRobot, FaTimes, FaComment, FaPaperPlane, FaUser, FaLightbulb, FaLaugh, FaQuoteLeft, FaCloudSun, FaPalette, FaExclamationTriangle, FaRedo, FaRegCopy, FaRegThumbsDown, FaRegThumbsUp, FaHistory, FaTrash, FaCheck, FaInfoCircle } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Client, Databases, Account, ID, Query } from 'appwrite';
 
@@ -758,6 +758,8 @@ const Chatbot = () => {
   const [deleteConfirm, setDeleteConfirm] = useState(null);
   const [showDeleteSuccess, setShowDeleteSuccess] = useState(false);
   const messagesEndRef = useRef(null);
+  const [isHovered, setIsHovered] = useState(false);
+  const [hasNotification, setHasNotification] = useState(true);
 
   // Get API URL based on environment
   const getApiUrl = () => {
@@ -1192,24 +1194,77 @@ const Chatbot = () => {
   return (
     <>
       {/* Chatbot toggle button */}
-      <motion.button
-        className="fixed lg:bottom-8 lg:right-8 bottom-4 right-4 z-[1001] bg-gradient-to-br from-indigo-500 to-purple-600 text-white lg:p-4 p-3 rounded-full shadow-2xl hover:shadow-3xl flex items-center justify-center transition-all duration-300 group backdrop-blur-md border border-white/20"
-        whileHover={{ scale: 1.15, rotate: 5 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={() => setIsOpen(!isOpen)}
-        aria-label="Toggle Palette AI Assistant"
+    <div className="fixed lg:bottom-6 bottom-[70px] lg:right-6 right-2 z-50">
+      {/* Notification badge */}
+      {hasNotification && (
+        <div className="absolute -top-1 -right-1 z-10">
+          <span className="flex h-4 w-4">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-4 w-4 bg-sky-500"></span>
+          </span>
+        </div>
+      )}
+      {/* from-blue-500 to-purple-600 */}
+      {/* Main button */}
+<motion.button
+  className="relative p-4 rounded-xl flex items-center justify-center overflow-hidden"
+  whileHover={{ scale: 1.1 }}
+  whileTap={{ scale: 0.9 }}
+  onClick={() => {
+    setIsOpen(!isOpen);
+    setHasNotification(false);
+  }}
+  onHoverStart={() => setIsHovered(true)}
+  onHoverEnd={() => setIsHovered(false)}
+  aria-label="Palette AI Assistant"
+>
+  {/* Spinning Gradient Border */}
+  <div className="absolute inset-0 rounded-xl p-[2px] bg-gradient-to-r from-cyan-500 via-purple-500 to-yellow-400 animate-spin-slow">
+    <div className="w-full h-full bg-gray-900 rounded-[10px]" />
+  </div>
+
+  {/* Icon inside */}
+  <AnimatePresence mode="wait">
+    {isOpen ? (
+      <motion.div
+        key="close"
+        initial={{ rotate: -180, opacity: 0 }}
+        animate={{ rotate: 0, opacity: 1 }}
+        exit={{ rotate: 180, opacity: 0 }}
+        transition={{ duration: 0.2 }}
       >
-        {isOpen ? (
-          <FaTimes size={24} />
-        ) : (
-          <div className="relative">
-            <FaPalette size={24} />
-            {connectionError && (
-              <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse border border-white"></span>
-            )}
-          </div>
-        )}
-      </motion.button>
+        <FaTimes className="text-2xl text-white" />
+      </motion.div>
+    ) : (
+      <motion.div
+        key="chat"
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.8, opacity: 0 }}
+        transition={{ duration: 0.2 }}
+      >
+        <FaPalette className="text-2xl text-cyan-400" />
+      </motion.div>
+    )}
+  </AnimatePresence>
+</motion.button>
+
+{/* Hover tooltip */}
+<AnimatePresence>
+  {isHovered && (
+    <motion.div
+      className="absolute right-20 top-1/3 -translate-y-1/2 bg-gray-900 text-white text-sm text-nowrap px-2 py-1.5 rounded-md shadow-lg border border-gray-700"
+      initial={{ opacity: 0, x: 10 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: 10 }}
+    >
+      Chat with Palette AI
+    </motion.div>
+  )}
+</AnimatePresence>
+
+</div>
+
 
       {/* Chatbot sidebar */}
       <AnimatePresence>

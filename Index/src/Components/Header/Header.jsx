@@ -22,7 +22,7 @@ import { FiMenu } from "react-icons/fi";
  import image7 from './Header-Images/no7.jpeg'
  import image8 from './Header-Images/no8.jpeg'
  import image9 from './Header-Images/no9.jpg'
-import Sidebar from "../Sidebar";
+// import Sidebar from "../Sidebar";
 
 // Dark Mode Context
 export const DarkModeContext = createContext();
@@ -287,14 +287,6 @@ const scrollDirection = useScrollDirection();
         animate={isScrolled ? "scrolled" : ["animate", "unscrolled"]}
         variants={navbarVariants}
       >
-      {/* <motion.nav
-  className={`fixed top-0 left-0 w-full z-[1000] py-3 px-6 rounded-b-xl backdrop-blur-md transition-all duration-500 ${
-    darkMode ? "bg-gray-900/40 text-white" : "bg-white/40 text-black"
-  }`}
-  initial={{ y: -100 }}
-  animate={{ y: scrollDirection === "down" ? 0 : -100 }}
-  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-> */}
         <div className="mx-auto w-full max-w-full px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             {/* Logo */}
@@ -704,6 +696,7 @@ const scrollDirection = useScrollDirection();
             </div>
           </div>
         </div>
+        {/* </div> */}
       </motion.nav>
 
       {/* Hero Section */}

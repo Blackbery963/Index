@@ -111,7 +111,7 @@ import { account } from "../appwriteConfig";
 import { FiUserPlus, FiCheck } from "react-icons/fi";
 import { ImSpinner2 } from "react-icons/im";
 
-export default function FollowButton({ targetUserId, onFollowChange = () => {} }) {
+ function FollowButton({ targetUserId, onFollowChange = () => {} }) {
   const [isFollowing, setIsFollowing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [currentUserId, setCurrentUserId] = useState(null);
@@ -223,3 +223,4 @@ const handleFollow = async () => {
   );
 }
 
+export default FollowButton

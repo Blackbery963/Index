@@ -353,14 +353,14 @@ const ArtMarketplace = () => {
           <p className="text-lg md:text-2xl text-gray-200 mb-10">
             Unique pieces from independent artists worldwide. Each item tells a story.
           </p>
-          <div className="flex flex-row gap-4 justify-center">
+          {/* <div className="flex flex-row gap-4 justify-center">
             <button className="px-8 py-3 rounded-xl bg-gradient-to-r from-pink-500 to-purple-600 text-white font-semibold shadow-lg hover:opacity-90 transition">
               Shop Featured
             </button>
             <button className="px-8 py-3 rounded-xl border border-white text-white font-semibold hover:bg-white/20 transition">
               Meet Artists
             </button>
-          </div>
+          </div> */}
         </motion.div>
       </section>
     </div>    
@@ -581,13 +581,3 @@ const ArtMarketplace = () => {
 };
 
 export default ArtMarketplace;
-
-
-
-
-
-
-
-
-
-

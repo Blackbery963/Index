@@ -22,7 +22,8 @@ import Sidebar from './Components/Sidebar.jsx';
 // Import your InstallPrompt component
 import InstallPrompt from './MainApp.jsx'
 // Other imports remain the same...
-import Account from './Components/Account/Account';
+// import Account from './Components/Account/Account';
+import Account from './Components/Account/Account.jsx';
 import Upload from './Components/Upload/Upload.jsx';
 // Authentication Service 
 import Signup from './Components/Authentication/Signup/Signup.jsx';
@@ -91,7 +92,8 @@ import TopNav from './Components/Sidebar.jsx';
 // import Chatbot from './ChatBot/Chatbot.jsx';
 import Chatbot from './Chatbot/Chatbot.jsx';
 // The commecial part starts from here 
-import Artstore from './Arteva/Artstore.jsx';
+// import Artstore from './Arteva/Artstore.jsx';
+import ArtStore from './Arteva/ArtStore/ArtStore.jsx';
 import OrderHistory from './Arteva/Commercial/OrderHistory.jsx';
 import Cart from './Settings/Cart.jsx';
 import Order from './Settings/Order.jsx';
@@ -395,7 +397,7 @@ const [navHeight, setNavHeight] = useState(56); // fallback, not 1400!
         <Route path='/diary/:id' element = {<January/>}/>
 
         {/* the routing of commercial section */}
-        <Route path='/Arteva/ArtStore' element = {<Artstore/>}/>
+        <Route path='/Arteva/ArtStore' element = {<ArtStore/>}/>
         <Route path='/Arteva/Commercial/OrderHistory' element = {<OrderHistory/>}/>
         <Route path='/Arteva/ArtMarketplace' element={<ArtMarketplace />} />
         {/* Temporary Share View */}

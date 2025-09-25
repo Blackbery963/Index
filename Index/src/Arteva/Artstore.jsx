@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { 
   FiShoppingBag, FiMenu, FiX, FiArrowRight, FiStar, FiBox, 
@@ -17,6 +17,7 @@ import { toast, ToastContainer } from 'react-toastify';
 
 const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
 const USER_COLLECTION_ID = import.meta.env.VITE_APPWRITE_USERS_COLLECTION_ID;
+const BUCKET_ID = import.meta.env.VITE_APPWRITE_BUCKET_ID;
 
 const ArtStore = () => {
   const [activeCategory, setActiveCategory] = useState('trending');
@@ -30,6 +31,8 @@ const ArtStore = () => {
   const [artPieces, setArtPieces] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentIndex, setCurrentIndex] = React.useState(0);
+
   const [cartItems, setCartItems] = useState(() => {
     const storedCart = localStorage.getItem('cartItems');
     return storedCart ? JSON.parse(storedCart) : [];
@@ -265,6 +268,24 @@ const ArtStore = () => {
           (art.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
            art.artist?.toLowerCase().includes(searchQuery.toLowerCase())
   ));
+
+const getFilePreviewUrl = (fileId) => {
+  return storage.getFilePreview(BUCKET_ID, fileId).href;
+};
+
+const fetchArtworks = async () => {
+  const response = await databases.listDocuments(DATABASE_ID, USER_COLLECTION_ID);
+
+  const artworks = response.documents.map((doc) => ({
+    ...doc,
+    imageUrl: doc.imageId ? getFilePreviewUrl(doc.imageId) : null,
+    additionalImageUrls: doc.additionalImageIds?.map((id) =>
+      getFilePreviewUrl(id)
+    ) || [],
+  }));
+
+  return artworks;
+};
   
   if (loading) {
     return (
@@ -490,40 +511,7 @@ const ArtStore = () => {
       {/* Main Content */}
       <div className="relative z-10 bg-white dark:bg-gray-950 pt-16 pb-24">
         {/* Category Selector */}
-        {/* <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="sticky top-16 z-20 bg-white/80 dark:bg-gray-950/80 border-b border-gray-200/30 dark:border-gray-800/30 backdrop-blur-md py-4"
-        >
-          <div className="max-w-7xl mx-auto px-4 sm:px-6">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <h3 className="text-lg font-semibold text-indigo-600 dark:bg-clip-text dark:text-transparent dark:bg-gradient-to-r dark:from-purple-400 dark:to-pink-300">
-                {activeCategory === 'trending' ? 'Trending Now' : `${categories.find((c) => c.id === activeCategory)?.name} Collection`}
-              </h3>
-              <div className="flex overflow-x-auto hide-scrollbar">
-                <div className="flex gap-3">
-                  {categories.map((category) => (
-                    <motion.button
-                      key={category.id}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={() => setActiveCategory(category.id)}
-                      className={`px-4 py-2 rounded-lg flex items-center gap-2 text-sm outline-none font-medium ${
-                        activeCategory === category.id
-                          ? 'bg-indigo-600 dark:bg-gradient-to-r dark:from-purple-600 dark:to-pink-500 text-white'
-                          : 'bg-gray-100 dark:bg-gray-800/50 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700/50 border border-gray-200 dark:border-gray-700/50'
-                      }`}
-                    >
-                      {category.icon}
-                      {category.name}
-                    </motion.button>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </motion.div> */}
+        
 
 {/* 🟣 Trending + Few Categories */}
 
@@ -630,9 +618,8 @@ const ArtStore = () => {
                         <FiCamera className="text-3xl text-gray-400" />
                       </div>
                     )}
-                    <div className="absolute top-4 right-4 p-2 rounded-full bg-white/80 dark:bg-gray-800/80 z-10">
-                      <LikeButton targetId={art.$id} targetType="artwork" />
-                    </div>
+
+
                   </div>
                   <div className="p-4">
                     <h3 className="text-sm font-medium text-gray-900 dark:text-white mb-1">
@@ -826,7 +813,7 @@ const ArtStore = () => {
                   </button>
                 </div>
 
-                {selectedArt.imageUrl ? (
+                {/* {selectedArt.imageUrl ? (
                   <div className="mb-6 rounded-lg overflow-hidden">
                     <img 
                       src={selectedArt.imageUrl} 
@@ -838,7 +825,89 @@ const ArtStore = () => {
                   <div className="mb-6 rounded-lg overflow-hidden bg-gray-200 dark:bg-gray-700 aspect-square flex items-center justify-center">
                     <FiCamera className="text-4xl text-gray-400" />
                   </div>
-                )}
+                )} */}
+                {/* 🔹 Image Slider */}
+{selectedArt.imageUrl || selectedArt.additionalImageIds?.length > 0 ? (
+  <div className="mb-6 relative rounded-lg overflow-hidden">
+    {(() => {
+
+      // ✅ Build image list (main + additional)
+      // const allImages = [
+      //   selectedArt.imageUrl,
+      //   ...(selectedArt.additionalImageIds?.map(
+      //     (id) => YourCollectionsService.getFilePreviewUrl(id) // 👈 fetch Appwrite preview
+      //   ) || []),
+      // ].filter(Boolean);
+      const allImages = [
+  selectedArt.imageUrl,
+  ...(selectedArt.additionalImageIds || []),
+].filter(Boolean);
+
+
+      const nextSlide = () =>
+        setCurrentIndex((prev) => (prev + 1) % allImages.length);
+      const prevSlide = () =>
+        setCurrentIndex((prev) => (prev - 1 + allImages.length) % allImages.length);
+
+      return (
+        <div className="relative w-full aspect-square">
+          {/* Slider Track */}
+          <div
+            className="flex transition-transform duration-500"
+            style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+          >
+            {allImages.map((url, index) => (
+              <img
+                key={index}
+                src={url}
+                alt={`Artwork view ${index + 1}`}
+                className="w-full h-full object-cover flex-shrink-0"
+              />
+            ))}
+          </div>
+
+          {/* Prev / Next Buttons */}
+          {allImages.length > 1 && (
+            <>
+              <button
+                onClick={prevSlide}
+                className="absolute top-1/2 left-3 -translate-y-1/2 bg-black/40 text-white p-2 rounded-full"
+              >
+                ‹
+              </button>
+              <button
+                onClick={nextSlide}
+                className="absolute top-1/2 right-3 -translate-y-1/2 bg-black/40 text-white p-2 rounded-full"
+              >
+                ›
+              </button>
+            </>
+          )}
+
+          {/* Dots */}
+          {allImages.length > 1 && (
+            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
+              {allImages.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentIndex(index)}
+                  className={`w-2 h-2 rounded-full ${
+                    index === currentIndex ? 'bg-white' : 'bg-white/50'
+                  }`}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      );
+    })()}
+  </div>
+) : (
+  <div className="mb-6 rounded-lg overflow-hidden bg-gray-200 dark:bg-gray-700 aspect-square flex items-center justify-center">
+    <FiCamera className="text-4xl text-gray-400" />
+  </div>
+)}
+
 
                 <div className="mb-6">
                   <div className="flex items-center gap-3 mb-4">

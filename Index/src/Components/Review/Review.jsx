@@ -161,140 +161,265 @@
 // // export default Review;
 
 
-import React from 'react';
-import { motion } from 'framer-motion';
-import { FaStar } from 'react-icons/fa';
-import profile_1 from './Images-of-Review/pr8.jpg';
-import profile_2 from './Images-of-Review/pr2.jpg';
-import profile_3 from './Images-of-Review/pr3.jpg';
-import profile_4 from './Images-of-Review/pr1.jpg';
-import profile_5 from './Images-of-Review/pr4.jpg';
-import profile_6 from './Images-of-Review/pr5.jpg';
+// import React from 'react';
+// import { motion } from 'framer-motion';
+// import { FaStar } from 'react-icons/fa';
+// import profile_1 from './Images-of-Review/pr8.jpg';
+// import profile_2 from './Images-of-Review/pr2.jpg';
+// import profile_3 from './Images-of-Review/pr3.jpg';
+// import profile_4 from './Images-of-Review/pr1.jpg';
+// import profile_5 from './Images-of-Review/pr4.jpg';
+// import profile_6 from './Images-of-Review/pr5.jpg';
+
+// const reviews = [
+//   {
+//     profileImg: profile_1,
+//     username: "Loved One",
+//     userDescription: "Frontend Developer",
+//     review: "Painters Diary captures the essence of art with elegant design and thoughtful typography.",
+//   },
+//   {
+//     profileImg: profile_2,
+//     username: "James Wilson",
+//     userDescription: "Digital Artist",
+//     review: "A perfect platform for artists to showcase their work. The community is supportive!",
+//   },
+//   {
+//     profileImg: profile_3,
+//     username: "Sophia Rodriguez",
+//     userDescription: "Art Collector",
+//     review: "I discovered amazing new artists through Painters Diary. Excellent curation.",
+//   },
+//   {
+//     profileImg: profile_4,
+//     username: "Emma Chen",
+//     userDescription: "Watercolor Painter",
+//     review: "The daily inspiration feed keeps me motivated to create new artwork.",
+//   },
+//   {
+//     profileImg: profile_5,
+//     username: "Michael Johnson",
+//     userDescription: "Photographer",
+//     review: "A platform that truly understands the needs of visual artists. Brilliant!",
+//   },
+//   {
+//     profileImg: profile_6,
+//     username: "Olivia Martinez",
+//     userDescription: "Art Teacher",
+//     review: "My students love using Painters Diary for art research. Highly recommended.",
+//   },
+ 
+// ];
+
+// // Review Card Component
+// const ReviewCard = ({ profileImg, username, userDescription, review }) => {
+//   return (
+//      <div className=" flex justify-center px-4 py-6">
+//       <div className="relative w-full max-w-md bg-white dark:bg-gray-900 rounded-3xl shadow-xl pt-16 pb-10 px-6 sm:px-10 border border-gray-100 dark:border-gray-800 text-center">
+//         {/* Profile Image */}
+//         <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 w-24 h-24 rounded-full border-4 border-white dark:border-gray-900 shadow-lg overflow-hidden">
+//           <img src={profileImg} alt={username} className="w-full h-full object-cover" />
+//         </div>
+
+//         {/* Name & Description */}
+//         <h3 className="text-xl font-bold text-teal-600 dark:text-teal-400 mt-4">{username}</h3>
+//         <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">{userDescription}</p>
+
+//         {/* Quote Icon */}
+
+//         {/* Review Text */}
+//         <p className="mt-4 text-sm text-gray-700 dark:text-gray-300 leading-relaxed px-2">
+//           {review}
+//         </p>
+
+//         {/* Star Rating */}
+//         <div className="flex justify-center gap-1 mt-6">
+//           {[...Array(5)].map((_, i) => (
+//             <FaStar key={i} className="text-yellow-400 text-lg " />
+//           ))}
+//         </div>
+//       </div>
+//       </div>
+//   );
+// };
+
+// // Main Review Component
+// const Review = () => {
+//   // Animation variants for cards
+//   const cardVariants = {
+//     hidden: { opacity: 0, y: 20 },
+//     visible: (i) => ({
+//       opacity: 1,
+//       y: 0,
+//       transition: { delay: i * 0.1, duration: 0.4, ease: 'easeOut' },
+//     }),
+//   };
+
+//   return (
+//     <div className="py-8 xl:max-w-7xl max-w-full sm:max-w-[85%] bg-gray-50 dark:bg-[#0a0f14] transition-colors">
+//       <div className=" max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+//         {/* Header */}
+//         <motion.div
+//           initial={{ opacity: 0, y: 20 }}
+//           animate={{ opacity: 1, y: 0 }}
+//           transition={{ duration: 0.5 }}
+//           className="text-center mb-10"
+//         >
+//           <h2 className="text-3xl font-semibold text-gray-900 dark:text-white">
+//             What People Say
+//           </h2>
+//           <p className="mt-2 text-base text-gray-600 dark:text-gray-400 max-w-xl mx-auto">
+//             Hear from our community of artists and art lovers
+//           </p>
+//         </motion.div>
+
+//         {/* Review Grid */}
+//         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+//           {reviews.map((review, index) => (
+//             <motion.div
+//               key={index}
+//               custom={index}
+//               initial="hidden"
+//               animate="visible"
+//               variants={cardVariants}
+//             >
+//               <ReviewCard
+//                 profileImg={review.profileImg}
+//                 username={review.username}
+//                 userDescription={review.userDescription}
+//                 review={review.review}
+//               />
+//             </motion.div>
+//           ))}
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Review;
+
+
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { FaStar } from "react-icons/fa";
+import { IoChevronBack, IoChevronForward } from "react-icons/io5";
+
+import profile_1 from "./Images-of-Review/pr8.jpg";
+import profile_2 from "./Images-of-Review/pr2.jpg";
+import profile_3 from "./Images-of-Review/pr3.jpg";
 
 const reviews = [
   {
     profileImg: profile_1,
     username: "Loved One",
     userDescription: "Frontend Developer",
-    review: "Painters Diary captures the essence of art with elegant design and thoughtful typography.",
+    review:
+      "Painters' Diary captures the essence of art with a beautifully minimal and creative interface.",
   },
   {
     profileImg: profile_2,
     username: "James Wilson",
     userDescription: "Digital Artist",
-    review: "A perfect platform for artists to showcase their work. The community is supportive!",
+    review:
+      "A peaceful space for creativity — the experience feels calm and inspiring every time I visit.",
   },
   {
     profileImg: profile_3,
     username: "Sophia Rodriguez",
     userDescription: "Art Collector",
-    review: "I discovered amazing new artists through Painters Diary. Excellent curation.",
+    review:
+      "I discovered incredible new artists here. The design feels elegant and thoughtfully made.",
   },
-  {
-    profileImg: profile_4,
-    username: "Emma Chen",
-    userDescription: "Watercolor Painter",
-    review: "The daily inspiration feed keeps me motivated to create new artwork.",
-  },
-  {
-    profileImg: profile_5,
-    username: "Michael Johnson",
-    userDescription: "Photographer",
-    review: "A platform that truly understands the needs of visual artists. Brilliant!",
-  },
-  {
-    profileImg: profile_6,
-    username: "Olivia Martinez",
-    userDescription: "Art Teacher",
-    review: "My students love using Painters Diary for art research. Highly recommended.",
-  },
- 
 ];
 
-// Review Card Component
-const ReviewCard = ({ profileImg, username, userDescription, review }) => {
-  return (
-     <div className=" flex justify-center px-4 py-6">
-      <div className="relative w-full max-w-md bg-white dark:bg-gray-900 rounded-3xl shadow-xl pt-16 pb-10 px-6 sm:px-10 border border-gray-100 dark:border-gray-800 text-center">
-        {/* Profile Image */}
-        <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 w-24 h-24 rounded-full border-4 border-white dark:border-gray-900 shadow-lg overflow-hidden">
-          <img src={profileImg} alt={username} className="w-full h-full object-cover" />
-        </div>
+const ReviewSlider = () => {
+  const [index, setIndex] = useState(0);
 
-        {/* Name & Description */}
-        <h3 className="text-xl font-bold text-teal-600 dark:text-teal-400 mt-4">{username}</h3>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">{userDescription}</p>
+  const nextSlide = () => setIndex((prev) => (prev + 1) % reviews.length);
+  const prevSlide = () => setIndex((prev) => (prev - 1 + reviews.length) % reviews.length);
 
-        {/* Quote Icon */}
-
-        {/* Review Text */}
-        <p className="mt-4 text-sm text-gray-700 dark:text-gray-300 leading-relaxed px-2">
-          {review}
-        </p>
-
-        {/* Star Rating */}
-        <div className="flex justify-center gap-1 mt-6">
-          {[...Array(5)].map((_, i) => (
-            <FaStar key={i} className="text-yellow-400 text-lg " />
-          ))}
-        </div>
-      </div>
-      </div>
-  );
-};
-
-// Main Review Component
-const Review = () => {
-  // Animation variants for cards
-  const cardVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: (i) => ({
-      opacity: 1,
-      y: 0,
-      transition: { delay: i * 0.1, duration: 0.4, ease: 'easeOut' },
-    }),
+  const slideVariants = {
+    enter: { opacity: 0, x: 50 },
+    center: { opacity: 1, x: 0, transition: { duration: 0.5 } },
+    exit: { opacity: 0, x: -50, transition: { duration: 0.4 } },
   };
 
   return (
-    <div className="py-8 xl:max-w-7xl max-w-full sm:max-w-[85%] bg-gray-50 dark:bg-[#0a0f14] transition-colors">
-      <div className=" max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-10"
-        >
-          <h2 className="text-3xl font-semibold text-gray-900 dark:text-white">
-            What People Say
-          </h2>
-          <p className="mt-2 text-base text-gray-600 dark:text-gray-400 max-w-xl mx-auto">
-            Hear from our community of artists and art lovers
-          </p>
-        </motion.div>
+    <div className="relative w-full flex flex-col items-center justify-center py- px-4 bg-gray-100 dark:bg-[#000705] transition-colors overflow-hidden">
+      <h2 className="text-3xl font-semibold text-gray-900 dark:text-white mb-6 text-center">
+        What People Say
+      </h2>
 
-        {/* Review Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {reviews.map((review, index) => (
-            <motion.div
-              key={index}
-              custom={index}
-              initial="hidden"
-              animate="visible"
-              variants={cardVariants}
-            >
-              <ReviewCard
-                profileImg={review.profileImg}
-                username={review.username}
-                userDescription={review.userDescription}
-                review={review.review}
+      <div className="relative w-full max-w-lg">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={index}
+            variants={slideVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            className="bg-white/60 dark:bg-white/5 backdrop-blur-xl border border-gray-200 dark:border-white/10 rounded-3xl shadow-xl p-8 text-center"
+          >
+            <div className="flex justify-center mb-4">
+              <img
+                src={reviews[index].profileImg}
+                alt={reviews[index].username}
+                className="w-20 h-20 rounded-full object-cover border-4 border-white dark:border-gray-800 shadow-md"
               />
-            </motion.div>
-          ))}
-        </div>
+            </div>
+
+            <h3 className="text-lg font-semibold text-teal-600 dark:text-teal-400">
+              {reviews[index].username}
+            </h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              {reviews[index].userDescription}
+            </p>
+
+            <p className="mt-4 text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
+              {reviews[index].review}
+            </p>
+
+            <div className="flex justify-center gap-1 mt-4">
+              {[...Array(5)].map((_, i) => (
+                <FaStar key={i} className="text-yellow-400" />
+              ))}
+            </div>
+          </motion.div>
+        </AnimatePresence>
+
+        {/* Navigation Buttons */}
+        <button
+          onClick={prevSlide}
+          className="absolute left-0 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/60 dark:bg-gray-800/40 backdrop-blur-md hover:bg-white dark:hover:bg-gray-700 transition"
+        >
+          <IoChevronBack className="text-gray-800 dark:text-white text-xl" />
+        </button>
+
+        <button
+          onClick={nextSlide}
+          className="absolute right-0 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/60 dark:bg-gray-800/40 backdrop-blur-md hover:bg-white dark:hover:bg-gray-700 transition"
+        >
+          <IoChevronForward className="text-gray-800 dark:text-white text-xl" />
+        </button>
+      </div>
+
+      {/* Dots Indicator */}
+      <div className="flex justify-center mt-6 gap-2">
+        {reviews.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setIndex(i)}
+            className={`w-2.5 h-2.5 rounded-full transition-all ${
+              i === index
+                ? "bg-teal-500 scale-110"
+                : "bg-gray-400/50 dark:bg-gray-600"
+            }`}
+          />
+        ))}
       </div>
     </div>
   );
 };
 
-export default Review;
+export default ReviewSlider;

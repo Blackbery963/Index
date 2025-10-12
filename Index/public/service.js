@@ -1,177 +1,129 @@
-// part 2 
-// const STATIC_CACHE = 'pwa-static-v3';
-// const DYNAMIC_CACHE = 'pwa-dynamic-v2';
+// const CACHE_NAME = "pwa-static-v3";   // bump version when static files change
+// const RUNTIME_CACHE = "pwa-runtime-v1";
 
-// // Define which assets to cache immediately
+// // ✅ Only cache critical static assets (no over-caching)
 // const STATIC_ASSETS = [
-//   '/',
-//   '/index.html',
-//   '/offline.html',
-//   '/styles.css',
-//   '/app.js',
-//   '/manifest.json',
-//   '/logo_192x192.png',
-//   '/logo_512x512.png'
+//   "/",
+//   "/index.html",
+//   "/offline.html",
+//   "/styles.css",
+//   "/app.js",
+//   "/manifest.json",
+//   "/logo_192x192.png",
+//   "/logo_512x512.png"
 // ];
 
-// // Define routes that should NOT be cached (API endpoints, etc.)
-// const NO_CACHE_ROUTES = [
-//   '/api/',
-//   '/auth/',
-//   '/graphql',
-//   '/socket.io/'
-// ];
-
-// // ✅ Install event
-// self.addEventListener('install', event => {
-//   console.log('[Service Worker] Installing...');
-  
-//   // Force the waiting service worker to become the active one
-//   self.skipWaiting();
-  
+// // ✅ Install event → cache critical assets only
+// self.addEventListener("install", event => {
+//   console.log("[SW] Install");
 //   event.waitUntil(
-//     caches.open(STATIC_CACHE)
-//       .then(cache => {
-//         console.log('[Service Worker] Pre-caching static assets');
-//         return cache.addAll(STATIC_ASSETS);
-//       })
-//       .catch(err => {
-//         console.error('[Service Worker] Pre-caching failed:', err);
-//       })
+//     caches.open(CACHE_NAME).then(cache => cache.addAll(STATIC_ASSETS))
 //   );
+//   self.skipWaiting();
 // });
 
-// // ✅ Activate event - clean up old caches
-// self.addEventListener('activate', event => {
-//   console.log('[Service Worker] Activating...');
-  
+// // ✅ Activate event → cleanup old caches
+// self.addEventListener("activate", event => {
+//   console.log("[SW] Activate");
 //   event.waitUntil(
-//     caches.keys().then(cacheNames => {
-//       return Promise.all(
-//         cacheNames.map(cacheName => {
-//           // Delete old caches that aren't the current ones
-//           if (cacheName !== STATIC_CACHE && cacheName !== DYNAMIC_CACHE) {
-//             console.log('[Service Worker] Deleting old cache:', cacheName);
-//             return caches.delete(cacheName);
+//     caches.keys().then(keys =>
+//       Promise.all(
+//         keys.map(key => {
+//           if (key !== CACHE_NAME && key !== RUNTIME_CACHE) {
+//             console.log("[SW] Removing old cache:", key);
+//             return caches.delete(key);
 //           }
 //         })
-//       );
-//     })
+//       )
+//     )
 //   );
-  
-//   // Take control of all clients immediately
-//   return self.clients.claim();
+//   self.clients.claim();
 // });
 
-// // ✅ Fetch event - improved strategy
-// self.addEventListener('fetch', event => {
-//   // Skip non-GET requests and browser extensions
-//   if (event.request.method !== 'GET' || 
-//       event.request.url.startsWith('chrome-extension://') ||
-//       event.request.url.includes('extension')) {
+// // ✅ Fetch strategy: Network-first for HTML, Cache-first for static assets, Network-only for APIs
+// self.addEventListener("fetch", event => {
+//   if (event.request.method !== "GET") return;
+
+//   const requestUrl = new URL(event.request.url);
+
+//   // HTML pages → network first (so updates load quickly)
+//   if (event.request.headers.get("accept")?.includes("text/html")) {
+//     event.respondWith(
+//       fetch(event.request)
+//         .then(response => {
+//           const cloned = response.clone();
+//           caches.open(CACHE_NAME).then(cache => cache.put(event.request, cloned));
+//           return response;
+//         })
+//         .catch(() => caches.match(event.request).then(res => res || caches.match("/offline.html")))
+//     );
 //     return;
 //   }
-  
-//   // Check if this is an API request that shouldn't be cached
-//   const isApiRequest = NO_CACHE_ROUTES.some(route => 
-//     event.request.url.includes(route)
-//   );
-  
-//   // For API requests, use network-only strategy
-//   if (isApiRequest) {
-//     event.respondWith(fetch(event.request));
+
+//   // Static assets (css, js, images) → cache first
+//   if (STATIC_ASSETS.some(asset => requestUrl.pathname.endsWith(asset))) {
+//     event.respondWith(
+//       caches.match(event.request).then(cached =>
+//         cached ||
+//         fetch(event.request).then(response => {
+//           const cloned = response.clone();
+//           caches.open(CACHE_NAME).then(cache => cache.put(event.request, cloned));
+//           return response;
+//         })
+//       )
+//     );
 //     return;
 //   }
-  
-//   // For static assets, use cache-first with network fallback
-//   event.respondWith(
-//     caches.match(event.request)
-//       .then(cachedResponse => {
-//         // Return cached version if available
-//         if (cachedResponse) {
-//           return cachedResponse;
-//         }
-        
-//         // Otherwise, fetch from network
-//         return fetch(event.request)
-//           .then(networkResponse => {
-//             // Only cache successful responses
-//             if (networkResponse && networkResponse.status === 200) {
-//               // Don't cache large files or non-cacheable content
-//               const contentType = networkResponse.headers.get('content-type');
-//               const isCacheable = contentType && (
-//                 contentType.includes('font/') ||
-//                 contentType.includes('image/') ||
-//                 contentType.includes('script/') ||
-//                 contentType.includes('style/') ||
-//                 contentType.includes('text/html')
-//               );
-              
-//               if (isCacheable) {
-//                 const responseClone = networkResponse.clone();
-//                 caches.open(DYNAMIC_CACHE)
-//                   .then(cache => {
-//                     cache.put(event.request, responseClone);
-//                   });
-//               }
-//             }
-//             return networkResponse;
-//           })
-//           .catch(error => {
-//             // If offline and request was HTML page → return offline fallback
-//             if (event.request.headers.get('accept').includes('text/html')) {
-//               return caches.match('/offline.html');
-//             }
-            
-//             // For other file types, you might return a placeholder
-//             if (event.request.destination === 'image') {
-//               return caches.match('/placeholder.png');
-//             }
-            
-//             throw error;
-//           });
-//       })
-//   );
+
+//   // API or other dynamic requests → network first but limit caching
+//   if (requestUrl.origin === location.origin) {
+//     event.respondWith(
+//       fetch(event.request)
+//         .then(response => {
+//           if (response.ok && response.type === "basic") {
+//             const cloned = response.clone();
+//             caches.open(RUNTIME_CACHE).then(cache => {
+//               cache.put(event.request, cloned);
+//               limitCacheSize(RUNTIME_CACHE, 30); // keep max 30 entries
+//             });
+//           }
+//           return response;
+//         })
+//         .catch(() => caches.match(event.request))
+//     );
+//   }
 // });
 
-// // ✅ Background sync example (if needed)
-// // self.addEventListener('sync', event => {
-// //   if (event.tag === 'background-sync') {
-// //     event.waitUntil(doBackgroundSync());
-// //   }
-// // });
+// // ✅ Cache size limiter (avoid bloating dynamic cache)
+// function limitCacheSize(cacheName, maxItems) {
+//   caches.open(cacheName).then(cache => {
+//     cache.keys().then(keys => {
+//       if (keys.length > maxItems) {
+//         cache.delete(keys[0]).then(() => limitCacheSize(cacheName, maxItems));
+//       }
+//     });
+//   });
+// }
 
 // // ✅ Push notifications
-// self.addEventListener('push', event => {
+// self.addEventListener("push", event => {
 //   const data = event.data ? event.data.json() : {};
 //   const title = data.title || "Painters' Diary";
 //   const options = {
 //     body: data.body || "You have a new notification!",
 //     icon: "/logo_192x192.png",
-//     badge: "/logo_192x192.png",
-//     tag: 'painters-diary-notification'
+//     badge: "/logo_512x512.png"
 //   };
-
 //   event.waitUntil(self.registration.showNotification(title, options));
 // });
 
-// // ✅ Handle notification click
-// self.addEventListener('notificationclick', event => {
+// // ✅ Notification click
+// self.addEventListener("notificationclick", event => {
 //   event.notification.close();
-  
-//   event.waitUntil(
-//     clients.matchAll({ type: 'window' })
-//       .then(clientList => {
-//         if (clientList.length > 0) {
-//           return clientList[0].focus();
-//         }
-//         return clients.openWindow('/');
-//       })
-//   );
+//   event.waitUntil(clients.openWindow("/"));
 // });
 
-
-const CACHE_NAME = "pwa-static-v3";   // bump version when static files change
+const CACHE_NAME = "pwa-static-v3";
 const RUNTIME_CACHE = "pwa-runtime-v1";
 
 // ✅ Only cache critical static assets (no over-caching)
@@ -278,20 +230,164 @@ function limitCacheSize(cacheName, maxItems) {
   });
 }
 
-// ✅ Push notifications
-self.addEventListener("push", event => {
-  const data = event.data ? event.data.json() : {};
-  const title = data.title || "Painters' Diary";
+// ✅ Enhanced Push Notification Handling
+self.addEventListener("push", function(event) {
+  console.log('[SW] Push Received');
+  
+  // Check if notification permission is granted
+  if (!(self.Notification && self.Notification.permission === 'granted')) {
+    console.log('[SW] Notifications not granted');
+    return;
+  }
+
+  let data = {};
+  try {
+    data = event.data ? event.data.json() : {};
+  } catch (error) {
+    console.log('[SW] Push data parsing error:', error);
+    data = {
+      title: 'Painters\' Diary',
+      body: event.data ? event.data.text() : 'You have a new notification!'
+    };
+  }
+
+  const title = data.title || 'Painters\' Diary';
   const options = {
-    body: data.body || "You have a new notification!",
-    icon: "/logo_192x192.png",
-    badge: "/logo_512x512.png"
+    body: data.body || 'You have a new notification!',
+    icon: data.icon || '/logo_192x192.png',
+    badge: data.badge || '/logo_512x512.png',
+    image: data.image,
+    data: data.data || { url: data.url || '/' },
+    actions: data.actions,
+    tag: data.tag || 'default',
+    requireInteraction: data.requireInteraction || false,
+    silent: data.silent || false,
+    vibrate: data.vibrate || [200, 100, 200]
   };
-  event.waitUntil(self.registration.showNotification(title, options));
+
+  event.waitUntil(
+    self.registration.showNotification(title, options)
+      .then(() => console.log('[SW] Notification shown successfully'))
+      .catch(error => console.error('[SW] Notification error:', error))
+  );
 });
 
-// ✅ Notification click
-self.addEventListener("notificationclick", event => {
+// ✅ Enhanced Notification Click Handling
+self.addEventListener("notificationclick", function(event) {
+  console.log('[SW] Notification clicked');
+  
   event.notification.close();
-  event.waitUntil(clients.openWindow("/"));
+
+  const notificationData = event.notification.data || {};
+  const targetUrl = notificationData.url || '/';
+
+  event.waitUntil(
+    clients.matchAll({ 
+      type: 'window',
+      includeUncontrolled: true 
+    }).then(windowClients => {
+      // Check if there's already a window/tab open with the target URL
+      for (let i = 0; i < windowClients.length; i++) {
+        const client = windowClients[i];
+        const clientUrl = new URL(client.url);
+        const targetUrlObj = new URL(targetUrl, self.location.origin);
+        
+        // If same origin and path, focus it
+        if (clientUrl.origin === targetUrlObj.origin && 
+            clientUrl.pathname === targetUrlObj.pathname) {
+          console.log('[SW] Focusing existing client');
+          return client.focus();
+        }
+      }
+      
+      // If not, open a new window/tab
+      if (clients.openWindow) {
+        console.log('[SW] Opening new window:', targetUrl);
+        return clients.openWindow(targetUrl);
+      }
+    })
+    .catch(error => console.error('[SW] Notification click error:', error))
+  );
+});
+
+// ✅ Notification Close Event (for analytics)
+self.addEventListener("notificationclose", function(event) {
+  console.log('[SW] Notification closed');
+  // You can send analytics here if needed
+  const notification = event.notification;
+  console.log('Closed notification:', notification.tag, notification.data);
+});
+
+// ✅ Handle Push Subscription Changes (important for reliability)
+self.addEventListener("pushsubscriptionchange", function(event) {
+  console.log('[SW] Push subscription changed');
+  
+  event.waitUntil(
+    self.registration.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey: event.oldSubscription.options.applicationServerKey
+    })
+    .then(function(newSubscription) {
+      console.log('[SW] New subscription:', newSubscription);
+      // Send new subscription to your server
+      // This would typically involve a fetch to your backend
+      return fetch('/api/update-subscription', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          oldSubscription: event.oldSubscription,
+          newSubscription: newSubscription
+        })
+      });
+    })
+    .catch(error => console.error('[SW] Subscription renewal failed:', error))
+  );
+});
+
+// ✅ Background Sync for Failed Requests (enhanced reliability)
+self.addEventListener('sync', function(event) {
+  console.log('[SW] Background sync:', event.tag);
+  
+  if (event.tag === 'background-sync') {
+    event.waitUntil(
+      // Implement your background sync logic here
+      // This could retry failed API calls, sync data, etc.
+      doBackgroundSync()
+    );
+  }
+});
+
+async function doBackgroundSync() {
+  console.log('[SW] Performing background sync');
+  // Add your sync logic here
+}
+
+// ✅ Message Handling (communication from main thread)
+self.addEventListener('message', function(event) {
+  console.log('[SW] Message received:', event.data);
+  
+  switch (event.data.type) {
+    case 'SKIP_WAITING':
+      self.skipWaiting();
+      break;
+      
+    case 'GET_SUBSCRIPTION':
+      self.registration.pushManager.getSubscription()
+        .then(subscription => {
+          event.ports[0].postMessage({ subscription });
+        });
+      break;
+      
+    case 'SHOW_NOTIFICATION':
+      if (self.Notification.permission === 'granted') {
+        self.registration.showNotification(
+          event.data.title,
+          event.data.options
+        );
+      }
+      break;
+      
+    default:
+      console.log('[SW] Unknown message type:', event.data.type);
+  }
 });

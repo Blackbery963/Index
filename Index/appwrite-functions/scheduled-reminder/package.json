@@ -1,0 +1,8 @@
+{
+  "name": "scheduled-reminders",
+  "version": "1.0.0",
+  "dependencies": {
+    "node-appwrite": "^8.0.0",
+    "web-push": "^3.6.7"
+  }
+}

@@ -18,6 +18,7 @@ const Creativity = lazy(() => import('./Components/Creativity/Creativity'));
 const Commerce = lazy(() => import('./Components/Commerce/Commerce'))
 const Visual = lazy(() => import('./Components/Visual/Visual'));
 const Review = lazy(() => import('./Components/Review/Review'));
+import ImageCollectionUI from './Components/Collections/ImageCollectionUI.jsx';
 import Sidebar from './Components/Sidebar.jsx';
 // Import your InstallPrompt component
 import InstallPrompt from './MainApp.jsx'
@@ -118,6 +119,16 @@ import CulturalCreationsGallery from './Components/Homemade_Crafts/CulturalCreat
 import PixelPainter from '../Games/PixelPainter.jsx';
 import HeroSection from './Components/Header/HeroSection.jsx';
 import StickyNav from './Components/Sidebar.jsx';
+// for short videos 
+// import ShortsPage from './Video/Video.jsx';
+import ShortsPage from './Video/Page/ShortsPage.jsx';
+
+// Invite System
+import InviteAcceptance from './InviteSystem/InviteAcceptance.jsx';
+import InviteSystem from './InviteSystem/InviteSystem.jsx';
+// Notification Service Imports
+
+
 
 const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
 const COLLECTION_ID = import.meta.env.VITE_APPWRITE_METADATA_COLLECTION_ID;
@@ -244,6 +255,29 @@ const [navHeight, setNavHeight] = useState(56); // fallback, not 1400!
   const totalTop = headerHeight + navHeight;
 
 
+
+
+
+
+  // Invite system
+    const [activeInviteCode, setActiveInviteCode] = useState(null);
+
+  // Check URL for invite code on app load
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const inviteCode = urlParams.get('invite');
+    if (inviteCode) {
+      setActiveInviteCode(inviteCode);
+    }
+  }, []);
+
+  const handleInviteSuccess = (result) => {
+    console.log('Invite accepted!', result);
+    setActiveInviteCode(null);
+    // Redirect to onboarding or show success message
+  };
+
+
   return (
     <Router>
       <Chatbot/>
@@ -251,7 +285,7 @@ const [navHeight, setNavHeight] = useState(56); // fallback, not 1400!
         <Route
           path="/"
           element={
-            <div className="relative flex items-center justify-center flex-col overflow-x-hidden bg-gray-100 dark:bg-[#000705] min-h-[60vh] md:min-h-screen">
+            <div className="relative flex items-center justify-center flex-col overflow-x-hidden bg-gray-100 dark:bg-[#000705]">
               <Header />
               <HeroSection/>
               <div className='w-full'>
@@ -261,58 +295,59 @@ const [navHeight, setNavHeight] = useState(56); // fallback, not 1400!
                 {/* Install Prompt Component */}
                 <div>
                 <InstallPrompt />
-                <FeedbackPrompt /> 
+                <FeedbackPrompt />
                 </div>
 
                 {/* <TopNav/> */}
                 <main className="w-full flex flex-col gap-y-4">
                 <div data-aos="fade-right" data-aos-delay="200" className="w-full will-change-transform will-change-opacity">
-                  <Collection />
+                  {/* <Collection/> */}
+                 <ImageCollectionUI/>
                 </div>
+                {/* <UnifiedFeed/> */}
                 {/* Landing page components */}
-                <div data-aos="fade-left" data-aos-delay="100" className="w-full will-change-transform will-change-opacity top-4">
+                {/* <div data-aos="fade-left" data-aos-delay="100" className="w-full will-change-transform will-change-opacity top-4">
                   <ArtCategories />
-                </div>
+                </div> */}
 
-                <div data-aos="fade-right" data-aos-delay="200" className="w-full will-change-transform will-change-opacity">
+                {/* <div data-aos="fade-right" data-aos-delay="200" className="w-full will-change-transform will-change-opacity">
                   < ArtistDiscovery />
-                </div>
+                </div> */}
 
-                <div data-aos="fade-left" data-aos-delay="300" className="w-full will-change-transform will-change-opacity">
+                {/* <div data-aos="fade-left" data-aos-delay="300" className="w-full will-change-transform will-change-opacity">
                   <Diarytemp />
-                </div>
-                <div data-aos="fade-right" data-aos-delay="400" className="w-full will-change-transform will-change-opacity">
+                </div> */}
+                {/* <div data-aos="fade-right" data-aos-delay="400" className="w-full will-change-transform will-change-opacity">
                   <Connecting />
                 </div>
                 <div data-aos="fade-left" data-aos-delay="300" className="w-full will-change-transform will-change-opacity">
                   <ResearchPapersPage />
-                </div>
-                 <div data-aos="fade-right" data-aos-delay="400" className="w-full will-change-transform will-change-opacity">
+                </div> */}
+                 {/* <div data-aos="fade-right" data-aos-delay="400" className="w-full will-change-transform will-change-opacity">
                   <DailyChallenge />
-                </div>
-                <div data-aos="fade-right" data-aos-delay="600" className="w-full will-change-transform will-change-opacity">
+                </div> */}
+                {/* <div data-aos="fade-right" data-aos-delay="600" className="w-full will-change-transform will-change-opacity">
                   <Commerce />
-                </div>
-                <div data-aos="fade-left" data-aos-delay="700" className="w-full will-change-transform will-change-opacity">
+                </div> */}
+                {/* <div data-aos="fade-left" data-aos-delay="700" className="w-full will-change-transform will-change-opacity">
                   <Visual />
-                </div>
-                <div data-aos="fade-right" data-aos-delay="800" className="w-full will-change-transform will-change-opacity">
+                </div> */}
+
+                {/* <div data-aos="fade-right" data-aos-delay="800" className="w-full will-change-transform will-change-opacity">
                 <Artisan />
-                </div>
+                </div> */}
                 <div data-aos="fade-left" data-aos-delay="900" className="w-full flex items-center justify-center flex-col gap-y-2">
                   <Review />
                 </div>
+                {/* <MixedMediaLanding/> */}
                 <div data-aos="fade-right" data-aos-delay="1000" className="w-full will-change-transform will-change-opacity">
                   <Footer />
                 </div>
                 </main>
               </Suspense>
-                          
-
             </div>
           }
         />
-        {/* Other routes remain the same */}
         <Route path='/Account' element={<Account isOwnProfile={true}/>}/>
         <Route path='/Account/:userId' element={<Account isOwnProfile={false}/>}/>
 
@@ -333,6 +368,7 @@ const [navHeight, setNavHeight] = useState(56); // fallback, not 1400!
         <Route path='Settings/Order' element={<Order/>}/>
         <Route path="/resources/feedback" element={<Feedback />} />
         <Route path="/Account/Edit_profile" element={<Edit_Profile />} />
+
         <Route path="/Account/dashboard" element={<Dashboard />} />
         <Route path="/Account/Upload" element={<Upload />} />
         <Route path="/collections" element={<Your_Collections />} />
@@ -404,6 +440,17 @@ const [navHeight, setNavHeight] = useState(56); // fallback, not 1400!
         <Route path="/share/:token" element={<TemporaryShareView />} />
         {/* Games */}
         <Route path="/Games/PixelPainter" element={<PixelPainter />} />
+        {/* VIdeo shorts */}
+        <Route path='/videos' element={<ShortsPage/>}/>
+        {/* Invite ROute */}
+        <Route path="/invite" element={<InviteSystem />} />
+              {activeInviteCode && (
+        <InviteAcceptance
+          inviteCode={activeInviteCode}
+          onSuccess={handleInviteSuccess}
+          onClose={() => setActiveInviteCode(null)}
+        />
+        )}
 
       </Routes>
     </Router>
@@ -411,5 +458,10 @@ const [navHeight, setNavHeight] = useState(56); // fallback, not 1400!
 }
 
 export default App;
+
+
+
+
+// 097549
 
 

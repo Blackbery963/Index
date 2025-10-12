@@ -632,3 +632,152 @@ const ShareButton = ({ artwork }) => {
 };
 
 export default ShareButton;
+
+// // components/Share/ShareFunction.jsx
+// import React, { useState } from 'react';
+// import { motion, AnimatePresence } from 'framer-motion';
+// import { 
+//   FiShare2, 
+//   FiLink, 
+//   FiTwitter, 
+//   FiFacebook, 
+//   FiInstagram,
+//   FiCopy,
+//   FiCheck
+// } from 'react-icons/fi';
+
+// const ShareButton = ({ artwork, className = '', children }) => {
+//   const [isShareOpen, setIsShareOpen] = useState(false);
+//   const [isCopied, setIsCopied] = useState(false);
+
+//   const shareUrl = `${window.location.origin}/gallery/${artwork.id}`;
+//   const shareText = `Check out this amazing ${artwork.type}: "${artwork.title}"`;
+
+//   const shareOptions = [
+//     {
+//       name: 'Copy Link',
+//       icon: FiLink,
+//       action: async () => {
+//         try {
+//           await navigator.clipboard.writeText(shareUrl);
+//           setIsCopied(true);
+//           setTimeout(() => setIsCopied(false), 2000);
+//         } catch (err) {
+//           // Fallback for older browsers
+//           const textArea = document.createElement('textarea');
+//           textArea.value = shareUrl;
+//           document.body.appendChild(textArea);
+//           textArea.select();
+//           document.execCommand('copy');
+//           document.body.removeChild(textArea);
+//           setIsCopied(true);
+//           setTimeout(() => setIsCopied(false), 2000);
+//         }
+//       }
+//     },
+//     {
+//       name: 'Twitter',
+//       icon: FiTwitter,
+//       action: () => {
+//         const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
+//         window.open(url, '_blank', 'width=600,height=400');
+//       }
+//     },
+//     {
+//       name: 'Facebook',
+//       icon: FiFacebook,
+//       action: () => {
+//         const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
+//         window.open(url, '_blank', 'width=600,height=400');
+//       }
+//     },
+//     {
+//       name: 'Share Native',
+//       icon: FiShare2,
+//       action: async () => {
+//         if (navigator.share) {
+//           try {
+//             await navigator.share({
+//               title: artwork.title,
+//               text: shareText,
+//               url: shareUrl,
+//             });
+//           } catch (err) {
+//             console.log('Error sharing:', err);
+//           }
+//         } else {
+//           // Fallback to copy link
+//           shareOptions[0].action();
+//         }
+//       }
+//     }
+//   ];
+
+//   return (
+//     <div className="relative">
+//       <motion.button
+//         whileTap={{ scale: 0.95 }}
+//         onClick={() => setIsShareOpen(!isShareOpen)}
+//         className={`flex items-center gap-2 ${className}`}
+//       >
+//         {children || (
+//           <>
+//             <FiShare2 size={18} />
+//             <span>Share</span>
+//           </>
+//         )}
+//       </motion.button>
+
+//       <AnimatePresence>
+//         {isShareOpen && (
+//           <>
+//             {/* Backdrop */}
+//             <motion.div
+//               initial={{ opacity: 0 }}
+//               animate={{ opacity: 1 }}
+//               exit={{ opacity: 0 }}
+//               className="fixed inset-0 z-40"
+//               onClick={() => setIsShareOpen(false)}
+//             />
+            
+//             {/* Share Menu */}
+//             <motion.div
+//               initial={{ opacity: 0, scale: 0.9, y: 10 }}
+//               animate={{ opacity: 1, scale: 1, y: 0 }}
+//               exit={{ opacity: 0, scale: 0.9, y: 10 }}
+//               transition={{ type: "spring", stiffness: 500, damping: 30 }}
+//               className="absolute bottom-full left-0 mb-2 z-50 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 p-2 min-w-[200px]"
+//             >
+//               <div className="text-sm font-medium text-gray-700 dark:text-gray-300 px-3 py-2 border-b border-gray-200 dark:border-gray-700">
+//                 Share this {artwork.type}
+//               </div>
+              
+//               <div className="space-y-1 mt-1">
+//                 {shareOptions.map((option, index) => (
+//                   <motion.button
+//                     key={option.name}
+//                     whileHover={{ backgroundColor: 'rgba(0,0,0,0.05)' }}
+//                     onClick={(e) => {
+//                       e.stopPropagation();
+//                       option.action();
+//                       setIsShareOpen(false);
+//                     }}
+//                     className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 text-left transition-colors"
+//                   >
+//                     <option.icon size={18} />
+//                     <span>{option.name}</span>
+//                     {option.name === 'Copy Link' && isCopied && (
+//                       <FiCheck size={16} className="text-green-500 ml-auto" />
+//                     )}
+//                   </motion.button>
+//                 ))}
+//               </div>
+//             </motion.div>
+//           </>
+//         )}
+//       </AnimatePresence>
+//     </div>
+//   );
+// };
+
+// export default ShareButton;

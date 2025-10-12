@@ -62,3 +62,74 @@ export default DownloadService;
 
 
 
+// // components/Downloads/downloadService.jsx
+// import React, { useState } from 'react';
+// import { motion } from 'framer-motion';
+// import { FiDownload, FiCheck } from 'react-icons/fi';
+
+// const DownloadService = ({ artwork, className = '', children }) => {
+//   const [isDownloading, setIsDownloading] = useState(false);
+//   const [isDownloaded, setIsDownloaded] = useState(false);
+
+//   const handleDownload = async () => {
+//     if (isDownloading) return;
+
+//     setIsDownloading(true);
+    
+//     try {
+//       // Create a temporary anchor element
+//       const response = await fetch(artwork.url);
+//       const blob = await response.blob();
+//       const blobUrl = URL.createObjectURL(blob);
+      
+//       const link = document.createElement('a');
+//       link.href = blobUrl;
+//       link.download = `${artwork.title || 'download'}.${artwork.type === 'video' ? 'mp4' : 'jpg'}`;
+//       document.body.appendChild(link);
+//       link.click();
+//       document.body.removeChild(link);
+      
+//       // Clean up
+//       URL.revokeObjectURL(blobUrl);
+      
+//       setIsDownloaded(true);
+//       setTimeout(() => setIsDownloaded(false), 3000);
+      
+//       // Track download in your analytics
+//       console.log(`Downloaded: ${artwork.title}`);
+      
+//     } catch (error) {
+//       console.error('Download failed:', error);
+//       // Fallback: open in new tab
+//       window.open(artwork.url, '_blank');
+//     } finally {
+//       setIsDownloading(false);
+//     }
+//   };
+
+//   return (
+//     <motion.button
+//       whileTap={{ scale: 0.95 }}
+//       onClick={handleDownload}
+//       disabled={isDownloading}
+//       className={`flex items-center gap-2 ${className} ${
+//         isDownloading ? 'opacity-50 cursor-not-allowed' : ''
+//       }`}
+//     >
+//       {children || (
+//         <>
+//           {isDownloaded ? (
+//             <FiCheck size={18} className="text-green-500" />
+//           ) : (
+//             <FiDownload size={18} />
+//           )}
+//           <span>
+//             {isDownloading ? 'Downloading...' : isDownloaded ? 'Downloaded!' : 'Download'}
+//           </span>
+//         </>
+//       )}
+//     </motion.button>
+//   );
+// };
+
+// export default DownloadService;

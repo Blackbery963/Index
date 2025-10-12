@@ -1,0 +1,236 @@
+.masonry-grid {
+  width: 100%;
+}
+
+.masonry-container {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.masonry-column {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+}
+
+.media-card {
+  background: transparent;
+  break-inside: avoid;
+  margin-bottom: 12px;
+  position: relative;
+}
+
+.media-card.highlighted-artwork {
+  animation: pulse-highlight 2s ease-in-out;
+  z-index: 10;
+}
+
+@keyframes pulse-highlight {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+.media-container {
+  background: transparent;
+}
+
+.media-header {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  z-index: 2;
+}
+
+.media-content {
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+  border-radius: 4px;
+}
+
+.media-element {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.media-content:hover .media-element {
+  transform: scale(1.05);
+}
+
+.media-info {
+  padding: 8px 4px 4px;
+}
+
+.media-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgb(17, 24, 39);
+  margin-bottom: 4px;
+  line-height: 1.2;
+}
+
+.dark .media-title {
+  color: rgb(229, 231, 235);
+}
+
+.media-description {
+  font-size: 12px;
+  color: rgb(107, 114, 128);
+  margin-bottom: 6px;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.dark .media-description {
+  color: rgb(156, 163, 175);
+}
+
+.media-stats {
+  margin-bottom: 6px;
+}
+
+.media-actions {
+  border-top: 1px solid rgb(229, 231, 235);
+  padding-top: 6px;
+}
+
+.dark .media-actions {
+  border-top-color: rgb(55, 65, 81);
+}
+
+.media-badge {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.media-badge.featured {
+  background: rgba(59, 130, 246, 0.9);
+  color: white;
+}
+
+.media-badge.video {
+  background: rgba(139, 92, 246, 0.9);
+  color: white;
+}
+
+.media-badge.user {
+  background: rgba(16, 185, 129, 0.9);
+  color: white;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .masonry-container {
+    gap: 8px;
+  }
+  
+  .masonry-column {
+    gap: 8px;
+  }
+  
+  .media-card {
+    margin-bottom: 8px;
+  }
+}
+
+/* Highlight animation for shared artworks */
+@keyframes pulse-highlight {
+  0% { 
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+  }
+  50% { 
+    transform: scale(1.02);
+    box-shadow: 0 0 0 10px rgba(59, 130, 246, 0.3);
+  }
+  100% { 
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+  }
+}
+
+.highlighted-artwork {
+  animation: pulse-highlight 2s ease-in-out 3; /* Pulse 3 times */
+  position: relative;
+  z-index: 10;
+}
+
+/* Ensure smooth transitions for media cards */
+.media-card {
+  transition: all 0.3s ease;
+}
+
+.media-card.highlighted-artwork {
+  animation: pulse-highlight 2s ease-in-out 3;
+}
+
+/* Mobile responsive adjustments for hero section */
+@media (max-width: 640px) {
+  .hero-content {
+    padding: 1.5rem !important;
+  }
+  
+  .hero-title {
+    font-size: 2rem !important;
+    line-height: 1.2 !important;
+  }
+  
+  .filter-buttons {
+    gap: 0.5rem !important;
+  }
+  
+  .filter-buttons button {
+    padding: 0.5rem 1rem !important;
+    font-size: 0.75rem !important;
+  }
+}
+
+/* Smooth transitions for infinite scroll */
+.infinite-scroll-loading {
+  opacity: 0;
+  animation: fadeIn 0.5s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Ensure smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Loading animation */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.pulse-loading {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}

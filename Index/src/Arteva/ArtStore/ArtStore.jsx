@@ -13,10 +13,8 @@ import { toast, ToastContainer } from 'react-toastify';
 
 import { ArtworkService } from './artworkService';
 import { CartService } from './cartService';
-// import LikeButton from '../EngagementService/likeButton';
 import LikeButton from '../../EngagementService/likeButton';
 import ImageSlider from './ImageSlider';
-// import { proceedToCheckout } from './Commercial/PlaceOrder';
 import { proceedToCheckout } from '../Commercial/PlaceOrder';
 
 const ArtStore = () => {
@@ -69,24 +67,6 @@ const ArtStore = () => {
 
     loadArtwork();
   }, []);
-  // In the useEffect where you fetch artwork
-// useEffect(() => {
-//   const loadArtwork = async () => {
-//     try {
-//       setLoading(true);
-//       // Use the enhanced version for better debugging
-//       const artwork = await ArtworkService.fetchArtworkEnhanced();
-//       setArtPieces(artwork);
-//     } catch (err) {
-//       setError(err.message);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   loadArtwork();
-// }, []);
-
   // Save cart to localStorage on changes
   useEffect(() => {
     CartService.saveCartItems(cartItems);
@@ -255,7 +235,7 @@ const Header = ({ searchQuery, setSearchQuery, viewMode, setViewMode, cartItemCo
     className="fixed w-full top-0 z-50 bg-white/40 dark:bg-gray-950/40 border-b border-gray-200/30 dark:border-gray-400/80 backdrop-blur-lg"
   >
     <div className="max-w-full mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
-      <Logo />
+    <Link to={'/'}>   <Logo /> </Link>
       <DesktopNav searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
       <HeaderActions 
         viewMode={viewMode}
@@ -484,9 +464,9 @@ const CategorySelector = ({ activeCategory, setActiveCategory, categories }) => 
   >
     <div className="max-w-7xl mx-auto px-4 sm:px-6">
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-        <div className="flex items-center gap-2 lg:shrink-0">
+        <div className="md:flex items-center gap-2 lg:shrink-0 hidden">
           <span className="text-2xl">🔥</span>
-          <h3 className="text-xl font-bold bg-gradient-to-r from-pink-500 via-red-500 to-yellow-400 bg-clip-text text-transparent">
+          <h3 className="text-xl  font-bold bg-gradient-to-r from-pink-500 via-red-500 to-yellow-400 bg-clip-text text-transparent">
             Trending Now
           </h3>
         </div>

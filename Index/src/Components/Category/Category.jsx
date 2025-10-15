@@ -104,7 +104,7 @@ function Category() {
     {
       name: 'Minimalism',
       para: 'Simplifies composition using basic shapes and limited colors.',
-      backImg: Pic_1,
+      backImg: Pic_11,
       link: '/Minimalism',
     },
     {

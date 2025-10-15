@@ -292,7 +292,7 @@ const DailyChallenge = () => {
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-all duration-300">
+    <div className="bg-white dark:bg-gray-800 rounded-sm p-6 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-all duration-300">
       {/* Header with Streak */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">

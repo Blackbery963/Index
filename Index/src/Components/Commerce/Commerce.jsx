@@ -1,174 +1,3 @@
-// // import React, { useState } from 'react';
-// // import { FiArrowRight, FiShoppingCart } from 'react-icons/fi';
-// // import { motion } from 'framer-motion';
-// // import bg from '../Commerce/ai-generated-8421436.jpg'
-// // import { Link } from 'react-router-dom';
-
-// // const Commerce = () => {
-// //   const [hoveredCard, setHoveredCard] = useState(null);
-
-// //   const featuredCategories = [
-// //     {
-// //       id: 1,
-// //       title: "Modern Masterpieces",
-// //       description: "Contemporary works from today's leading artists",
-// //       link: "/modern",
-// //       image: "https://images.pexels.com/photos/1410224/pexels-photo-1410224.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-// //     },
-// //     {
-// //       id: 2,
-// //       title: "Classic Paintings",
-// //       description: "Timeless works from art history's greatest minds",
-// //       link:"/traditional",
-// //       image: "https://images.pexels.com/photos/14499089/pexels-photo-14499089.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-// //     },
-// //     {
-// //       id: 3,
-// //       title: "Abstract Expressions",
-// //       description: "Bold colors and unconventional compositions",
-// //       link: "/abstract",
-// //       image: "https://images.pexels.com/photos/767956/pexels-photo-767956.jpeg?auto=compress&cs=tinysrgb&w=600"
-// //     }
-// //   ];
-
-// //   return (
-// //     <div className="min-h-screen max-w-[95%] rounded-lg mx-auto relative overflow-hidden">
-// //       {/* Full-screen background image with overlay */}
-// //       <div className="absolute inset-0 z-0">
-// //         <img 
-// //           src={bg} 
-// //           alt="Art gallery background"
-// //           className="w-full h-full object-cover"
-// //         />
-// //       </div>
-
-// //       {/* Content */}
-// //       <div className="relative z-10 min-h-screen flex flex-col">
-// //         {/* Header */}
-// //         <header className="py-6 px-4 sm:px-8 flex justify-between items-center">
-// //           <motion.h1 
-// //             className="text-2xl font-light text-white"
-// //             initial={{ opacity: 0, y: -20 }}
-// //             animate={{ opacity: 1, y: 0 }}
-// //             transition={{ duration: 0.6 }}
-// //           >
-// //             ArtEva
-// //           </motion.h1>
-// //           <motion.a
-// //             href="/shop"
-// //             className="flex items-center text-white hover:text-gray-200 transition"
-// //             initial={{ opacity: 0 }}
-// //             animate={{ opacity: 1 }}
-// //             transition={{ delay: 0.3, duration: 0.6 }}
-// //           >
-// //             <FiShoppingCart className="mr-2" />
-// //             Shop Now
-// //           </motion.a>
-// //         </header>
-
-// //         {/* Hero Section */}
-// // <main className="flex-grow flex flex-col items-center justify-center px-4 text-center">
-// //   <motion.div
-// //     className="max-w-3xl p-8 rounded-xl bg-white/5 dark:bg-black/30 backdrop-blur-lg shadow-xl border border-white/10"
-// //     initial={{ opacity: 0, y: 20 }}
-// //     animate={{ opacity: 1, y: 0 }}
-// //     transition={{ duration: 0.8 }}
-// //   >
-// //     <h1 className="text-4xl md:text-6xl font-light text-black mb-6 leading-tight font-Quicksand">
-// //       Discover Art That <br className="hidden md:block" />
-// //       <span className="font-semibold text-teal-300">Speaks to You</span>
-// //     </h1>
-// //     <p className="text-lg md:text-xl mb-10 max-w-2xl mx-auto font-Playfair text-black">
-// //       Your gateway to extraordinary artworks from emerging and established artists worldwide.
-// //     </p>
-// //     <div className="flex flex-col sm:flex-row justify-center gap-4">
-// //        <Link
-// //         to="/gallery"
-// //         className="px-8 py-4 bg-teal-400 text-black rounded-md font-semibold hover:bg-teal-300 transition shadow-lg font-Quicksand"
-// //         whileHover={{ scale: 1.05 }}
-// //         whileTap={{ scale: 0.95 }}
-// //       >
-// //         Explore Gallery
-// //        </Link>
-// //        <Link
-// //         to="/Artists/DiscoverUsers"
-// //         className="px-8 py-4 border border-teal-300 text-white rounded-md font-semibold hover:bg-white/10 transition bg-white/5 backdrop-blur-md font-Quicksand"
-// //         whileHover={{ scale: 1.05 }}
-// //         whileTap={{ scale: 0.95 }}
-// //       >
-// //         Meet the Artists
-// //        </Link>
-// //     </div>
-// //   </motion.div>
-// // </main>
-
-        
-
-
-// //         {/* Category Gateway */}
-// //         <section className="py-16 px-4 sm:px-8">
-          
-// //           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-// //             {featuredCategories.map((category) => (
-// //               <Link
-// //                 key={category.id}
-// //                 to={category.link}
-// //                 className="relative group overflow-hidden rounded-lg shadow-xl h-96"
-// //                 onMouseEnter={() => setHoveredCard(category.id)}
-// //                 onMouseLeave={() => setHoveredCard(null)}
-// //                 initial={{ opacity: 0, y: 20 }}
-// //                 whileInView={{ opacity: 1, y: 0 }}
-// //                 viewport={{ once: true }}
-// //                 transition={{ duration: 0.5 }}
-// //               >
-// //                 <img 
-// //                   src={category.image} 
-// //                   alt={category.title}
-// //                   className="w-full h-full object-cover absolute inset-0 transition-transform duration-500 group-hover:scale-105"
-// //                 />
-// //                 <div className="absolute inset-0 bg-black/40 group-hover:bg-black/30 transition"></div>
-// //                 <div className="absolute inset-0 flex flex-col justify-end p-6 text-white">
-// //                   <motion.h3 
-// //                     className="text-2xl font-medium mb-2 font-Quicksand"
-// //                     animate={{
-// //                       y: hoveredCard === category.id ? 0 : 20,
-// //                       opacity: hoveredCard === category.id ? 1 : 0.9
-// //                     }}
-// //                   >
-// //                     {category.title}
-// //                   </motion.h3>
-// //                   <motion.p
-// //                     className="mb-4 font-Playfair"
-// //                     animate={{
-// //                       y: hoveredCard === category.id ? 0 : 20,
-// //                       opacity: hoveredCard === category.id ? 1 : 0
-// //                     }}
-// //                     transition={{ delay: 0.1 }}
-// //                   >
-// //                     {category.description}
-// //                   </motion.p>
-// //                   <motion.div
-// //                     animate={{
-// //                       y: hoveredCard === category.id ? 0 : 20,
-// //                       opacity: hoveredCard === category.id ? 1 : 0
-// //                     }}
-// //                     transition={{ delay: 0.2 }}
-// //                     className="flex items-center font-medium font-Quicksand bg-white/30 backdrop-blur-lg w-fit px-2 py-1 rounded-lg"
-// //                   >
-// //                     View Collection <FiArrowRight className="ml-2" />
-// //                   </motion.div>
-// //                 </div>
-// //               </Link>
-// //             ))}
-// //           </div>
-// //         </section>
-// //       </div>
-// //     </div>
-// //   );
-// // };
-
-// // export default Commerce;
-
 // import React from 'react';
 // import { FiArrowRight, FiShoppingCart } from 'react-icons/fi';
 // import { Link } from 'react-router-dom';
@@ -301,97 +130,250 @@
 // };
 
 // export default Commerce;
-import React from 'react';
+
+
+
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FiShoppingBag, FiArrowRight } from 'react-icons/fi';
+import { FiShoppingBag, FiStar, FiClock, FiUser } from 'react-icons/fi';
 
 const MiniCommerce = () => {
-  const featuredProducts = [
+  const [featuredProducts, setFeaturedProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Different content for each section
+  const commerceSections = [
     {
       id: 1,
-      title: "Handmade Paintings",
-      description: "Original artwork by skilled artists",
-      link: "/handmade-paintings",
-      image: "https://images.pexels.com/photos/3358727/pexels-photo-3358727.jpeg",
-      items: "50+ pieces"
+      title: "Trending Artworks",
+      subtitle: "Most popular this week",
+      type: "trending",
+      icon: "🔥",
+      products: []
     },
     {
-      id: 2, 
-      title: "Artisan Crafts",
-      description: "Unique handmade decor items",
-      link: "/decor-crafts",
-      image: "https://images.pexels.com/photos/33297461/pexels-photo-33297461.jpeg",
-      items: "30+ crafts"
+      id: 2,
+      title: "New Arrivals", 
+      subtitle: "Fresh from artists",
+      type: "new",
+      icon: "🆕",
+      products: []
+    },
+    {
+      id: 3,
+      title: "Limited Edition",
+      subtitle: "Exclusive pieces",
+      type: "limited",
+      icon: "⭐",
+      products: []
     }
   ];
 
-  return (
-    <div className="bg-white dark:bg-gray-800 rounded-sm p-6 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-all duration-300">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-gradient-to-r from-amber-500 to-orange-500 rounded-full flex items-center justify-center shadow-lg">
-            <FiShoppingBag className="w-5 h-5 text-white" />
-          </div>
-          <div>
-            <h3 className="font-bold text-gray-900 dark:text-white">Art Marketplace</h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400">Handcrafted treasures</p>
+  useEffect(() => {
+    const fetchCommerceData = async () => {
+      try {
+        setLoading(true);
+        
+        // Simulate API delay
+        await new Promise(resolve => setTimeout(resolve, 800));
+        
+        // Mock data for different sections
+        const trendingProducts = [
+          {
+            id: 1,
+            title: "Abstract Emotions",
+            artist: "Sarah Chen",
+            price: 249,
+            rating: 4.8,
+            image: "https://images.pexels.com/photos/1572386/pexels-photo-1572386.jpeg",
+            timeLeft: "2 days",
+            category: "Painting"
+          },
+          {
+            id: 2,
+            title: "Mountain Serenity",
+            artist: "Alex Rivera", 
+            price: 189,
+            rating: 4.9,
+            image: "https://images.pexels.com/photos/2356059/pexels-photo-2356059.jpeg",
+            timeLeft: "5 days",
+            category: "Digital"
+          }
+        ];
+
+        const newArrivals = [
+          {
+            id: 3,
+            title: "Urban Dreams",
+            artist: "Maya Patel",
+            price: 129,
+            rating: 4.7,
+            image: "https://images.pexels.com/photos/270366/pexels-photo-270366.jpeg",
+            timeLeft: "Just added",
+            category: "Mixed Media"
+          },
+          {
+            id: 4,
+            title: "Ocean Whisper",
+            artist: "Kenji Tanaka",
+            price: 299,
+            rating: 5.0,
+            image: "https://images.pexels.com/photos/1025469/pexels-photo-1025469.jpeg",
+            timeLeft: "1 day",
+            category: "Sculpture"
+          }
+        ];
+
+        const limitedEditions = [
+          {
+            id: 5,
+            title: "Golden Hour",
+            artist: "Elena Silva",
+            price: 399,
+            rating: 4.9,
+            image: "https://images.pexels.com/photos/1248583/pexels-photo-1248583.jpeg",
+            timeLeft: "Last one",
+            category: "Print"
+          },
+          {
+            id: 6,
+            title: "Desert Soul",
+            artist: "Carlos Mendez",
+            price: 179,
+            rating: 4.8,
+            image: "https://images.pexels.com/photos/221047/pexels-photo-221047.jpeg",
+            timeLeft: "3 left",
+            category: "Photography"
+          }
+        ];
+
+        // Update sections with their respective products
+        commerceSections[0].products = trendingProducts;
+        commerceSections[1].products = newArrivals;
+        commerceSections[2].products = limitedEditions;
+        
+        setFeaturedProducts(commerceSections);
+      } catch (error) {
+        console.error('Error fetching commerce data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCommerceData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-100 dark:border-gray-700">
+        <div className="animate-pulse">
+          <div className="h-4 bg-gray-200 dark:bg-gray-600 rounded w-1/3 mb-2"></div>
+          <div className="h-3 bg-gray-200 dark:bg-gray-600 rounded w-1/2 mb-4"></div>
+          <div className="space-y-3">
+            {[1, 2].map((item) => (
+              <div key={item} className="flex gap-3">
+                <div className="w-12 h-12 bg-gray-200 dark:bg-gray-600 rounded"></div>
+                <div className="flex-1 space-y-2">
+                  <div className="h-3 bg-gray-200 dark:bg-gray-600 rounded w-3/4"></div>
+                  <div className="h-3 bg-gray-200 dark:bg-gray-600 rounded w-1/2"></div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
-        <Link 
-          to="/commerce"
-          className="flex items-center gap-1 text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 text-sm font-medium group"
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      {featuredProducts.map((section) => (
+        <div 
+          key={section.id}
+          className="bg-white dark:bg-gray-800 rounded-sm p-4 shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-shadow duration-200"
         >
-          Shop all
-          <FiArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-        </Link>
-      </div>
-
-      {/* Products Grid */}
-      <div className="grid grid-cols-1 gap-4">
-        {featuredProducts.map((product) => (
-          <Link
-            key={product.id}
-            to={product.link}
-            className="group block rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all duration-300"
-          >
-            <div className="flex items-center gap-4 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl group-hover:bg-gray-100 dark:group-hover:bg-gray-700 transition-colors">
-              {/* Product Image */}
-              <div className="flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden">
-                <img
-                  src={product.image}
-                  alt={product.title}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                />
+          {/* Section Header */}
+          <div className="flex items-center justify-between mb-3">
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-lg">{section.icon}</span>
+                <h3 className="font-semibold text-gray-900 dark:text-white">
+                  {section.title}
+                </h3>
               </div>
-              
-              {/* Product Info */}
-              <div className="flex-1 min-w-0">
-                <h4 className="font-semibold text-gray-900 dark:text-white text-sm mb-1">
-                  {product.title}
-                </h4>
-                <p className="text-gray-600 dark:text-gray-400 text-xs mb-1">
-                  {product.description}
-                </p>
-                <p className="text-amber-600 dark:text-amber-400 text-xs font-medium">
-                  {product.items} available
-                </p>
-              </div>
-              
-              {/* Arrow */}
-              <FiArrowRight className="w-4 h-4 text-gray-400 group-hover:text-amber-500 group-hover:translate-x-1 transition-all duration-300 flex-shrink-0" />
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                {section.subtitle}
+              </p>
             </div>
-          </Link>
-        ))}
-      </div>
+            <Link 
+              to={"/Arteva/Artstore"}
+              className="text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 text-sm font-medium"
+            >
+              View all
+            </Link>
+          </div>
 
-      {/* CTA Button */}
-      <Link to="/commerce">
-        <button className="mt-4 w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white py-3 rounded-lg text-sm font-semibold transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2">
-          <FiShoppingBag className="w-4 h-4" />
-          Browse Marketplace
-        </button>
-      </Link>
+          {/* Products List */}
+          <div className="space-y-3">
+            {section.products.map((product) => (
+              <Link
+                key={product.id}
+                // to={`/artwork/${product.id}`}
+                className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150 group"
+              >
+                {/* Product Image */}
+                <div className="flex-shrink-0 w-12 h-12 rounded-md overflow-hidden">
+                  <img
+                    src={product.image}
+                    alt={product.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                  />
+                </div>
+                
+                {/* Product Info */}
+                <div className="flex-1 min-w-0">
+                  <h4 className="font-medium text-gray-900 dark:text-white text-sm mb-1 line-clamp-1">
+                    {product.title}
+                  </h4>
+                  
+                  <div className="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-400 mb-1">
+                    <FiUser className="w-3 h-3" />
+                    <span>{product.artist}</span>
+                  </div>
+                  
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="text-amber-600 dark:text-amber-400 font-semibold text-sm">
+                        ${product.price}
+                      </span>
+                      <div className="flex items-center gap-1 text-xs text-gray-500">
+                        <FiStar className="w-3 h-3 text-amber-400" />
+                        <span>{product.rating}</span>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center gap-1 text-xs text-gray-500">
+                      <FiClock className="w-3 h-3" />
+                      <span>{product.timeLeft}</span>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+
+          {/* Section-specific CTA */}
+          <div className="mt-4 pt-3 border-t border-gray-100 dark:border-gray-700">
+            <Link 
+              to={"/Arteva/Artstore"}
+              className="w-full flex items-center justify-center gap-2 py-2 text-sm font-medium text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 transition-colors duration-150"
+            >
+              <FiShoppingBag className="w-4 h-4" />
+              Explore {section.title.toLowerCase()}
+            </Link>
+          </div>
+        </div>
+      ))}
     </div>
   );
 };

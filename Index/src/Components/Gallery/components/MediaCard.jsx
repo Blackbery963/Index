@@ -56,6 +56,17 @@ const MediaCard = ({ item, userProfile, isHighlighted, onClick }) => {
           {item.description && (
             <p className="media-description">{item.description}</p>
           )}
+          <div>
+            {item.tags && item.tags.length > 0 && (
+              <div className="media-tags">
+                {item.tags.map((tag, index) => (
+                  <span key={index} className="media-tag">
+                    {item.tag}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
           
           {/* Stats */}
           <div className="media-stats">

@@ -2,6 +2,9 @@
   "dependencies": {
     "@capacitor/cli": "^7.4.3",
     "@capacitor/core": "^7.4.3",
+    "@ffmpeg/ffmpeg": "^0.12.15",
+    "@ffmpeg/util": "^0.12.2",
+    "browser-image-compression": "^2.0.2",
     "web-push": "^3.6.7"
   }
 }

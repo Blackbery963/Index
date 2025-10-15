@@ -38,7 +38,7 @@ const UserInfo = ({ item, userProfile }) => {
           {userProfile?.name || 'Username'}
         </span>
       </Link>
-      <FollowButton targetUserId={item.userId} />
+      <FollowButton targetUserId={item.userId} variant='icon' />
     </>
   );
 };

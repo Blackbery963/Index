@@ -1363,6 +1363,7 @@ const navbarVariants = {
                     {darkMode ? <CiLight size={18} className="mb-1" /> : <CiDark size={18} className="mb-1" />}
                     <span className="text-xs font-medium">Theme</span>
                   </button>
+                      
                 </div>
 
                 {/* Menu Routes */}

@@ -54,47 +54,47 @@
 //     //   Review: 'I discovered amazing new artists through Painters Diary. The curation is excellent.',
 //     // },
 //     // {
-//     //   Profileimg: profile_4,
-//     //   Username: 'Emma Chen',
-//     //   Userdescription: 'Watercolor Painter',
-//     //   Review: 'The daily inspiration feed keeps me motivated to create new artwork every day.',
-//     // },
-//     // {
-//     //   Profileimg: profile_5,
-//     //   Username: 'Michael Johnson',
-//     //   Userdescription: 'Photographer',
-//     //   Review: 'Finally a platform that understands the needs of visual artists. Brilliant execution!',
-//     // },
-//     // {
-//     //   Profileimg: profile_6,
-//     //   Username: 'Olivia Martinez',
-//     //   Userdescription: 'Art Teacher',
-//     //   Review: 'My students love using Painters Diary for their art research. Highly recommended for educators.',
-//     // },
+    //   Profileimg: profile_4,
+    //   Username: 'Emma Chen',
+    //   Userdescription: 'Watercolor Painter',
+    //   Review: 'The daily inspiration feed keeps me motivated to create new artwork every day.',
+    // },
+    // {
+    //   Profileimg: profile_5,
+    //   Username: 'Michael Johnson',
+    //   Userdescription: 'Photographer',
+    //   Review: 'Finally a platform that understands the needs of visual artists. Brilliant execution!',
+    // },
+    // {
+    //   Profileimg: profile_6,
+    //   Username: 'Olivia Martinez',
+    //   Userdescription: 'Art Teacher',
+    //   Review: 'My students love using Painters Diary for their art research. Highly recommended for educators.',
+    // },
     
-// //       Profileimg: profile_7,
-// //       Username: 'Daniel Kim',
-// //       Userdescription: 'Illustrator',
-// //       Review: 'The clean interface puts the focus exactly where it should be - on the artwork.',
-// //     },
-// //     {
-// //       Profileimg: profile_8,
-// //       Username: 'Ava Thompson',
-// //       Userdescription: 'Gallery Owner',
-// //       Review: 'I regularly scout for new talent on Painters Diary. The quality of work is outstanding.',
-// //     },
-// //     {
-// //       Profileimg: profile_9,
-// //       Username: 'Liam Brown',
-// //       Userdescription: 'Art Director',
-// //       Review: 'The best digital art platform I have used in my 10-year career. Simply phenomenal.',
-// //     },
-// //     {
-// //       Profileimg: profile_10,
-// //       Username: 'Isabella Nice',
-// //       Userdescription: 'Muralist',
-// //       Review: 'Painters Diary understands artists needs better than any other platform out there.',
-// //     }
+    //   Profileimg: profile_7,
+    //   Username: 'Daniel Kim',
+    //   Userdescription: 'Illustrator',
+    //   Review: 'The clean interface puts the focus exactly where it should be - on the artwork.',
+    // },
+    // {
+    //   Profileimg: profile_8,
+    //   Username: 'Ava Thompson',
+    //   Userdescription: 'Gallery Owner',
+    //   Review: 'I regularly scout for new talent on Painters Diary. The quality of work is outstanding.',
+    // },
+    // {
+    //   Profileimg: profile_9,
+    //   Username: 'Liam Brown',
+    //   Userdescription: 'Art Director',
+    //   Review: 'The best digital art platform I have used in my 10-year career. Simply phenomenal.',
+    // },
+    // {
+    //   Profileimg: profile_10,
+    //   Username: 'Isabella Nice',
+    //   Userdescription: 'Muralist',
+    //   Review: 'Painters Diary understands artists needs better than any other platform out there.',
+    // }
 // //   ];
 
 // //   return (

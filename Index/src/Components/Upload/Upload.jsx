@@ -85,23 +85,23 @@
 //   ];
 
 //   const tagOptions = [
-//     'Abstract',
-//     'Landscape',
-//     'Portrait',
-//     'StillLife',
-//     'Fantasy',
-//     'Realism',
-//     'Surrealism',
-//     'Traditional',
-//     'Minimalism',
-//     'Expressionism',
-//     'Impressionism',
-//     'PopArt',
-//     'DigitalArt',
-//     'Historical',
-//     'Modern',
-//     'Nature',
-//     'Photography'
+    // 'Abstract',
+    // 'Landscape',
+    // 'Portrait',
+    // 'StillLife',
+    // 'Fantasy',
+    // 'Realism',
+    // 'Surrealism',
+    // 'Traditional',
+    // 'Minimalism',
+    // 'Expressionism',
+    // 'Impressionism',
+    // 'PopArt',
+    // 'DigitalArt',
+    // 'Historical',
+    // 'Modern',
+    // 'Nature',
+    // 'Photography'
 //   ];
 
 //     useEffect(() => {

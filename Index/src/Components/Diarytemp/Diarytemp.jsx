@@ -191,14 +191,15 @@ const DiaryTemplate = ({ viewMode = 'feed', onDiaryAction }) => {
         </div>
 
         <div className="grid grid-cols-3 gap-3 mb-4">
+          <Link to={"/January"}>
           <button
-            onClick={() => onDiaryAction?.('startWriting')}
-            className="flex flex-col items-center gap-2 p-3 bg-white dark:bg-gray-800 rounded-lg hover:shadow-md transition-all group"
+            // onClick={() => onDiaryAction?.('startWriting')}
+            className="flex flex-col items-center gap-2 p-3 bg-white dark:bg-gray-800 rounded-lg hover:shadow-md transition-all group w-full"
           >
             <PenTool className="w-5 h-5 text-yellow-600 group-hover:scale-110 transition-transform" />
             <span className="text-xs font-medium text-gray-700 dark:text-gray-300">Start</span>
           </button>
-          
+          </Link>
           <Link to="/Diaryland">
             <button className="flex flex-col items-center gap-2 p-3 bg-white dark:bg-gray-800 rounded-lg hover:shadow-md transition-all group w-full">
               <FileText className="w-5 h-5 text-yellow-600 group-hover:scale-110 transition-transform" />

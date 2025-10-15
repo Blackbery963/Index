@@ -13,9 +13,6 @@
 
 
 
-
-
-
 // const Items = [
 //   {
 //     id: 1,
@@ -165,119 +162,198 @@
 
 // export default Visual;
 
-import { useState } from 'react';
+
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Heart, Bookmark, ShoppingBag, Tag } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Heart, Bookmark, ShoppingBag, Tag, ChevronLeft, ChevronRight, X, Star, Eye } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const Visual = ({ viewMode = 'feed', onProductClick, likedProducts, savedProducts, onLike, onSave, formatTimestamp }) => {
-  const [hoveredProduct, setHoveredProduct] = useState(null);
+  const [selectedIndex, setSelectedIndex] = useState(null);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [imageErrors, setImageErrors] = useState(new Set());
 
-  // Mock API data for products (in real app, this would come from an API)
-  const products = [
+  // Curated artistic/handmade products with matching images
+  const artisticProducts = [
     {
-      id: 101,
-      title: 'Handwoven Basket',
-      price: 45,
-      image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=500&h=500&fit=crop',
-      category: 'basketry',
-      artist: 'Craft Masters',
-      description: 'Beautifully handwoven natural fiber basket',
-      tags: ['handmade', 'natural', 'decor'],
-      likes: 23,
-      views: 156,
-      timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-      trending: 8,
-      comments: 5,
-      shares: 12,
-      inStock: true
+      title: 'Handwoven Macramé Wall Hanging',
+      category: 'Wall Decor',
+      artist: 'Fiber Arts Studio',
+      description: 'Beautifully handcrafted macramé wall hanging made from natural cotton rope. Perfect for bohemian or modern spaces.',
+      tags: ['macrame', 'handmade', 'boho', 'wall-art'],
+      price: 89,
+      image: 'https://images.unsplash.com/photo-1615529182904-14819c35db37?w=500&h=500&fit=crop'
     },
     {
-      id: 102,
-      title: 'Ceramic Clay Pot',
-      price: 60,
-      image: 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=500&h=500&fit=crop',
-      category: 'pottery',
-      artist: 'Clay Studio',
-      description: 'Hand-thrown ceramic pot with unique glaze',
-      tags: ['ceramic', 'handmade', 'home'],
-      likes: 45,
-      views: 289,
-      timestamp: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(),
-      trending: 15,
-      comments: 8,
-      shares: 20,
-      inStock: true
+      title: 'Ceramic Pottery Vase Set',
+      category: 'Home Decor',
+      artist: 'Clay & Fire Studio',
+      description: 'Hand-thrown ceramic vases with unique glaze patterns. Each piece is one-of-a-kind and food-safe.',
+      tags: ['ceramic', 'pottery', 'vase', 'handmade'],
+      price: 65,
+      image: 'https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=500&h=500&fit=crop'
     },
     {
-      id: 103,
-      title: 'Macramé Wall Hanging',
-      price: 80,
-      image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=500&h=500&fit=crop',
-      category: 'wall decor',
-      artist: 'Fiber Arts Co',
-      description: 'Intricate macramé design for modern spaces',
-      tags: ['macrame', 'textile', 'bohemian'],
-      likes: 67,
-      views: 342,
-      timestamp: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
-      trending: 22,
-      comments: 12,
-      shares: 35,
-      inStock: true
+      title: 'Handcrafted Wooden Bowl',
+      category: 'Kitchenware',
+      artist: 'Wood Artisans Co.',
+      description: 'Carved from solid walnut wood with food-safe finish. Perfect for serving or decorative display.',
+      tags: ['wood', 'handcarved', 'bowl', 'kitchen'],
+      price: 55,
+      image: 'https://images.unsplash.com/photo-1610701596061-2ecf227e85b2?w=500&h=500&fit=crop'
     },
     {
-      id: 104,
-      title: 'Hand-Carved Wooden Bowl',
-      price: 25,
-      image: 'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=500&h=500&fit=crop',
-      category: 'woodwork',
-      artist: 'Wood Craftsmen',
-      description: 'Natural wood bowl with smooth finish',
-      tags: ['wood', 'handcarved', 'organic'],
-      likes: 34,
-      views: 198,
-      timestamp: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(),
-      trending: 11,
-      comments: 6,
-      shares: 15,
-      inStock: false
+      title: 'Natural Fiber Woven Basket',
+      category: 'Storage',
+      artist: 'Weave Masters',
+      description: 'Handwoven basket made from sustainable seagrass. Ideal for storage or plant holders.',
+      tags: ['basket', 'woven', 'natural', 'storage'],
+      price: 42,
+      image: 'https://images.unsplash.com/photo-1615529328331-f8917597711f?w=500&h=500&fit=crop'
     },
     {
-      id: 105,
-      title: 'Natural Dye Textile',
+      title: 'Hand-Painted Canvas Art',
+      category: 'Wall Art',
+      artist: 'Modern Canvas Studio',
+      description: 'Original abstract painting on canvas. Vibrant colors perfect for contemporary interiors.',
+      tags: ['painting', 'canvas', 'abstract', 'art'],
+      price: 120,
+      image: 'https://images.unsplash.com/photo-1561214115-f2f134cc4912?w=500&h=500&fit=crop'
+    },
+    {
+      title: 'Artisan Scented Candles',
+      category: 'Home Fragrance',
+      artist: 'Scent Crafters',
+      description: 'Hand-poured soy candles with essential oils. Natural, eco-friendly, and long-burning.',
+      tags: ['candle', 'soy', 'natural', 'handmade'],
+      price: 28,
+      image: 'https://images.unsplash.com/photo-1602874801006-e24b9d1b263c?w=500&h=500&fit=crop'
+    },
+    {
+      title: 'Handmade Leather Journal',
+      category: 'Stationery',
+      artist: 'Leather Craft Co.',
+      description: 'Premium leather-bound journal with handmade paper. Perfect for writing or sketching.',
+      tags: ['leather', 'journal', 'notebook', 'handmade'],
+      price: 48,
+      image: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=500&h=500&fit=crop'
+    },
+    {
+      title: 'Woven Textile Wall Tapestry',
+      category: 'Textile Art',
+      artist: 'Textile Studio',
+      description: 'Handwoven tapestry using natural dyes. Unique patterns inspired by traditional crafts.',
+      tags: ['textile', 'tapestry', 'woven', 'wall-art'],
       price: 95,
-      image: 'https://images.unsplash.com/photo-1558769132-cb25c5d0d5ba?w=500&h=500&fit=crop',
-      category: 'textile',
-      artist: 'Eco Dye Studio',
-      description: 'Fabric dyed with natural plant pigments',
-      tags: ['ecofriendly', 'textile', 'natural'],
-      likes: 89,
-      views: 421,
-      timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
-      trending: 28,
-      comments: 15,
-      shares: 42,
-      inStock: true
+      image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&h=500&fit=crop'
     },
     {
-      id: 106,
-      title: 'Pressed Floral Frame',
-      price: 30,
-      image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=500&h=500&fit=crop',
-      category: 'paper craft',
+      title: 'Handcrafted Wooden Cutting Board',
+      category: 'Kitchenware',
+      artist: 'Wood & Grain',
+      description: 'Premium hardwood cutting board with juice groove. Food-safe and durable.',
+      tags: ['wood', 'kitchen', 'cutting-board', 'handmade'],
+      price: 58,
+      image: 'https://images.unsplash.com/photo-1616486029423-aaa4789e8c9a?w=500&h=500&fit=crop'
+    },
+    {
+      title: 'Pressed Botanical Art Frame',
+      category: 'Wall Art',
       artist: 'Botanical Arts',
-      description: 'Delicate pressed flowers in glass frame',
-      tags: ['floral', 'preserved', 'decor'],
-      likes: 56,
-      views: 267,
-      timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
-      trending: 18,
-      comments: 9,
-      shares: 24,
-      inStock: true
+      description: 'Real pressed flowers preserved in glass frame. Each piece showcases nature\'s beauty.',
+      tags: ['botanical', 'pressed-flowers', 'frame', 'art'],
+      price: 38,
+      image: 'https://images.unsplash.com/photo-1490312278390-ab64016e0aa9?w=500&h=500&fit=crop'
+    },
+    {
+      title: 'Hand-Knitted Throw Blanket',
+      category: 'Textiles',
+      artist: 'Knit & Cozy',
+      description: 'Chunky knit blanket made from soft merino wool. Perfect for cozy evenings.',
+      tags: ['knit', 'blanket', 'wool', 'cozy'],
+      price: 110,
+      image: 'https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=500&h=500&fit=crop'
+    },
+    {
+      title: 'Ceramic Tea Set',
+      category: 'Tableware',
+      artist: 'Pottery House',
+      description: 'Handmade ceramic tea set with teapot and four cups. Elegant and functional.',
+      tags: ['ceramic', 'tea', 'pottery', 'handmade'],
+      price: 72,
+      image: 'https://images.unsplash.com/photo-1578320339911-e3a13c872c4e?w=500&h=500&fit=crop'
     }
   ];
+
+  // Fallback images for when primary images fail
+  const fallbackImages = [
+    'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=500&h=500&fit=crop',
+    'https://images.unsplash.com/photo-1452860606245-08befc0ff44b?w=500&h=500&fit=crop',
+    'https://images.unsplash.com/photo-1576682812057-2a4b4f8f1a1f?w=500&h=500&fit=crop',
+    'https://images.unsplash.com/photo-1513694203232-719a280e022f?w=500&h=500&fit=crop'
+  ];
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+        
+        // Create products with proper IDs and metadata
+        const mappedProducts = artisticProducts.map((item, index) => ({
+          id: 1000 + index,
+          title: item.title,
+          price: item.price,
+          image: item.image,
+          fallbackImage: fallbackImages[index % fallbackImages.length],
+          category: item.category,
+          artist: item.artist,
+          description: item.description,
+          tags: item.tags,
+          likes: Math.floor(Math.random() * 200) + 50,
+          views: Math.floor(Math.random() * 1000) + 200,
+          rating: (Math.random() * 2 + 3).toFixed(1), // 3.0 - 5.0
+          reviews: Math.floor(Math.random() * 50) + 10,
+          timestamp: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000).toISOString(),
+          trending: Math.floor(Math.random() * 40) + 10,
+          comments: Math.floor(Math.random() * 30) + 5,
+          shares: Math.floor(Math.random() * 60) + 10,
+          inStock: Math.random() > 0.15, // 85% in stock
+          stockCount: Math.floor(Math.random() * 20) + 5
+        }));
+
+        setProducts(mappedProducts);
+      } catch (error) {
+        console.error('Failed to load products:', error);
+        setProducts([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  // Handle keyboard navigation
+  useEffect(() => {
+    if (selectedIndex !== null) {
+      document.body.style.overflow = 'hidden';
+      
+      const handleKeyDown = (e) => {
+        if (e.key === 'Escape') setSelectedIndex(null);
+        if (e.key === 'ArrowLeft') setSelectedIndex((prev) => (prev - 1 + products.length) % products.length);
+        if (e.key === 'ArrowRight') setSelectedIndex((prev) => (prev + 1) % products.length);
+      };
+      
+      window.addEventListener('keydown', handleKeyDown);
+      return () => {
+        window.removeEventListener('keydown', handleKeyDown);
+        document.body.style.overflow = 'auto';
+      };
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+  }, [selectedIndex, products.length]);
 
   const isLiked = (productId) => likedProducts?.has(productId);
   const isSaved = (productId) => savedProducts?.has(productId);
@@ -292,309 +368,353 @@ const Visual = ({ viewMode = 'feed', onProductClick, likedProducts, savedProduct
     onSave?.(productId);
   };
 
-  const handleProductClick = (product) => {
-    onProductClick?.(product);
+  const handleProductClick = (index) => {
+    setSelectedIndex(index);
+    onProductClick?.(products[index]);
+  };
+
+  const handleImageError = (productId, e) => {
+    const product = products.find(p => p.id === productId);
+    if (product && !imageErrors.has(productId)) {
+      console.log('Image failed, using fallback for:', product.title);
+      e.target.src = product.fallbackImage;
+      setImageErrors(prev => new Set(prev).add(productId));
+    }
   };
 
   const handleBuyClick = (e, product) => {
     e.stopPropagation();
-    // Handle buy action - redirect to product page or add to cart
     console.log('Buy product:', product);
+    alert(`Added "${product.title}" to cart!`);
   };
 
-  // Different layouts based on view mode (matching ImageCard)
-  const getProductLayout = (product) => {
-    switch (viewMode) {
-      case 'grid':
-        return (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.3 }}
-            className="bg-white dark:bg-gray-900 rounded-lg shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-200/50 dark:border-gray-700/50 group cursor-pointer"
-            onClick={() => handleProductClick(product)}
-            onMouseEnter={() => setHoveredProduct(product.id)}
-            onMouseLeave={() => setHoveredProduct(null)}
-          >
-            {/* Image Container */}
-            <div className="relative aspect-square overflow-hidden">
-              <img
-                src={product.image}
-                alt={product.title}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                loading="lazy"
-              />
-              
-              {/* Price Badge */}
-              <div className="absolute top-3 left-3 bg-green-500 text-white text-sm px-3 py-1.5 rounded-full font-semibold flex items-center gap-1 shadow-lg">
-                <Tag className="w-3 h-3" />
-                ${product.price}
-              </div>
-
-              {/* Stock Status */}
-              {!product.inStock && (
-                <div className="absolute top-3 right-3 bg-red-500 text-white text-xs px-2 py-1 rounded-full font-semibold shadow-lg">
-                  Sold Out
-                </div>
-              )}
-
-              {/* Overlay Actions */}
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
-                <div className="flex items-center gap-2 bg-white/90 dark:bg-gray-800/90 backdrop-blur-lg rounded-2xl p-3 shadow-lg">
-                  <ShoppingBag className="w-5 h-5 text-gray-700 dark:text-gray-300" />
-                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">View Product</span>
-                </div>
-              </div>
-
-              {/* Quick Actions */}
-              <div className="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <button 
-                  onClick={(e) => handleSave(e, product.id)}
-                  className={`p-2 rounded-full backdrop-blur-lg transition-all ${
-                    isSaved(product.id) 
-                      ? 'bg-blue-500 text-white shadow-lg' 
-                      : 'bg-white/90 dark:bg-gray-800/90 text-gray-700 dark:text-gray-300 hover:bg-blue-500 hover:text-white'
-                  }`}
-                >
-                  <Bookmark className={`w-4 h-4 ${isSaved(product.id) ? 'fill-current' : ''}`} />
-                </button>
-                <button 
-                  onClick={(e) => handleBuyClick(e, product)}
-                  className="p-2 rounded-full bg-white/90 dark:bg-gray-800/90 text-gray-700 dark:text-gray-300 backdrop-blur-lg hover:bg-green-500 hover:text-white transition-all"
-                >
-                  <ShoppingBag className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-
-            {/* Content */}
-            <div className="p-4">
-              <h3 className="font-bold text-gray-900 dark:text-white text-sm mb-1 line-clamp-1">
-                {product.title}
-              </h3>
-              <p className="text-xs text-gray-600 dark:text-gray-400 mb-2 line-clamp-1">
-                by {product.artist}
-              </p>
-              
-              <div className="flex items-center justify-between">
-                <button 
-                  onClick={(e) => handleLike(e, product.id)}
-                  className={`flex items-center gap-1 transition-all ${
-                    isLiked(product.id) ? 'text-red-500 scale-110' : 'text-gray-600 dark:text-gray-400 hover:text-red-500'
-                  }`}
-                >
-                  <Heart className={`w-4 h-4 ${isLiked(product.id) ? 'fill-current' : ''}`} />
-                  <span className="text-xs font-medium">{product.likes}</span>
-                </button>
-                
-                <span className="text-xs text-gray-500 dark:text-gray-400">
-                  {formatTimestamp?.(product.timestamp)}
-                </span>
-              </div>
-            </div>
-          </motion.div>
-        );
-
-      case 'collage':
-        return (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            className="bg-white dark:bg-gray-900 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-200/50 dark:border-gray-700/50 group cursor-pointer"
-            onClick={() => handleProductClick(product)}
-          >
-            <div className="relative aspect-[4/3] overflow-hidden">
-              <img
-                src={product.image}
-                alt={product.title}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                loading="lazy"
-              />
-              
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              
-              <div className="absolute bottom-2 left-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <h3 className="text-white text-sm font-semibold line-clamp-1 mb-1">
-                  {product.title}
-                </h3>
-                <div className="flex items-center justify-between text-xs text-white/90">
-                  <span>${product.price}</span>
-                  <div className="flex items-center gap-2">
-                    <button 
-                      onClick={(e) => handleLike(e, product.id)}
-                      className={`flex items-center gap-1 ${isLiked(product.id) ? 'text-red-300' : ''}`}
-                    >
-                      <Heart className={`w-3 h-3 ${isLiked(product.id) ? 'fill-current' : ''}`} />
-                      {product.likes}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        );
-
-      default: // Feed view
-        return (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            className="bg-white dark:bg-gray-900 rounded-sm shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200/50 dark:border-gray-700/50 group cursor-pointer"
-            onClick={() => handleProductClick(product)}
-          >
-            {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-gray-100 dark:border-gray-800">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-blue-500 rounded-full flex items-center justify-center text-white font-semibold shadow-lg">
-                  {product.artist[0].toUpperCase()}
-                </div>
-                <div>
-                  <p className="font-semibold text-gray-900 dark:text-white">{product.artist}</p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
-                    {formatTimestamp?.(product.timestamp)}
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                  product.inStock 
-                    ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' 
-                    : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
-                }`}>
-                  {product.inStock ? 'In Stock' : 'Sold Out'}
-                </span>
-              </div>
-            </div>
-
-            {/* Image Container */}
-            <div className="relative">
-              <img
-                src={product.image}
-                alt={product.title}
-                className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-[1.02]"
-                loading="lazy"
-              />
-              
-              {/* Price Badge */}
-              <div className="absolute top-4 left-4 bg-green-500 text-white text-sm px-3 py-1.5 rounded-full font-semibold flex items-center gap-2 shadow-lg">
-                <Tag className="w-4 h-4" />
-                ${product.price}
-              </div>
-
-              {/* Quick Actions */}
-              <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <button 
-                  onClick={(e) => handleSave(e, product.id)}
-                  className={`p-3 rounded-xl backdrop-blur-lg transition-all ${
-                    isSaved(product.id) 
-                      ? 'bg-blue-500 text-white shadow-lg' 
-                      : 'bg-white/90 dark:bg-gray-800/90 text-gray-700 dark:text-gray-300 hover:bg-blue-500 hover:text-white'
-                  }`}
-                >
-                  <Bookmark className={`w-5 h-5 ${isSaved(product.id) ? 'fill-current' : ''}`} />
-                </button>
-                <button 
-                  onClick={(e) => handleBuyClick(e, product)}
-                  disabled={!product.inStock}
-                  className="p-3 rounded-xl bg-white/90 dark:bg-gray-800/90 text-gray-700 dark:text-gray-300 backdrop-blur-lg hover:bg-green-500 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-                >
-                  <ShoppingBag className="w-5 h-5" />
-                </button>
-              </div>
-            </div>
-
-            {/* Content */}
-            <div className="p-4">
-              <div className="mb-3">
-                <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2">
-                  {product.title}
-                </h3>
-                <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed line-clamp-2">
-                  {product.description}
-                </p>
-              </div>
-              
-              {/* Tags */}
-              <div className="flex flex-wrap gap-2 mb-4">
-                {product.tags.slice(0, 4).map(tag => (
-                  <span 
-                    key={tag} 
-                    className="px-3 py-1.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-sm rounded-full font-medium transition-colors hover:bg-green-100 dark:hover:bg-green-900/30 hover:text-green-700 dark:hover:text-green-300"
-                  >
-                    #{tag}
-                  </span>
-                ))}
-              </div>
-
-              {/* Engagement Stats */}
-              <div className="flex items-center justify-between pt-3 border-t border-gray-100 dark:border-gray-800">
-                <div className="flex items-center gap-4">
-                  <button 
-                    onClick={(e) => handleLike(e, product.id)}
-                    className={`flex items-center gap-2 transition-all ${
-                      isLiked(product.id) ? 'text-red-500 scale-105' : 'text-gray-600 dark:text-gray-400 hover:text-red-500'
-                    }`}
-                  >
-                    <Heart className={`w-5 h-5 ${isLiked(product.id) ? 'fill-current' : ''}`} />
-                    <span className="font-semibold text-sm">{product.likes}</span>
-                  </button>
-                  
-                  <button className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-blue-500 transition-colors">
-                    <span className="font-semibold text-sm">{product.comments} comments</span>
-                  </button>
-                </div>
-                
-                <button 
-                  onClick={(e) => handleBuyClick(e, product)}
-                  disabled={!product.inStock}
-                  className={`px-4 py-2 rounded-lg font-semibold text-sm transition-all ${
-                    product.inStock
-                      ? 'bg-green-500 text-white hover:bg-green-600 shadow-lg hover:shadow-xl'
-                      : 'bg-gray-300 text-gray-500 dark:bg-gray-700 dark:text-gray-400 cursor-not-allowed'
-                  }`}
-                >
-                  {product.inStock ? 'Add to Cart' : 'Sold Out'}
-                </button>
-              </div>
-            </div>
-          </motion.div>
-        );
-    }
+  const getContainerClass = () => {
+    if (viewMode === 'grid') return 'grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4';
+    if (viewMode === 'collage') return 'columns-2 sm:columns-3 gap-4 space-y-4';
+    return 'grid grid-cols-1 gap-4 max-w-4xl mx-auto';
   };
+
+  const getProductLayout = (product, index) => {
+    return (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.3, delay: index * 0.05 }}
+        className="bg-white dark:bg-gray-900 rounded-sm shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden cursor-pointer group"
+        onClick={() => handleProductClick(index)}
+      >
+        {/* Image Container */}
+        <div className="relative aspect-square overflow-hidden bg-gray-100 dark:bg-gray-800">
+          <img
+            src={product.image}
+            alt={product.title}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            loading="lazy"
+            onError={(e) => handleImageError(product.id, e)}
+          />
+          
+          {/* Price Badge */}
+          <div className="absolute top-3 left-3 bg-green-500 text-white text-sm px-3 py-1.5 rounded-full font-semibold flex items-center gap-1 shadow-lg">
+            <Tag className="w-3 h-3" />
+            ${product.price}
+          </div>
+
+          {/* Stock Status */}
+          {!product.inStock && (
+            <div className="absolute top-3 right-3 bg-red-500 text-white text-xs px-2 py-1 rounded-full font-semibold shadow-lg">
+              Sold Out
+            </div>
+          )}
+
+          {/* Quick Actions Overlay */}
+          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
+            <div className="flex gap-2">
+              <button
+                onClick={(e) => handleSave(e, product.id)}
+                className={`p-2 rounded-lg backdrop-blur-lg transition-all ${
+                  isSaved(product.id)
+                    ? 'bg-blue-500 text-white'
+                    : 'bg-white/90 text-gray-700 hover:bg-blue-500 hover:text-white'
+                }`}
+              >
+                <Bookmark className={`w-4 h-4 ${isSaved(product.id) ? 'fill-current' : ''}`} />
+              </button>
+              <button
+                onClick={(e) => handleBuyClick(e, product)}
+                disabled={!product.inStock}
+                className="p-2 rounded-lg bg-white/90 text-gray-700 hover:bg-green-500 hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <ShoppingBag className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Product Info */}
+        <div className="p-4">
+          <h3 className="font-bold text-gray-900 dark:text-white text-sm mb-1 line-clamp-2">
+            {product.title}
+          </h3>
+          <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">
+            by {product.artist}
+          </p>
+
+          {/* Rating */}
+          <div className="flex items-center gap-1 mb-2">
+            <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+            <span className="text-xs font-medium text-gray-700 dark:text-gray-300">
+              {product.rating}
+            </span>
+            <span className="text-xs text-gray-500 dark:text-gray-400">
+              ({product.reviews})
+            </span>
+          </div>
+
+          {/* Engagement Stats */}
+          <div className="flex items-center justify-between">
+            <button
+              onClick={(e) => handleLike(e, product.id)}
+              className={`flex items-center gap-1 text-xs transition-all ${
+                isLiked(product.id) ? 'text-red-500 scale-110' : 'text-gray-600 dark:text-gray-400 hover:text-red-500'
+              }`}
+            >
+              <Heart className={`w-3 h-3 ${isLiked(product.id) ? 'fill-current' : ''}`} />
+              {product.likes}
+            </button>
+            <span className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1">
+              <Eye className="w-3 h-3" />
+              {product.views}
+            </span>
+          </div>
+        </div>
+      </motion.div>
+    );
+  };
+
+  const selectedProduct = selectedIndex !== null ? products[selectedIndex] : null;
 
   return (
-    <section className="py-8">
-      <div className="flex justify-between items-center mb-6">
+    <section className="py-6 w-full">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-3 px-2">
         <div>
-          <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">Featured Products</h2>
-          <p className="text-gray-600 dark:text-gray-400">Handcrafted items from our community</p>
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
+            Handcrafted Products
+          </h2>
+          <p className="text-sm text-gray-600 dark:text-gray-400">
+            Unique artisan goods from talented creators
+          </p>
         </div>
-        <Link to="/shop" className="text-sm text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white">
-          View all products
+        <Link
+          to="/shop"
+          className="text-sm text-purple-600 dark:text-purple-400 hover:underline font-medium"
+        >
+          View all products →
         </Link>
       </div>
-      {/* <div className={`transition-all duration-500 ${
-        viewMode === 'collage'
-          ? 'columns-1 sm:columns-2 xl:columns-3 gap-4 space-y-4' 
-          : viewMode === 'shop'
-          ? 'columns-1 lg:columns-2 gap-4 space-y-4 max-w-6xl mx-auto'
-          : viewMode === 'grid'
-          ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'
-          : 'flex flex-col gap-4 w-full'
-      }`}> */}
-      <div className={`transition-all duration-500 ${
-  viewMode === 'collage'
-    ? 'columns-1 sm:columns-2 xl:columns-3 gap-4 space-y-4'  // Multi-column for discover
-    : 'flex flex-col gap-6 w-full max-w-4xl mx-auto'  // Single column for feed
-}`}>
-        {products.map((product) => (
-          <div key={product.id}>
-            {getProductLayout(product)}
+
+      {loading ? (
+        <div className="flex items-center justify-center py-20">
+          <div className="flex flex-col items-center gap-4">
+            <div className="w-12 h-12 border-4 border-purple-200 border-t-purple-500 rounded-full animate-spin" />
+            <p className="text-gray-600 dark:text-gray-400">Loading handmade items...</p>
           </div>
-        ))}
-      </div>
+        </div>
+      ) : (
+        <div className={getContainerClass()}>
+          {products.map((product, index) => (
+            <div key={product.id}>
+              {getProductLayout(product, index)}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Enhanced Lightbox */}
+      <AnimatePresence>
+        {selectedProduct && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/95 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            onClick={() => setSelectedIndex(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative max-w-5xl w-full max-h-[90vh] bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-2xl flex flex-col md:flex-row"
+            >
+              {/* Close Button */}
+              <button
+                onClick={() => setSelectedIndex(null)}
+                className="absolute top-4 right-4 z-10 p-2 bg-white/90 dark:bg-gray-800/90 hover:bg-white dark:hover:bg-gray-800 rounded-full text-gray-700 dark:text-gray-200 transition-all shadow-lg"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              {/* Navigation Buttons */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectedIndex((prev) => (prev - 1 + products.length) % products.length);
+                }}
+                className="absolute left-4 top-1/2 -translate-y-1/2 z-10 p-3 bg-white/90 dark:bg-gray-800/90 hover:bg-white dark:hover:bg-gray-800 rounded-full text-gray-700 dark:text-gray-200 transition-all shadow-lg"
+              >
+                <ChevronLeft className="w-6 h-6" />
+              </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectedIndex((prev) => (prev + 1) % products.length);
+                }}
+                className="absolute right-4 top-1/2 -translate-y-1/2 z-10 p-3 bg-white/90 dark:bg-gray-800/90 hover:bg-white dark:hover:bg-gray-800 rounded-full text-gray-700 dark:text-gray-200 transition-all shadow-lg"
+              >
+                <ChevronRight className="w-6 h-6" />
+              </button>
+
+              {/* Image Section */}
+              <div className="md:w-3/5 h-64 md:h-auto bg-gray-100 dark:bg-gray-800 flex items-center justify-center p-4">
+                <img
+                  src={selectedProduct.image}
+                  alt={selectedProduct.title}
+                  className="max-w-full max-h-full object-contain"
+                  onError={(e) => handleImageError(selectedProduct.id, e)}
+                />
+              </div>
+
+              {/* Details Section */}
+              <div className="md:w-2/5 p-6 flex flex-col justify-between overflow-y-auto max-h-[50vh] md:max-h-full">
+                <div>
+                  <div className="flex items-start justify-between mb-2">
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white pr-8">
+                      {selectedProduct.title}
+                    </h2>
+                  </div>
+                  
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                    by {selectedProduct.artist}
+                  </p>
+
+                  {/* Rating */}
+                  <div className="flex items-center gap-2 mb-4">
+                    <div className="flex items-center gap-1">
+                      {[...Array(5)].map((_, i) => (
+                        <Star
+                          key={i}
+                          className={`w-4 h-4 ${
+                            i < Math.floor(selectedProduct.rating)
+                              ? 'fill-yellow-400 text-yellow-400'
+                              : 'text-gray-300'
+                          }`}
+                        />
+                      ))}
+                    </div>
+                    <span className="text-sm text-gray-600 dark:text-gray-400">
+                      {selectedProduct.rating} ({selectedProduct.reviews} reviews)
+                    </span>
+                  </div>
+
+                  {/* Price */}
+                  <div className="flex items-center gap-2 mb-4">
+                    <Tag className="w-5 h-5 text-green-500" />
+                    <span className="text-3xl font-bold text-gray-900 dark:text-white">
+                      ${selectedProduct.price}
+                    </span>
+                  </div>
+
+                  {/* Description */}
+                  <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                    {selectedProduct.description}
+                  </p>
+
+                  {/* Tags */}
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {selectedProduct.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="text-xs bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 px-3 py-1 rounded-full font-medium"
+                      >
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Stock Status */}
+                  {selectedProduct.inStock ? (
+                    <p className="text-sm text-green-600 dark:text-green-400 mb-4">
+                      ✓ In Stock ({selectedProduct.stockCount} available)
+                    </p>
+                  ) : (
+                    <p className="text-sm text-red-600 dark:text-red-400 mb-4">
+                      ✕ Out of Stock
+                    </p>
+                  )}
+
+                  {/* Engagement Stats */}
+                  <div className="grid grid-cols-3 gap-4 mb-4 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                    <div className="text-center">
+                      <p className="text-xs text-gray-600 dark:text-gray-400">Likes</p>
+                      <p className="text-lg font-semibold text-gray-900 dark:text-white">
+                        {selectedProduct.likes}
+                      </p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-xs text-gray-600 dark:text-gray-400">Views</p>
+                      <p className="text-lg font-semibold text-gray-900 dark:text-white">
+                        {selectedProduct.views}
+                      </p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-xs text-gray-600 dark:text-gray-400">Comments</p>
+                      <p className="text-lg font-semibold text-gray-900 dark:text-white">
+                        {selectedProduct.comments}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex gap-2 mt-4">
+                  <button
+                    onClick={(e) => handleLike(e, selectedProduct.id)}
+                    className={`flex-1 py-3 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-all ${
+                      isLiked(selectedProduct.id)
+                        ? 'bg-red-500 text-white shadow-lg'
+                        : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-red-500 hover:text-white'
+                    }`}
+                  >
+                    <Heart className={`w-4 h-4 ${isLiked(selectedProduct.id) ? 'fill-current' : ''}`} />
+                    Like
+                  </button>
+                  
+                  <button
+                    onClick={(e) => handleSave(e, selectedProduct.id)}
+                    className={`flex-1 py-3 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-all ${
+                      isSaved(selectedProduct.id)
+                        ? 'bg-blue-500 text-white shadow-lg'
+                        : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-blue-500 hover:text-white'
+                    }`}
+                  >
+                    <Bookmark className={`w-4 h-4 ${isSaved(selectedProduct.id) ? 'fill-current' : ''}`} />
+                    Save
+                  </button>
+                  
+                  <button
+                    onClick={(e) => handleBuyClick(e, selectedProduct)}
+                    disabled={!selectedProduct.inStock}
+                    className="flex-1 py-3 rounded-xl text-sm font-semibold bg-gradient-to-r from-green-500 to-emerald-500 text-white flex items-center justify-center gap-2 hover:from-green-600 hover:to-emerald-600 transition-all shadow-lg hover:shadow-xl disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed"
+                  >
+                    <ShoppingBag className="w-4 h-4" />
+                    {selectedProduct.inStock ? 'Add to Cart' : 'Out of Stock'}
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 };

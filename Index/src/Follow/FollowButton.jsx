@@ -3,8 +3,9 @@
 // import { account } from "../appwriteConfig";
 // import { FiUserPlus, FiCheck } from "react-icons/fi";
 // import { ImSpinner2 } from "react-icons/im";
+// import { LuLoader } from "react-icons/lu";
 
-//  function FollowButton({ targetUserId, onFollowChange = () => {} }) {
+// function FollowButton({ targetUserId, onFollowChange = () => {} }) {
 //   const [isFollowing, setIsFollowing] = useState(false);
 //   const [isLoading, setIsLoading] = useState(false);
 //   const [currentUserId, setCurrentUserId] = useState(null);
@@ -22,7 +23,7 @@
 //     getCurrentUser();
 //   }, []);
 
-//   // Check follow status
+//   // Check follow status ONCE when components mount or IDs change
 //   useEffect(() => {
 //     if (!currentUserId || !targetUserId) return;
 
@@ -38,42 +39,30 @@
 //     checkStatus();
 //   }, [currentUserId, targetUserId]);
 
-//   // const handleFollow = async () => {
-//   //   if (!currentUserId || isLoading) return;
-
-//   //   setIsLoading(true);
-//   //   try {
-//   //     if (isFollowing) {
-//   //       await followService.unfollowUser(currentUserId, targetUserId);
-//   //     } else {
-//   //       await followService.followUser(currentUserId, targetUserId);
-//   //     }
-
-//   //     const updatedStatus = await followService.checkFollowStatus(currentUserId, targetUserId);
-//   //     setIsFollowing(updatedStatus);
-//   //     onFollowChange(updatedStatus);
-//   //   } catch (error) {
-//   //     console.error("Error updating follow status:", error);
-//   //   } finally {
-//   //     setIsLoading(false);
-//   //   }
-//   // };
-
+//   // In your handleFollow, check status only when needed
 // const handleFollow = async () => {
 //   if (!currentUserId || isLoading) return;
+  
 //   setIsLoading(true);
   
 //   try {
-//     const newStatus = !isFollowing;
+//     // Check current status first
+//     const currentStatus = await followService.checkFollowStatus(currentUserId, targetUserId);
+//     const newStatus = !currentStatus;
+    
 //     if (newStatus) {
 //       await followService.followUser(currentUserId, targetUserId);
 //     } else {
 //       await followService.unfollowUser(currentUserId, targetUserId);
 //     }
+    
 //     setIsFollowing(newStatus);
 //     onFollowChange(newStatus);
 //   } catch (error) {
 //     console.error('Error:', error);
+//     // Re-check status on error
+//     const actualStatus = await followService.checkFollowStatus(currentUserId, targetUserId);
+//     setIsFollowing(actualStatus);
 //   } finally {
 //     setIsLoading(false);
 //   }
@@ -85,145 +74,305 @@
 //   }
 
 //   return (
-//     <button
-//       onClick={handleFollow}
-//       disabled={isLoading}
-//       className={`
-//         flex items-center gap-1 px-2 py-1 rounded-xl font-medium shadow-sm transition-all duration-200
-//         border focus:outline-none focus:ring-2 focus:ring-offset-1
-//         ${
-//           isFollowing
-//             ? "bg-gray-100 text-gray-800 border-gray-300 hover:bg-gray-200 focus:ring-gray-300"
-//             : "bg-blue-600 text-white border-blue-600 hover:bg-blue-700 focus:ring-blue-400"
-//         }
-//         disabled:opacity-70 disabled:cursor-not-allowed
-//       `}
-//     >
-//       {isLoading ? (
-//         <ImSpinner2 className="animate-spin text-sm" />
-//       ) : isFollowing ? (
-//         <>
-//           {/* <FiCheck className="text-sm" /> */}
-//           Following
-//         </>
-//       ) : (
-//         <>
-//           <FiUserPlus className="text-sm" />
-//           Follow
-//         </>
-//       )}
-//     </button>
+// <button
+// onClick={handleFollow}
+// disabled={isLoading}
+//   className={`
+//     inline-flex items-center justify-center gap-1.5 px-4 py-1.5 
+//     rounded-lg text-sm font-medium 
+//     transition-all duration-200 
+//     backdrop-blur-md border
+//     ${
+//       isFollowing
+//         ? "bg-white/20 text-gray-900 dark:text-gray-100 border-white/30 hover:bg-white/30"
+//         : "bg-blue-500/30 text-blue-50 dark:text-blue-800 border-blue-400/30 hover:bg-blue-500/40"
+//     }
+//     focus:outline-none focus:ring-2 focus:ring-blue-300/40
+//     disabled:opacity-60 disabled:cursor-not-allowed
+//   `}
+// >
+//   {isLoading ? (
+//     <LuLoader className="animate-spin text-sm" />
+//   ) : isFollowing ? (
+//     <span className="text-sm">Following</span>
+//   ) : (
+//     <>
+//       <FiUserPlus className="text-sm" />
+//       <span className="text-sm">Follow</span>
+//     </>
+//   )}
+// </button>
+
+
 //   );
 // }
 
-// export default FollowButton
+// export default FollowButton;
 
-import { useState, useEffect } from "react";
+
+
+import { useState, useEffect, useCallback } from "react";
 import { followService } from "./FollowService";
 import { account } from "../appwriteConfig";
-import { FiUserPlus, FiCheck } from "react-icons/fi";
-import { ImSpinner2 } from "react-icons/im";
+import { FiUserPlus, FiCheck, FiUserMinus } from "react-icons/fi";
 import { LuLoader } from "react-icons/lu";
 
-function FollowButton({ targetUserId, onFollowChange = () => {} }) {
+function FollowButton({ 
+  targetUserId, 
+  onFollowChange = () => {}, 
+  variant = "default",
+  size = "md"
+}) {
   const [isFollowing, setIsFollowing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [currentUserId, setCurrentUserId] = useState(null);
+  const [hasInitialized, setHasInitialized] = useState(false);
 
-  // Fetch current user on mount
-  useEffect(() => {
-    const getCurrentUser = async () => {
-      try {
-        const user = await account.get();
-        setCurrentUserId(user.$id);
-      } catch (error) {
-        console.error("Error getting current user:", error);
-      }
-    };
-    getCurrentUser();
+  // Memoized user fetch
+  const getCurrentUser = useCallback(async () => {
+    try {
+      const user = await account.get();
+      setCurrentUserId(user.$id);
+      return user.$id;
+    } catch (error) {
+      console.error("Error getting current user:", error);
+      return null;
+    }
   }, []);
 
-  // Check follow status ONCE when components mount or IDs change
-  useEffect(() => {
-    if (!currentUserId || !targetUserId) return;
+  // Memoized status check
+  const checkFollowStatus = useCallback(async (userId, targetId) => {
+    if (!userId || !targetId) return false;
+    try {
+      return await followService.checkFollowStatus(userId, targetId);
+    } catch (error) {
+      console.error("Error checking follow status:", error);
+      return false;
+    }
+  }, []);
 
-    const checkStatus = async () => {
-      try {
-        const status = await followService.checkFollowStatus(currentUserId, targetUserId);
+  // Initialize user and status
+  useEffect(() => {
+    let mounted = true;
+
+    const initialize = async () => {
+      const userId = await getCurrentUser();
+      if (!mounted || !userId || !targetUserId) return;
+
+      const status = await checkFollowStatus(userId, targetUserId);
+      if (mounted) {
         setIsFollowing(status);
-      } catch (error) {
-        console.error("Error checking follow status:", error);
+        setHasInitialized(true);
       }
     };
 
-    checkStatus();
-  }, [currentUserId, targetUserId]);
+    initialize();
 
-  // In your handleFollow, check status only when needed
-const handleFollow = async () => {
-  if (!currentUserId || isLoading) return;
-  
-  setIsLoading(true);
-  
-  try {
-    // Check current status first
-    const currentStatus = await followService.checkFollowStatus(currentUserId, targetUserId);
-    const newStatus = !currentStatus;
+    return () => {
+      mounted = false;
+    };
+  }, [targetUserId, getCurrentUser, checkFollowStatus]);
+
+  // Optimized follow handler with immediate feedback
+  const handleFollow = async () => {
+    if (!currentUserId || isLoading || !hasInitialized) return;
+
+    const newStatus = !isFollowing;
     
-    if (newStatus) {
-      await followService.followUser(currentUserId, targetUserId);
-    } else {
-      await followService.unfollowUser(currentUserId, targetUserId);
-    }
-    
+    // Immediate UI update
     setIsFollowing(newStatus);
+    setIsLoading(true);
     onFollowChange(newStatus);
-  } catch (error) {
-    console.error('Error:', error);
-    // Re-check status on error
-    const actualStatus = await followService.checkFollowStatus(currentUserId, targetUserId);
-    setIsFollowing(actualStatus);
-  } finally {
-    setIsLoading(false);
+
+    try {
+      if (newStatus) {
+        await followService.followUser(currentUserId, targetUserId);
+      } else {
+        await followService.unfollowUser(currentUserId, targetUserId);
+      }
+    } catch (error) {
+      console.error("Follow toggle failed:", error);
+      
+      // Revert on error and re-verify actual status
+      const actualStatus = await checkFollowStatus(currentUserId, targetUserId);
+      setIsFollowing(actualStatus);
+      onFollowChange(actualStatus);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Don't render until initialized
+  if (!hasInitialized) {
+    return (
+      <div className="inline-flex items-center justify-center gap-1.5 px-4 py-1.5 rounded-lg opacity-50">
+        <LuLoader className="animate-spin text-sm" />
+      </div>
+    );
   }
-};
 
   if (!currentUserId) return null;
+  
   if (currentUserId === targetUserId) {
-    return <span className="text-xs text-gray-500 italic">This is you</span>;
+    return (
+      <span className="text-xs text-gray-500 italic px-3 py-1.5">
+        This is you
+      </span>
+    );
   }
 
-  return (
-<button
-onClick={handleFollow}
-disabled={isLoading}
-  className={`
-    inline-flex items-center justify-center gap-1.5 px-4 py-1.5 
-    rounded-lg text-sm font-medium 
-    transition-all duration-200 
-    backdrop-blur-md border
-    ${
-      isFollowing
-        ? "bg-white/20 text-gray-900 dark:text-gray-100 border-white/30 hover:bg-white/30"
-        : "bg-blue-500/30 text-blue-50 dark:text-blue-800 border-blue-400/30 hover:bg-blue-500/40"
+  // Size configurations
+  const sizeConfig = {
+    sm: {
+      button: "px-3 py-1 text-xs gap-1",
+      icon: "text-xs",
+      text: "text-xs"
+    },
+    md: {
+      button: "px-4 py-1.5 text-sm gap-1.5", 
+      icon: "text-sm",
+      text: "text-sm"
+    },
+    lg: {
+      button: "px-5 py-2 text-base gap-2",
+      icon: "text-base",
+      text: "text-base"
     }
-    focus:outline-none focus:ring-2 focus:ring-blue-300/40
-    disabled:opacity-60 disabled:cursor-not-allowed
-  `}
->
-  {isLoading ? (
-    <LuLoader className="animate-spin text-sm" />
-  ) : isFollowing ? (
-    <span className="text-sm">Following</span>
-  ) : (
-    <>
-      <FiUserPlus className="text-sm" />
-      <span className="text-sm">Follow</span>
-    </>
-  )}
-</button>
+  };
 
+  // Variant configurations with better visual distinction
+  const variantConfig = {
 
+    default: {
+     following: {
+    // ✅ Glassmorphic "Following" state
+    bg: "bg-white/20 dark:bg-white/10 backdrop-blur-md shadow-sm hover:bg-white/25 dark:hover:bg-white/20",
+    text: "text-gray-900 dark:text-gray-100",
+    border: "border border-white/30 dark:border-white/20",
+    icon: FiCheck
+    },
+    notFollowing: {
+    // ✅ Soft blue frosted style
+    bg: "bg-blue-500/20 dark:bg-blue-500/10 backdrop-blur-md hover:bg-blue-500/30 dark:hover:bg-blue-500/20 shadow-sm",
+    text: "text-blue-900 dark:text-blue-100",
+    border: "border border-blue-400/40 dark:border-blue-500/30",
+    icon: FiUserPlus
+    }
+    },
+
+    
+    outline: {
+      following: {
+        bg: "bg-transparent hover:bg-green-50 dark:hover:bg-green-900/20",
+        text: "text-green-600 dark:text-green-400",
+        border: "border border-green-500",
+        icon: FiCheck
+      },
+      notFollowing: {
+        bg: "bg-transparent hover:bg-blue-50 dark:hover:bg-blue-900/20",
+        text: "text-blue-600 dark:text-blue-400", 
+        border: "border border-blue-500",
+        icon: FiUserPlus
+      }
+    },
+    
+    minimal: {
+      following: {
+        bg: "bg-green-100 dark:bg-green-900/30 hover:bg-green-200 dark:hover:bg-green-900/50",
+        text: "text-green-700 dark:text-green-300",
+        border: "",
+        icon: FiCheck
+      },
+      notFollowing: {
+        bg: "bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700",
+        text: "text-gray-700 dark:text-gray-300",
+        border: "",
+        icon: FiUserPlus
+      }
+    },
+    
+    icon: {
+      following: {
+        bg: "bg-green-500 hover:bg-green-600",
+        text: "text-white",
+        border: "",
+        icon: FiCheck
+      },
+      notFollowing: {
+        bg: "bg-blue-500 hover:bg-blue-600",
+        text: "text-white", 
+        border: "",
+        icon: FiUserPlus
+      }
+    },
+
+    ghost: {
+      following: {
+        bg: "hover:bg-green-50 dark:hover:bg-green-900/20",
+        text: "text-green-600 dark:text-green-400",
+        border: "",
+        icon: FiCheck
+      },
+      notFollowing: {
+        bg: "hover:bg-blue-50 dark:hover:bg-blue-900/20", 
+        text: "text-blue-600 dark:text-blue-400",
+        border: "",
+        icon: FiUserPlus
+      }
+    }
+  };
+
+  const currentSize = sizeConfig[size];
+  const currentVariant = variantConfig[variant];
+  const stateConfig = isFollowing ? currentVariant.following : currentVariant.notFollowing;
+  const IconComponent = stateConfig.icon;
+
+  const baseClasses = `
+    inline-flex items-center justify-center
+    rounded-lg font-medium transition-all duration-200
+    focus:outline-none focus:ring-2 focus:ring-blue-500/50
+    disabled:opacity-50 disabled:cursor-not-allowed
+    ${currentSize.button}
+    ${stateConfig.bg}
+    ${stateConfig.text}
+    ${stateConfig.border}
+  `.trim();
+
+  // Render different content based on variant
+  const renderContent = () => {
+    if (isLoading) {
+      return (
+        <>
+          <LuLoader className={`animate-spin ${currentSize.icon}`} />
+          {variant !== "icon" && <span className={currentSize.text}>Loading</span>}
+        </>
+      );
+    }
+
+    if (variant === "icon") {
+      return <IconComponent className={currentSize.icon} />;
+    }
+
+    return (
+      <>
+        <IconComponent className={currentSize.icon} />
+        <span className={currentSize.text}>
+          {isFollowing ? "Following" : "Follow"}
+        </span>
+      </>
+    );
+  };
+
+  return (
+    <button
+      onClick={handleFollow}
+      disabled={isLoading}
+      className={baseClasses}
+      aria-label={isFollowing ? `Unfollow user` : `Follow user`}
+      title={isFollowing ? "Click to unfollow" : "Click to follow"}
+    >
+      {renderContent()}
+    </button>
   );
 }
 

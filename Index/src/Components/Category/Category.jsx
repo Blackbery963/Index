@@ -104,7 +104,7 @@ function Category() {
     {
       name: 'Minimalism',
       para: 'Simplifies composition using basic shapes and limited colors.',
-      backImg: Pic_11,
+      backImg: Pic_1,
       link: '/Minimalism',
     },
     {
@@ -124,12 +124,6 @@ function Category() {
       para: 'Established styles representing cultural heritage.',
       backImg: Pic_14,
       link: '/Traditional',
-    },
-    {
-      name: 'Digital',
-      para: 'Created using digital tools and software.',
-      backImg: Pic_15,
-      link: '/Digital',
     },
     {
     name: 'Digital',

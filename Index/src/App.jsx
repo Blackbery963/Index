@@ -18,7 +18,8 @@ const Creativity = lazy(() => import('./Components/Creativity/Creativity'));
 const Commerce = lazy(() => import('./Components/Commerce/Commerce'))
 const Visual = lazy(() => import('./Components/Visual/Visual'));
 const Review = lazy(() => import('./Components/Review/Review'));
-import ImageCollectionUI from './Components/Collections/ImageCollectionUI.jsx';
+
+// import ImageCollectionUI from './Components/Collections/ImageCollectionUI.jsx';
 import Sidebar from './Components/Sidebar.jsx';
 // Import your InstallPrompt component
 import InstallPrompt from './MainApp.jsx'
@@ -31,7 +32,7 @@ import Signup from './Components/Authentication/Signup/Signup.jsx';
 import Login from './Components/Authentication/Login/Login.jsx';
 import ResetPassword from './Components/Authentication/Login/ResetPassword.jsx';
 import EmailVerification from './Components/Authentication/Verification/EmailVerification.jsx';
-
+import ImprovedCollection from './Components/Collections/ImprovedCollection.jsx/ImprovedCollection.jsx';
 import Gallery from './Components/Gallery/Gallery';
 import Category from './Components/Category/Category';
 import Landscape from './Sub-Components/Landscape';
@@ -302,8 +303,10 @@ const [navHeight, setNavHeight] = useState(56); // fallback, not 1400!
                 <main className="w-full flex flex-col gap-y-4">
                 <div data-aos="fade-right" data-aos-delay="200" className="w-full will-change-transform will-change-opacity">
                   {/* <Collection/> */}
-                 <ImageCollectionUI/>
+                 {/* <ImageCollectionUI/> */}
+                 <ImprovedCollection/>
                 </div>
+                
                 {/* <UnifiedFeed/> */}
                 {/* Landing page components */}
                 {/* <div data-aos="fade-left" data-aos-delay="100" className="w-full will-change-transform will-change-opacity top-4">

@@ -842,7 +842,7 @@ const ArtistDiscovery = ({ viewMode = 'feed', onArtistClick, followedArtists, on
 
         {/* CTA Buttons */}
         <div className="flex gap-2 mt-6">
-          <Link to="/artists" className="flex-1">
+          <Link to="/Artists/DiscoverUsers" className="flex-1">
             <button className="w-full py-2 bg-gradient-to-r from-pink-500 to-rose-600 text-white text-sm font-medium rounded-lg hover:shadow-lg transition-all flex items-center justify-center gap-2">
               <Users className="w-4 h-4" />
               Explore All Artists

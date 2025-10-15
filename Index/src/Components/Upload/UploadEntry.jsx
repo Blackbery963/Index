@@ -1061,10 +1061,66 @@ const UploadEntry = ({ index, entry, updateEntry, handleFileChange, handleEntryU
   const fileInputRef = useRef(null);
   const additionalImagesRef = useRef(null);
 
+  // const artCategories = [
+  //   'Abstract',
+  //   'Landscape',
+  //   'Portrait',
+  //   'StillLife',
+  //   'Fantasy',
+  //   'Realism',
+  //   'Surrealism',
+  //   'Traditional',
+  //   'Minimalism',
+  //   'Expressionism',
+  //   'Impressionism',
+  //   'PopArt',
+  //   'DigitalArt',
+  //   'Historical',
+  //   'Modern',
+  //   'Nature',
+  //   'Photography'
+  // ];
   const artCategories = [
-    'Painting', 'Drawing', 'Sculpture', 'Photography', 'Digital Art',
-    'Pottery', 'Textile', 'Jewelry', 'Woodwork', 'Mixed Media'
-  ];
+  // 🎨 Painting & Traditional Art
+  'Landscape',
+  'Portrait',
+  'Watercolour',
+  'OilPainting',
+  'Abstract',
+  'StillLife',
+  'Historical',
+  'Surrealism',
+  'Impressionism',
+  'Realism',
+  'Expressionism',
+  'Minimalism',
+  'PopArt',
+  'Nature',
+  'Traditional',
+  'Digital',
+  'Modern',
+  'Photography',
+
+  // 🪄 Handcrafted & Decorative Arts
+  'Handcraft',
+  'JewelleryDesign',
+  'Pottery',
+  'Sculpture',
+  'Woodwork',
+  'Ceramics',
+  'Embroidery',
+  'TextileArt',
+  'Calligraphy',
+  'PaperCraft',
+
+  // 💼 Commercial & Applied Arts
+  'Illustration',
+  'GraphicDesign',
+  'FashionDesign',
+  'InteriorDesign',
+  'ProductDesign'
+];
+
 
   const steps = [
     { number: 1, title: 'Type', description: 'Choose content type' },

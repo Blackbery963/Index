@@ -100,47 +100,53 @@ const DiwaliGreeting = () => {
   const { skipGreeting } = useAuth();
 
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-orange-900 via-purple-900 to-blue-900 flex items-center justify-center z-50 p-4">
-      {/* Animated Diyas */}
-      <div className="absolute top-10 left-10 text-4xl animate-pulse">🪔</div>
-      <div className="absolute top-10 right-10 text-4xl animate-pulse" style={{ animationDelay: '0.5s' }}>🪔</div>
-      <div className="absolute bottom-10 left-10 text-4xl animate-pulse" style={{ animationDelay: '1s' }}>🪔</div>
-      <div className="absolute bottom-10 right-10 text-4xl animate-pulse" style={{ animationDelay: '1.5s' }}>🪔</div>
-      
-      {/* Floating Rangoli elements */}
-      <div className="absolute top-1/4 left-1/4 text-2xl animate-bounce">✨</div>
-      <div className="absolute top-1/3 right-1/4 text-2xl animate-bounce" style={{ animationDelay: '0.3s' }}>✨</div>
-      <div className="absolute bottom-1/4 left-1/3 text-2xl animate-bounce" style={{ animationDelay: '0.6s' }}>✨</div>
-      
-      <div className="text-center bg-white/10 backdrop-blur-md rounded-3xl p-8 border border-white/20 shadow-2xl max-w-2xl w-full">
-        <div className="text-6xl mb-6 animate-pulse">🪔</div>
-        
-        <h1 className="text-5xl font-bold text-yellow-300 mb-4 font-serif">
-          Happy Diwali!
-        </h1>
-        
-        <div className="text-white text-xl mb-6 leading-relaxed">
-          <p className="mb-2">May the divine light of Diwali</p>
-          <p className="mb-2">fill your life with</p>
-          <p className="text-2xl font-bold text-yellow-200">Joy, Prosperity and Happiness</p>
-        </div>
-        
-        <p className="text-yellow-100 text-lg mb-8 italic">
-          "Wishing you and your family a sparkling Diwali!"
-        </p>
-        
-        <button
-          onClick={skipGreeting}
-          className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold py-4 px-8 rounded-full text-lg hover:from-yellow-300 hover:to-orange-400 transition-all duration-300 transform hover:scale-105 shadow-lg"
-        >
-          Continue to Explore 🎨
-        </button>
-        
-        <div className="mt-6 text-yellow-200 text-sm">
-          <p>Experience the magic of creativity this festive season</p>
-        </div>
-      </div>
+   <div className="fixed inset-0 bg-gradient-to-br from-orange-900 via-purple-900 to-blue-900 flex items-center justify-center z-50 p-4">
+  {/* Animated Diyas */}
+  <div className="absolute top-10 left-10 text-4xl animate-pulse">🪔</div>
+  <div className="absolute top-10 right-10 text-4xl animate-pulse" style={{ animationDelay: '0.5s' }}>🪔</div>
+  <div className="absolute bottom-10 left-10 text-4xl animate-pulse" style={{ animationDelay: '1s' }}>🪔</div>
+  <div className="absolute bottom-10 right-10 text-4xl animate-pulse" style={{ animationDelay: '1.5s' }}>🪔</div>
+  
+  {/* Floating Rangoli Elements */}
+  <div className="absolute top-1/4 left-1/4 text-2xl animate-bounce">✨</div>
+  <div className="absolute top-1/3 right-1/4 text-2xl animate-bounce" style={{ animationDelay: '0.3s' }}>✨</div>
+  <div className="absolute bottom-1/4 left-1/3 text-2xl animate-bounce" style={{ animationDelay: '0.6s' }}>✨</div>
+
+  {/* Main Card */}
+  <div className="text-center bg-white/10 backdrop-blur-md rounded-3xl p-8 border border-white/20 shadow-2xl max-w-2xl w-full">
+    <div className="text-6xl mb-6 animate-pulse">🪔</div>
+
+    <h1 className="text-5xl font-bold text-yellow-300 mb-4 font-serif tracking-wide">
+      Happy Diwali ✨
+    </h1>
+
+    <div className="text-white text-xl mb-6 leading-relaxed">
+      <p className="mb-2">Let every brushstroke be a spark of light,</p>
+      <p className="mb-2">and every color a celebration of life.</p>
+      <p className="text-2xl font-bold text-yellow-200">
+        Shine Bright. Create Bold. Celebrate Art.
+      </p>
     </div>
+
+    <p className="text-yellow-100 text-lg mb-8 italic">
+      “This Diwali, light up your imagination —  
+      because creativity is the brightest flame.”
+    </p>
+
+    <button
+      onClick={skipGreeting}
+      className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold py-4 px-8 rounded-full text-lg hover:from-yellow-300 hover:to-orange-400 transition-all duration-300 transform hover:scale-105 shadow-lg"
+    >
+      Enter the Festival of Art 🎨
+    </button>
+
+    <div className="mt-6 text-yellow-200 text-sm">
+      <p>Welcome to <span className="font-semibold text-yellow-300">Painters’ Diary</span> —  
+      where every artist celebrates the light within.</p>
+    </div>
+  </div>
+</div>
+
   );
 };
 

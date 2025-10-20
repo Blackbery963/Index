@@ -81,20 +81,67 @@ export const artCategories = {
 
 };
 
+// export const acceptedFileTypes = {
+//   images: [
+//     "image/jpeg",
+//     "image/jpg", 
+//     "image/png",
+//     "image/webp",
+//     "image/x-png"
+//   ],
+//   videos: [
+//     "video/mp4",
+//     "video/webm",
+//     "video/ogg",
+//     "video/quicktime", // .mov files
+//     "video/x-msvideo"  // .avi files
+//   ]
+// };
+// acceptedFileTypes.js
+// constants.js
 export const acceptedFileTypes = {
   images: [
     "image/jpeg",
     "image/jpg", 
     "image/png",
     "image/webp",
+    "image/gif",
+    "image/bmp",
+    "image/svg+xml",
+    "image/tiff",
+    "image/x-tiff",
+    "image/x-icon",
+    "image/heic",
+    "image/heif",
+    "image/avif",
     "image/x-png"
   ],
   videos: [
     "video/mp4",
     "video/webm",
     "video/ogg",
-    "video/quicktime", // .mov files
-    "video/x-msvideo"  // .avi files
+    "video/quicktime",
+    "video/x-msvideo",
+    "video/mpeg",
+    "video/x-mpeg",
+    "video/x-matroska",
+    "video/x-flv",
+    "video/3gpp",
+    "video/3gpp2",
+    "video/x-ms-wmv",
+    "video/x-m4v",
+    "video/MP2T"
   ]
 };
+
+// export const maxFileSize = 10 * 1024 * 1024; // 10MB
+
+// Supported file extensions for display
+export const supportedImageExtensions = [
+  'jpg', 'jpeg', 'png', 'webp', 'gif', 'bmp', 'svg', 'tiff', 'tif', 'ico', 'heic', 'heif', 'avif'
+];
+
+export const supportedVideoExtensions = [
+  'mp4', 'webm', 'ogg', 'mov', 'avi', 'mpeg', 'mpg', 'mkv', 'flv', '3gp', '3g2', 'wmv', 'm4v', 'ts', 'mts'
+];
 export const maxFileSize = 10*1024*1024; // 10MB in bytes

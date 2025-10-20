@@ -806,3 +806,4 @@ const ArtistDiary = () => {
 };
 
 export default ArtistDiary;
+

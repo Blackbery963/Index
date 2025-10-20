@@ -134,202 +134,102 @@
 // // export default ArtCategories;
 
 
-import React, { useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FiArrowRight } from "react-icons/fi";
-import Pic_1 from "../Category/Category-images/landscape.png";
-import Pic_2 from "../Category/Category-images/portrait.jpg";
-import Pic_3 from "../Category/Category-images/still life.jpg";
-import Pic_4 from "../Category/Category-images/oil.jpg";
-import Pic_5 from "../Category/Category-images/abstract.jpg";
-import Pic_6 from "../Category/Category-images/digital.jpg";
-import Pic_7 from "../Category/Category-images/water.jpg";
-import Pic_8 from "../Category/Category-images/historic.jpg";
-import Pic_9 from "../Category/Category-images/Photography.jpg";
-import Pic_10 from "../Category/Category-images/minimal.jpg";
-import Pic_11 from "../Category/Category-images/surreal.png";
-import Pic_12 from "../Category/Category-images/impression.jpg";
+import { fetchPexelsImage } from "../Category/pexels";
+
+const categoriesData = [
+  { name: "Portrait", link: "/portrait", color: "from-blue-500 to-purple-600" },
+  { name: "Landscape", link: "/landscape", color: "from-green-500 to-teal-600" },
+  { name: "Abstract", link: "/abstract", color: "from-pink-500 to-red-600" },
+  { name: "Still Life", link: "/still-life", color: "from-orange-500 to-amber-600" },
+  { name: "Oil Painting", link: "/oil-painting", color: "from-yellow-500 to-orange-600" },
+  { name: "Digital Art", link: "/digital-art", color: "from-cyan-500 to-blue-600" },
+  { name: "Watercolor", link: "/watercolor", color: "from-sky-500 to-indigo-600" },
+  { name: "Sculpture", link: "/sculpture", color: "from-stone-500 to-gray-600" },
+  { name: "Street Art", link: "/street-art", color: "from-lime-500 to-green-600" },
+  { name: "Minimalist", link: "/minimalist", color: "from-gray-500 to-slate-600" },
+  { name: "Surrealism", link: "/surrealism", color: "from-purple-500 to-fuchsia-600" },
+  { name: "Impressionism", link: "/impressionism", color: "from-rose-500 to-pink-600" },
+  { name: "Cubism", link: "/cubism", color: "from-amber-500 to-yellow-600" },
+  { name: "Pop Art", link: "/pop-art", color: "from-red-500 to-orange-600" },
+  { name: "Realism", link: "/realism", color: "from-emerald-500 to-green-600" },
+  { name: "Expressionism", link: "/expressionism", color: "from-violet-500 to-purple-600" },
+  { name: "Conceptual", link: "/conceptual", color: "from-teal-500 to-cyan-600" },
+  { name: "Futurism", link: "/futurism", color: "from-indigo-500 to-blue-600" },
+];
 
 const MiniArtCategories = () => {
-  const allCategories = [
-    {
-      id: 1,
-      name: "Portrait",
-      image: Pic_2,
-      link: "/portrait",
-      color: "from-blue-500 to-purple-600"
-    },
-    {
-      id: 2,
-      name: "Landscape", 
-      image: Pic_1,
-      link: "/landscape",
-      color: "from-green-500 to-teal-600"
-    },
-    {
-      id: 3,
-      name: "Abstract",
-      image: Pic_5,
-      link: "/abstract", 
-      color: "from-pink-500 to-red-600"
-    },
-    {
-      id: 4,
-      name: "Still Life",
-      image: Pic_3,
-      link: "/still-life",
-      color: "from-orange-500 to-amber-600"
-    },
-    {
-      id: 5,
-      name: "Oil Painting",
-      image: Pic_4,
-      link: "/oil-painting",
-      color: "from-yellow-500 to-orange-600"
-    },
-    {
-      id: 6,
-      name: "Digital Art",
-      image: Pic_6,
-      link: "/digital-art",
-      color: "from-cyan-500 to-blue-600"
-    },
-    {
-      id: 7,
-      name: "Watercolor",
-      image: Pic_7,
-      link: "/watercolor",
-      color: "from-sky-500 to-indigo-600"
-    },
-    {
-      id: 8,
-      name: "Sculpture",
-      image: Pic_8,
-      link: "/sculpture",
-      color: "from-stone-500 to-gray-600"
-    },
-    {
-      id: 9,
-      name: "Street Art",
-      image: Pic_9,
-      link: "/street-art",
-      color: "from-lime-500 to-green-600"
-    },
-    {
-      id: 10,
-      name: "Minimalist",
-      image: Pic_10,
-      link: "/minimalist",
-      color: "from-gray-500 to-slate-600"
-    },
-    {
-      id: 11,
-      name: "Surrealism",
-      image: Pic_11,
-      link: "/surrealism",
-      color: "from-purple-500 to-fuchsia-600"
-    },
-    {
-      id: 12,
-      name: "Impressionism",
-      image: Pic_12,
-      link: "/impressionism",
-      color: "from-rose-500 to-pink-600"
-    },
-    {
-      id: 13,
-      name: "Cubism",
-      image: Pic_5, // Reusing abstract as placeholder
-      link: "/cubism",
-      color: "from-amber-500 to-yellow-600"
-    },
-    {
-      id: 14,
-      name: "Pop Art",
-      image: Pic_6, // Reusing digital as placeholder
-      link: "/pop-art",
-      color: "from-red-500 to-orange-600"
-    },
-    {
-      id: 15,
-      name: "Realism",
-      image: Pic_2, // Reusing portrait as placeholder
-      link: "/realism",
-      color: "from-emerald-500 to-green-600"
-    },
-    {
-      id: 16,
-      name: "Expressionism",
-      image: Pic_11, // Reusing surreal as placeholder
-      link: "/expressionism",
-      color: "from-violet-500 to-purple-600"
-    }
-  ];
+  const [categories, setCategories] = useState([]);
 
-  // Randomly select 4 categories to display
-  const displayedCategories = useMemo(() => {
-    // Create a shuffled copy of the categories array
-    const shuffled = [...allCategories].sort(() => 0.5 - Math.random());
-    // Take first 4 items
-    return shuffled.slice(0, 4);
-  }, []); // This will randomize once when component mounts
-
-  // Alternative: Randomize on every render (more dynamic but less performant)
-  // const displayedCategories = useMemo(() => {
-  //   const shuffled = [...allCategories].sort(() => 0.5 - Math.random());
-  //   return shuffled.slice(0, 4);
-  // }, []); // Remove dependency to randomize every time
+  useEffect(() => {
+    const loadImages = async () => {
+      const updated = await Promise.all(
+        categoriesData.map(async (cat) => {
+          const img = await fetchPexelsImage(`${cat.name} art`);
+          return { ...cat, image: img };
+        })
+      );
+      setCategories(updated.filter((c) => c.image)); // Only keep those with valid images
+    };
+    loadImages();
+  }, []);
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-sm p-6 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-all duration-300">
+    <div className="bg-white dark:bg-gray-800 rounded-sm p-6 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-2xl transition-all duration-300">
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-5">
         <div>
           <h3 className="text-lg font-bold text-gray-900 dark:text-white">
             Art Categories
           </h3>
           <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-            Discover different styles • Refreshed regularly
+            Discover different styles • Updated automatically
           </p>
         </div>
-        <Link 
+        <Link
           to="/Category"
           className="flex items-center gap-1 text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 text-sm font-medium group"
         >
           View all
-          <FiArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+          <FiArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
         </Link>
       </div>
 
       {/* Categories Grid */}
-      <div className="grid grid-cols-2 gap-3">
-        {displayedCategories.map((category) => (
-          <Link
-            key={category.id}
-            to={category.link}
-            className="group block rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all duration-300"
-          >
-            <div className="aspect-square relative">
-              <img 
-                src={category.image} 
-                alt={category.name}
-                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-              />
-              <div className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-70 group-hover:opacity-80 transition-opacity duration-300`} />
-              <div className="absolute inset-0 flex items-center justify-center p-3">
-                <span className="text-white font-semibold text-center text-sm drop-shadow-lg">
-                  {category.name}
-                </span>
+      <div className="grid grid-cols-2 gap-4">
+        {categories.length > 0 ? (
+          categories.slice(0, 4).map((cat, index) => (
+            <Link
+              key={index}
+              to={cat.link}
+              className="group relative block overflow-hidden rounded-xl shadow-md hover:shadow-xl transition-all duration-500"
+            >
+              <div className="aspect-[1/1] relative">
+                <img
+                  src={cat.image}
+                  alt={cat.name}
+                  loading="lazy"
+                  className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+                />
+                <div
+                  className={`absolute inset-0 bg-gradient-to-br ${cat.color} opacity-70 group-hover:opacity-80 transition-opacity duration-300`}
+                ></div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="text-white font-semibold text-center text-base drop-shadow-md">
+                    {cat.name}
+                  </span>
+                </div>
               </div>
-            </div>
-          </Link>
-        ))}
+            </Link>
+          ))
+        ) : (
+          <p className="text-gray-500 text-sm text-center col-span-full">
+            Loading beautiful art categories...
+          </p>
+        )}
       </div>
-
-      {/* Refresh Indicator */}
-      {/* <div className="mt-3 text-xs text-gray-500 dark:text-gray-400 text-center">
-        Categories refresh on page load
-      </div> */}
     </div>
   );
 };

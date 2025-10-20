@@ -67,6 +67,7 @@ const ArtStore = () => {
 
     loadArtwork();
   }, []);
+  
   // Save cart to localStorage on changes
   useEffect(() => {
     CartService.saveCartItems(cartItems);

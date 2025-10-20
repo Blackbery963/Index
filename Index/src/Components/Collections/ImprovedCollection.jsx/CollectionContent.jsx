@@ -46,13 +46,16 @@ const CollectionContent = ({
             {mixedContent.map((item, idx) => 
               <div
                 key={item.id || `${item.type}-${idx}`}
-                className={viewMode === 'feed' ? 'col-span-2' : ''}
+                // className={viewMode === 'feed' ? 'col-span-2' : ''}
+                className={`break-inside-avoid ${viewMode === 'feed' ? 'col-span-2' : ''}`}
                 ref={idx === mixedContent.length - 1 ? lastElementRef : null}
               >
                 {renderContentItem(item)}
               </div>
             )}
           </div>
+        
+         
 
           {/* Manual Load More Button */}
           {hasMore && !loading && (images.length > 0 || manualContent.length > 0) && (

@@ -70,6 +70,9 @@ import ResourceHub from './Community/Resources/ResourceHub.jsx';
 import ResourceUpload from './Community/Resources/ResourceUpload.jsx';
 import ChallengeUpload from './Community/CommunityChallenges/ChallengeUpload.jsx';
 
+
+// import ArtCategory from './Sub-Components/ArtCategory.jsx';
+// import ArtCategory from './Sub-Components/ArtCategory.jsx';
 import Nature from './Sub-Components/Nature.jsx';
 import Traditional from './Sub-Components/Traditional.jsx';
 import Photography from './Sub-Components/Photography.jsx';
@@ -89,7 +92,6 @@ import DiaryCollection from './Components/Diaryland/DiaryCollection.jsx';
 import Notification from './Settings/Notification.jsx';
 // ✅ Correct
 // import TopNav from './Components/TopNav.jsx';
-import TopNav from './Components/Sidebar.jsx';
 
 // import Chatbot from './ChatBot/Chatbot.jsx';
 import Chatbot from './Chatbot/Chatbot.jsx';
@@ -116,6 +118,7 @@ import HandmadePaintingsGallery from './Components/Homemade_Crafts/HandmadePaint
 import DecorCraftsGallery from './Components/Homemade_Crafts/DecorCraftsGallery.jsx';
 import CulturalCreationsGallery from './Components/Homemade_Crafts/CulturalCreationsGallery.jsx';
 // Games
+
 // import PixelPainter from './Games/PixelPainter.jsx';
 import PixelPainter from '../Games/PixelPainter.jsx';
 import HeroSection from './Components/Header/HeroSection.jsx';
@@ -129,6 +132,9 @@ import InviteAcceptance from './InviteSystem/InviteAcceptance.jsx';
 import InviteSystem from './InviteSystem/InviteSystem.jsx';
 // Notification Service Imports
 
+// Authentication Service Imports
+import SimpleSignupPrompt from './Components/Authentication/SimpleSignupPrompt.jsx';
+import { AuthProvider } from './Components/Authentication/AuthContext.jsx';
 
 
 const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
@@ -280,6 +286,7 @@ const [navHeight, setNavHeight] = useState(56); // fallback, not 1400!
 
 
   return (
+    <AuthProvider>
     <Router>
       <Chatbot/>
       <Routes>
@@ -292,6 +299,7 @@ const [navHeight, setNavHeight] = useState(56); // fallback, not 1400!
               <div className='w-full'>
               <StickyNav/>
               </div>
+              <SimpleSignupPrompt />
               <Suspense fallback={<div className="text-center py-6 text-blue-600">Loading...</div>}>
                 {/* Install Prompt Component */}
                 <div>
@@ -363,6 +371,8 @@ const [navHeight, setNavHeight] = useState(56); // fallback, not 1400!
         <Route path="/category" element={<Category />} />
         <Route path="/diaryland" element={<Diaryland />} />
         <Route path="/january" element={<January />} />
+        {/* <Route path="/january" element={<ArtistDiary />} /> */}
+
         <Route path="/about" element={<About />} />
         <Route path="/favourite" element={<Favourite />} />
         <Route path="/faqs" element={<FAQs />} />
@@ -411,6 +421,7 @@ const [navHeight, setNavHeight] = useState(56); // fallback, not 1400!
         <Route path='/Impressionism' element={<Impression/>}/>
         <Route path='/Surrealism' element={<Surrealism/>}/>       
         <Route path='/Digital' element={<Digital/>}/>
+        {/* <Route path='/Digital' element={<ArtCategory Category = "digital" />} /> */}
         <Route path='/Pop-Art' element={<Pop/>}/>
         <Route path='/Expressionism' element={<Express/>}/>
         <Route path="/landscape" element={<Landscape />} />
@@ -420,6 +431,8 @@ const [navHeight, setNavHeight] = useState(56); // fallback, not 1400!
         <Route path='/Photography' element={<Photography/>}/>
         <Route path="/watercolor" element={<Water_color />} />
         <Route path="/abstract" element={<Abstract />} />
+        {/* <Route path="/abstract" element={<ArtCategory Category = "abstract" />} />  */}
+
         <Route path="/historical" element={<Historical />} />
         <Route path="/modern" element={<Modern />} />
 
@@ -457,6 +470,7 @@ const [navHeight, setNavHeight] = useState(56); // fallback, not 1400!
 
       </Routes>
     </Router>
+    </AuthProvider>
   );
 }
 

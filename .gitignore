@@ -5,3 +5,4 @@ Index/src/Components/Authentication/EmailService/.env
 Index/ChatbotServer/.env
 Index/Backend/.env
 Index/Backend/.env
+.vercel

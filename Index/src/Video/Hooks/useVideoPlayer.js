@@ -1,27 +1,3 @@
-// import { useState, useCallback } from "react";
-
-// export function useVideoPlayer(videoRef) {
-//   const [playing, setPlaying] = useState(true);
-//   const [muted, setMuted] = useState(true);
-
-//   const togglePlay = useCallback(() => {
-//     if (!videoRef.current) return;
-//     if (playing) {
-//       videoRef.current.pause();
-//     } else {
-//       videoRef.current.play();
-//     }
-//     setPlaying(!playing);
-//   }, [playing]);
-
-//   const toggleMute = useCallback(() => {
-//     if (!videoRef.current) return;
-//     videoRef.current.muted = !muted;
-//     setMuted(!muted);
-//   }, [muted]);
-
-//   return { playing, muted, togglePlay, toggleMute };
-// }
 import { useState, useCallback, useRef, useEffect } from "react";
 
 export function useVideoPlayer() {

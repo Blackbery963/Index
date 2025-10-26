@@ -6,3 +6,4 @@ Index/ChatbotServer/.env
 Index/Backend/.env
 Index/Backend/.env
 .vercel
+node_modules/

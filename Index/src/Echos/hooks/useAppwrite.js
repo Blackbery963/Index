@@ -6,6 +6,7 @@ export const useStories = () => {
   const [stories, setStories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { user } = useAuth(); // Add this
 
   // Fetch all stories
   const fetchStories = async () => {

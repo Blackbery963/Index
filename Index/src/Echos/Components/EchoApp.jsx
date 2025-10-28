@@ -1,5 +1,5 @@
-// // // src/components/EchoApp.jsx
-// import React, { useState, useRef } from 'react';
+
+// import React, { useState, useRef, useEffect } from 'react';
 // import { ChevronLeftIcon, ChevronRightIcon, PlusIcon, BookOpenIcon } from '@heroicons/react/24/outline';
 // import { useStories } from '../hooks/useStories';
 // import StoryCard from './StoryCard';
@@ -11,11 +11,12 @@
 //   const [selectedStoryIndex, setSelectedStoryIndex] = useState(0);
 //   const [isViewerOpen, setIsViewerOpen] = useState(false);
 //   const [isCreateOpen, setIsCreateOpen] = useState(false);
+//   const [seenStories, setSeenStories] = useState(new Set());
   
 //   const scrollRef = useRef(null);
 //   const { stories, loading, createStory, uploadFile } = useStories();
 
-//   // Group stories by user
+//   // Group stories by user and track seen status
 //   const groupedStories = stories.reduce((acc, story) => {
 //     const existingUser = acc.find(user => user.userId === story.userId);
 //     if (existingUser) {
@@ -25,11 +26,19 @@
 //         userId: story.userId,
 //         author: story.author,
 //         avatar: story.avatar,
-//         stories: [story]
+//         stories: [story],
+//         hasUnseen: !seenStories.has(story.userId)
 //       });
 //     }
 //     return acc;
 //   }, []);
+
+//   // Separate seen and unseen users
+//   const seenUsers = groupedStories.filter(user => !user.hasUnseen);
+//   const unseenUsers = groupedStories.filter(user => user.hasUnseen);
+
+//   // Reorder: unseen first, then seen
+//   const orderedStories = [...unseenUsers, ...seenUsers];
 
 //   const scroll = (direction) => {
 //     if (!scrollRef.current) return;
@@ -41,7 +50,8 @@
 //   };
 
 //   const openViewer = (userIndex, storyIndex = 0) => {
-//     setSelectedUserIndex(userIndex);
+//     const actualIndex = orderedStories.findIndex((_, idx) => idx === userIndex);
+//     setSelectedUserIndex(actualIndex);
 //     setSelectedStoryIndex(storyIndex);
 //     setIsViewerOpen(true);
 //   };
@@ -51,25 +61,38 @@
 //   };
 
 //   const navigateUser = (direction) => {
-//     const newUserIndex = (selectedUserIndex + direction + groupedStories.length) % groupedStories.length;
+//     const newUserIndex = (selectedUserIndex + direction + orderedStories.length) % orderedStories.length;
 //     setSelectedUserIndex(newUserIndex);
-//     setSelectedStoryIndex(0); // Reset to first story when changing user
+//     setSelectedStoryIndex(0);
+    
+//     // Mark user as seen when navigating to them
+//     const currentUserId = orderedStories[newUserIndex]?.userId;
+//     if (currentUserId) {
+//       setSeenStories(prev => new Set([...prev, currentUserId]));
+//     }
 //   };
 
 //   const navigateStory = (direction) => {
-//     const currentUserStories = groupedStories[selectedUserIndex]?.stories || [];
+//     const currentUserStories = orderedStories[selectedUserIndex]?.stories || [];
 //     const newStoryIndex = (selectedStoryIndex + direction + currentUserStories.length) % currentUserStories.length;
 //     setSelectedStoryIndex(newStoryIndex);
 //   };
 
 //   const handleLike = (storyId) => {
-//     // Implement like functionality
 //     console.log('Like story:', storyId);
 //   };
 
 //   const handleCreateStory = async (storyData) => {
 //     await createStory(storyData);
 //   };
+
+//   // Mark story as seen when viewer opens
+//   useEffect(() => {
+//     if (isViewerOpen && orderedStories[selectedUserIndex]) {
+//       const userId = orderedStories[selectedUserIndex].userId;
+//       setSeenStories(prev => new Set([...prev, userId]));
+//     }
+//   }, [isViewerOpen, selectedUserIndex]);
 
 //   if (loading) {
 //     return (
@@ -90,9 +113,9 @@
 //         <div className="flex items-center justify-between mb-6">
 //           <div className="flex items-center gap-2">
 //             <BookOpenIcon className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-//             <h2 className="text-xl font-medium text-gray-900 dark:text-white">My Stories</h2>
+//             <h2 className="text-xl font-medium text-gray-900 dark:text-white">Stories</h2>
 //             <span className="text-sm text-gray-500 dark:text-gray-400 ml-2">
-//               {groupedStories.length} users • {stories.length} stories
+//               {unseenUsers.length} new • {groupedStories.length} users
 //             </span>
 //           </div>
           
@@ -123,7 +146,7 @@
 //             {/* Create New Card */}
 //             <div 
 //               onClick={() => setIsCreateOpen(true)}
-//               className="flex-shrink-0 w-40 h-56 bg-gray-50 dark:bg-gray-800 rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-600 flex flex-col items-center justify-center cursor-pointer hover:border-indigo-400 dark:hover:border-indigo-500 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-300 hover:scale-105 group"
+//               className="flex-shrink-0 w-40 h-56 bg-gray-50 dark:bg-gray-800 rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-600 flex flex-col items-center justify-center cursor-pointer hover:border-indigo-400 dark:hover:border-indigo-500 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-300 hover:scale-100 group"
 //             >
 //               <div className="transform group-hover:scale-110 transition-transform duration-300">
 //                 <PlusIcon className="w-8 h-8 text-gray-400 dark:text-gray-500 mb-2" />
@@ -134,13 +157,14 @@
 //             </div>
 
 //             {/* User Story Cards - One per user */}
-//             {groupedStories.map((user, userIndex) => (
+//             {orderedStories.map((user, userIndex) => (
 //               <div key={user.userId} className="flex-shrink-0 w-40">
 //                 <StoryCard
 //                   user={user}
 //                   onCardClick={() => openViewer(userIndex, 0)}
 //                   onLike={handleLike}
 //                   userIndex={userIndex}
+//                   hasUnseen={user.hasUnseen}
 //                 />
 //               </div>
 //             ))}
@@ -150,7 +174,7 @@
 
 //       {/* Modals */}
 //       <StoryViewer
-//         users={groupedStories}
+//         users={orderedStories}
 //         currentUserIndex={selectedUserIndex}
 //         currentStoryIndex={selectedStoryIndex}
 //         isOpen={isViewerOpen}
@@ -158,6 +182,8 @@
 //         onNavigateUser={navigateUser}
 //         onNavigateStory={navigateStory}
 //         onLike={handleLike}
+//         seenStories={seenStories}
+//         onMarkAsSeen={(userId) => setSeenStories(prev => new Set([...prev, userId]))}
 //       />
 
 //       <CreateStoryModal
@@ -183,8 +209,6 @@
 // export default EchoApp;
 
 
-
-// // src/components/EchoApp.jsx
 import React, { useState, useRef, useEffect } from 'react';
 import { ChevronLeftIcon, ChevronRightIcon, PlusIcon, BookOpenIcon } from '@heroicons/react/24/outline';
 import { useStories } from '../hooks/useStories';

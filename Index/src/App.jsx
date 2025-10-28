@@ -71,8 +71,7 @@ import ResourceUpload from './Community/Resources/ResourceUpload.jsx';
 import ChallengeUpload from './Community/CommunityChallenges/ChallengeUpload.jsx';
 
 
-// import ArtCategory from './Sub-Components/ArtCategory.jsx';
-// import ArtCategory from './Sub-Components/ArtCategory.jsx';
+// import ArtGalleryTemplate from './Sub-Components/ArtGalleryTemplate.jsx';
 import Nature from './Sub-Components/Nature.jsx';
 import Traditional from './Sub-Components/Traditional.jsx';
 import Photography from './Sub-Components/Photography.jsx';
@@ -96,7 +95,6 @@ import Notification from './Settings/Notification.jsx';
 // import Chatbot from './ChatBot/Chatbot.jsx';
 import Chatbot from './Chatbot/Chatbot.jsx';
 // The commecial part starts from here 
-// import Artstore from './Arteva/Artstore.jsx';
 import ArtStore from './Arteva/ArtStore/ArtStore.jsx';
 import OrderHistory from './Arteva/Commercial/OrderHistory.jsx';
 import Cart from './Settings/Cart.jsx';
@@ -125,7 +123,7 @@ import HeroSection from './Components/Header/HeroSection.jsx';
 import StickyNav from './Components/Sidebar.jsx';
 // for short videos 
 // import ShortsPage from './Video/Video.jsx';
-import ShortsPage from './Video/Page/ShortsPage.jsx';
+// import ShortsPage from './Video/Page/ShortsPage.jsx';
 
 // Invite System
 import InviteAcceptance from './InviteSystem/InviteAcceptance.jsx';
@@ -135,7 +133,10 @@ import InviteSystem from './InviteSystem/InviteSystem.jsx';
 // Authentication Service Imports
 import SimpleSignupPrompt from './Components/Authentication/SimpleSignupPrompt.jsx';
 import { AuthProvider } from './Components/Authentication/AuthContext.jsx';
-
+// Echo
+// import EchoApp from './Echos/EchoApp.jsx';
+// import NexusTales from './Echos/nexusTales.jsx';
+import EchoApp from './Echos/Components/EchoApp.jsx';
 
 const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
 const COLLECTION_ID = import.meta.env.VITE_APPWRITE_METADATA_COLLECTION_ID;
@@ -309,6 +310,8 @@ const [navHeight, setNavHeight] = useState(56); // fallback, not 1400!
 
                 {/* <TopNav/> */}
                 <main className="w-full flex flex-col gap-y-4">
+                  <EchoApp/>
+                  {/* <NexusTales/> */}
                 <div data-aos="fade-right" data-aos-delay="200" className="w-full will-change-transform will-change-opacity">
                   {/* <Collection/> */}
                  {/* <ImageCollectionUI/> */}
@@ -421,17 +424,18 @@ const [navHeight, setNavHeight] = useState(56); // fallback, not 1400!
         <Route path='/Impressionism' element={<Impression/>}/>
         <Route path='/Surrealism' element={<Surrealism/>}/>       
         <Route path='/Digital' element={<Digital/>}/>
-        {/* <Route path='/Digital' element={<ArtCategory Category = "digital" />} /> */}
+        {/* <Route path="/Digital" element={<ArtGalleryTemplate />} /> */}
         <Route path='/Pop-Art' element={<Pop/>}/>
         <Route path='/Expressionism' element={<Express/>}/>
         <Route path="/landscape" element={<Landscape />} />
+        {/* <Route path="/gallery/landscape" element={<ArtGalleryTemplate />} /> */}
         <Route path="/portrait" element={<Portrait />} />
         <Route path="/still-life" element={<Still_life />} />
         <Route path="/oil_paint" element={<Oil_paint />} />
         <Route path='/Photography' element={<Photography/>}/>
         <Route path="/watercolor" element={<Water_color />} />
-        <Route path="/abstract" element={<Abstract />} />
-        {/* <Route path="/abstract" element={<ArtCategory Category = "abstract" />} />  */}
+          <Route path="/abstract" element={<Abstract />} />
+        {/* <Route path="/abstract" element={<ArtGalleryTemplate />} /> */}
 
         <Route path="/historical" element={<Historical />} />
         <Route path="/modern" element={<Modern />} />
@@ -457,7 +461,7 @@ const [navHeight, setNavHeight] = useState(56); // fallback, not 1400!
         {/* Games */}
         <Route path="/Games/PixelPainter" element={<PixelPainter />} />
         {/* VIdeo shorts */}
-        <Route path='/videos' element={<ShortsPage/>}/>
+        {/* <Route path='/videos' element={<ShortsPage/>}/> */}
         {/* Invite ROute */}
         <Route path="/invite" element={<InviteSystem />} />
               {activeInviteCode && (

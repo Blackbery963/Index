@@ -141,7 +141,7 @@ import { fetchPexelsImage } from "../Category/pexels";
 
 const categoriesData = [
   { name: "Portrait", link: "/portrait", color: "from-blue-500 to-purple-600" },
-  { name: "Landscape", link: "/landscape", color: "from-green-500 to-teal-600" },
+  { name: "Landscape", link: "/gallery/landscape", color: "from-green-500 to-teal-600" },
   { name: "Abstract", link: "/abstract", color: "from-pink-500 to-red-600" },
   { name: "Still Life", link: "/still-life", color: "from-orange-500 to-amber-600" },
   { name: "Oil Painting", link: "/oil-painting", color: "from-yellow-500 to-orange-600" },

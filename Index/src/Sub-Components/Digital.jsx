@@ -169,6 +169,15 @@ useEffect(() => {
     }
   };
 
+    const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+   const scrollToContent = () => {
+    if (contentRef.current) {
+      contentRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   const [likes, setLikes] = useState({});
   const [showComments, setShowComments] = useState(null);
   const [newComment, setNewComment] = useState('');

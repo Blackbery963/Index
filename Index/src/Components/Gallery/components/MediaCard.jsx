@@ -33,6 +33,7 @@ const MediaCard = ({ item, userProfile, isHighlighted, onClick }) => {
               className="media-element"
               muted
               playsInline
+              controls={false}
               preload="metadata"
               onMouseEnter={(e) => e.target.play()}
               onMouseLeave={(e) => {

@@ -115,7 +115,7 @@ const StickyNav = () => {
     <>
       {/* Desktop/Tablet Sidebar */}
       <aside
-        className={`hidden sm:block fixed top-[90px] xl:left-[15px] left-[0px] md:left-[7px] h-[calc(100vh-80px)] z-40 transition-all rounded-lg duration-500 ease-in-out scrollbar-hidden ${
+        className={`hidden sm:block fixed top-[85px] xl:left-[18px] left-[0px] md:left-[7px] h-[calc(98vh-80px)] z-40 transition-all rounded-lg duration-500 ease-in-out scrollbar-hidden ${
           isSticky ? "translate-y-0 opacity-100" : "-translate-y-4 opacity-0 pointer-events-none"
         } ${isCollapsed ? "w-16" : "w-64"}`}
       >

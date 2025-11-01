@@ -307,11 +307,10 @@ const [navHeight, setNavHeight] = useState(56); // fallback, not 1400!
                 <InstallPrompt />
                 <FeedbackPrompt />
                 </div>
+              <EchoApp/>
 
                 {/* <TopNav/> */}
                 <main className="w-full flex flex-col gap-y-4">
-                  <EchoApp/>
-                  {/* <NexusTales/> */}
                 <div data-aos="fade-right" data-aos-delay="200" className="w-full will-change-transform will-change-opacity">
                   {/* <Collection/> */}
                  {/* <ImageCollectionUI/> */}

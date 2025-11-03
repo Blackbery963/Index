@@ -69,6 +69,8 @@
 //   }
 // };
 
+
+
 import { Query } from 'appwrite';
 import { storage, databases } from '../../../appwriteConfig';
 import { fetchUserProfile } from './galleryService';

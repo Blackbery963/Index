@@ -121,10 +121,8 @@ import CulturalCreationsGallery from './Components/Homemade_Crafts/CulturalCreat
 import PixelPainter from '../Games/PixelPainter.jsx';
 import HeroSection from './Components/Header/HeroSection.jsx';
 import StickyNav from './Components/Sidebar.jsx';
-// for short videos 
-// import ShortsPage from './Video/Video.jsx';
-// import ShortsPage from './Video/Page/ShortsPage.jsx';
-
+// Short videos page
+import ShortVideos from './Videos/ShortVideos.jsx';
 // Invite System
 import InviteAcceptance from './InviteSystem/InviteAcceptance.jsx';
 import InviteSystem from './InviteSystem/InviteSystem.jsx';
@@ -134,8 +132,6 @@ import InviteSystem from './InviteSystem/InviteSystem.jsx';
 import SimpleSignupPrompt from './Components/Authentication/SimpleSignupPrompt.jsx';
 import { AuthProvider } from './Components/Authentication/AuthContext.jsx';
 // Echo
-// import EchoApp from './Echos/EchoApp.jsx';
-// import NexusTales from './Echos/nexusTales.jsx';
 import EchoApp from './Echos/Components/EchoApp.jsx';
 
 const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
@@ -289,12 +285,12 @@ const [navHeight, setNavHeight] = useState(56); // fallback, not 1400!
   return (
     <AuthProvider>
     <Router>
-      <Chatbot/>
       <Routes>
         <Route
           path="/"
           element={
             <div className="relative flex items-center justify-center flex-col overflow-x-hidden bg-gray-100 dark:bg-[#000705]">
+              <Chatbot/>
               <Header />
               <HeroSection/>
               <div className='w-full'>
@@ -470,6 +466,8 @@ const [navHeight, setNavHeight] = useState(56); // fallback, not 1400!
           onClose={() => setActiveInviteCode(null)}
         />
         )}
+        {/* for short videos */}
+        <Route path='/moments' element={<ShortVideos/>}/>
 
       </Routes>
     </Router>

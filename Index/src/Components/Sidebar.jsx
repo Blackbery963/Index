@@ -91,7 +91,7 @@ const StickyNav = () => {
   const mainNavItems = [
     { id: "explore", label: "Explore", icon: MdOutlineExplore, path: "/" },
     { id: "gallery", label: "Gallery", icon: CiGrid42, path: "/gallery" },
-    { id: "moments", label: "Moments", icon: IoSparklesOutline, path: "/videos" },
+    { id: "moments", label: "Moments", icon: IoSparklesOutline, path: "/moments" },
     { id: "diary", label: "Diary", icon: MdOutlineBook, path: "/journal" },
     { id: "community", label: "Community", icon: FiUsers, path: "/community" },
   ];
@@ -115,11 +115,11 @@ const StickyNav = () => {
     <>
       {/* Desktop/Tablet Sidebar */}
       <aside
-        className={`hidden sm:block fixed top-[85px] xl:left-[18px] left-[0px] md:left-[7px] h-[calc(98vh-80px)] z-40 transition-all rounded-lg duration-500 ease-in-out scrollbar-hidden ${
+        className={`hidden sm:block fixed top-[85px] xl:left-[18px] left-[0px] md:left-[7px] h-[calc(98vh-80px)] z-40 transition-all rounded-lg duration-500 ease-in-out  ${
           isSticky ? "translate-y-0 opacity-100" : "-translate-y-4 opacity-0 pointer-events-none"
         } ${isCollapsed ? "w-16" : "w-64"}`}
       >
-        <div className="h-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-r border-gray-200/30 dark:border-gray-700/30 rounded-lg">
+        <div className="h-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-r border-gray-200/30 dark:border-gray-700/30 rounded-lg ">
           {/* Header with controls */}
           <div className="flex items-center justify-between p-4 border-b border-gray-200/30 dark:border-gray-700/30">
             {!isCollapsed && (
@@ -155,7 +155,7 @@ const StickyNav = () => {
             ))}
             
             {/* More Features Button with Unique Popup */}
-            <div className="relative more-menu-container">
+            <div className="relative more-menu-container ">
               <button
                 onClick={() => setShowMoreMenu(!showMoreMenu)}
                 className={`group relative flex items-center rounded-xl transition-all duration-200 w-full hide-scrollbar ${
@@ -186,7 +186,7 @@ const StickyNav = () => {
               {showMoreMenu && (
                 <div className={`absolute ${
                   isCollapsed ? "left-full ml-2 top-0" : "left-0 right-0 top-full mt-2 hide-scrollbar"
-                } bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl rounded-xl shadow-2xl border border-gray-200/50 dark:border-gray-700/50 z-50 min-w-[240px] overflow-hidden`}>
+                } bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl rounded-xl shadow-2xl border border-gray-200/50 dark:border-gray-700/50 z-50 min-w-[240px] overflow-hidden `}>
                   {/* Popup Header */}
                   <div className="p-4 border-b border-gray-200/30 dark:border-gray-700/30">
                     <h3 className="font-semibold text-gray-900 dark:text-white text-sm">

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Sparkles, Plus } from 'lucide-react';
 
-const CollectionContent = ({
+const CollectionContentTwo = ({
   error,
   loading,
   images,
@@ -15,7 +15,7 @@ const CollectionContent = ({
   lastElementRef
 }) => {
   return (
-    <div className="px-0 sm:px-4 py-6">
+    <div className="px-0 sm:px-4 py-0">
       {/* Error message - doesn't block content */}
       {error && (
         <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl sm:rounded-2xl p-4 sm:p-6 mb-6 text-center">
@@ -110,4 +110,4 @@ const CollectionContent = ({
   );
 };
 
-export default CollectionContent;
+export default CollectionContentTwo;

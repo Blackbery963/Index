@@ -12,6 +12,10 @@ import {
 import { motion } from 'framer-motion';
 import { MdSearch } from "react-icons/md";
 import { HiOutlineViewfinderCircle } from "react-icons/hi2";
+import LikeButton from '../EngagementService/likeButton';
+import ShareButton from '../Share/ShareFunction';
+import DownloadService from '../Downloads/downloadService';
+import FollowButton from '../Follow/FollowButton';
 
 const ImageCard = ({ 
   image, 
@@ -169,68 +173,11 @@ const ImageCard = ({
               </p>
               
               <div className="flex items-center justify-between">
-                <button 
-                  onClick={handleLike}
-                  className={`flex items-center gap-1 transition-all ${
-                    isLiked ? 'text-red-500 scale-110' : 'text-gray-600 dark:text-gray-400 hover:text-red-500'
-                  }`}
-                >
-                  <Heart className={`w-4 h-4 ${isLiked ? 'fill-current' : ''}`} />
-                  <span className="text-xs font-medium">{likeCount}</span>
-                </button>
-                
-                <span className="text-xs text-gray-500 dark:text-gray-400">
-                  {formatTimestamp?.(image.timestamp) || 'Recently'}
-                </span>
+              <LikeButton targetId={image.id || image.$id} />
               </div>
             </div>
           </motion.div>
         );
-
-      case 'collage':
-        return (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            className="bg-white dark:bg-gray-900 rounded-sm shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-200/50 dark:border-gray-700/50 group cursor-pointer break-inside-avoid"
-            onClick={handleClick}
-          >
-            <div className="relative aspect-[4/3] overflow-hidden">
-              <img
-                src={imageSrc}
-                alt={image.title || 'Artwork'}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                loading="lazy"
-                onError={(e) => {
-                  console.error('Failed to load image:', imageSrc);
-                  e.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="300"%3E%3Crect fill="%23ddd" width="400" height="300"/%3E%3Ctext fill="%23999" x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle"%3EImage not found%3C/text%3E%3C/svg%3E';
-                }}
-              />
-              
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              
-              <div className="absolute bottom-2 left-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <h3 className="text-white text-sm font-semibold line-clamp-1 mb-1">
-                  {image.title || 'Untitled'}
-                </h3>
-                <div className="flex items-center justify-between text-xs text-white/90">
-                  <span>by {image.artist || 'Unknown'}</span>
-                  <div className="flex items-center gap-2">
-                    <button 
-                      onClick={handleLike}
-                      className={`flex items-center gap-1 ${isLiked ? 'text-red-300' : ''}`}
-                    >
-                      <Heart className={`w-3 h-3 ${isLiked ? 'fill-current' : ''}`} />
-                      {likeCount}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        );
-
       default: // Feed view
         return (
           <motion.div
@@ -255,12 +202,7 @@ const ImageCard = ({
                   </p>
                 </div>
               </div>
-              <button 
-                onClick={(e) => e.stopPropagation()}
-                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl transition-colors"
-              >
-                <MoreHorizontal className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-              </button>
+              <FollowButton targetUserId={image.userId} variant='ghost' />
             </div>
 
             {/* Image Container */}
@@ -332,34 +274,13 @@ const ImageCard = ({
               )}
 
               {/* Engagement Stats */}
-              <div className="flex items-center justify-between pt-3 border-t border-gray-100 dark:border-gray-800">
-                <div className="flex items-center gap-4">
-                  <button 
-                    onClick={handleLike}
-                    className={`flex items-center gap-2 transition-all ${
-                      isLiked ? 'text-red-500 scale-105' : 'text-gray-600 dark:text-gray-400 hover:text-red-500'
-                    }`}
-                  >
-                    <Heart className={`w-5 h-5 ${isLiked ? 'fill-current' : ''}`} />
-                    <span className="font-semibold text-sm">{likeCount}</span>
-                  </button>
-                  
-                  <button 
-                    onClick={(e) => e.stopPropagation()}
-                    className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-blue-500 transition-colors"
-                  >
-                    <MessageCircle className="w-5 h-5" />
-                    <span className="font-semibold text-sm">{image.comments || 0}</span>
-                  </button>
-                  
-                  <button 
-                    onClick={(e) => e.stopPropagation()}
-                    className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-green-500 transition-colors"
-                  >
-                    <Share2 className="w-5 h-5" />
-                    <span className="font-semibold text-sm">{image.shares || 0}</span>
-                  </button>
+              <div className="flex items-center justify-between border-t border-gray-100 dark:border-gray-800">
+                <div className="flex items-center gap-2">
+                    <div className=' mt-2'><LikeButton targetId={image.id || image.$id} /></div>
+                  <ShareButton artwork={image} variant='compact' position='bottom-sheet'/>
+                  <DownloadService artwork={image}/>
                 </div>
+                
                 
                 <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
                   <Eye className="w-4 h-4" />
@@ -376,3 +297,4 @@ const ImageCard = ({
 };
 
 export default ImageCard;
+

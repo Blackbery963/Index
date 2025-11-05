@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import { FiDownload } from "react-icons/fi";
 import { downloadImage } from "./downloadImage";
 import { databases } from "../appwriteConfig";
+import { MdOutlineFileDownload } from "react-icons/md";
 
 const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
 const METADATA_COLLECTION_ID = import.meta.env.VITE_APPWRITE_METADATA_COLLECTION_ID;
@@ -45,7 +46,7 @@ useEffect(() => {
         className="download-btn text-gray-500 dark:text-gray-400 hover:text-blue-800 transition"
         title="Download"
       >
-        <FiDownload size={16} />
+        <FiDownload size={18} className="text-gray-600 dark:text-gray-300" />
       </button>
       <span className="text-gray-500 dark:text-gray-400">{downloadCount}</span>
     </div>

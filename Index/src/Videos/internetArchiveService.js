@@ -515,6 +515,8 @@
 //   return desc.toString().replace(/<[^>]*>/g, '').replace(/https?:\/\/[^\s]+/g, '').replace(/\s+/g, ' ').trim().slice(0, 120);
 // }
 
+
+
 // Coverr API - Free stock videos without API key
 const COVER_API_BASE = import.meta.env.VITE_COVERR_API_KEY;
 

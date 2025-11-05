@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import MediaCard from './MediaCard';
-// import '../../styles/masonry.css';
 import '../styles/masonry.css'
 
 const MasonryGrid = ({ media, userProfiles, artworkRefs, highlightedArtwork, openLightbox }) => {

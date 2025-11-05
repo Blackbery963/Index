@@ -32,7 +32,7 @@ import Signup from './Components/Authentication/Signup/Signup.jsx';
 import Login from './Components/Authentication/Login/Login.jsx';
 import ResetPassword from './Components/Authentication/Login/ResetPassword.jsx';
 import EmailVerification from './Components/Authentication/Verification/EmailVerification.jsx';
-import ImprovedCollection from './Components/Collections/ImprovedCollection.jsx/ImprovedCollection.jsx';
+import ImprovedCollection from './Components/Collections/ImprovedCollection/ImprovedCollection.jsx';
 import Gallery from './Components/Gallery/Gallery';
 import Category from './Components/Category/Category';
 import Landscape from './Sub-Components/Landscape';
@@ -133,6 +133,8 @@ import SimpleSignupPrompt from './Components/Authentication/SimpleSignupPrompt.j
 import { AuthProvider } from './Components/Authentication/AuthContext.jsx';
 // Echo
 import EchoApp from './Echos/Components/EchoApp.jsx';
+// front gallery
+import MainGalleryPage from './FrontGallery/MainGalleryPage.jsx';
 
 const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
 const COLLECTION_ID = import.meta.env.VITE_APPWRITE_METADATA_COLLECTION_ID;
@@ -307,6 +309,7 @@ const [navHeight, setNavHeight] = useState(56); // fallback, not 1400!
 
                 {/* <TopNav/> */}
                 <main className="w-full flex flex-col gap-y-4">
+                  {/* <MainGalleryPage/> */}
                 <div data-aos="fade-right" data-aos-delay="200" className="w-full will-change-transform will-change-opacity">
                   {/* <Collection/> */}
                  {/* <ImageCollectionUI/> */}

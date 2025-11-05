@@ -1,0 +1,836 @@
+import { Query, ID } from 'appwrite';
+import { databases, storage } from '../appwriteConfig';
+import { fetchUserProfile } from '../Components/Account/ProfileServixe';
+
+// const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
+// const COLLECTION_ID = import.meta.env.VITE_APPWRITE_METADATA_COLLECTION_ID;
+// const BUCKET_ID = import.meta.env.VITE_APPWRITE_BUCKET_ID;
+
+// // Cache for user profiles and media
+// const userProfileCache = new Map();
+// const mediaCache = new Map();
+
+// export const fetchAppwriteMedia = async (filter = 'all', lastId = null, options = {}) => {
+//   const {
+//     pageSize = 20,
+//     enableCache = true,
+//     retryCount = 3,
+//     userId = null,
+//     tags = null
+//   } = options;
+
+//   try {
+//     // Build queries dynamically
+//     const queries = [
+//       Query.orderDesc('$createdAt'),
+//       Query.limit(pageSize),
+//       Query.select([
+//         '$id', 'userId', 'title', 'description', 'fileId', 'fileType',
+//         'medium', 'tag', 'uploadDate', 'viewCount', 'price', 'isForSale',
+//         'additionalImageIds', 'originalFileName', 'status', 'awards',
+//         'artworkId', 'downloads', '$createdAt', '$updatedAt'
+//       ])
+//     ];
+
+//     // Add cursor for pagination
+//     if (lastId) {
+//       queries.push(Query.cursorAfter(lastId));
+//     }
+
+//     // Add filter conditions
+//     if (filter === 'videos') {
+//       queries.push(Query.equal('fileType', 'video'));
+//     } else if (filter === 'images') {
+//       queries.push(Query.or([
+//         Query.equal('fileType', 'image'),
+//         Query.equal('fileType', 'artwork')
+//       ]));
+//     } else if (filter === 'for-sale') {
+//       queries.push(Query.equal('isForSale', true));
+//     }
+
+//     // Filter by user if provided
+//     if (userId) {
+//       queries.push(Query.equal('userId', userId));
+//     }
+
+//     // Filter by tags if provided
+//     if (tags && tags.length > 0) {
+//       queries.push(Query.contains('tags', tags));
+//     }
+
+//     console.log(`Fetching Appwrite media: filter=${filter}, lastId=${lastId}`);
+
+//     const response = await databases.listDocuments(
+//       DATABASE_ID,
+//       COLLECTION_ID,
+//       queries
+//     );
+
+//     // Process media items with enhanced metadata
+//     const mediaProcessing = response.documents.map(async (doc) => {
+//       try {
+//         return await processMediaDocument(doc);
+//       } catch (err) {
+//         console.error(`Error processing document ${doc.$id}:`, err);
+//         return null;
+//       }
+//     });
+
+//     const mediaResults = await Promise.allSettled(mediaProcessing);
+//     const validMedia = mediaResults
+//       .filter(result => result.status === 'fulfilled' && result.value !== null)
+//       .map(result => result.value);
+
+//     console.log(`Successfully processed ${validMedia.length}/${response.documents.length} media items`);
+
+//     // Fetch user profiles
+//     const uniqueUserIds = [...new Set(validMedia.map(item => item.userId))];
+//     const profiles = await fetchUserProfilesWithCache(uniqueUserIds, enableCache);
+
+//     // Determine if there's more data
+//     const hasMore = validMedia.length === pageSize;
+
+//     return {
+//       media: validMedia,
+//       profiles,
+//       lastId: validMedia.length > 0 ? validMedia[validMedia.length - 1].$id : null,
+//       hasMore,
+//       total: response.total,
+//       stats: {
+//         requested: response.documents.length,
+//         processed: validMedia.length,
+//         failed: response.documents.length - validMedia.length
+//       }
+//     };
+//   } catch (error) {
+//     console.error('Error fetching Appwrite media:', error);
+    
+//     if (retryCount > 0) {
+//       console.log(`Retrying fetch... (${retryCount} attempts left)`);
+//       return fetchAppwriteMedia(filter, lastId, {
+//         ...options,
+//         retryCount: retryCount - 1
+//       });
+//     }
+    
+//     throw new Error(`Failed to fetch Appwrite media: ${error.message}`);
+//   }
+// };
+
+// // Process individual media document with enhanced metadata
+// const processMediaDocument = async (doc) => {
+//   // Get main file URL
+//   let mainUrl;
+//   let additionalUrls = [];
+  
+//   try {
+//     mainUrl = storage.getFileView(BUCKET_ID, doc.fileId);
+    
+//     // Process additional images if available
+//     if (doc.additionalImageIds) {
+//       const additionalIds = parseAdditionalImageIds(doc.additionalImageIds);
+//       additionalUrls = await Promise.all(
+//         additionalIds.map(async (fileId) => {
+//           try {
+//             return {
+//               fileId,
+//               url: storage.getFileView(BUCKET_ID, fileId),
+//               type: determineMediaType(null, fileId)
+//             };
+//           } catch (error) {
+//             console.warn(`Failed to get additional image ${fileId}:`, error);
+//             return null;
+//           }
+//         })
+//       ).then(results => results.filter(url => url !== null));
+//     }
+//   } catch (urlError) {
+//     console.warn(`Failed to get URL for file ${doc.fileId}:`, urlError);
+//     throw new Error('Failed to get file URL');
+//   }
+
+//   // Determine media type and category
+//   const mediaType = determineMediaType(doc.fileType, doc.fileId);
+//   const category = determineCategory(doc, mediaType);
+  
+//   // Parse tags and awards
+//   const tags = parseTags(doc.tags || doc.tag);
+//   const awards = parseAwards(doc.awards);
+
+//   return {
+//     // Core identification
+//     id: doc.$id,
+//     documentId: doc.$id,
+//     artworkId: doc.artworkId || doc.$id,
+    
+//     // Media content
+//     src: mainUrl,
+//     url: mainUrl,
+//     additionalImages: additionalUrls,
+//     type: mediaType,
+//     category,
+//     fileType: doc.fileType,
+//     originalFileName: doc.originalFileName,
+    
+//     // Metadata
+//     title: doc.title || 'Untitled Artwork',
+//     description: doc.description || '',
+//     artist: doc.userId, // Will be replaced with profile data
+//     userId: doc.userId,
+//     tags,
+//     awards,
+//     medium: doc.medium || 'Digital',
+    
+//     // Engagement metrics
+//     likes: 0, // You might want to track this separately
+//     comments: 0,
+//     shares: 0,
+//     views: doc.viewCount || 0,
+//     downloads: doc.downloads || 0,
+//     trending: calculateTrendingScore(doc),
+    
+//     // Commercial info
+//     price: doc.price || null,
+//     isForSale: doc.isForSale || false,
+//     currency: 'USD', // You might want to store this in your database
+    
+//     // Timestamps
+//     timestamp: doc.uploadDate || doc.$createdAt,
+//     createdAt: doc.$createdAt,
+//     updatedAt: doc.$updatedAt,
+    
+//     // Status
+//     status: doc.status || 'published',
+    
+//     // Source identification
+//     source: 'appwrite',
+//     isFeatured: false
+//   };
+// };
+
+// // Enhanced user profile fetching
+// const fetchUserProfilesWithCache = async (userIds, enableCache = true) => {
+//   const profiles = {};
+//   const uncachedUserIds = [];
+
+//   if (enableCache) {
+//     userIds.forEach(userId => {
+//       if (userProfileCache.has(userId)) {
+//         profiles[userId] = userProfileCache.get(userId);
+//       } else {
+//         uncachedUserIds.push(userId);
+//       }
+//     });
+//   } else {
+//     uncachedUserIds.push(...userIds);
+//   }
+
+//   if (uncachedUserIds.length > 0) {
+//     const profilePromises = uncachedUserIds.map(async (userId) => {
+//       try {
+//         const profile = await fetchUserProfile(userId);
+//         if (enableCache) {
+//           userProfileCache.set(userId, profile);
+//         }
+//         return { userId, profile };
+//       } catch (error) {
+//         console.error(`Failed to fetch profile for user ${userId}:`, error);
+//         return {
+//           userId,
+//           profile: getFallbackProfile(userId)
+//         };
+//       }
+//     });
+
+//     const profileResults = await Promise.allSettled(profilePromises);
+//     profileResults.forEach(result => {
+//       if (result.status === 'fulfilled') {
+//         profiles[result.value.userId] = result.value.profile;
+//       }
+//     });
+//   }
+
+//   return profiles;
+// };
+
+// // Helper functions
+// const determineMediaType = (fileType, fileId) => {
+//   if (fileType) {
+//     return fileType.toLowerCase();
+//   }
+  
+//   const extension = fileId.split('.').pop()?.toLowerCase();
+//   const videoExtensions = ['mp4', 'mov', 'avi', 'webm', 'mkv'];
+//   const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg'];
+  
+//   if (videoExtensions.includes(extension)) return 'video';
+//   if (imageExtensions.includes(extension)) return 'image';
+  
+//   return 'image';
+// };
+
+// const determineCategory = (doc, mediaType) => {
+//   if (doc.isForSale) return 'for-sale';
+//   if (mediaType === 'video') return 'video';
+//   return 'image';
+// };
+
+// const parseTags = (tagData) => {
+//   if (!tagData) return ['art'];
+//   if (Array.isArray(tagData)) return tagData.slice(0, 5);
+//   if (typeof tagData === 'string') {
+//     return tagData.split(',').map(tag => tag.trim()).slice(0, 5);
+//   }
+//   return ['art'];
+// };
+
+// const parseAwards = (awardsData) => {
+//   if (!awardsData) return [];
+//   if (Array.isArray(awardsData)) return awardsData;
+//   if (typeof awardsData === 'string') {
+//     return awardsData.split(',').map(award => award.trim());
+//   }
+//   return [];
+// };
+
+// const parseAdditionalImageIds = (additionalImageIds) => {
+//   if (!additionalImageIds) return [];
+//   if (Array.isArray(additionalImageIds)) return additionalImageIds;
+//   if (typeof additionalImageIds === 'string') {
+//     return additionalImageIds.split(',').map(id => id.trim()).filter(id => id);
+//   }
+//   return [];
+// };
+
+// const calculateTrendingScore = (doc) => {
+//   let score = 0;
+//   score += (doc.viewCount || 0) * 0.1;
+//   score += (doc.downloads || 0) * 0.5;
+//   if (doc.awards && doc.awards.length > 0) score += doc.awards.length * 2;
+//   return Math.min(score, 10); // Cap at 10
+// };
+
+// const getFallbackProfile = (userId) => ({
+//   name: 'Unknown Artist',
+//   profileImage: null,
+//   title: 'Digital Artist',
+//   isFallback: true,
+//   userId: userId
+// });
+
+// // Export functions for cache management
+// export const clearUserProfileCache = (userId = null) => {
+//   if (userId) {
+//     userProfileCache.delete(userId);
+//   } else {
+//     userProfileCache.clear();
+//   }
+// };
+
+// export const getCacheStats = () => ({
+//   userProfiles: userProfileCache.size,
+//   media: mediaCache.size
+// });
+
+// // Batch operations
+// export const fetchMediaByIds = async (mediaIds) => {
+//   try {
+//     const mediaPromises = mediaIds.map(async (mediaId) => {
+//       try {
+//         const doc = await databases.getDocument(DATABASE_ID, COLLECTION_ID, mediaId);
+//         return await processMediaDocument(doc);
+//       } catch (error) {
+//         console.error(`Failed to fetch media ${mediaId}:`, error);
+//         return null;
+//       }
+//     });
+
+//     const mediaResults = await Promise.allSettled(mediaPromises);
+//     return mediaResults
+//       .filter(result => result.status === 'fulfilled' && result.value !== null)
+//       .map(result => result.value);
+
+//   } catch (error) {
+//     console.error('Error fetching media by IDs:', error);
+//     return [];
+//   }
+// };
+
+// // Increment view count
+// export const incrementViewCount = async (mediaId) => {
+//   try {
+//     const doc = await databases.getDocument(DATABASE_ID, COLLECTION_ID, mediaId);
+//     const currentViews = doc.viewCount || 0;
+    
+//     await databases.updateDocument(DATABASE_ID, COLLECTION_ID, mediaId, {
+//       viewCount: currentViews + 1
+//     });
+    
+//     return true;
+//   } catch (error) {
+//     console.error('Error incrementing view count:', error);
+//     return false;
+//   }
+// };
+
+
+
+
+// import { Query, ID } from 'appwrite';
+// // import { fetchUserProfile } from './galleryService';
+// import fetchU
+
+
+const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
+const COLLECTION_ID = import.meta.env.VITE_APPWRITE_METADATA_COLLECTION_ID;
+const BUCKET_ID = import.meta.env.VITE_APPWRITE_BUCKET_ID;
+
+// Cache for user profiles
+const userProfileCache = new Map();
+
+export const fetchAppwriteMedia = async (filter = 'all', page = 1, options = {}) => {
+  const {
+    pageSize = 20,
+    enableCache = true
+  } = options;
+
+  try {
+    // Calculate offset for proper pagination
+    const offset = (page - 1) * pageSize;
+
+    // Build queries
+    const queries = [
+      Query.orderDesc('$createdAt'),
+      Query.limit(pageSize),
+      Query.offset(offset),
+      Query.select([
+        '$id', 'userId', 'title', 'description', 'fileId', 'fileType',
+        'medium', 'tag', 'uploadDate', 'viewCount', 'price', 'isForSale',
+        'additionalImageIds', 'originalFileName', 'status', 'awards',
+        'artworkId', 'downloads', '$createdAt', '$updatedAt'
+      ])
+    ];
+
+    // Add filter conditions
+    if (filter === 'videos') {
+      queries.push(Query.equal('fileType', 'video'));
+    } else if (filter === 'images') {
+      queries.push(Query.or([
+        Query.equal('fileType', 'image'),
+        Query.equal('fileType', 'artwork')
+      ]));
+    } else if (filter === 'for-sale') {
+      queries.push(Query.equal('isForSale', true));
+    }
+
+    console.log(`Fetching Appwrite media: filter=${filter}, page=${page}, offset=${offset}`);
+
+    const response = await databases.listDocuments(
+      DATABASE_ID,
+      COLLECTION_ID,
+      queries
+    );
+
+    // Process media items
+    const mediaProcessing = response.documents.map(async (doc) => {
+      try {
+        return await processMediaDocument(doc);
+      } catch (err) {
+        console.error(`Error processing document ${doc.$id}:`, err);
+        return null;
+      }
+    });
+
+    const mediaResults = await Promise.allSettled(mediaProcessing);
+    const validMedia = mediaResults
+      .filter(result => result.status === 'fulfilled' && result.value !== null)
+      .map(result => result.value);
+
+    console.log(`Successfully processed ${validMedia.length}/${response.documents.length} media items`);
+
+    // Fetch user profiles
+    const uniqueUserIds = [...new Set(validMedia.map(item => item.userId))];
+    const profiles = await fetchUserProfilesWithCache(uniqueUserIds, enableCache);
+
+    // Calculate pagination info
+    const totalPages = Math.ceil(response.total / pageSize);
+    const hasMore = page < totalPages;
+
+    return {
+      media: validMedia,
+      profiles,
+      pagination: {
+        currentPage: page,
+        totalPages,
+        pageSize,
+        totalItems: response.total,
+        hasMore
+      },
+      stats: {
+        requested: response.documents.length,
+        processed: validMedia.length,
+        failed: response.documents.length - validMedia.length
+      }
+    };
+  } catch (error) {
+    console.error('Error fetching Appwrite media:', error);
+    throw new Error(`Failed to fetch Appwrite media: ${error.message}`);
+  }
+};
+
+// // Keep the rest of your helper functions the same...
+// const processMediaDocument = async (doc) => {
+//   // Get main file URL
+//   let mainUrl;
+//   let additionalUrls = [];
+  
+//   try {
+//     mainUrl = storage.getFileView(BUCKET_ID, doc.fileId);
+    
+//     // Process additional images if available
+//     if (doc.additionalImageIds) {
+//       const additionalIds = parseAdditionalImageIds(doc.additionalImageIds);
+//       additionalUrls = await Promise.all(
+//         additionalIds.map(async (fileId) => {
+//           try {
+//             return {
+//               fileId,
+//               url: storage.getFileView(BUCKET_ID, fileId),
+//               type: determineMediaType(null, fileId)
+//             };
+//           } catch (error) {
+//             console.warn(`Failed to get additional image ${fileId}:`, error);
+//             return null;
+//           }
+//         })
+//       ).then(results => results.filter(url => url !== null));
+//     }
+//   } catch (urlError) {
+//     console.warn(`Failed to get URL for file ${doc.fileId}:`, urlError);
+//     throw new Error('Failed to get file URL');
+//   }
+
+//   const mediaType = determineMediaType(doc.fileType, doc.fileId);
+//   const category = determineCategory(doc, mediaType);
+//   const tags = parseTags(doc.tags || doc.tag);
+//   const awards = parseAwards(doc.awards);
+
+//   return {
+//     id: doc.$id,
+//     documentId: doc.$id,
+//     artworkId: doc.artworkId || doc.$id,
+//     src: mainUrl,
+//     url: mainUrl,
+//     additionalImageIds: additionalUrls,
+//     type: mediaType,
+//     category,
+//     fileType: doc.fileType,
+//     originalFileName: doc.originalFileName,
+//     title: doc.title || 'Untitled Artwork',
+//     description: doc.description || '',
+//     artist: doc.userId,
+//     userId: doc.userId,
+//     tags,
+//     awards,
+//     medium: doc.medium || 'Digital',
+//     likes: 0,
+//     comments: 0,
+//     shares: 0,
+//     views: doc.viewCount || 0,
+//     downloads: doc.downloads || 0,
+//     trending: calculateTrendingScore(doc),
+//     price: doc.price || null,
+//     isForSale: doc.isForSale || false,
+//     currency: 'USD',
+//     timestamp: doc.uploadDate || doc.$createdAt,
+//     createdAt: doc.$createdAt,
+//     updatedAt: doc.$updatedAt,
+//     status: doc.status || 'published',
+//     source: 'appwrite',
+//     isFeatured: false
+//   };
+// };
+
+// In your appwriteService.js - Update the processMediaDocument function
+
+const processMediaDocument = async (doc) => {
+  // Get main file URL
+  let mainUrl;
+  let additionalUrls = [];
+  
+  try {
+    mainUrl = storage.getFileView(BUCKET_ID, doc.fileId);
+    
+    // Process additional images if available
+    if (doc.additionalImageIds) {
+      additionalUrls = await fetchAdditionalImages(doc.additionalImageIds);
+    }
+  } catch (urlError) {
+    console.warn(`Failed to get URL for file ${doc.fileId}:`, urlError);
+    throw new Error('Failed to get file URL');
+  }
+
+  const mediaType = determineMediaType(doc.fileType, doc.fileId);
+  const category = determineCategory(doc, mediaType);
+  const tags = parseTags(doc.tags || doc.tag);
+  const awards = parseAwards(doc.awards);
+
+  return {
+    id: doc.$id,
+    documentId: doc.$id,
+    artworkId: doc.artworkId || doc.$id,
+    src: mainUrl,
+    url: mainUrl,
+    additionalImages: additionalUrls, // This will now contain all additional images
+    type: mediaType,
+    category,
+    fileType: doc.fileType,
+    originalFileName: doc.originalFileName,
+    title: doc.title || 'Untitled Artwork',
+    description: doc.description || '',
+    artist: doc.userId,
+    userId: doc.userId,
+    tags,
+    awards,
+    medium: doc.medium || 'Digital',
+    likes: 0,
+    comments: 0,
+    shares: 0,
+    views: doc.viewCount || 0,
+    downloads: doc.downloads || 0,
+    trending: calculateTrendingScore(doc),
+    price: doc.price || null,
+    isForSale: doc.isForSale || false,
+    currency: 'USD',
+    timestamp: doc.uploadDate || doc.$createdAt,
+    createdAt: doc.$createdAt,
+    updatedAt: doc.$updatedAt,
+    status: doc.status || 'published',
+    source: 'appwrite',
+    isFeatured: false,
+    // Add main image to the beginning of all images for the slideshow
+    allImages: [mainUrl, ...additionalUrls.map(img => img.url)]
+  };
+};
+
+// New function to fetch additional images
+const fetchAdditionalImages = async (additionalImageIds) => {
+  try {
+    const additionalIds = parseAdditionalImageIds(additionalImageIds);
+    
+    const imagePromises = additionalIds.map(async (fileId, index) => {
+      try {
+        const url = storage.getFileView(BUCKET_ID, fileId);
+        return {
+          id: fileId,
+          url: url,
+          type: determineMediaType(null, fileId),
+          position: index + 1,
+          fileId: fileId
+        };
+      } catch (error) {
+        console.warn(`Failed to get additional image ${fileId}:`, error);
+        return null;
+      }
+    });
+
+    const results = await Promise.allSettled(imagePromises);
+    return results
+      .filter(result => result.status === 'fulfilled' && result.value !== null)
+      .map(result => result.value);
+
+  } catch (error) {
+    console.error('Error fetching additional images:', error);
+    return [];
+  }
+};
+
+// Enhanced helper function to parse additional image IDs
+const parseAdditionalImageIds = (additionalImageIds) => {
+  if (!additionalImageIds) return [];
+  
+  try {
+    if (Array.isArray(additionalImageIds)) {
+      return additionalImageIds.slice(0, 3); // Limit to 3 additional images
+    }
+    
+    if (typeof additionalImageIds === 'string') {
+      // Handle comma-separated string
+      const ids = additionalImageIds.split(',').map(id => id.trim()).filter(id => id);
+      return ids.slice(0, 3);
+    }
+    
+    return [];
+  } catch (error) {
+    console.error('Error parsing additional image IDs:', error);
+    return [];
+  }
+};
+
+// ... keep all your existing helper functions
+
+// Enhanced user profile fetching
+const fetchUserProfilesWithCache = async (userIds, enableCache = true) => {
+  const profiles = {};
+  const uncachedUserIds = [];
+
+  if (enableCache) {
+    userIds.forEach(userId => {
+      if (userProfileCache.has(userId)) {
+        profiles[userId] = userProfileCache.get(userId);
+      } else {
+        uncachedUserIds.push(userId);
+      }
+    });
+  } else {
+    uncachedUserIds.push(...userIds);
+  }
+
+  if (uncachedUserIds.length > 0) {
+    const profilePromises = uncachedUserIds.map(async (userId) => {
+      try {
+        const profile = await fetchUserProfile(userId);
+        if (enableCache) {
+          userProfileCache.set(userId, profile);
+        }
+        return { userId, profile };
+      } catch (error) {
+        console.error(`Failed to fetch profile for user ${userId}:`, error);
+        return {
+          userId,
+          profile: getFallbackProfile(userId)
+        };
+      }
+    });
+
+    const profileResults = await Promise.allSettled(profilePromises);
+    profileResults.forEach(result => {
+      if (result.status === 'fulfilled') {
+        profiles[result.value.userId] = result.value.profile;
+      }
+    });
+  }
+
+  return profiles;
+};
+
+// Helper functions
+const determineMediaType = (fileType, fileId) => {
+  if (fileType) {
+    return fileType.toLowerCase();
+  }
+  
+  const extension = fileId.split('.').pop()?.toLowerCase();
+  const videoExtensions = ['mp4', 'mov', 'avi', 'webm', 'mkv'];
+  const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg'];
+  
+  if (videoExtensions.includes(extension)) return 'video';
+  if (imageExtensions.includes(extension)) return 'image';
+  
+  return 'image';
+};
+
+const determineCategory = (doc, mediaType) => {
+  if (doc.isForSale) return 'for-sale';
+  if (mediaType === 'video') return 'video';
+  return 'image';
+};
+
+const parseTags = (tagData) => {
+  if (!tagData) return ['art'];
+  if (Array.isArray(tagData)) return tagData.slice(0, 5);
+  if (typeof tagData === 'string') {
+    return tagData.split(',').map(tag => tag.trim()).slice(0, 5);
+  }
+  return ['art'];
+};
+
+const parseAwards = (awardsData) => {
+  if (!awardsData) return [];
+  if (Array.isArray(awardsData)) return awardsData;
+  if (typeof awardsData === 'string') {
+    return awardsData.split(',').map(award => award.trim());
+  }
+  return [];
+};
+
+// const parseAdditionalImageIds = (additionalImageIds) => {
+//   if (!additionalImageIds) return [];
+//   if (Array.isArray(additionalImageIds)) return additionalImageIds;
+//   if (typeof additionalImageIds === 'string') {
+//     return additionalImageIds.split(',').map(id => id.trim()).filter(id => id);
+//   }
+//   return [];
+// };
+
+const calculateTrendingScore = (doc) => {
+  let score = 0;
+  score += (doc.viewCount || 0) * 0.1;
+  score += (doc.downloads || 0) * 0.5;
+  if (doc.awards && doc.awards.length > 0) score += doc.awards.length * 2;
+  return Math.min(score, 10); // Cap at 10
+};
+
+const getFallbackProfile = (userId) => ({
+  name: 'Unknown Artist',
+  profileImage: null,
+  title: 'Digital Artist',
+  isFallback: true,
+  userId: userId
+});
+
+// Export functions for cache management
+export const clearUserProfileCache = (userId = null) => {
+  if (userId) {
+    userProfileCache.delete(userId);
+  } else {
+    userProfileCache.clear();
+  }
+};
+
+export const getCacheStats = () => ({
+  userProfiles: userProfileCache.size,
+  media: mediaCache.size
+});
+
+// Batch operations
+export const fetchMediaByIds = async (mediaIds) => {
+  try {
+    const mediaPromises = mediaIds.map(async (mediaId) => {
+      try {
+        const doc = await databases.getDocument(DATABASE_ID, COLLECTION_ID, mediaId);
+        return await processMediaDocument(doc);
+      } catch (error) {
+        console.error(`Failed to fetch media ${mediaId}:`, error);
+        return null;
+      }
+    });
+
+    const mediaResults = await Promise.allSettled(mediaPromises);
+    return mediaResults
+      .filter(result => result.status === 'fulfilled' && result.value !== null)
+      .map(result => result.value);
+
+  } catch (error) {
+    console.error('Error fetching media by IDs:', error);
+    return [];
+  }
+};
+
+// Increment view count
+export const incrementViewCount = async (mediaId) => {
+  try {
+    const doc = await databases.getDocument(DATABASE_ID, COLLECTION_ID, mediaId);
+    const currentViews = doc.viewCount || 0;
+    
+    await databases.updateDocument(DATABASE_ID, COLLECTION_ID, mediaId, {
+      viewCount: currentViews + 1
+    });
+    
+    return true;
+  } catch (error) {
+    console.error('Error incrementing view count:', error);
+    return false;
+  }
+};

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Heart, 
   MessageCircle, 
@@ -19,6 +19,8 @@ import ShareButton from '../Share/ShareFunction';
 import DownloadService from '../Downloads/downloadService';
 import FollowButton from '../Follow/FollowButton';
 import { MdCurrencyRupee } from 'react-icons/md';
+// import { CartService } from '../Arteva/ArtStore/cartService';
+
 
 const ArtworkCard = ({ 
   artwork, 
@@ -34,6 +36,7 @@ const ArtworkCard = ({
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+  const [cartItems, setCartItems] = useState(false)
 
   const isLiked = likedArtworks?.has(artwork.id);
   const isSaved = savedArtworks?.has(artwork.id);
@@ -74,6 +77,33 @@ const ArtworkCard = ({
     setCurrentImageIndex(index);
   };
 
+  //cart service 
+
+    // // Save cart to localStorage on changes
+    // useEffect(() => {
+    //   CartService.saveCartItems(cartItems);
+    // }, [cartItems]);
+  
+    // // Cart operations
+    // const addToCart = (art) => {
+    //   CartService.addToCart(art, cartItems, setCartItems);
+    // };
+  
+    // const removeFromCart = (id) => {
+    //   CartService.removeFromCart(id, cartItems, setCartItems);
+    // };
+  
+    // const updateCartItemQuantity = (id, newQuantity) => {
+    //   CartService.updateCartItemQuantity(id, newQuantity, cartItems, setCartItems);
+    // };
+  
+    // const clearCart = () => {
+    //   CartService.clearCart(setCartItems);
+    // };
+  
+    // const { itemCount: cartItemCount, total: cartTotal } = CartService.getCartSummary(cartItems);
+  
+
   if (!currentImage) {
     return (
       <div className="bg-red-50 dark:bg-red-900/20 rounded-lg p-4">
@@ -91,7 +121,7 @@ const ArtworkCard = ({
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-white dark:bg-gray-900 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border-2 border-purple-200 dark:border-purple-800 group cursor-pointer relative"
+            className="bg-white dark:bg-gray-900 rounded-sm shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border-2 border-purple-200 dark:border-purple-800 group cursor-pointer relative"
             onClick={() => onArtworkClick?.(artwork)}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
@@ -214,7 +244,7 @@ const ArtworkCard = ({
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white dark:bg-gray-900 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border-2 border-purple-200 dark:border-purple-800 group cursor-pointer"
+            className="bg-white dark:bg-gray-900 rounded-sn shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border-2 border-purple-200 dark:border-purple-800 group cursor-pointer"
             onClick={() => onArtworkClick?.(artwork)}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
@@ -369,5 +399,4 @@ const ArtworkCard = ({
 
   return getCardLayout();
 };
-
-export default ArtworkCard;
+export default ArtworkCard

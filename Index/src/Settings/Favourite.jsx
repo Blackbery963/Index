@@ -31,7 +31,7 @@ const Favourite = () => {
   };
 
   return (
-    <div className=" h-screen w-screen overflow-x-hidden bg-slate-300">
+    <div className=" h-screen w-screen overflow-hidden max-w-full bg-slate-300">
       <header className='h-[80px] w-full bg-gradient-to-l from-[#3c25267c] via-[#5e3b4d75] to-[#d9a1bf80] backdrop-blur-md flex items-center justify-between px-4 md:px-6 shadow-lg text-white fixed top-0 z-50'>
             {/* Logo */}
              <h1 className='lg:text-[35px] md:text-[30px] sm:text-[25px] text-[20px] font-bold font-Eagle text-[#190909]'>Painters' Diary</h1>

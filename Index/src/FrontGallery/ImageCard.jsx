@@ -147,7 +147,7 @@ const ImageCard = ({
 
               {/* Quick Actions */}
               <div className="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <button 
+                {/* <button 
                   onClick={handleSave}
                   className={`p-2 rounded-full backdrop-blur-lg transition-all ${
                     isSaved 
@@ -156,7 +156,7 @@ const ImageCard = ({
                   }`}
                 >
                   <Bookmark className={`w-4 h-4 ${isSaved ? 'fill-current' : ''}`} />
-                </button>
+                </button> */}
                 <button className="p-2 rounded-full bg-white/90 dark:bg-gray-800/90 text-gray-700 dark:text-gray-300 backdrop-blur-lg hover:bg-green-500 hover:text-white transition-all">
                   <Download className="w-4 h-4" />
                 </button>
@@ -234,7 +234,7 @@ const ImageCard = ({
               </div>
 
               {/* Quick Actions */}
-              <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              {/* <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <button 
                   onClick={handleSave}
                   className={`p-3 rounded-xl backdrop-blur-lg transition-all ${
@@ -245,7 +245,7 @@ const ImageCard = ({
                 >
                   <Bookmark className={`w-5 h-5 ${isSaved ? 'fill-current' : ''}`} />
                 </button>
-              </div>
+              </div> */}
             </div>
 
             {/* Content */}

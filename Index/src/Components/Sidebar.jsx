@@ -17,6 +17,7 @@ import {
   FiShield,
   FiFileText,
   FiUserPlus,
+  FiBookmark,
 } from "react-icons/fi";
 import { IoSparklesOutline } from "react-icons/io5";
 import { MdOutlineBook, MdOutlineExplore, MdOutlineMoreVert} from "react-icons/md";
@@ -91,7 +92,7 @@ const StickyNav = () => {
   // Main navigation items (most important - always visible)
   const mainNavItems = [
     { id: "explore", label: "Explore", icon: MdOutlineExplore, path: "/" },
-    { id: "gallery", label: "Gallery", icon: CiGrid42, path: "/gallery" },
+    { id: "gallery", label: "Gallery", icon: FiGrid, path: "/gallery" },
     { id: "moments", label: "Moments", icon: IoSparklesOutline, path: "/moments" },
     { id: "artist", label: "Artist", icon: FiUserPlus, path: "/Artists/DiscoverUsers" }, 
     { id: "diary", label: "Diary", icon: MdOutlineBook, path: "/journal" },
@@ -103,7 +104,7 @@ const StickyNav = () => {
   const featureItems = [
     { id: "categories", label: "Categories", icon: TbCategory2, path: "/category" },
     { id: "artstore", label: "Art Store", icon: FiShoppingBag, path: "/Arteva/Artstore" },
-    { id: "favorites", label: "Favorites", icon: FiHeart, path: "/favourite" },
+    { id: "save", label: "Saved", icon: FiBookmark, path: "/saved" },
 
   ];
 

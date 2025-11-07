@@ -375,7 +375,7 @@ const [navHeight, setNavHeight] = useState(56); // fallback, not 1400!
         {/* <Route path="/january" element={<ArtistDiary />} /> */}
 
         <Route path="/about" element={<About />} />
-        <Route path="/favourite" element={<Favourite />} />
+        <Route path="/saved" element={<Favourite />} />
         <Route path="/faqs" element={<FAQs />} />
         <Route path='/settings/notification' element={<Notification/>}/>
         <Route path='/settings/cart' element={<Cart/>}/>

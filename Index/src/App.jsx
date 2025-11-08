@@ -93,7 +93,10 @@ import Notification from './Settings/Notification.jsx';
 // import TopNav from './Components/TopNav.jsx';
 
 // import Chatbot from './ChatBot/Chatbot.jsx';
-import Chatbot from './Chatbot/Chatbot.jsx';
+// import Chatbot from './Chatbot/Chatbot.jsx';
+import ChatbotUI from './Chatbot/ChatbotUI.jsx';
+
+
 // The commecial part starts from here 
 import ArtStore from './Arteva/ArtStore/ArtStore.jsx';
 import OrderHistory from './Arteva/Commercial/OrderHistory.jsx';
@@ -292,7 +295,7 @@ const [navHeight, setNavHeight] = useState(56); // fallback, not 1400!
           path="/"
           element={
             <div className="relative flex items-center justify-center flex-col overflow-x-hidden bg-gray-100 dark:bg-[#000705]">
-              <Chatbot/>
+              <ChatbotUI/>
               <Header />
               <HeroSection/>
               <div className='w-full'>

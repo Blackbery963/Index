@@ -272,7 +272,9 @@ const ChatbotUI = () => {
     startNewChat,
     loadChatFromHistory,
     deleteLocalChat,
-    displayedTexts
+    displayedTexts,
+    isHistoryLoading
+    
   } = useChatbot();
 
   // Resizable sidebar state
@@ -455,15 +457,27 @@ const ChatbotUI = () => {
 
         {/* Main Content */}
         {showHistory ? (
+          // <ChatHistory
+          //   chatHistory={chatHistory}
+          //   chatId={chatId}
+          //   loadChatFromHistory={loadChatFromHistory}
+          //   startNewChat={startNewChat}
+          //   deleteConfirm={deleteConfirm}
+          //   setDeleteConfirm={setDeleteConfirm}
+          //   showDeleteSuccess={showDeleteSuccess}
+          //   deleteLocalChat={deleteLocalChat}
+          // />
+          // In your ChatbotUI component, pass the loading state:
           <ChatHistory
-            chatHistory={chatHistory}
-            chatId={chatId}
-            loadChatFromHistory={loadChatFromHistory}
-            startNewChat={startNewChat}
-            deleteConfirm={deleteConfirm}
-            setDeleteConfirm={setDeleteConfirm}
-            showDeleteSuccess={showDeleteSuccess}
-            deleteLocalChat={deleteLocalChat}
+          chatHistory={chatHistory}
+          chatId={chatId}
+          loadChatFromHistory={loadChatFromHistory}
+          startNewChat={startNewChat}
+          deleteConfirm={deleteConfirm}
+          setDeleteConfirm={setDeleteConfirm}
+          showDeleteSuccess={showDeleteSuccess}
+          deleteLocalChat={deleteLocalChat}
+          isLoading={isHistoryLoading} // Add this prop
           />
         ) : (
           <>
@@ -511,6 +525,7 @@ const ChatbotUI = () => {
                       <MessageBubble
                         message={message}
                         displayedText={displayedTexts[message.id]}
+                        onRegenerate={(msg) => console.log("Regenerate:", msg)}
                       />
                     </motion.div>
                   ))}

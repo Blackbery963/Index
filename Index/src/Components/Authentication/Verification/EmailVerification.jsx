@@ -202,121 +202,186 @@ const EmailVerification = () => {
   // ---------------------- UI ----------------------
 
   return (
+    // <div
+    //   className="min-h-screen flex items-center justify-center p-4 bg-gray-100 dark:bg-gray-900"
+    //   style={{
+    //     backgroundImage: `url(${backgroundImage})`,
+    //     backgroundSize: 'cover',
+    //     backgroundPosition: 'center',
+    //     backgroundAttachment: 'fixed',
+    //   }}
+    // >
+    //   <Link to="/account" className="absolute top-2 left-2 text-sm text-gray-500 hover:underline">
+    //     Skip For Now
+    //   </Link>
+    //   <motion.div
+    //     initial={{ opacity: 0, scale: 0.95 }}
+    //     animate={{ opacity: 1, scale: 1 }}
+    //     transition={{ duration: 0.6, ease: 'easeOut' }}
+    //     className="w-full max-w-md bg-gradient-to-b from-[#1f7d53]/95 to-[#145c3e]/95 backdrop-blur-lg rounded-2xl shadow-2xl overflow-hidden border border-gray-200 dark:border-gray-700"
+    //   >
+    //     <div className="p-8">
+    //       <div className="text-center mb-2">
+    //         <Paintbrush className="w-12 h-12 text-white mx-auto mb-2" />
+    //         <h1 className="text-xl font-bold text-white font-Eagle">Painters' Diary</h1>
+    //       </div>
+
+    //       {!isVerified ? (
+    //         <>
+    //           <div className="text-center mb-8">
+    //             <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+    //               <Mail className="w-8 h-8 text-white" />
+    //             </div>
+    //             <h1 className="text-2xl font-bold text-white mb-2 font-['Playfair_Display']">Verify Your Email</h1>
+    //             <p className="text-white/80">
+    //               We've sent a 6-digit code to <span className="font-semibold text-white">{email}</span>
+    //             </p>
+    //             <p className="text-white/60 text-sm mt-2">Check spam folder if you don't see it</p>
+    //           </div>
+
+    //           <form onSubmit={handleVerify} className="space-y-6" autoComplete="one-time-code">
+    //             <div>
+    //               <label htmlFor="code" className="block text-lg font-semibold text-white mb-2 font-['Playfair_Display']">
+    //                 Verification Code
+    //               </label>
+    //               <input
+    //                 id="code"
+    //                 inputMode="numeric"
+    //                 pattern="\d{6}"
+    //                 type="text"
+    //                 aria-label="Enter 6-digit verification code"
+    //                 value={code}
+    //                 onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+    //                 placeholder="Enter 6-digit code"
+    //                 className="w-full px-4 py-3 bg-white/20 backdrop-blur-md border border-white/50 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/80 transition-all duration-200"
+    //                 required
+    //                 maxLength={6}
+    //                 disabled={isBusy}
+    //               />
+    //             </div>
+
+    //             {error && (
+    //               <div className="flex items-center gap-2 text-red-300 bg-red-500/20 p-3 rounded-lg">
+    //                 <XCircle className="w-5 h-5" />
+    //                 <span className="text-sm">{error}</span>
+    //               </div>
+    //             )}
+
+    //             <button
+    //               type="submit"
+    //               disabled={isBusy || code.length !== 6}
+    //               className="w-full bg-white text-[#1f7d53] py-3 px-4 rounded-lg font-bold hover:bg-gray-100 focus:ring-2 focus:ring-white focus:ring-offset-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 font-['Quicksand']"
+    //             >
+    //               {isBusy ? (
+    //                 <>
+    //                   <div className="w-5 h-5 border-2 border-[#1f7d53] border-t-transparent rounded-full animate-spin" />
+    //                   Verifying...
+    //                 </>
+    //               ) : (
+    //                 <>
+    //                   Verify Email
+    //                   <ArrowRight className="w-5 h-5" />
+    //                 </>
+    //               )}
+    //             </button>
+    //           </form>
+
+    //           <div className="mt-6 text-center">
+    //             <button
+    //               type="button"
+    //               onClick={handleResend}
+    //               disabled={isBusy || countdown > 0}
+    //               className="text-white hover:text-gray-200 font-medium text-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1 mx-auto"
+    //             >
+    //               <RotateCcw className="w-4 h-4" />
+    //               {countdown > 0 ? `Resend in ${countdown}s` : "Didn't receive the code? Resend"}
+    //             </button>
+    //           </div>
+    //         </>
+    //       ) : (
+    //         <div className="text-center py-8">
+    //           <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+    //             <CheckCircle className="w-8 h-8 text-white" />
+    //           </div>
+    //           <h1 className="text-2xl font-bold text-white mb-2 font-['Playfair_Display']">Email Verified!</h1>
+    //           <p className="text-white/80 mb-6">Your email has been successfully verified. Redirecting…</p>
+    //           <div className="w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin mx-auto"></div>
+    //         </div>
+    //       )}
+    //     </div>
+
+    //     <div className="bg-white/10 px-8 py-4 border-t border-white/20">
+    //       <p className="text-xs text-white/60 text-center">Need help? Contact support@paintersdiary.com</p>
+    //     </div>
+    //   </motion.div>
+
+    //   <ToastContainer position="top-right" autoClose={3000} theme="colored" />
+    // </div>
+
     <div
-      className="min-h-screen flex items-center justify-center p-4 bg-gray-100 dark:bg-gray-900"
-      style={{
-        backgroundImage: `url(${backgroundImage})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundAttachment: 'fixed',
-      }}
+    className="min-h-screen flex items-center justify-center p-4 bg-gray-100 dark:bg-gray-900"
+    style={{
+      backgroundImage: `url(${backgroundImage})`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundAttachment: 'fixed',
+    }}
+  >
+    <Link
+      to="/account"
+      className="absolute top-3 left-3 bg-white/20 text-white px-4 py-2 rounded-full text-sm font-medium backdrop-blur-md hover:bg-white/30 transition-all"
     >
-      <Link to="/account" className="absolute top-2 left-2 text-sm text-gray-500 hover:underline">
-        Skip For Now
-      </Link>
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.6, ease: 'easeOut' }}
-        className="w-full max-w-md bg-gradient-to-b from-[#1f7d53]/95 to-[#145c3e]/95 backdrop-blur-lg rounded-2xl shadow-2xl overflow-hidden border border-gray-200 dark:border-gray-700"
-      >
-        <div className="p-8">
-          <div className="text-center mb-2">
-            <Paintbrush className="w-12 h-12 text-white mx-auto mb-2" />
-            <h1 className="text-xl font-bold text-white font-Eagle">Painters' Diary</h1>
-          </div>
+      Skip For Now
+    </Link>
 
-          {!isVerified ? (
-            <>
-              <div className="text-center mb-8">
-                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Mail className="w-8 h-8 text-white" />
-                </div>
-                <h1 className="text-2xl font-bold text-white mb-2 font-['Playfair_Display']">Verify Your Email</h1>
-                <p className="text-white/80">
-                  We've sent a 6-digit code to <span className="font-semibold text-white">{email}</span>
-                </p>
-                <p className="text-white/60 text-sm mt-2">Check spam folder if you don't see it</p>
-              </div>
-
-              <form onSubmit={handleVerify} className="space-y-6" autoComplete="one-time-code">
-                <div>
-                  <label htmlFor="code" className="block text-lg font-semibold text-white mb-2 font-['Playfair_Display']">
-                    Verification Code
-                  </label>
-                  <input
-                    id="code"
-                    inputMode="numeric"
-                    pattern="\d{6}"
-                    type="text"
-                    aria-label="Enter 6-digit verification code"
-                    value={code}
-                    onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                    placeholder="Enter 6-digit code"
-                    className="w-full px-4 py-3 bg-white/20 backdrop-blur-md border border-white/50 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/80 transition-all duration-200"
-                    required
-                    maxLength={6}
-                    disabled={isBusy}
-                  />
-                </div>
-
-                {error && (
-                  <div className="flex items-center gap-2 text-red-300 bg-red-500/20 p-3 rounded-lg">
-                    <XCircle className="w-5 h-5" />
-                    <span className="text-sm">{error}</span>
-                  </div>
-                )}
-
-                <button
-                  type="submit"
-                  disabled={isBusy || code.length !== 6}
-                  className="w-full bg-white text-[#1f7d53] py-3 px-4 rounded-lg font-bold hover:bg-gray-100 focus:ring-2 focus:ring-white focus:ring-offset-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 font-['Quicksand']"
-                >
-                  {isBusy ? (
-                    <>
-                      <div className="w-5 h-5 border-2 border-[#1f7d53] border-t-transparent rounded-full animate-spin" />
-                      Verifying...
-                    </>
-                  ) : (
-                    <>
-                      Verify Email
-                      <ArrowRight className="w-5 h-5" />
-                    </>
-                  )}
-                </button>
-              </form>
-
-              <div className="mt-6 text-center">
-                <button
-                  type="button"
-                  onClick={handleResend}
-                  disabled={isBusy || countdown > 0}
-                  className="text-white hover:text-gray-200 font-medium text-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1 mx-auto"
-                >
-                  <RotateCcw className="w-4 h-4" />
-                  {countdown > 0 ? `Resend in ${countdown}s` : "Didn't receive the code? Resend"}
-                </button>
-              </div>
-            </>
-          ) : (
-            <div className="text-center py-8">
-              <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <CheckCircle className="w-8 h-8 text-white" />
-              </div>
-              <h1 className="text-2xl font-bold text-white mb-2 font-['Playfair_Display']">Email Verified!</h1>
-              <p className="text-white/80 mb-6">Your email has been successfully verified. Redirecting…</p>
-              <div className="w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin mx-auto"></div>
-            </div>
-          )}
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.6, ease: 'easeOut' }}
+      className="w-full max-w-md bg-gradient-to-b from-[#1f7d53]/95 to-[#145c3e]/95 backdrop-blur-lg rounded-2xl shadow-2xl overflow-hidden border border-white/20"
+    >
+      <div className="p-8 text-center">
+        <div className="mb-4">
+          <Paintbrush className="w-12 h-12 text-white mx-auto mb-2" />
+          <h1 className="text-xl font-bold text-white font-Eagle">Painters' Diary</h1>
         </div>
 
-        <div className="bg-white/10 px-8 py-4 border-t border-white/20">
-          <p className="text-xs text-white/60 text-center">Need help? Contact support@paintersdiary.com</p>
+        <div className="w-20 h-20 mx-auto mb-6 bg-white/20 rounded-full flex items-center justify-center border-2 border-white/30 animate-pulse">
+          <Mail className="w-10 h-10 text-white" />
         </div>
-      </motion.div>
 
-      <ToastContainer position="top-right" autoClose={3000} theme="colored" />
-    </div>
+        <h2 className="text-2xl font-bold text-white mb-2 font-Playfair">
+          Email Verification — Coming Soon!
+        </h2>
+        <p className="text-white/80 mb-4">
+          This feature is currently under development. You’ll be notified when it’s ready.
+        </p>
+
+        <div className="bg-white/10 border border-white/20 rounded-xl p-4 mb-6">
+          <p className="text-white/90 text-sm">
+            For now, you can <span className="font-semibold text-yellow-300">skip this step</span> and continue exploring your account.  
+            We’ll alert you once the email verification system is live.
+          </p>
+        </div>
+
+        <button
+          onClick={() => navigate('/account')}
+          className="w-full bg-white text-[#1f7d53] py-3 px-6 rounded-lg font-semibold shadow-md hover:bg-gray-100 transition-all duration-200 flex items-center justify-center gap-2"
+        >
+          Continue to Account
+          <ArrowRight className="w-5 h-5" />
+        </button>
+      </div>
+
+      <div className="bg-white/10 px-8 py-4 border-t border-white/20 text-center">
+        <p className="text-xs text-white/60">
+          Need help? Contact <span className="text-white font-medium">support@paintersdiary.com</span>
+        </p>
+      </div>
+    </motion.div>
+
+    {/* <ToastContainer position="top-right" autoClose={3000} theme="colored" /> */}
+  </div>
   );
 };
 

@@ -393,8 +393,8 @@ function Account({ isOwnProfile = true }) {
               {profileData?.username?.charAt(0) || 'U'}
               </div>
                 <span className="hidden md:inline text-gray-800 dark:text-gray-200 font-medium font-Playfair">
-           {profileData?.username || 'User'}
-</span>
+                 {profileData?.username || 'User'}
+                </span>
 
             </button>
 
@@ -725,7 +725,7 @@ function Account({ isOwnProfile = true }) {
             ].map((stat) => (
               <motion.div
                 key={stat.label}
-                className="flex items-center px-3 py-1.5 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 gap-1"
+                className="flex items-center px-3 py-1.5 bg-white shadow-inner dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 gap-1"
                 whileHover={{ y: -2 }}
                 transition={{ duration: 0.2 }}
               >

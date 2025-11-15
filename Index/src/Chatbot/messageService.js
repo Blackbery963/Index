@@ -788,8 +788,7 @@ import { JOKES, FACTS, QUOTES,ART_TERMS, ART_TIPS } from "./enhanchedKnowledge/l
 import { enhancedAIHandler } from "./enhanchedKnowledge/ai/aiHandler";
 
 // Import filtering systems
-// import { shouldUseAI, getRedirectionResponse, classifyMessage } from './filters/chatFilter';
-// import { getPatternResponse } from './filters/patternMatcher';
+
 import { shouldUseAI, getRedirectionResponse, classifyMessage } from "./enhanchedKnowledge/filters/chatFilter";
 import { getPatternResponse } from "./enhanchedKnowledge/filters/patternMatcher";
 

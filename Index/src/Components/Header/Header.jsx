@@ -22,6 +22,7 @@ import { databases, account, Query } from "../../appwriteConfig";
 import { CubeIcon } from '@heroicons/react/24/outline';
 import { FiBookmark, FiUpload, FiUser } from "react-icons/fi";
 import bg from "../../../file_0000000038dc61f89085a4fc680c94b6 (1)_20250814_101526.jpg"
+
 // Dark Mode Context
 export const DarkModeContext = createContext();
 

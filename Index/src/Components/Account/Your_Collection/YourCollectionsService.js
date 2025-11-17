@@ -84,7 +84,14 @@ export class YourCollectionsService {
       "Installation Art", "Kinetic Art", "Light Art", "Performance Art", "Sound Art", "Bio Art",
       "Graphic Design", "Industrial Design", "Fashion Design", "Interior Design",
       "Architectural Drawing", "Game Design", "Portrait Photography", "Landscape Photography",
-      "Street Photography", "Conceptual Photography", "Documentary Photography", "Micro Photography", "Other"
+      "Street Photography", "Conceptual Photography", "Documentary Photography", "Micro Photography", "Other",
+      'Landscape', 'Portrait', 'Watercolour', 'OilPainting', 'Abstract', 
+    'StillLife', 'Historical', 'Surrealism', 'Impressionism', 'Realism', 
+    'Expressionism', 'Minimalism', 'PopArt', 'Nature', 'Traditional', 
+    'Digital', 'Modern', 'Photography', 'Handcraft', 'JewelleryDesign', 
+    'Pottery', 'Sculpture', 'Woodwork', 'Ceramics', 'Embroidery', 
+    'TextileArt', 'Calligraphy', 'PaperCraft', 'Illustration', 
+    'GraphicDesign', 'FashionDesign', 'InteriorDesign', 'ProductDesign'
     ];
     return imageTypes.includes(medium);
   }
@@ -140,3 +147,4 @@ export class YourCollectionsService {
   }
 }
 
+// 9735368549

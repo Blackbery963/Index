@@ -1,7 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, Palette, Globe } from 'lucide-react';
-// import Your_Collections from '../Your_Collection/Your_Collections';
 import Your_Collections from '../../Your_Collection/Your_Collections';
 
 const TabContent = ({ activeTab, isOwnProfile, currentUser, viewedUserId, profileData }) => {
@@ -11,7 +10,7 @@ const TabContent = ({ activeTab, isOwnProfile, currentUser, viewedUserId, profil
   };
 
   return (
-    <div className="mt-6">
+    <div className="mt-4">
       <AnimatePresence mode="wait">
         <motion.div
           key={activeTab}
@@ -22,15 +21,15 @@ const TabContent = ({ activeTab, isOwnProfile, currentUser, viewedUserId, profil
         >
           {activeTab === 'collections' && (
             <div>
-              <h3 className="text-xl font-semibold text-gray-800 dark:text-white mb-4 font-Eagle">
+              {/* <h3 className="text-xl font-semibold text-gray-800 dark:text-white mb-4 font-Eagle">
                 {isOwnProfile ? 'Your Collections' : 'Collections'}
-              </h3>
+              </h3> */}
               <Your_Collections userId={isOwnProfile ? currentUser?.$id : viewedUserId} />
             </div>
           )}
 
           {activeTab === 'about' && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <h3 className="text-lg font-semibold text-gray-800 mb-4 dark:text-white font-Quicksand">About</h3>
                 <p className="text-gray-600 dark:text-gray-400 font-Playfair text-[15px] leading-relaxed">
@@ -90,3 +89,4 @@ const TabContent = ({ activeTab, isOwnProfile, currentUser, viewedUserId, profil
 };
 
 export default TabContent;
+

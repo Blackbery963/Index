@@ -310,7 +310,7 @@ function Account({ isOwnProfile = true }) {
           />
 
           {/* Tabs */}
-          <div className="mt-6 border-b border-gray-200 dark:border-gray-700">
+          {/* <div className="mt-6 border-b border-gray-200 dark:border-gray-700">
             <div className="flex space-x-6">
               {['collections', 'about'].map((tab) => (
                 <button
@@ -326,7 +326,7 @@ function Account({ isOwnProfile = true }) {
                 </button>
               ))}
             </div>
-          </div>
+          </div> */}
 
           {/* Tab Content */}
           <TabContent

@@ -11,11 +11,10 @@ import Footer from './Components/Footer/Footer';
 
 // Lazy load components
 const ArtCategories = lazy(() => import('./Components/Style/ArtCategories'));
-const Collection = lazy(() => import('./Components/Collections/Collection'));
+// const Collection = lazy(() => import('./Components/Collections/Collection'));
 const Diarytemp = lazy(() => import('./Components/Diarytemp/Diarytemp'));
 const Connecting = lazy(() => import('./Components/Connecting/Connecting'));
-const Creativity = lazy(() => import('./Components/Creativity/Creativity'));
-const Commerce = lazy(() => import('./Components/Commerce/Commerce'))
+// const Commerce = lazy(() => import('./Components/Commerce/Commerce'))
 const Visual = lazy(() => import('./Components/Visual/Visual'));
 const Review = lazy(() => import('./Components/Review/Review'));
 
@@ -24,9 +23,6 @@ import Sidebar from './Components/Sidebar.jsx';
 // Import your InstallPrompt component
 import InstallPrompt from './MainApp.jsx'
 // Other imports remain the same...
-// import Account from './Components/Account/Account';
-// import Account from './Components/Account/Account.jsx';
-
 import Account from './Components/Account/Profile/Account.jsx';
 import Upload from './Components/Upload/Upload.jsx';
 // Authentication Service 
@@ -141,7 +137,7 @@ import { AuthProvider } from './Components/Authentication/AuthContext.jsx';
 // Echo
 import EchoApp from './Echos/Components/EchoApp.jsx';
 // front gallery
-import MainGalleryPage from './FrontGallery/MainGalleryPage.jsx';
+// import MainGalleryPage from './FrontGallery/MainGalleryPage.jsx';
 
 const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
 const COLLECTION_ID = import.meta.env.VITE_APPWRITE_METADATA_COLLECTION_ID;
@@ -321,6 +317,7 @@ const [navHeight, setNavHeight] = useState(56); // fallback, not 1400!
                   {/* <Collection/> */}
                  {/* <ImageCollectionUI/> */}
                  <ImprovedCollection/>
+                 {/* <MainGalleryPage/> */}
                 </div>
                 
                 {/* <UnifiedFeed/> */}
@@ -355,9 +352,9 @@ const [navHeight, setNavHeight] = useState(56); // fallback, not 1400!
                 {/* <div data-aos="fade-right" data-aos-delay="800" className="w-full will-change-transform will-change-opacity">
                 <Artisan />
                 </div> */}
-                <div data-aos="fade-left" data-aos-delay="900" className="w-full flex items-center justify-center flex-col gap-y-2">
+                {/* <div data-aos="fade-left" data-aos-delay="900" className="w-full flex items-center justify-center flex-col gap-y-2">
                   <Review />
-                </div>
+                </div> */}
                 {/* <MixedMediaLanding/> */}
                 <div data-aos="fade-right" data-aos-delay="1000" className="w-full will-change-transform will-change-opacity">
                   <Footer />

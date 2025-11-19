@@ -1,277 +1,191 @@
-
-// import React from 'react';
-// import { useAuth } from './AuthContext';
-
-// const StrictSignupPrompt = () => {
-//     const { 
-//         isAuthenticated, 
-//         showStrictPrompt, 
-//         siteBlocked, 
-//         forceSignup, 
-//         forceExit 
-//     } = useAuth();
-
-//     // Don't show if authenticated
-//     if (isAuthenticated) return null;
-
-//     // 🟥 Site blocked state
-//     if (siteBlocked) {
-//         return (
-//             <div className="fixed inset-0 bg-gradient-to-tr from-red-600 to-pink-700 flex items-center justify-center z-50 p-4">
-//                 <div className="bg-white p-8 rounded-2xl shadow-2xl max-w-md w-full text-center">
-//                     <div className="text-6xl mb-4">🔒</div>
-//                     <h2 className="text-3xl font-bold text-gray-800 mb-4">
-//                         Account Required
-//                     </h2>
-//                     <p className="text-gray-600 mb-6 text-lg">
-//                         To keep our community safe and personalized, we ask every visitor to create a free account.  
-//                         It only takes a few seconds!
-//                     </p>
-//                     <div className="space-y-4">
-//                         <button
-//                             onClick={forceSignup}
-//                             className="w-full bg-green-600 text-white py-4 px-6 rounded-xl hover:bg-green-700 transition-colors font-bold text-lg"
-//                         >
-//                             🌟 Create Free Account
-//                         </button>
-//                         <button
-//                             onClick={forceExit}
-//                             className="w-full bg-gray-200 text-gray-800 py-3 px-6 rounded-xl hover:bg-gray-300 transition-colors font-medium"
-//                         >
-//                             🚪 Maybe Later
-//                         </button>
-//                     </div>
-//                 </div>
-//             </div>
-//         );
-//     }
-
-//     // 🕐 Soft strict prompt
-//     if (showStrictPrompt) {
-//         return (
-//             <div className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50 p-4">
-//                 <div className="bg-white p-8 rounded-2xl shadow-2xl max-w-md w-full text-center">
-//                     <div className="text-4xl mb-4">🎨</div>
-//                     <h2 className="text-2xl font-bold text-gray-800 mb-4">
-//                         Enjoying the Art?
-//                     </h2>
-//                     <p className="text-gray-600 mb-2">
-//                         You’ve been exploring for a while — we love that! 💖  
-//                         To continue your creative journey and access more content:
-//                     </p>
-//                     <p className="text-blue-600 font-semibold mb-6">
-//                         Please create a free account or come back later.
-//                     </p>
-
-//                     <div className="space-y-4">
-//                         <button
-//                             onClick={forceSignup}
-//                             className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white py-4 px-6 rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 font-bold text-lg shadow-lg"
-//                         >
-//                             ✨ Create My Free Account
-//                         </button>
-//                         <button
-//                             onClick={forceExit}
-//                             className="w-full bg-gradient-to-r from-gray-400 to-gray-500 text-white py-3 px-6 rounded-xl hover:from-gray-500 hover:to-gray-600 transition-all duration-300 font-medium"
-//                         >
-//                             🚪 I’ll Visit Later
-//                         </button>
-//                     </div>
-
-//                     <p className="text-xs text-gray-500 mt-6">
-//                         You have 10 seconds before access is paused — don’t miss out on more inspiration ✨
-//                     </p>
-//                 </div>
-//             </div>
-//         );
-//     }
-
-//     return null;
-// };
-
-// export default StrictSignupPrompt;
-
-
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from './AuthContext';
+import { X, Sparkles, Lock, Unlock, Star, Zap, Palette } from 'lucide-react';
 
-// Diwali Greeting Component
-const DiwaliGreeting = () => {
-  const { skipGreeting } = useAuth();
+const CuriosityTeaser = () => {
+  const { isAuthenticated, showTeaser, previewFeatures } = useAuth();
+  const [visible, setVisible] = useState(false);
+  const [currentHint, setCurrentHint] = useState(0);
+
+  const hints = [
+    "🎨 There's a whole studio waiting for you...",
+    "✨ Imagine what you could create with AI magic",
+    "🌟 Your personal art gallery is just one click away",
+    "🚀 Premium tools that make art creation effortless",
+    "💫 Filters that transform your artwork instantly"
+  ];
+
+  useEffect(() => {
+    if (showTeaser && !isAuthenticated) {
+      setVisible(true);
+      const hintInterval = setInterval(() => {
+        setCurrentHint((prev) => (prev + 1) % hints.length);
+      }, 3000);
+      return () => clearInterval(hintInterval);
+    }
+  }, [showTeaser, isAuthenticated]);
+
+  if (!visible || isAuthenticated) return null;
 
   return (
-   <div className="fixed inset-0 bg-gradient-to-br from-orange-900 via-purple-900 to-blue-900 flex items-center justify-center z-50 p-4">
-  {/* Animated Diyas */}
-  <div className="absolute top-10 left-10 text-4xl animate-pulse">🪔</div>
-  <div className="absolute top-10 right-10 text-4xl animate-pulse" style={{ animationDelay: '0.5s' }}>🪔</div>
-  <div className="absolute bottom-10 left-10 text-4xl animate-pulse" style={{ animationDelay: '1s' }}>🪔</div>
-  <div className="absolute bottom-10 right-10 text-4xl animate-pulse" style={{ animationDelay: '1.5s' }}>🪔</div>
-  
-  {/* Floating Rangoli Elements */}
-  <div className="absolute top-1/4 left-1/4 text-2xl animate-bounce">✨</div>
-  <div className="absolute top-1/3 right-1/4 text-2xl animate-bounce" style={{ animationDelay: '0.3s' }}>✨</div>
-  <div className="absolute bottom-1/4 left-1/3 text-2xl animate-bounce" style={{ animationDelay: '0.6s' }}>✨</div>
-
-  {/* Main Card */}
-  <div className="text-center bg-white/10 backdrop-blur-md rounded-3xl p-8 border border-white/20 shadow-2xl max-w-2xl w-full">
-    <div className="text-6xl mb-6 animate-pulse">🪔</div>
-
-    <h1 className="text-5xl font-bold text-yellow-300 mb-4 font-serif tracking-wide">
-      Happy Diwali ✨
-    </h1>
-
-    <div className="text-white text-xl mb-6 leading-relaxed">
-      <p className="mb-2">Let every brushstroke be a spark of light,</p>
-      <p className="mb-2">and every color a celebration of life.</p>
-      <p className="text-2xl font-bold text-yellow-200">
-        Shine Bright. Create Bold. Celebrate Art.
-      </p>
+    <div className="fixed bottom-6 right-6 z-40 animate-float">
+      <div className="bg-gradient-to-br from-purple-600 to-blue-500 text-white p-4 rounded-2xl shadow-2xl max-w-sm border border-white/20 backdrop-blur-sm">
+        <div className="flex items-start gap-3">
+          <Sparkles className="flex-shrink-0 mt-1" size={20} />
+          <div className="flex-1">
+            <p className="font-semibold mb-1">Curious About the Magic? ✨</p>
+            <p className="text-sm text-white/90 mb-2 min-h-[40px] flex items-center">
+              {hints[currentHint]}
+            </p>
+            <div className="flex gap-2">
+              <button 
+                onClick={() => window.location.href = '/signup'}
+                className="flex-1 bg-white text-purple-600 py-2 px-3 rounded-lg font-semibold text-sm hover:bg-gray-100 transition-colors"
+              >
+                Show Me!
+              </button>
+              <button 
+                onClick={() => setVisible(false)}
+                className="px-3 py-2 rounded-lg hover:bg-white/10 transition-colors"
+              >
+                <X size={16} />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-
-    <p className="text-yellow-100 text-lg mb-8 italic">
-      “This Diwali, light up your imagination —  
-      because creativity is the brightest flame.”
-    </p>
-
-    <button
-      onClick={skipGreeting}
-      className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold py-4 px-8 rounded-full text-lg hover:from-yellow-300 hover:to-orange-400 transition-all duration-300 transform hover:scale-105 shadow-lg"
-    >
-      Enter the Festival of Art 🎨
-    </button>
-
-    <div className="mt-6 text-yellow-200 text-sm">
-      <p>Welcome to <span className="font-semibold text-yellow-300">Painters’ Diary</span> —  
-      where every artist celebrates the light within.</p>
-    </div>
-  </div>
-</div>
-
   );
 };
 
-// Main Strict Signup Prompt Component
-const StrictSignupPrompt = () => {
-    const { 
-        isAuthenticated, 
-        showStrictPrompt, 
-        siteBlocked, 
-        showDiwaliGreeting,
-        forceSignup, 
-        forceExit 
-    } = useAuth();
+const FeatureUnlockExperience = () => {
+  const { isAuthenticated, showUnlock, previewFeatures } = useAuth();
+  const [currentFeature, setCurrentFeature] = useState(0);
+  const [revealed, setRevealed] = useState(false);
 
-    // Show Diwali greeting for new visitors
-    if (showDiwaliGreeting && !isAuthenticated) {
-        return <DiwaliGreeting />;
+  useEffect(() => {
+    if (showUnlock && !isAuthenticated) {
+      const featureInterval = setInterval(() => {
+        setCurrentFeature((prev) => {
+          if (prev < previewFeatures.length - 1) return prev + 1;
+          setRevealed(true);
+          return prev;
+        });
+      }, 800);
+      
+      return () => clearInterval(featureInterval);
     }
+  }, [showUnlock, isAuthenticated, previewFeatures]);
 
-    // Don't show if authenticated
-    if (isAuthenticated) return null;
+  if (!showUnlock || isAuthenticated) return null;
 
-    // 🟥 Site blocked state - Diwali Themed
-    if (siteBlocked) {
-        return (
-            <div className="fixed inset-0 bg-gradient-to-br from-orange-600 via-red-600 to-pink-700 flex items-center justify-center z-50 p-4">
-                {/* Animated Diyas */}
-                <div className="absolute top-6 left-6 text-3xl animate-pulse">🪔</div>
-                <div className="absolute top-6 right-6 text-3xl animate-pulse" style={{ animationDelay: '0.5s' }}>🪔</div>
-                
-                <div className="bg-white p-8 rounded-2xl shadow-2xl max-w-md w-full text-center border-4 border-yellow-400">
-                    <div className="text-5xl mb-4 animate-bounce">🔒</div>
-                    <div className="text-3xl mb-2">🪔</div>
-                    
-                    <h2 className="text-2xl font-bold text-gray-800 mb-3 font-serif">
-                        Diwali Special Access
-                    </h2>
-                    
-                    <p className="text-gray-600 mb-4 leading-relaxed">
-                        This festive season, join our creative family! 
-                        <span className="block text-orange-600 font-semibold mt-1">
-                            Light up your creativity with a free account!
-                        </span>
-                    </p>
-                    
-                    <div className="space-y-4">
-                        <button
-                            onClick={forceSignup}
-                            className="w-full bg-gradient-to-r from-green-500 to-green-600 text-white py-4 px-6 rounded-xl hover:from-green-600 hover:to-green-700 transition-all duration-300 font-bold text-lg shadow-lg transform hover:scale-105"
-                        >
-                            🪔 Join Festive Community
-                        </button>
-                        <button
-                            onClick={forceExit}
-                            className="w-full bg-gradient-to-r from-gray-400 to-gray-500 text-white py-3 px-6 rounded-xl hover:from-gray-500 hover:to-gray-600 transition-all duration-300 font-medium"
-                        >
-                            🚪 Celebrate Elsewhere
-                        </button>
-                    </div>
-                    
-                    <p className="text-xs text-gray-500 mt-4">
-                        May your Diwali be filled with light and creativity! ✨
-                    </p>
-                </div>
+  return (
+    <div className="fixed inset-0 bg-black/95 flex items-center justify-center z-50 p-4">
+      <div className="bg-gradient-to-br from-gray-900 to-gray-800 border border-gray-700 rounded-3xl p-8 max-w-2xl w-full text-center shadow-2xl">
+        {/* Animated Header */}
+        <div className="flex items-center justify-center gap-3 mb-6">
+          <Lock className="text-yellow-400" size={24} />
+          <h2 className="text-3xl font-bold bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
+            Unlock Your Creative Potential
+          </h2>
+          <Unlock className="text-yellow-400" size={24} />
+        </div>
+
+        {/* Progress Bar */}
+        <div className="w-full bg-gray-700 rounded-full h-2 mb-8">
+          <div 
+            className="bg-gradient-to-r from-green-400 to-blue-500 h-2 rounded-full transition-all duration-800"
+            style={{ width: `${((currentFeature + 1) / previewFeatures.length) * 100}%` }}
+          ></div>
+        </div>
+
+        {/* Feature Reveal Animation */}
+        <div className="min-h-[200px] flex items-center justify-center mb-6">
+          {!revealed ? (
+            <div className="text-center">
+              <Zap className="mx-auto mb-4 text-yellow-400 animate-pulse" size={48} />
+              <p className="text-xl text-gray-300 mb-2">Unlocking Feature...</p>
+              <p className="text-2xl font-bold text-white animate-pulse">
+                {previewFeatures[currentFeature]}
+              </p>
             </div>
-        );
-    }
-
-    // 🕐 Soft strict prompt - Diwali Themed
-    if (showStrictPrompt) {
-        return (
-            <div className="fixed inset-0 bg-black/95 flex items-center justify-center z-50 p-4">
-                {/* Floating Diyas and Sparkles */}
-                <div className="absolute top-8 left-8 text-3xl animate-pulse">🪔</div>
-                <div className="absolute top-8 right-8 text-3xl animate-pulse" style={{ animationDelay: '0.5s' }}>🪔</div>
-                <div className="absolute bottom-8 left-8 text-2xl animate-bounce">✨</div>
-                <div className="absolute bottom-8 right-8 text-2xl animate-bounce" style={{ animationDelay: '0.3s' }}>✨</div>
-                
-                <div className="bg-gradient-to-br from-yellow-50 to-orange-50 p-8 rounded-2xl shadow-2xl max-w-md w-full text-center border-4 border-yellow-300 relative">
-                    {/* Header with Diya */}
-                    <div className="absolute -top-6 left-1/2 transform -translate-x-1/2">
-                        <div className="text-5xl animate-pulse">🪔</div>
-                    </div>
-                    
-                    <h2 className="text-2xl font-bold text-orange-800 mb-4 mt-4 font-serif">
-                        Diwali Greetings! 🎇
-                    </h2>
-                    
-                    <p className="text-gray-700 mb-3 leading-relaxed">
-                        You've been enjoying the creative spark! 
-                        <span className="block text-orange-600 font-semibold mt-1">
-                            Like the lasting light of a diya, join our community!
-                        </span>
-                    </p>
-                    
-                    <p className="text-blue-600 font-semibold mb-6 text-lg">
-                        Create your free account to continue the celebration!
-                    </p>
-
-                    <div className="space-y-4">
-                        <button
-                            onClick={forceSignup}
-                            className="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white py-4 px-6 rounded-xl hover:from-orange-600 hover:to-red-600 transition-all duration-300 font-bold text-lg shadow-lg transform hover:scale-105"
-                        >
-                            ✨ Join the Festival Fun
-                        </button>
-                        <button
-                            onClick={forceExit}
-                            className="w-full bg-gradient-to-r from-gray-400 to-gray-500 text-white py-3 px-6 rounded-xl hover:from-gray-500 hover:to-gray-600 transition-all duration-300 font-medium"
-                        >
-                            🪔 Maybe Later
-                        </button>
-                    </div>
-
-                    <p className="text-xs text-gray-600 mt-6 flex items-center justify-center">
-                        <span className="animate-pulse mr-1">🪔</span>
-                        Limited time - Join before the fireworks end! 
-                        <span className="animate-pulse ml-1">✨</span>
-                    </p>
-                </div>
+          ) : (
+            <div className="text-center">
+              <Star className="mx-auto mb-4 text-yellow-400 animate-bounce" size={48} />
+              <p className="text-2xl font-bold text-white mb-2">🎉 All Features Unlocked!</p>
+              <p className="text-gray-300">Your creative journey begins now</p>
             </div>
-        );
-    }
+          )}
+        </div>
 
-    return null;
+        {/* Feature Grid */}
+        {revealed && (
+          <div className="grid grid-cols-2 gap-3 mb-8">
+            {previewFeatures.map((feature, index) => (
+              <div key={index} className="bg-gray-800/50 border border-gray-700 rounded-xl p-3 text-left">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                  <span className="text-white text-sm">{feature}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Action Buttons */}
+        <div className="space-y-4">
+          <button
+            onClick={() => window.location.href = '/signup'}
+            className="w-full bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white py-4 px-6 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center gap-3"
+          >
+            <Palette size={20} />
+            Start Creating Now - It's Free!
+            <Sparkles size={20} />
+          </button>
+          
+          <p className="text-gray-400 text-sm">
+            Join thousands of artists already creating magic ✨
+          </p>
+        </div>
+      </div>
+    </div>
+  );
 };
 
-export default StrictSignupPrompt;
+const MiniPreviewOverlay = () => {
+  const { isAuthenticated } = useAuth();
+  const [showPreview, setShowPreview] = useState(false);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      const timer = setTimeout(() => setShowPreview(true), 10000);
+      return () => clearTimeout(timer);
+    }
+  }, [isAuthenticated]);
+
+  if (!showPreview || isAuthenticated) return null;
+
+  return (
+    <div className="fixed top-4 right-4 z-30">
+      <div className="bg-black/80 backdrop-blur-sm text-white p-3 rounded-xl border border-white/20">
+        <div className="flex items-center gap-2 text-sm">
+          <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+          <span>Artists Online: 1.2k+</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Main export that combines all components
+export const CreativeAuthExperience = () => {
+  return (
+    <>
+      <CuriosityTeaser />
+      <FeatureUnlockExperience />
+      <MiniPreviewOverlay />
+    </>
+  );
+};
+
+export default CreativeAuthExperience;

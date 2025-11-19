@@ -1,50 +1,67 @@
-import React from 'react';
-import { List, Grid3X3, Sparkles } from 'lucide-react';
-import { MdGridView } from 'react-icons/md';
+import React from "react";
+import { MdGridView } from "react-icons/md";
+import { FiGrid } from "react-icons/fi";
+import { Sparkles } from "lucide-react";
 import { FiSlack } from 'react-icons/fi';
 
 const CollectionHeader = ({ viewMode, setViewMode }) => {
   return (
-    <div className="sticky top-0 z-40 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl rounded-xl border-b border-gray-200 dark:border-gray-80 mb-6">
-      <div className="px-4 py-3 rounded-lg">
+    <div className="sticky top-0 z-40 px-1 py-2">
+      <div className="
+        bg-white/80 dark:bg-gray-900/80 
+        backdrop-blur-xl shadow-sm 
+        rounded-lg border border-white/10 dark:border-gray-700/40
+        px-4 py-3
+      ">
+        
         <div className="flex items-center justify-between">
-          
-          {/* Title */}
-          <div className="flex items-center gap-3">
-            <Sparkles className="w-6 h-6 text-purple-500" />
-            {/* <h1 className="text-xl font-bold text-gray-900 dark:text-white">
-              Discover
-            </h1> */}
+
+          {/* Left Icon */}
+          <div className="flex items-center gap-2">
+            <Sparkles className="w-5 h-5 text-purple-500/70" />
           </div>
 
-          {/* Simple Toggle */}
-          <div className="flex bg-gray-100 dark:bg-gray-800 rounded-xl p-1">
+          {/* Beautiful Minimal Pill Toggle */}
+          <div
+            className="relative flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1"
+          >
+            {/* Active highlight */}
+            <div
+              className={`
+                absolute inset-y-1 w-[47%] rounded-lg 
+                bg-white dark:bg-gray-700 shadow-sm 
+                transition-transform duration-300
+                ${viewMode === "feed" ? "translate-x-0" : "translate-x-full"}
+              `}
+            />
+
             <button
-              onClick={() => setViewMode('feed')}
-              className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
-                viewMode === 'feed'
-                  ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
-                  : 'text-gray-600 dark:text-gray-400'
-              }`}
+              onClick={() => setViewMode("feed")}
+              className="
+                relative z-10 flex items-center gap-1.5
+                w-20 justify-center py-1.5 text-xs font-medium
+                text-gray-700 dark:text-gray-300
+              "
             >
-              {/* <List className="w-4 h-4" /> */}
-              <MdGridView className=" w-4 h-4"/>
+              <MdGridView className="w-4 h-4" />
               Feed
             </button>
+
             <button
-              onClick={() => setViewMode('collage')}
-              className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
-                viewMode === 'collage'
-                  ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
-                  : 'text-gray-600 dark:text-gray-400'
-              }`}
+              onClick={() => setViewMode("collage")}
+              className="
+                relative z-10 flex items-center gap-1.5
+                w-20 justify-center py-1.5 text-xs font-medium
+                text-gray-700 dark:text-gray-300
+              "
             >
               <FiSlack className="w-4 h-4" />
-              Discover
+              Explore
             </button>
           </div>
 
         </div>
+
       </div>
     </div>
   );

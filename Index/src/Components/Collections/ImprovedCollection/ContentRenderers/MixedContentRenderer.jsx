@@ -1,109 +1,14 @@
-// import React from 'react';
-// import Visual from '../../../Visual/Visual';
-// import DiaryTemplate from '../../../Diarytemp/Diarytemp';
-// import Gateway from '../../../Connecting/Connecting';
-// import ArtResearchPage from '../../../ResearchPaperPage';
-// import ArtistDiscovery from '../../../ArtistDiscovery';
-// import MiniArtCategories from '../../../Style/ArtCategories';
-// import MiniArtisan from '../../../Artisian/Artisian';
-// import MiniCommerce from '../../../Commerce/Commerce';
-// import DailyChallenge from '../../../DialyChallenge';
-// import MainGalleryPage from '../../../../FrontGallery/MainGalleryPage';
-
-// const MixedContentRenderer = ({ 
-//   item, 
-//   viewMode, 
-//   likedProducts, 
-//   savedProducts, 
-//   followedArtists, 
-//   handleProductLike, 
-//   handleProductSave, 
-//   handleArtistFollow, 
-//   formatTimestamp 
-// }) => {
-//   try {
-//     switch (item.type) {
-//       case 'artists':
-//         return (
-//           <ArtistDiscovery 
-//             viewMode={viewMode}
-//             onArtistClick={(artist) => console.log('Artist clicked:', artist)}
-//             followedArtists={followedArtists}
-//             onFollow={handleArtistFollow}
-//           />
-//         );
-
-//       case 'mini-categories':
-//         return <MiniArtCategories />;
-//       case 'mini-artisan':
-//         return <MiniArtisan />;
-//       case 'mini-commerce':
-//         return <MiniCommerce />;
-//       case 'products':
-//         return (
-//           <Visual 
-//             viewMode={viewMode}
-//             onProductClick={(product) => console.log('Product clicked:', product)}
-//             likedProducts={likedProducts}
-//             savedProducts={savedProducts}
-//             onLike={handleProductLike}
-//             onSave={handleProductSave}
-//             formatTimestamp={formatTimestamp}
-//           />
-//         );
-//       case 'diary':
-//         return (
-//           <DiaryTemplate 
-//             viewMode={viewMode}
-//             onDiaryAction={(action) => console.log('Diary action:', action)}
-//           />
-//         );
-//       case 'communities':
-//         return (
-//           <Gateway 
-//             viewMode={viewMode}
-//             onCommunityAction={(action) => console.log('Community action:', action)}
-//           />
-//         );
-//       case 'research':
-//         return (
-//           <ArtResearchPage 
-//             viewMode={viewMode}
-//             onResearchAction={(action) => console.log('Research action:', action)}
-//           />
-//         );
-//       case 'daily-challenge':
-//         return <DailyChallenge />;
-//       default:
-//         return null;
-//     }
-//   } catch (error) {
-//     console.error(`Error rendering ${item.type}:`, error);
-//     return (
-//       <div className="bg-red-50 dark:bg-red-900/20 rounded-lg p-4">
-//         <p className="text-red-600 dark:text-red-400 text-sm">
-//           Error loading {item.type} content
-//         </p>
-//       </div>
-//     );
-//   }
-// };
-
-// export default MixedContentRenderer;
-
-
-
 import React from 'react';
-import Visual from '../../../Visual/Visual';
+// import Visual from '../../../Visual/Visual';
 import DiaryTemplate from '../../../Diarytemp/Diarytemp';
 import Gateway from '../../../Connecting/Connecting';
 import ArtResearchPage from '../../../ResearchPaperPage';
 import ArtistDiscovery from '../../../ArtistDiscovery';
 import MiniArtCategories from '../../../Style/ArtCategories';
 import MiniArtisan from '../../../Artisian/Artisian';
-import MiniCommerce from '../../../Commerce/Commerce';
 import DailyChallenge from '../../../DialyChallenge';
-import MainGalleryPage from '../../../../FrontGallery/MainGalleryPage';
+
+
 
 const MixedContentRenderer = ({ 
   item, 
@@ -137,41 +42,41 @@ const MixedContentRenderer = ({
         (item.fileType && ['image', 'video'].includes(item.fileType))) {
       
       // If it's a gallery container item, render the full MainGalleryPage
-      if (item.isGalleryContainer) {
-        return (
-          <MainGalleryPage 
-            media={media}
-            profiles={profiles}
-            loading={loading}
-            error={error}
-            activeFilter={activeFilter}
-            onFilterChange={onFilterChange}
-            viewMode={viewMode}
-            onViewModeChange={onViewModeChange}
-            onMediaClick={onMediaClick}
-            onLike={onLike}
-            onSave={onSave}
-            hasMore={hasMore}
-            isLoadingMore={isLoadingMore}
-            onLoadMore={onLoadMore}
-            formatTimestamp={formatTimestamp}
-          />
-        );
-      }
+      // if (item.isGalleryContainer) {
+      //   return (
+      //     <MainGalleryPage 
+      //       media={media}
+      //       profiles={profiles}
+      //       loading={loading}
+      //       error={error}
+      //       activeFilter={activeFilter}
+      //       onFilterChange={onFilterChange}
+      //       viewMode={viewMode}
+      //       onViewModeChange={onViewModeChange}
+      //       onMediaClick={onMediaClick}
+      //       onLike={onLike}
+      //       onSave={onSave}
+      //       hasMore={hasMore}
+      //       isLoadingMore={isLoadingMore}
+      //       onLoadMore={onLoadMore}
+      //       formatTimestamp={formatTimestamp}
+      //     />
+      //   );
+      // }
       
       // If it's an individual gallery item, render through Visual component
-      return (
-        <Visual 
-          item={item}
-          viewMode={viewMode}
-          onProductClick={onMediaClick}
-          likedProducts={likedProducts}
-          savedProducts={savedProducts}
-          onLike={onLike}
-          onSave={onSave}
-          formatTimestamp={formatTimestamp}
-        />
-      );
+      // return (
+      //   <Visual 
+      //     item={item}
+      //     viewMode={viewMode}
+      //     onProductClick={onMediaClick}
+      //     likedProducts={likedProducts}
+      //     savedProducts={savedProducts}
+      //     onLike={onLike}
+      //     onSave={onSave}
+      //     formatTimestamp={formatTimestamp}
+      //   />
+      // );
     }
 
     // Priority 2: Other content types
@@ -192,22 +97,22 @@ const MixedContentRenderer = ({
       case 'mini-artisan':
         return <MiniArtisan viewMode={viewMode} />;
 
-      case 'mini-commerce':
-        return <MiniCommerce viewMode={viewMode} />;
+      // case 'mini-commerce':
+      //   return <MiniCommerce viewMode={viewMode} />;
 
-      case 'products':
-        return (
-          <Visual 
-            item={item}
-            viewMode={viewMode}
-            onProductClick={(product) => console.log('Product clicked:', product)}
-            likedProducts={likedProducts}
-            savedProducts={savedProducts}
-            onLike={handleProductLike}
-            onSave={handleProductSave}
-            formatTimestamp={formatTimestamp}
-          />
-        );
+      // case 'products':
+      //   return (
+      //     <Visual 
+      //       item={item}
+      //       viewMode={viewMode}
+      //       onProductClick={(product) => console.log('Product clicked:', product)}
+      //       likedProducts={likedProducts}
+      //       savedProducts={savedProducts}
+      //       onLike={handleProductLike}
+      //       onSave={handleProductSave}
+      //       formatTimestamp={formatTimestamp}
+      //     />
+      //   );
 
       case 'diary':
         return (
@@ -241,20 +146,20 @@ const MixedContentRenderer = ({
 
       default:
         // Fallback: Try to render as gallery content if it has media properties
-        if (item.src || item.url || item.mediaUrl || item.fileId) {
-          return (
-            <Visual 
-              item={item}
-              viewMode={viewMode}
-              onProductClick={onMediaClick}
-              likedProducts={likedProducts}
-              savedProducts={savedProducts}
-              onLike={onLike}
-              onSave={onSave}
-              formatTimestamp={formatTimestamp}
-            />
-          );
-        }
+        // if (item.src || item.url || item.mediaUrl || item.fileId) {
+        //   return (
+        //     <Visual 
+        //       item={item}
+        //       viewMode={viewMode}
+        //       onProductClick={onMediaClick}
+        //       likedProducts={likedProducts}
+        //       savedProducts={savedProducts}
+        //       onLike={onLike}
+        //       onSave={onSave}
+        //       formatTimestamp={formatTimestamp}
+        //     />
+        //   );
+        // }
         
         console.warn('Unknown content type:', item.type, item);
         return null;

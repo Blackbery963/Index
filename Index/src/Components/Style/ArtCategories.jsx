@@ -108,24 +108,24 @@ import { FiArrowRight } from "react-icons/fi";
 import { fetchPexelsImage } from "../Category/pexels";
 
 const categoriesData = [
-  { name: "Portrait", link: "/portrait", color: "from-blue-500 to-purple-600" },
-  { name: "Landscape", link: "/landscape", color: "from-green-500 to-teal-600" },
-  { name: "Abstract", link: "/abstract", color: "from-pink-500 to-red-600" },
-  { name: "Still Life", link: "/still-life", color: "from-orange-500 to-amber-600" },
-  { name: "Oil Painting", link: "/oil-painting", color: "from-yellow-500 to-orange-600" },
-  { name: "Digital Art", link: "/digital-art", color: "from-cyan-500 to-blue-600" },
-  { name: "Watercolor", link: "/watercolor", color: "from-sky-500 to-indigo-600" },
-  { name: "Sculpture", link: "/sculpture", color: "from-stone-500 to-gray-600" },
-  { name: "Street Art", link: "/street-art", color: "from-lime-500 to-green-600" },
-  { name: "Minimalist", link: "/minimalist", color: "from-gray-500 to-slate-600" },
-  { name: "Surrealism", link: "/surrealism", color: "from-purple-500 to-fuchsia-600" },
-  { name: "Impressionism", link: "/impressionism", color: "from-rose-500 to-pink-600" },
-  { name: "Cubism", link: "/cubism", color: "from-amber-500 to-yellow-600" },
-  { name: "Pop Art", link: "/pop-art", color: "from-red-500 to-orange-600" },
-  { name: "Realism", link: "/realism", color: "from-emerald-500 to-green-600" },
-  { name: "Expressionism", link: "/expressionism", color: "from-violet-500 to-purple-600" },
-  { name: "Conceptual", link: "/conceptual", color: "from-teal-500 to-cyan-600" },
-  { name: "Futurism", link: "/futurism", color: "from-indigo-500 to-blue-600" },
+  { name: "Portrait", link: "/category/portrait", color: "from-blue-500 to-purple-600" },
+  { name: "Landscape", link: "/category/landscape", color: "from-green-500 to-teal-600" },
+  { name: "Abstract", link: "/category/abstract", color: "from-pink-500 to-red-600" },
+  { name: "Still Life", link: "/category/still-life", color: "from-orange-500 to-amber-600" },
+  { name: "Oil Painting", link: "/category/oil-painting", color: "from-yellow-500 to-orange-600" },
+  { name: "Digital Art", link: "/category/digital-art", color: "from-cyan-500 to-blue-600" },
+  { name: "Watercolor", link: "/category/watercolor", color: "from-sky-500 to-indigo-600" },
+  { name: "Sculpture", link: "/category/sculpture", color: "from-stone-500 to-gray-600" },
+  { name: "Street Art", link: "/category/street-art", color: "from-lime-500 to-green-600" },
+  { name: "Minimalist", link: "/category/minimalist", color: "from-gray-500 to-slate-600" },
+  { name: "Surrealism", link: "/category/surrealism", color: "from-purple-500 to-fuchsia-600" },
+  { name: "Impressionism", link: "/category/impressionism", color: "from-rose-500 to-pink-600" },
+  { name: "Cubism", link: "/categpry/cubism", color: "from-amber-500 to-yellow-600" },
+  { name: "Pop Art", link: "/category/pop-art", color: "from-red-500 to-orange-600" },
+  { name: "Realism", link: "/category/realism", color: "from-emerald-500 to-green-600" },
+  { name: "Expressionism", link: "/category/expressionism", color: "from-violet-500 to-purple-600" },
+  { name: "Conceptual", link: "/category/conceptual", color: "from-teal-500 to-cyan-600" },
+  { name: "Futurism", link: "/category/futurism", color: "from-indigo-500 to-blue-600" },
 ];
 
 const MiniArtCategories = () => {
@@ -211,3 +211,5 @@ const MiniArtCategories = () => {
 };
 
 export default MiniArtCategories;
+
+

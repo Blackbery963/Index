@@ -33,13 +33,6 @@ import ResetPassword from './Components/Authentication/Login/ResetPassword.jsx';
 import EmailVerification from './Components/Authentication/Verification/EmailVerification.jsx';
 import ImprovedCollection from './Components/Collections/ImprovedCollection/ImprovedCollection.jsx';
 import Gallery from './Components/Gallery/Gallery';
-// import Category from './Components/Category/Category';
-// import Landscape from './Sub-Components/Landscape';
-// import Still_life from './Sub-Components/Still_life';
-// import Oil_paint from './Sub-Components/Oil_paint';
-// import Water_color from './Sub-Components/Water_color';
-// import Abstract from './Sub-Components/Abstract';
-// import Modern from './Sub-Components/Modern';
 import Diaryland from './Components/Diaryland/Diaryland';
 import January from './DiaryService/January.jsx';
 import About from './Company/About/About';
@@ -50,6 +43,7 @@ import Edit_Profile from './Components/Account/Edit_Profile/Edit_Profile';
 import Dashboard from './Components/Account/Dashboard/Dashboard';
 import Your_Collections from './Components/Account/Your_Collection/Your_Collections';
 import Journal from './Components/Journal/Journal';
+import Diary from './Components/Journal/Diary.jsx';
 // import PrivacyPolicy from './Legal/Privacy_Policy/Privacy_Policy.jsx';
 // import PrivacyPolicy from '../PrivacyPolicy.jsx';
 import Legal from './Legal/Privacy_Policy/Legal.jsx';
@@ -70,31 +64,12 @@ import VotingGallery from './Community/CommunityChallenges/VotingGallery.jsx';
 import ResourceHub from './Community/Resources/ResourceHub.jsx';
 import ResourceUpload from './Community/Resources/ResourceUpload.jsx';
 import ChallengeUpload from './Community/CommunityChallenges/ChallengeUpload.jsx';
-
-
-// import ArtGalleryTemplate from './Sub-Components/ArtGalleryTemplate.jsx';
-// import Nature from './Sub-Components/Nature.jsx';
-// import Traditional from './Sub-Components/Traditional.jsx';
-// import Photography from './Sub-Components/Photography.jsx';
-// import Realism from './Sub-Components/Realism.jsx';
-// import Minimalism from './Sub-Components/Minimalism.jsx';
-// import Impression from './Sub-Components/Impression.jsx';
-// import Surrealism from './Sub-Components/Surrealism.jsx';
-// import Digital from './Sub-Components/Digital.jsx';
-// import Pop from './Sub-Components/Pop.jsx';
-// import Portrait from './Sub-Components/Portrait.jsx';
-// import Historical from './Sub-Components/Histoirical';
-// import Express from './Sub-Components/Express.jsx';
 import UserDiscoveryPage from './Components/Artisian/userDiscoveryPage.jsx';
 import DiscoverUsers from './Components/Artisian/DiscoverArtists.jsx';
 import ArtistDiscovery from './Components/ArtistDiscovery.jsx';
 import DiaryCollection from './Components/Diaryland/DiaryCollection.jsx';
 import Notification from './Settings/Notification.jsx';
-// ✅ Correct
-// import TopNav from './Components/TopNav.jsx';
 
-// import Chatbot from './ChatBot/Chatbot.jsx';
-// import Chatbot from './Chatbot/Chatbot.jsx';
 import ChatbotUI from './Chatbot/ChatbotUI.jsx';
 
 
@@ -382,6 +357,7 @@ const [navHeight, setNavHeight] = useState(56); // fallback, not 1400!
 
         <Route path="/diaryland" element={<Diaryland />} />
         <Route path="/january" element={<January />} />
+        <Route path='/diary' element={<Diary/>}/>
         {/* <Route path="/january" element={<ArtistDiary />} /> */}
 
         <Route path="/about" element={<About />} />
@@ -426,29 +402,6 @@ const [navHeight, setNavHeight] = useState(56); // fallback, not 1400!
         {/* The routing of the sub-components */}
         <Route path="/gallery" element={<Gallery />} />
         <Route path='/gallery/:id' element={<Gallery />} />
-
-
-        {/* <Route path='/Nature' element={<Nature/>}/>
-        <Route path='/Traditional' element={<Traditional/>}/>
-        <Route path='/Realism' element={<Realism/>}/>
-        <Route path='/Minimalism' element={<Minimalism/>}/>
-        <Route path='/Impressionism' element={<Impression/>}/>
-        <Route path='/Surrealism' element={<Surrealism/>}/>       
-        <Route path='/Digital' element={<Digital/>}/>
-        {/* <Route path="/Digital" element={<ArtGalleryTemplate />} /> */}
-        {/* <Route path='/Pop-Art' element={<Pop/>}/>
-        <Route path='/Expressionism' element={<Express/>}/> */}
-        {/* <Route path="/landscape" element={<Landscape />} /> */}
-        {/* <Route path="/gallery/landscape" element={<ArtGalleryTemplate />} /> */}
-        {/* <Route path="/portrait" element={<Portrait />} /> */}
-        {/* <Route path="/still-life" element={<Still_life />} />
-        <Route path="/oil_paint" element={<Oil_paint />} />
-        <Route path='/Photography' element={<Photography/>}/>
-        <Route path="/watercolor" element={<Water_color />} /> */}
-          {/* <Route path="/abstract" element={<Abstract />} /> */}
-        {/* <Route path="/abstract" element={<ArtGalleryTemplate />} /> */}
-        {/* <Route path="/historical" element={<Historical />} />
-        <Route path="/modern" element={<Modern />} /> */} 
 
         {/* Homemade Crafts Gallery */}
         <Route path="/Components/Homemade_Crafts/HandmadePaintingsGallery" element={<HandmadePaintingsGallery />} />

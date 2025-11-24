@@ -81,7 +81,7 @@ const CartSidebar = ({ isOpen, onClose, cartItems, setCartItems }) => {
             {/* Cart Items */}
             <div className="flex-1 overflow-y-auto">
               {cartItems.length === 0 ? (
-                <div className="flex flex-col items-center justify-center h-full text-center p-8">
+                <div className="flex flex-col items-center justify-center h-full text-center p-8 ">
                   <div className="text-6xl mb-4">🛒</div>
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
                     Your cart is empty

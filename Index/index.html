@@ -1,54 +1,268 @@
 <!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/jpg" href="./file_0000000038dc61f89085a4fc680c94b6 (1)_20250814_101526.jpg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta property="og:title" content="Painters' Diary" />
-    <meta property="og:description" content="Discover beautiful artworks" />
-    <meta property="og:image" content={artwork.mediaUrl} />
-    <meta property="og:url" content={shareUrl} />
-    <meta property="og:type" content="website" />
-    <!-- For better mobile behavior -->
-     <!-- In your index.html or equivalent -->
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Painters Diary">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="msapplication-tap-highlight" content="no">
-    <meta name="mobile-web-app-capable" content="yes">
-    <!-- Add this to your HTML to help with caching -->
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-    
-    <!-- For Google Adsense -->
-     <meta name="google-adsense-account" content="ca-pub-3671904846524423">
-     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3671904846524423"
-     crossorigin="anonymous"></script>
+<html lang="en" itemscope itemtype="https://schema.org/WebSite">
+<head>
+  <meta charset="UTF-8" />
 
-    <link rel="manifest" href="./public/manifest.json">
-    <title>Painters' Diary</title>
-    <style>
-      @import url('https://fonts.googleapis.com/css2?family=Almendra:ital,wght@0,400;0,700;1,400;1,700&family=Carattere&family=Cookie&family=Cormorant+Upright:wght@300;400;500;600;700&family=Cormorant:ital,wght@0,300..700;1,300..700&family=Crete+Round:ital@0;1&family=DM+Serif+Text:ital@0;1&family=Dancing+Script:wght@400..700&family=Eagle+Lake&family=Faculty+Glyphic&family=Funnel+Display:wght@300..800&family=Great+Vibes&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Lora:ital,wght@0,400..700;1,400..700&family=Lugrasimo&family=Markazi+Text:wght@400..700&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=Noto+Serif:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Protest+Revolution&family=Quicksand:wght@300..700&family=Quintessential&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Rye&family=Tapestry&family=Trade+Winds&family=Unna:ital,wght@0,400;0,700;1,400;1,700&display=swap');
-      </style>
-      <!-- Settings Google Analytics -->
-      <!-- Google tag (gtag.js) -->
-      <script async src="https://www.googletagmanager.com/gtag/js?id=G-WBLBS18RCH"></script>
-      <script>
-       window.dataLayer = window.dataLayer || [];
-       function gtag(){dataLayer.push(arguments);}
-       gtag('js', new Date());
+  <!-- Primary Settings -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-        gtag('config', 'G-WBLBS18RCH', {'debug_mode': true});
-      </script>
-  </head>
-  <body>
-    <div id="root"></div>
-    <div id="modal-root"></div>
-    <script type="module" src="src/main.jsx"></script>
-    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3671904846524423"
-     crossorigin="anonymous"></script> -->
-  </body>
+  <!-- Critical CSS for above-the-fold content -->
+  <style>
+    /* Critical CSS for initial load */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+  </style>
+
+  <!-- Optimized Google Fonts Loading -->
+<!-- Google Fonts Optimized Loading -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Almendra:ital,wght@0,400;0,700;1,400;1,700&
+family=Carattere&
+family=Cookie&
+family=Cormorant+Upright:wght@300;400;500;600;700&
+family=Cormorant:ital,wght@0,300..700;1,300..700&
+family=Crete+Round:ital@0;1&
+family=DM+Serif+Text:ital@0;1&
+family=Dancing+Script:wght@400..700&
+family=Eagle+Lake&
+family=Faculty+Glyphic&
+family=Funnel+Display:wght@300..800&
+family=Great+Vibes&
+family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&
+family=Lora:ital,wght@0,400..700;1,400..700&
+family=Lugrasimo&
+family=Markazi+Text:wght@400..700&
+family=Montserrat:ital,wght@0,100..900;1,100..900&
+family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&
+family=Noto+Serif:ital,wght@0,100..900;1,100..900&
+family=Playfair+Display:ital,wght@0,400..900;1,400..900&
+family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&
+family=Protest+Revolution&
+family=Quicksand:wght@300..700&
+family=Quintessential&
+family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&
+family=Rye&
+family=Tapestry&
+family=Trade+Winds&
+family=Unna:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://www.thepaintersdiary.com/" />
+
+  <!-- Favicon & App Icons -->
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#8B4513" />
+
+  <!-- Primary Meta Tags -->
+  <title>Painters' Diary — Art Gallery Platform | Share Paintings & Creative Diaries</title>
+  <meta name="title" content="Painters' Diary — Art Gallery Platform | Share Paintings & Creative Diaries" />
+  <meta name="description" content="Join Painters' Diary: Upload digital art, share artist diaries, explore painting galleries, join art communities, and participate in creative challenges. Connect with global artists today." />
+  <meta name="keywords" content="art gallery, painting platform, artist community, digital art sharing, oil paintings, watercolor art, sketch drawings, art diary, creative journal, art challenges, online art portfolio, emerging artists, art marketplace, handmade artwork" />
+  <meta name="author" content="Painters' Diary" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  
+  <!-- Additional SEO Meta Tags -->
+  <meta name="subject" content="Online Art Gallery and Creative Community" />
+  <meta name="copyright" content="Painters' Diary" />
+  <meta name="language" content="EN" />
+  <meta name="revised" content="Monday, December 9th, 2024, 5:00 pm" />
+  <meta name="classification" content="Art, Creative, Community, Gallery" />
+  <meta name="url" content="https://www.thepaintersdiary.com" />
+  <meta name="category" content="art and entertainment" />
+  <meta name="coverage" content="Worldwide" />
+  <meta name="distribution" content="Global" />
+  <meta name="rating" content="General" />
+  <meta name="revisit-after" content="7 days" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.thepaintersdiary.com/" />
+  <meta property="og:title" content="Painters' Diary — Share Your Art Journey with Global Artists" />
+  <meta property="og:description" content="Upload paintings, write creative diaries, explore art galleries, connect with artists worldwide. Join our art community and participate in monthly challenges." />
+  <meta property="og:image" content="https://www.thepaintersdiary.com/images/og-image.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Painters' Diary - Art Gallery Platform Showcasing Various Paintings" />
+  <meta property="og:site_name" content="Painters' Diary" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:see_also" content="https://www.thepaintersdiary.com/gallery" />
+  <meta property="og:see_also" content="https://www.thepaintersdiary.com/community" />
+
+  <!-- Twitter/X Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://www.thepaintersdiary.com/" />
+  <meta name="twitter:title" content="Painters' Diary — Art Community & Creative Platform" />
+  <meta name="twitter:description" content="Share paintings, write art diaries, join creative challenges. Connect with global artists in our vibrant community." />
+  <meta name="twitter:image" content="https://www.thepaintersdiary.com/images/twitter-image.jpg" />
+  <meta name="twitter:site" content="@paintersdiary" />
+  <meta name="twitter:creator" content="@paintersdiary" />
+  <meta name="twitter:label1" content="Art Categories" />
+  <meta name="twitter:data1" content="Paintings, Drawings, Digital Art" />
+  <meta name="twitter:label2" content="Community Size" />
+  <meta name="twitter:data2" content="Thousands of Artists" />
+
+  <!-- Additional Social Meta -->
+  <meta property="fb:app_id" content="your_facebook_app_id" />
+  <meta property="fb:pages" content="your_facebook_page_id" />
+
+  <!-- PWA / Mobile Experience -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Painters' Diary">
+  <meta name="application-name" content="Painters' Diary">
+  <meta name="msapplication-TileColor" content="#8B4513">
+  <meta name="msapplication-config" content="/browserconfig.xml">
+
+  <!-- Performance Hints -->
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+  <link rel="preconnect" href="https://www.googletagmanager.com">
+
+  <!-- Structured Data (Enhanced) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://www.thepaintersdiary.com/#website",
+        "name": "Painters' Diary",
+        "url": "https://www.thepaintersdiary.com",
+        "description": "A global platform for artists to share artworks, diaries, galleries and creative challenges.",
+        "publisher": {
+          "@type": "Organization",
+          "@id": "https://www.thepaintersdiary.com/#organization",
+          "name": "Painters' Diary",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://www.thepaintersdiary.com/logo.png",
+            "width": 200,
+            "height": 60
+          },
+          "sameAs": [
+            "https://www.facebook.com/paintersdiary",
+            "https://www.instagram.com/paintersdiary",
+            "https://twitter.com/paintersdiary"
+          ]
+        },
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://www.thepaintersdiary.com/search?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://www.thepaintersdiary.com/#organization",
+        "name": "Painters' Diary",
+        "url": "https://www.thepaintersdiary.com",
+        "description": "Global art community platform for painters and artists",
+        "foundingDate": "2024",
+        "numberOfEmployees": "10-50",
+        "slogan": "Where Every Stroke Tells a Story",
+        "address": {
+          "@type": "PostalAddress",
+          "addressCountry": "US"
+        },
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "customer service",
+          "email": "support@thepaintersdiary.com"
+        }
+      },
+      {
+        "@type": "ItemList",
+        "name": "Popular Art Categories",
+        "description": "Most popular art categories on Painters' Diary",
+        "url": "https://www.thepaintersdiary.com/categories",
+        "numberOfItems": 8,
+        "itemListElement": [
+          {"@type": "ListItem", "position": 1, "name": "Oil Paintings"},
+          {"@type": "ListItem", "position": 2, "name": "Watercolor Art"},
+          {"@type": "ListItem", "position": 3, "name": "Digital Paintings"},
+          {"@type": "ListItem", "position": 4, "name": "Sketch Drawings"},
+          {"@type": "ListItem", "position": 5, "name": "Abstract Art"},
+          {"@type": "ListItem", "position": 6, "name": "Portrait Paintings"},
+          {"@type": "ListItem", "position": 7, "name": "Landscape Art"},
+          {"@type": "ListItem", "position": 8, "name": "Mixed Media"}
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <!-- Additional Organization Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ArtGallery",
+    "name": "Painters' Diary Gallery",
+    "url": "https://www.thepaintersdiary.com/gallery",
+    "description": "Online art gallery featuring thousands of paintings from global artists",
+    "address": {
+      "@type": "PostalAddress",
+      "addressCountry": "US"
+    },
+    "openingHours": "Mo-Su 00:00-23:59"
+  }
+  </script>
+
+</head>
+
+<body itemscope itemtype="https://schema.org/WebPage">
+  
+  <!-- Hidden accessibility content for SEO -->
+  <div class="sr-only">
+    <h1>Painters' Diary - Online Art Gallery and Creative Community</h1>
+    <h2>Share paintings, artwork, and creative diaries with artists worldwide</h2>
+    <p>Platform features: Art upload, gallery browsing, artist communities, creative challenges, painting tutorials, art marketplace</p>
+  </div>
+
+  <div id="root"></div>
+  <div id="modal-root"></div>
+
+  <!-- Deferred Analytics -->
+  <script>
+    // Defer non-critical scripts
+    window.addEventListener('load', function() {
+      // Google Analytics
+      var script = document.createElement('script');
+      script.async = true;
+      script.src = 'https://www.googletagmanager.com/gtag/js?id=G-WBLBS18RCH';
+      document.head.appendChild(script);
+      
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){ dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', 'G-WBLBS18RCH', { 'anonymize_ip': true });
+      
+      // Cloudflare Analytics
+      var cfScript = document.createElement('script');
+      cfScript.defer = true;
+      cfScript.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+      cfScript.setAttribute('data-cf-beacon', '{"token": "edbbf39e721a452f95c850e4a00f8195"}');
+      document.head.appendChild(cfScript);
+    });
+  </script>
+
+  <script type="module" src="/src/main.jsx"></script>
+</body>
 </html>

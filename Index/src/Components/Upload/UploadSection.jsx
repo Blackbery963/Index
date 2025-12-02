@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { toast } from 'react-toastify';
 import { IoCloudUploadOutline } from 'react-icons/io5';
-import UploadEntry from './UploadEntry';
+// import UploadEntry from './UploadEntry';
+import UploadEntry from './UploadEntry/UploadEntry';
 import ImageGallery from './ImageGallery';
 import { account, databases, storage, config, Query, ID, Permission, Role } from "../../appwriteConfig";
 import { maxFileSize } from './constants';
@@ -733,7 +734,7 @@ const UploadSection = () => {
   };
 
   return (
-    <div className="flex flex-col items-center bg-gradient-to-b from-gray-100 to-white dark:from-[#040d12f5] dark:to-[#1a2630f5] min-h-screen pt-[100px] font-Playfair">
+    <div className="flex flex-col items-center bg-gradient-to-b from-gray-100 to-white dark:from-[#000705] dark:to-[#000705] min-h-screen pt-[100px] font-Playfair">
       <div className="w-full max-w-5xl mb-8 px-4">
         <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-2 font-Playfair">Share Your Creations</h2>
         <p className="text-gray-600 dark:text-gray-300">Upload your art, crafts, and creative works to share with the community</p>
@@ -757,74 +758,98 @@ const UploadSection = () => {
         </div>
       </div>
 
-      {activeTab === 'upload' && (
-        <div className="w-full max-w-5xl mb-6 px-4">
-          {isProcessing && (
-            <div className="mb-4 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-              <p className="text-blue-700 dark:text-blue-300 text-sm font-medium">
-                ⚡ Processing file...
-              </p>
-            </div>
-          )}
-          
-          <div className="flex flex-col md:flex-row gap-8 w-full mb-4 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm p-2 lg:p-6 rounded-2xl shadow-xl border border-teal-100 dark:border-gray-700">
-            <div className="w-full md:w-1/2 h-80 bg-gradient-to-br from-gray-200 to-gray-100 dark:from-gray-700 dark:to-gray-800 flex items-center justify-center rounded-xl overflow-hidden p-4">
-              {previewUrl ? (
-                entries[0].fileType === "image" ? (
-                  <img
-                    src={previewUrl}
-                    alt="Preview"
-                    className="max-h-full max-w-full object-contain rounded-xl"
-                  />
-                ) : entries[0].fileType === "video" ? (
-                  <video
-                    src={previewUrl}
-                    controls
-                    className="max-h-full max-w-full object-contain rounded-xl"
-                  />
-                ) : (
-                  <div className="text-center">
-                    <IoCloudUploadOutline className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500 mb-2" />
-                    <p className="text-gray-500 dark:text-gray-400">File preview not available</p>
-                    <p className="text-gray-400 dark:text-gray-500 text-sm">File: {entries[0].file?.name}</p>
-                  </div>
-                )
-              ) : (
-                <div className="text-center">
-                  <IoCloudUploadOutline className="mx-auto h-16 w-16 text-gray-400 dark:text-gray-500 mb-4" />
-                  <p className="text-gray-500 dark:text-gray-400 text-xl font-medium font-Playfair">Creation Preview</p>
-                  <p className="text-gray-400 dark:text-gray-500 text-sm mt-2">Your uploaded file will appear here</p>
-                </div>
-              )}
-            </div>
-            <div className="w-full md:w-1/2 space-y-4">
-              <UploadEntry
-                index={0}
-                entry={entries[0]}
-                updateEntry={updateEntry}
-                handleFileChange={handleFileChange}
-                handleEntryUpload={handleEntryUpload}
-                uploading={uploadingStates[0] || false}
-              />
-            </div>
-          </div>
 
-          {Object.values(uploadingStates).some((state) => state) && (
-            <div className="w-full max-w-5xl mb-6">
-              <div className="flex justify-between mb-1">
-                <span className="text-sm font-medium text-teal-700 dark:text-teal-400">Upload Progress</span>
-                <span className="text-sm font-medium text-gray-500 dark:text-gray-400">{progress}%</span>
-              </div>
-              <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2.5">
-                <div
-                  className="bg-gradient-to-r from-teal-600 to-teal-300 dark:from-teal-500 dark:to-teal-700 h-2.5 rounded-full transition-all duration-300"
-                  style={{ width: `${progress}%` }}
-                ></div>
-              </div>
+{activeTab === 'upload' && (
+  <div className="w-full md:max-w-5xl max-w-full mb-10 px-1">
+
+    {/* Processing alert */}
+    {isProcessing && (
+      <div className="mb-4 p-4 bg-teal-50 dark:bg-teal-900/20 border border-teal-200 dark:border-teal-800 rounded-xl shadow-sm">
+        <p className="text-teal-800 dark:text-teal-300 text-sm font-medium">
+          ⚡ Processing your creation...
+        </p>
+      </div>
+    )}
+
+    {/* Outer Section */}
+    <div className="
+      w-full flex flex-col md:flex-row gap-10
+      bg-white/50 dark:bg-gray-800/30 
+      backdrop-blur-xl
+      rounded-sm shadow-2xl px-1 py-4 md:p-6 lg:p-8
+      border border-white/40 dark:border-gray-700
+    ">
+
+      {/* PREVIEW SECTION */}
+      <div className="
+        w-full md:w-1/2 h-[340px]
+        rounded-xl overflow-hidden
+        flex items-center justify-center
+        bg-gradient-to-br from-gray-100 to-gray-50
+        dark:from-gray-700 dark:to-gray-800
+        shadow-inner
+        px-2
+      ">
+        {previewUrl ? (
+          entries[0].fileType === "image" ? (
+            <img
+              src={previewUrl}
+              alt="Preview"
+              className="max-h-full max-w-full object-contain rounded-lg"
+            />
+          ) : entries[0].fileType === "video" ? (
+            <video
+              src={previewUrl}
+              controls
+              className="max-h-full max-w-full object-contain rounded-lg"
+            />
+          ) : (
+            <div className="text-center opacity-80">
+              <IoCloudUploadOutline className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500 mb-3" />
+              <p className="text-gray-600 dark:text-gray-300">Preview not available</p>
             </div>
-          )}
+          )
+        ) : (
+          <div className="text-center opacity-70">
+            <IoCloudUploadOutline className="mx-auto h-16 w-16 text-gray-400 dark:text-gray-500 mb-4" />
+            <p className="text-xl font-medium text-gray-700 dark:text-gray-300 font-Playfair">Your Creation Preview</p>
+            <p className="text-gray-500 dark:text-gray-400 text-sm mt-2">It will appear here once selected</p>
+          </div>
+        )}
+      </div>
+
+      {/* FORM (no padding) */}
+      <div className="w-full md:w-1/2 px-0 space-y-6">
+        <UploadEntry
+          index={0}
+          entry={entries[0]}
+          updateEntry={updateEntry}
+          handleFileChange={handleFileChange}
+          handleEntryUpload={handleEntryUpload}
+          uploading={uploadingStates[0] || false}
+        />
+      </div>
+    </div>
+
+    {/* PROGRESS BAR */}
+    {Object.values(uploadingStates).some((state) => state) && (
+      <div className="w-full mt-6">
+        <div className="flex justify-between mb-1">
+          <span className="text-sm font-medium text-teal-700 dark:text-teal-400">Upload Progress</span>
+          <span className="text-sm font-medium text-gray-600 dark:text-gray-300">{progress}%</span>
         </div>
-      )}
+        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+          <div
+            className="bg-teal-600 dark:bg-teal-500 h-2.5 rounded-full transition-all duration-300"
+            style={{ width: `${progress}%` }}
+          ></div>
+        </div>
+      </div>
+    )}
+
+  </div>
+)}
+
 
       {activeTab === 'myArtwork' && (
         <ImageGallery

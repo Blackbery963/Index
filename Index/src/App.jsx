@@ -33,8 +33,8 @@ import ResetPassword from './Components/Authentication/Login/ResetPassword.jsx';
 import EmailVerification from './Components/Authentication/Verification/EmailVerification.jsx';
 import ImprovedCollection from './Components/Collections/ImprovedCollection/ImprovedCollection.jsx';
 import Gallery from './Components/Gallery/Gallery';
-import Diaryland from './Components/Diaryland/Diaryland';
-import January from './DiaryService/January.jsx';
+// import Diaryland from './Components/Diaryland/Diaryland';
+// import January from './DiaryService/January.jsx';
 import About from './Company/About/About';
 import Favourite from './Settings/Favourite.jsx';
 import FAQs from './Resources/FAQs/FAQs';
@@ -42,8 +42,13 @@ import Feedback from './Resources/Feedback/Feedback';
 import Edit_Profile from './Components/Account/Edit_Profile/Edit_Profile';
 import Dashboard from './Components/Account/Dashboard/Dashboard';
 import Your_Collections from './Components/Account/Your_Collection/Your_Collections';
-import Journal from './Components/Journal/Journal';
-import Diary from './Components/Journal/Diary.jsx';
+// import Journal from './Components/Journal/Journal';
+// import Diary from './Components/Journal/Diary.jsx';
+// import Diary from './Components/Journal/DiaryService/Diary.jsx'
+// import Journal from './Components/Journal/JournalService/Journal.jsx';
+import JournalGateway from './Components/Journal/JournalService/Journal.jsx';
+import CreationStudio from './Components/Journal/DiaryService/Diary.jsx';
+
 // import PrivacyPolicy from './Legal/Privacy_Policy/Privacy_Policy.jsx';
 // import PrivacyPolicy from '../PrivacyPolicy.jsx';
 import Legal from './Legal/Privacy_Policy/Legal.jsx';
@@ -67,7 +72,7 @@ import ChallengeUpload from './Community/CommunityChallenges/ChallengeUpload.jsx
 import UserDiscoveryPage from './Components/Artisian/userDiscoveryPage.jsx';
 import DiscoverUsers from './Components/Artisian/DiscoverArtists.jsx';
 import ArtistDiscovery from './Components/ArtistDiscovery.jsx';
-import DiaryCollection from './Components/Diaryland/DiaryCollection.jsx';
+// import DiaryCollection from './Components/Diaryland/DiaryCollection.jsx';
 import Notification from './Settings/Notification.jsx';
 
 import ChatbotUI from './Chatbot/ChatbotUI.jsx';
@@ -355,9 +360,9 @@ const [navHeight, setNavHeight] = useState(56); // fallback, not 1400!
         <Route path="/category/:categoryName" element={<GalleryPage />} />
         <Route path="/category" element={<Category />} />
 
-        <Route path="/diaryland" element={<Diaryland />} />
-        <Route path="/january" element={<January />} />
-        <Route path='/diary' element={<Diary/>}/>
+        {/* <Route path="/diaryland" element={<Diaryland />} /> */}
+        {/* <Route path="/january" element={<January />} /> */}
+        <Route path='/diary' element={<CreationStudio/>}/>
         {/* <Route path="/january" element={<ArtistDiary />} /> */}
 
         <Route path="/about" element={<About />} />
@@ -372,7 +377,7 @@ const [navHeight, setNavHeight] = useState(56); // fallback, not 1400!
         <Route path="/Account/dashboard" element={<Dashboard />} />
         <Route path="/Account/Upload" element={<Upload />} />
         <Route path="/collections" element={<Your_Collections />} />
-        <Route path="/Journal" element={<Journal />} />
+        <Route path="/Journal" element={<JournalGateway />} />
         <Route path="/Legal/Privacy_Policy" element={<Legal />} />
         {/* <Route path="/privacy-policy" element={<PrivacyPolicy />} /> */}
         <Route path="/Legal/Terms_Conditions" element={<Terms_Conditions />} />
@@ -412,8 +417,8 @@ const [navHeight, setNavHeight] = useState(56); // fallback, not 1400!
         <Route path='/Artists/DiscoverUsers' element={<DiscoverUsers/>}/>
 
         {/* Diary */}
-        <Route path='/Diaries/Diary-Collection' element={<DiaryCollection/>}/>
-        <Route path='/diary/:id' element = {<January/>}/>
+        {/* <Route path='/Diaries/Diary-Collection' element={<DiaryCollection/>}/> */}
+        {/* <Route path='/diary/:id' element = {<January/>}/> */}
 
         {/* the routing of commercial section */}
         <Route path='/Arteva/ArtStore' element = {<ArtStore/>}/>

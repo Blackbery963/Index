@@ -1,326 +1,10 @@
-// import React from 'react';
-
-
-// // const VITE_APPWRITE_ENDPOINT = import.meta.env.VITE_APPWRITE_ENDPOINT;
-// // const VITE_APPWRITE_PROJECT_ID = import.meta.env.VITE_APPWRITE_PROJECT_ID;
-
-// const config = {
-//   bucketId: import.meta.env.VITE_APPWRITE_BUCKET_ID,
-// };
-
-// const ImageCard = ({
-//   image,
-//   editingImage,
-//   editForm,
-//   handleEditChange,
-//   startEditing,
-//   handleUpdate,
-//   deleteImage,
-//   setEditingImage,
-//   calculatePlatformFee,
-//   isInitialized,
-//   user
-// }) => {
-//   return (
-//     <div className="bg-white dark:bg-gray-800/90 p-4 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-shadow duration-300">
-//       {/* {editingImage === image.$id ? ( */}
-//       {/* // In the ImageCard component, update the media display: */}
-// {editingImage !== image.$id && (
-//   <>
-//     {image.fileId && (
-//       <>
-//         {image.fileType === 'video' ? (
-//           <video 
-//             className="w-full h-48 object-cover rounded-lg mb-4"
-//             controls
-//           >
-//             <source 
-//               src={`${import.meta.env.VITE_APPWRITE_ENDPOINT}/storage/buckets/${config.bucketId}/files/${image.fileId}/view?project=${import.meta.env.VITE_APPWRITE_PROJECT_ID}`} 
-//               type="video/mp4" 
-//             />
-//             Your browser does not support the video tag.
-//           </video>
-//         ) : (
-//           <img
-//             src={`${import.meta.env.VITE_APPWRITE_ENDPOINT}/storage/buckets/${config.bucketId}/files/${image.fileId}/view?project=${import.meta.env.VITE_APPWRITE_PROJECT_ID}`}
-//             alt={image.title}
-//             className="w-full h-48 object-cover rounded-lg mb-4"
-//           />
-//         )}
-//       </>
-//     )}
-//     {/* ... rest of the component */}
-//   </>
-// )}
-//         <div className="space-y-4">
-//           <input
-//             type="text"
-//             value={editForm.title}
-//             onChange={(e) => handleEditChange('title', e.target.value)}
-//             placeholder="Title"
-//             className="w-full p-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-200 font-medium font-Playfair"
-//           />
-//           <textarea
-//             value={editForm.description}
-//             onChange={(e) => handleEditChange('description', e.target.value)}
-//             placeholder="Description"
-//             className="w-full p-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-200 font-medium font-Playfair"
-//             rows="3"
-//           />
-//           <input
-//             type="text"
-//             value={editForm.tag}
-//             onChange={(e) => handleEditChange('tag', e.target.value)}
-//             placeholder="Tag"
-//             className="w-full p-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-200 font-medium font-Playfair"
-//           />
-//           <input
-//             type="text"
-//             value={editForm.awards}
-//             onChange={(e) => handleEditChange('awards', e.target.value)}
-//             placeholder="Awards & Recognition"
-//             className="w-full p-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-200 font-medium font-Playfair"
-//           />
-//           <input
-//             type="number"
-//             value={editForm.price}
-//             onChange={(e) => handleEditChange('price', e.target.value)}
-//             placeholder="Price (INR)"
-//             className="w-full p-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-200 font-medium font-Playfair"
-//             min="0"
-//             step="0.01"
-//           />
-//           <div className="flex gap-2">
-//             <button
-//               onClick={() => handleUpdate(image.$id)}
-//               className="w-full p-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-all duration-300 font-Playfair"
-//             >
-//               Save
-//             </button>
-//             <button
-//               onClick={() => setEditingImage(null)}
-//               className="w-full p-3 bg-gray-300 dark:bg-gray-600 text-gray-800 dark:text-white rounded-lg hover:bg-gray-400 dark:hover:bg-gray-700 transition-all duration-300 font-Playfair"
-//             >
-//               Cancel
-//             </button>
-//           </div>
-//         </div>
-//       ) : (
-//         <>
-//           <img
-//             src={`${import.meta.env.VITE_APPWRITE_ENDPOINT}/storage/buckets/${config.bucketId}/files/${image.fileId}/view?project=${import.meta.env.VITE_APPWRITE_PROJECT_ID}`}
-//             alt={image.title}
-//             className="w-full h-48 object-cover rounded-lg mb-4"
-//           />
-//           <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100 font-Playfair">
-//             {image.title}
-//           </h3>
-//           <p className="text-gray-600 dark:text-gray-300 text-sm mb-2">{image.description}</p>
-//           <p className="text-gray-500 dark:text-gray-400 text-sm">
-//             Type: {image.medium}
-//           </p>
-//           <p className="text-gray-500 dark:text-gray-400 text-sm">
-//             Category: {image.tag || 'not specified'}
-//           </p>
-//           {image.price && (
-//             <div className="mt-2">
-//               <p className="text-teal-600 dark:text-teal-400 font-semibold text-sm">
-//                 Price: ₹{image.price}
-//               </p>
-//               <p className="text-gray-500 dark:text-gray-400 text-xs">
-//                 Platform fee: ₹{calculatePlatformFee(image.price).toFixed(2)}
-//               </p>
-//             </div>
-//           )}
-//           {image.awards && (
-//             <p className="text-gray-500 dark:text-gray-400 text-xs mt-1">
-//               Awards: {image.awards}
-//             </p>
-//           )}
-//           <p className="text-gray-500 dark:text-gray-400 text-xs mt-2">
-//             Uploaded: {new Date(image.uploadDate).toLocaleDateString()}
-//           </p>
-//           <div className="flex gap-2 mt-4">
-//             <button
-//               onClick={() => startEditing(image)}
-//               className="flex-1 p-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-all duration-300 font-Playfair text-sm"
-//               disabled={!isInitialized}
-//             >
-//               Edit
-//             </button>
-//             <button
-//               onClick={() => deleteImage(image.$id, image.fileId)}
-//               className="flex-1 p-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all duration-300 font-Playfair text-sm"
-//               disabled={!isInitialized}
-//             >
-//               Delete
-//             </button>
-//           </div>
-//         </>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default ImageCard;
-
-
-
-// import React from 'react';
-
-// const config = {
-//   bucketId: import.meta.env.VITE_APPWRITE_BUCKET_ID,
-// };
-
-// const ImageCard = ({
-//   image,
-//   editingImage,
-//   editForm,
-//   handleEditChange,
-//   startEditing,
-//   handleUpdate,
-//   deleteImage,
-//   setEditingImage,
-//   calculatePlatformFee,
-//   isInitialized,
-// }) => {
-//   const fileUrl = `${import.meta.env.VITE_APPWRITE_ENDPOINT}/storage/buckets/${config.bucketId}/files/${image.fileId}/view?project=${import.meta.env.VITE_APPWRITE_PROJECT_ID}`;
-
-//   return (
-//     <div className="bg-white dark:bg-gray-800/90 p-4 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-shadow duration-300">
-//       {editingImage === image.$id ? (
-//         // --- Edit Mode ---
-//         <div className="space-y-4">
-//           <input
-//             type="text"
-//             value={editForm.title}
-//             onChange={(e) => handleEditChange('title', e.target.value)}
-//             placeholder="Title"
-//             className="w-full p-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-200 font-medium font-Playfair"
-//           />
-//           <textarea
-//             value={editForm.description}
-//             onChange={(e) => handleEditChange('description', e.target.value)}
-//             placeholder="Description"
-//             rows="3"
-//             className="w-full p-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-200 font-medium font-Playfair"
-//           />
-//           <input
-//             type="text"
-//             value={editForm.tag}
-//             onChange={(e) => handleEditChange('tag', e.target.value)}
-//             placeholder="Tag"
-//             className="w-full p-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-200 font-medium font-Playfair"
-//           />
-//           <input
-//             type="text"
-//             value={editForm.awards}
-//             onChange={(e) => handleEditChange('awards', e.target.value)}
-//             placeholder="Awards & Recognition"
-//             className="w-full p-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-200 font-medium font-Playfair"
-//           />
-//           <input
-//             type="number"
-//             value={editForm.price}
-//             onChange={(e) => handleEditChange('price', e.target.value)}
-//             placeholder="Price (INR)"
-//             min="0"
-//             step="0.01"
-//             className="w-full p-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-200 font-medium font-Playfair"
-//           />
-//           <div className="flex gap-2">
-//             <button
-//               onClick={() => handleUpdate(image.$id)}
-//               className="w-full p-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-all duration-300 font-Playfair"
-//             >
-//               Save
-//             </button>
-//             <button
-//               onClick={() => setEditingImage(null)}
-//               className="w-full p-3 bg-gray-300 dark:bg-gray-600 text-gray-800 dark:text-white rounded-lg hover:bg-gray-400 dark:hover:bg-gray-700 transition-all duration-300 font-Playfair"
-//             >
-//               Cancel
-//             </button>
-//           </div>
-//         </div>
-//       ) : (
-//         // --- View Mode ---
-//         <>
-//           {image.fileId &&
-//             (image.fileType === 'video' ? (
-//               <video className="w-full h-48 object-cover rounded-lg mb-4" controls>
-//                 <source src={fileUrl} type="video/mp4" />
-//                 Your browser does not support the video tag.
-//               </video>
-//             ) : (
-//               <img
-//                 src={fileUrl}
-//                 alt={image.title}
-//                 className="w-full h-48 object-cover rounded-lg mb-4"
-//               />
-//             ))}
-
-//           <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100 font-Playfair">
-//             {image.title}
-//           </h3>
-//           <p className="text-gray-600 dark:text-gray-300 text-sm mb-2">
-//             {image.description}
-//           </p>
-//           <p className="text-gray-500 dark:text-gray-400 text-sm">
-//             Type: {image.medium}
-//           </p>
-//           <p className="text-gray-500 dark:text-gray-400 text-sm">
-//             Category: {image.tag || 'not specified'}
-//           </p>
-
-//           {image.price && (
-//             <div className="mt-2">
-//               <p className="text-teal-600 dark:text-teal-400 font-semibold text-sm">
-//                 Price: ₹{image.price}
-//               </p>
-//               <p className="text-gray-500 dark:text-gray-400 text-xs">
-//                 Platform fee: ₹{calculatePlatformFee(image.price).toFixed(2)}
-//               </p>
-//             </div>
-//           )}
-
-//           {image.awards && (
-//             <p className="text-gray-500 dark:text-gray-400 text-xs mt-1">
-//               Awards: {image.awards}
-//             </p>
-//           )}
-
-//           <p className="text-gray-500 dark:text-gray-400 text-xs mt-2">
-//             Uploaded: {new Date(image.uploadDate).toLocaleDateString()}
-//           </p>
-
-//           <div className="flex gap-2 mt-4">
-//             <button
-//               onClick={() => startEditing(image)}
-//               className="flex-1 p-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-all duration-300 font-Playfair text-sm"
-//               disabled={!isInitialized}
-//             >
-//               Edit
-//             </button>
-//             <button
-//               onClick={() => deleteImage(image.$id, image.fileId)}
-//               className="flex-1 p-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all duration-300 font-Playfair text-sm"
-//               disabled={!isInitialized}
-//             >
-//               Delete
-//             </button>
-//           </div>
-//         </>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default ImageCard;
-
-
-import React, { useState } from 'react';
-import { IoChevronForward, IoChevronBack, IoImages, IoPricetag } from 'react-icons/io5';
+import React, { useState, useEffect, useRef } from "react";
+import {
+  IoChevronForward,
+  IoChevronBack,
+  IoImages,
+  IoPricetag,
+} from "react-icons/io5";
 
 const config = {
   bucketId: import.meta.env.VITE_APPWRITE_BUCKET_ID,
@@ -332,252 +16,336 @@ const ImageCard = ({
   editForm,
   handleEditChange,
   startEditing,
-  handleUpdate,
-  deleteImage,
+  // handleUpdate,
+  // deleteImage,
   setEditingImage,
-  calculatePlatformFee,
   isInitialized,
-  getAllImageUrls, // New prop to get all image URLs
+  getAllImageUrls,
 }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  
-  // Get all image URLs including additional images
-  const allImageUrls = getAllImageUrls ? getAllImageUrls(image) : [];
-  const hasAdditionalImages = allImageUrls.length > 1;
-  const isForSale = !!image.price;
+  // mediaLoaded => true when the currently displayed media is fully loaded (image onLoad or video onLoadedData)
+  const [mediaLoaded, setMediaLoaded] = useState(false);
+  // fallback to avoid stuck skeletons
+  const fallbackTimerRef = useRef(null);
+  // update and delete handlers come from parent
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
-  const getImageUrl = (fileId) => {
-    return `${import.meta.env.VITE_APPWRITE_ENDPOINT}/storage/buckets/${config.bucketId}/files/${fileId}/view?project=${import.meta.env.VITE_APPWRITE_PROJECT_ID}`;
+  const handleUpdate = async (id) => {
+  setIsUpdating(true);
+  await yourUpdateLogic(id);
+  setIsUpdating(false);
   };
 
-  const mainImageUrl = getImageUrl(image.fileId);
+  const deleteImage = async (id, fileId) => {
+  setIsDeleting(true);
+  await yourDeleteLogic(id, fileId);
+  setIsDeleting(false);
+  };
 
+
+
+  // Build URL list - use provided helper if available, otherwise build from image.fileId
+  const buildUrls = () => {
+    try {
+      const urls = getAllImageUrls ? getAllImageUrls(image) : [];
+      if (Array.isArray(urls) && urls.length > 0) return urls;
+    } catch (err) {
+      // ignore and fallback
+    }
+    // fallback single URL (if fileId exists)
+    if (image?.fileId) {
+      return [
+        `${import.meta.env.VITE_APPWRITE_ENDPOINT}/storage/buckets/${
+          config.bucketId
+        }/files/${image.fileId}/view?project=${
+          import.meta.env.VITE_APPWRITE_PROJECT_ID
+        }`,
+      ];
+    }
+    return [];
+  };
+
+  const allImageUrls = buildUrls();
+  const hasAdditionalImages = allImageUrls.length > 1;
+  const isForSale = !!image?.price;
+
+  // Safely get main url
+  const mainImageUrl = allImageUrls[0] || "";
+
+  // navigation helpers
   const nextImage = () => {
+    if (allImageUrls.length <= 1) return;
     setCurrentImageIndex((prev) => (prev + 1) % allImageUrls.length);
   };
 
   const prevImage = () => {
+    if (allImageUrls.length <= 1) return;
     setCurrentImageIndex((prev) => (prev - 1 + allImageUrls.length) % allImageUrls.length);
   };
 
   const goToImage = (index) => {
+    if (index < 0 || index >= allImageUrls.length) return;
     setCurrentImageIndex(index);
   };
 
+  // whenever index or image changes, reset mediaLoaded and start fallback timer
+  useEffect(() => {
+    setMediaLoaded(false);
+
+    // clear any existing timer
+    if (fallbackTimerRef.current) {
+      clearTimeout(fallbackTimerRef.current);
+    }
+
+    // If there is no media (empty URL), mark as loaded so skeleton doesn't hang
+    if (!allImageUrls[currentImageIndex]) {
+      // small delay to preserve UX consistency (so skeleton shows briefly)
+      fallbackTimerRef.current = setTimeout(() => setMediaLoaded(true), 200);
+      return () => clearTimeout(fallbackTimerRef.current);
+    }
+
+    // fallback: if media doesn't load within 8s, stop skeleton to avoid stuck UI
+    fallbackTimerRef.current = setTimeout(() => {
+      setMediaLoaded(true);
+    }, 8000);
+
+    return () => {
+      if (fallbackTimerRef.current) clearTimeout(fallbackTimerRef.current);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentImageIndex, image?.fileId]);
+
+  // handlers for successful load / error
+  const handleMediaLoaded = () => {
+    // clear fallback timer and reveal media
+    if (fallbackTimerRef.current) {
+      clearTimeout(fallbackTimerRef.current);
+      fallbackTimerRef.current = null;
+    }
+    setMediaLoaded(true);
+  };
+
+  const handleMediaError = () => {
+    // treat as loaded to reveal fallback UI
+    if (fallbackTimerRef.current) {
+      clearTimeout(fallbackTimerRef.current);
+      fallbackTimerRef.current = null;
+    }
+    setMediaLoaded(true);
+  };
+
   return (
-    <div className="bg-white dark:bg-gray-800/90 p-4 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-shadow duration-300">
+    <div className=" backdrop-blur-xl p-2 rounded-md shadow-lg border border-white/40 dark:border-gray-700 hover:shadow-xl transition-all duration-300">
+      {/* ------------------ EDIT MODE ------------------ */}
       {editingImage === image.$id ? (
-        // --- Edit Mode ---
         <div className="space-y-4">
           <input
             type="text"
             value={editForm.title}
-            onChange={(e) => handleEditChange('title', e.target.value)}
+            onChange={(e) => handleEditChange("title", e.target.value)}
             placeholder="Title"
-            className="w-full p-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-200 font-medium font-Playfair"
+            className="w-full p-3 bg-white/40 dark:bg-gray-700/40 backdrop-blur-lg border border-white/50 dark:border-gray-600 rounded-xl text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-teal-500 font-Playfair"
           />
+
           <textarea
             value={editForm.description}
-            onChange={(e) => handleEditChange('description', e.target.value)}
+            onChange={(e) => handleEditChange("description", e.target.value)}
             placeholder="Description"
             rows="3"
-            className="w-full p-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-200 font-medium font-Playfair"
+            className="w-full p-3 bg-white/40 dark:bg-gray-700/40 backdrop-blur-lg border border-white/50 dark:border-gray-600 rounded-xl text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-teal-500 font-Playfair"
           />
+
           <input
             type="text"
             value={editForm.tag}
-            onChange={(e) => handleEditChange('tag', e.target.value)}
+            onChange={(e) => handleEditChange("tag", e.target.value)}
             placeholder="Tag"
-            className="w-full p-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-200 font-medium font-Playfair"
+            className="w-full p-3 bg-white/40 dark:bg-gray-700/40 backdrop-blur-lg border border-white/50 dark:border-gray-600 rounded-xl text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-teal-500 font-Playfair"
           />
+
           <input
             type="text"
             value={editForm.awards}
-            onChange={(e) => handleEditChange('awards', e.target.value)}
+            onChange={(e) => handleEditChange("awards", e.target.value)}
             placeholder="Awards & Recognition"
-            className="w-full p-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-200 font-medium font-Playfair"
+            className="w-full p-3 bg-white/40 dark:bg-gray-700/40 backdrop-blur-lg border border-white/50 dark:border-gray-600 rounded-xl text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-teal-500 font-Playfair"
           />
+
           <input
             type="number"
             value={editForm.price}
-            onChange={(e) => handleEditChange('price', e.target.value)}
+            onChange={(e) => handleEditChange("price", e.target.value)}
             placeholder="Price (INR)"
-            min="0"
-            step="0.01"
-            className="w-full p-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-200 font-medium font-Playfair"
+            className="w-full p-3 bg-white/40 dark:bg-gray-700/40 backdrop-blur-lg border border-white/50 dark:border-gray-600 rounded-xl text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-teal-500 font-Playfair"
           />
+
           <div className="flex gap-2">
             <button
               onClick={() => handleUpdate(image.$id)}
-              className="w-full p-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-all duration-300 font-Playfair"
+              className="flex-1 p-3 bg-teal-600 text-white rounded-xl hover:bg-teal-700 transition-all font-Playfair"
             >
               Save
             </button>
+
             <button
               onClick={() => setEditingImage(null)}
-              className="w-full p-3 bg-gray-300 dark:bg-gray-600 text-gray-800 dark:text-white rounded-lg hover:bg-gray-400 dark:hover:bg-gray-700 transition-all duration-300 font-Playfair"
+              className="flex-1 p-3 bg-gray-300 dark:bg-gray-600 text-gray-800 dark:text-white rounded-xl hover:bg-gray-400 dark:hover:bg-gray-700 transition-all font-Playfair"
             >
               Cancel
             </button>
           </div>
         </div>
       ) : (
-        // --- View Mode ---
         <>
-          {/* Image/Video Display with Slider */}
-          <div className="relative mb-4">
-            {image.fileId && (
-              <div className="relative rounded-lg overflow-hidden">
-                {image.fileType === 'video' ? (
-                  <video className="w-full h-48 object-cover" controls>
-                    <source src={mainImageUrl} type="video/mp4" />
-                    Your browser does not support the video tag.
-                  </video>
-                ) : (
-                  <>
-                    <img
-                      src={allImageUrls[currentImageIndex] || mainImageUrl}
-                      alt={image.title}
-                      className="w-full h-48 object-cover"
-                    />
-                    
-                    {/* Image Counter Badge */}
-                    {hasAdditionalImages && (
-                      <div className="absolute top-2 right-2 bg-black bg-opacity-60 text-white px-2 py-1 rounded-full text-xs flex items-center gap-1">
-                        <IoImages className="w-3 h-3" />
-                        <span>{currentImageIndex + 1}/{allImageUrls.length}</span>
-                      </div>
-                    )}
-                    
-                    {/* Sale Badge */}
-                    {isForSale && (
-                      <div className="absolute top-2 left-2 bg-green-600 text-white px-2 py-1 rounded-full text-xs flex items-center gap-1">
-                        <IoPricetag className="w-3 h-3" />
-                        <span>For Sale</span>
-                      </div>
-                    )}
+          {/* ------------------ VIEW MODE ------------------ */}
 
-                    {/* Navigation Arrows */}
-                    {hasAdditionalImages && allImageUrls.length > 1 && (
-                      <>
-                        <button
-                          onClick={prevImage}
-                          className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-1 rounded-full hover:bg-opacity-70 transition-all"
-                        >
-                          <IoChevronBack className="w-4 h-4" />
-                        </button>
-                        <button
-                          onClick={nextImage}
-                          className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-1 rounded-full hover:bg-opacity-70 transition-all"
-                        >
-                          <IoChevronForward className="w-4 h-4" />
-                        </button>
-                      </>
-                    )}
-                  </>
-                )}
+          <div className="relative mb-4 rounded-md overflow-hidden bg-gray-200 dark:bg-gray-700">
+            {/* Skeleton overlay shown until mediaLoaded === true */}
+            {!mediaLoaded && (
+              <div className="absolute inset-0 z-20 animate-pulse bg-gradient-to-r from-gray-300 via-gray-200 to-gray-300 dark:from-gray-700 dark:via-gray-600 dark:to-gray-700" />
+            )}
+
+            {/* Display media */}
+            {image.fileType === "video" ? (
+              mainImageUrl ? (
+                <video
+                  className={`w-full h-48 object-cover transition-opacity duration-500 ${
+                    mediaLoaded ? "opacity-100" : "opacity-0"
+                  }`}
+                  controls
+                  onLoadedData={handleMediaLoaded}
+                  onError={handleMediaError}
+                  src={mainImageUrl}
+                />
+              ) : (
+                <div className="w-full h-48 flex items-center justify-center text-gray-600 dark:text-gray-300">
+                  No video available
+                </div>
+              )
+            ) : mainImageUrl ? (
+              <img
+                src={allImageUrls[currentImageIndex] || mainImageUrl}
+                alt={image.title || "creation"}
+                onLoad={handleMediaLoaded}
+                onError={handleMediaError}
+                className={`w-full h-48 object-cover transition-opacity duration-500 ${
+                  mediaLoaded ? "opacity-100" : "opacity-0"
+                }`}
+              />
+            ) : (
+              <div className="w-full h-48 flex items-center justify-center text-gray-600 dark:text-gray-300">
+                No image available
               </div>
             )}
 
-            {/* Thumbnail Dots Indicator */}
-            {hasAdditionalImages && allImageUrls.length > 1 && (
-              <div className="flex justify-center mt-2 space-x-1">
-                {allImageUrls.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => goToImage(index)}
-                    className={`w-2 h-2 rounded-full transition-all ${
-                      index === currentImageIndex 
-                        ? 'bg-teal-500' 
-                        : 'bg-gray-300 dark:bg-gray-600 hover:bg-teal-300'
-                    }`}
-                  />
-                ))}
+            {/* BADGES (only show after media is revealed to avoid flicker) */}
+            {hasAdditionalImages && mediaLoaded && (
+              <div className="absolute top-2 right-2 bg-black/60 text-white px-2 py-1 rounded-lg text-xs flex items-center gap-1 z-30">
+                <IoImages className="w-3 h-3" />
+                {currentImageIndex + 1}/{allImageUrls.length}
               </div>
             )}
 
-            {/* Thumbnail Strip (Alternative to dots) */}
-            {hasAdditionalImages && allImageUrls.length > 1 && (
-              <div className="flex justify-center mt-2 space-x-1 overflow-x-auto py-1">
-                {allImageUrls.map((url, index) => (
-                  <button
-                    key={index}
-                    onClick={() => goToImage(index)}
-                    className={`flex-shrink-0 w-12 h-12 border-2 rounded-lg overflow-hidden transition-all ${
-                      index === currentImageIndex 
-                        ? 'border-teal-500' 
-                        : 'border-transparent hover:border-teal-300'
-                    }`}
-                  >
-                    <img
-                      src={url}
-                      alt={`Thumbnail ${index + 1}`}
-                      className="w-full h-full object-cover"
-                    />
-                  </button>
-                ))}
+            {isForSale && mediaLoaded && (
+              <div className="absolute top-2 left-2 bg-green-600/80 text-white px-2 py-1 rounded-lg text-xs flex items-center gap-1 z-30">
+                <IoPricetag className="w-3 h-3" /> ₹{image.price}
               </div>
+            )}
+
+            {/* SLIDER BUTTONS (only when we have more than one and media revealed) */}
+            {hasAdditionalImages && mediaLoaded && (
+              <>
+                <button
+                  onClick={prevImage}
+                  aria-label="Previous image"
+                  className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 text-white p-1 rounded-full hover:bg-black/70 z-30"
+                >
+                  <IoChevronBack className="w-4 h-4" />
+                </button>
+
+                <button
+                  onClick={nextImage}
+                  aria-label="Next image"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 text-white p-1 rounded-full hover:bg-black/70 z-30"
+                >
+                  <IoChevronForward className="w-4 h-4" />
+                </button>
+              </>
             )}
           </div>
 
-          {/* Content Details */}
-          <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100 font-Playfair mb-2">
+          {/* ---------- THUMBNAILS ---------- */}
+          {hasAdditionalImages && (
+            <div className="flex justify-center gap-2 mt-2 overflow-x-auto pb-1">
+              {allImageUrls.map((url, index) => (
+                <button
+                  key={index}
+                  onClick={() => {
+                    goToImage(index);
+                  }}
+                  className={`flex-shrink-0 w-12 h-12 rounded-lg overflow-hidden border-2 transition-all ${
+                    index === currentImageIndex
+                      ? "border-teal-500"
+                      : "border-transparent hover:border-teal-300"
+                  }`}
+                >
+                  {/* tiny thumbnail skeleton while it loads */}
+                  <img
+                    src={url}
+                    className="w-full h-full object-cover"
+                    alt={`thumb-${index}`}
+                    onLoad={() => {}}
+                    onError={() => {}}
+                  />
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* ---------- CONTENT ---------- */}
+          <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 font-Playfair mt-3">
             {image.title}
           </h3>
-          
+
           <p className="text-gray-600 dark:text-gray-300 text-sm mb-3 line-clamp-2">
             {image.description}
           </p>
-          
-          <div className="space-y-1 text-sm">
-            <p className="text-gray-500 dark:text-gray-400">
-              <span className="font-medium">Type:</span> {image.medium}
+
+          <p className="text-gray-500 dark:text-gray-400 text-sm">
+            <span className="font-medium">Type:</span> {image.medium || "—"}
+          </p>
+
+          <p className="text-gray-500 dark:text-gray-400 text-sm">
+            <span className="font-medium">Category:</span> {image.tag || "—"}
+          </p>
+
+          {image.awards && (
+            <p className="text-gray-500 dark:text-gray-400 text-sm">
+              <span className="font-medium">Awards:</span> {image.awards}
             </p>
-            
-            <p className="text-gray-500 dark:text-gray-400">
-              <span className="font-medium">Category:</span> {image.tag || 'Not specified'}
-            </p>
+          )}
 
-            {image.awards && (
-              <p className="text-gray-500 dark:text-gray-400">
-                <span className="font-medium">Awards:</span> {image.awards}
-              </p>
-            )}
+          <p className="text-gray-400 dark:text-gray-500 text-xs mt-1">
+            Uploaded on: {image.uploadDate ? new Date(image.uploadDate).toLocaleDateString() : "—"}
+          </p>
 
-            {isForSale && (
-              <div className="mt-2 p-2 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                <p className="text-green-700 dark:text-green-300 font-semibold">
-                  ₹{image.price}
-                </p>
-                <p className="text-green-600 dark:text-green-400 text-xs">
-                  Platform fee: ₹{calculatePlatformFee(image.price).toFixed(2)}
-                </p>
-                {hasAdditionalImages && (
-                  <p className="text-green-600 dark:text-green-400 text-xs mt-1">
-                    {allImageUrls.length - 1} additional image{allImageUrls.length - 1 !== 1 ? 's' : ''} available
-                  </p>
-                )}
-              </div>
-            )}
-
-            <p className="text-gray-400 dark:text-gray-500 text-xs mt-2">
-              Uploaded: {new Date(image.uploadDate).toLocaleDateString()}
-            </p>
-          </div>
-
-          {/* Action Buttons */}
+          {/* ---------- BUTTONS ---------- */}
           <div className="flex gap-2 mt-4">
             <button
               onClick={() => startEditing(image)}
-              className="flex-1 p-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-all duration-300 font-Playfair text-sm"
-              disabled={!isInitialized}
+              // disabled={!isInitialized}\
+               disabled={isUpdating || isDeleting}
+              className="flex-1 p-2 bg-teal-600 text-white rounded-xl hover:bg-teal-700 transition-all duration-300 font-Playfair text-sm"
             >
               Edit
             </button>
+
             <button
               onClick={() => deleteImage(image.$id, image.fileId)}
-              className="flex-1 p-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all duration-300 font-Playfair text-sm"
-              disabled={!isInitialized}
+              // disabled={!isInitialized}
+               disabled={isUpdating || isDeleting}
+              className="flex-1 p-2 bg-red-600 text-white rounded-xl hover:bg-red-700 transition-all duration-300 font-Playfair text-sm"
             >
               Delete
             </button>

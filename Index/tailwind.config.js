@@ -65,6 +65,7 @@ export default {
         expand: 'expand 1.5s ease-out forwards',
         fadeOut: 'fadeOut 0.8s ease-out forwards',
         pulseblur: 'pulseBlur 3s infinite',
+        float: 'float 15s linear infinite alternate',
   
      
     },
@@ -89,6 +90,10 @@ export default {
           '0%, 100%': { opacity: '0.2' },
           '50%': { opacity: '0.3' },
         },
+         float: {
+      '0%': { transform: 'translate(0, 0)' },
+      '100%': { transform: 'translate(-40px, -40px)' },
+    },
      
     },
 

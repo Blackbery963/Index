@@ -17,7 +17,7 @@ export const ArtworkCard = ({
 }) => {
   return (
     <motion.div
-      className="group relative bg-white dark:bg-gray-900 rounded-xl overflow-hidden 
+      className="group relative bg-white dark:bg-zinc-950 rounded-xl overflow-hidden 
                  shadow hover:shadow-lg border border-gray-100 dark:border-gray-700 
                  transition-all duration-300 flex flex-col"
       whileHover={{ y: -3 }}

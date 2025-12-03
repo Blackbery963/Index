@@ -25,7 +25,7 @@ const Header = () => {
 
   return (
     <header
-      className={`fixed top-3 left-1/2 -translate-x-1/2 w-[96%] rounded-2xl z-50 border transition-all duration-300
+      className={`fixed top-3 left-1/2 -translate-x-1/2 w-[98%] rounded-lg z-50 border transition-all duration-300
       ${isScrolled ? "shadow-xl" : ""}
       bg-white/30 dark:bg-gray-900/30 border-white/20 dark:border-gray-700/40 backdrop-blur-2xl`}
     >

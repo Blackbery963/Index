@@ -17,7 +17,7 @@ const Header = ({
   setIsMenuOpen 
 }) => {
   return (
-    <header className="w-full py-3 bg-white/80 dark:bg-gray-800/90 backdrop-blur-lg flex items-center justify-between px-6 z-50 fixed border-b border-gray-200/60 dark:border-gray-700/60 shadow-sm">
+    <header className="w-full py-3 bg-white/80 dark:bg-zinc-900/90 backdrop-blur-lg flex items-center justify-between px-6 z-50 fixed border-b border-gray-200/60 dark:border-gray-700/60 shadow-sm">
       <div className="flex items-center gap-3">
         <button
           className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700/80 transition-all duration-200"

@@ -124,7 +124,7 @@ const StickyNav = () => {
           isSticky ? "translate-y-0 opacity-100" : "-translate-y-4 opacity-0 pointer-events-none"
         } ${isCollapsed ? "w-16" : "w-64"}`}
       >
-        <div className="h-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-r border-gray-200/30 dark:border-gray-700/30 rounded-lg ">
+        <div className="h-full bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl border-r border-gray-200/30 dark:border-gray-700/30 rounded-lg ">
           {/* Header with controls */}
           <div className="flex items-center justify-between p-4 border-b border-gray-200/30 dark:border-gray-700/30">
             {!isCollapsed && (
@@ -167,7 +167,7 @@ const StickyNav = () => {
                   isCollapsed ? "p-3 justify-center" : "px-4 py-3"
                 } ${
                   showMoreMenu 
-                    ? "bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400" 
+                    ? "bg-blue-50 dark:bg-zinc-950/50 text-blue-600 dark:text-blue-400" 
                     : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800/30"
                 }`}
               >
@@ -191,7 +191,7 @@ const StickyNav = () => {
               {showMoreMenu && (
                 <div className={`absolute ${
                   isCollapsed ? "left-full ml-2 top-0" : "left-0 right-0 top-full mt-2 hide-scrollbar"
-                } bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl rounded-xl shadow-2xl border border-gray-200/50 dark:border-gray-700/50 z-50 min-w-[240px] overflow-hidden `}>
+                } bg-white/95 dark:bg-zinc-950/95 backdrop-blur-xl rounded-xl shadow-2xl border border-gray-200/50 dark:border-gray-700/50 z-50 min-w-[240px] overflow-hidden `}>
                   {/* Popup Header */}
                   <div className="p-4 border-b border-gray-200/30 dark:border-gray-700/30">
                     <h3 className="font-semibold text-gray-900 dark:text-white text-sm">

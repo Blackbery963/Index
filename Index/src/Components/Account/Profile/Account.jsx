@@ -218,7 +218,7 @@ function Account({ isOwnProfile = true }) {
   // Loading and error states
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 dark:bg-zinc-950">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
         <p className="mt-4 text-gray-600 dark:text-gray-300 font-Playfair">Loading your profile...</p>
       </div>
@@ -252,7 +252,7 @@ function Account({ isOwnProfile = true }) {
   }
 
   return (
-    <div className="w-full min-h-screen flex flex-col pb-6 overflow-x-hidden bg-gray-50 dark:bg-gray-900">
+    <div className="w-full min-h-screen flex flex-col pb-6 overflow-x-hidden bg-gray-50 dark:bg-zinc-950">
       <ToastContainer position='top-left' />
 
       <Header

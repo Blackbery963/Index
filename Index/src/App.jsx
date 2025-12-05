@@ -273,6 +273,7 @@ const [navHeight, setNavHeight] = useState(56); // fallback, not 1400!
   return (
     <AuthProvider>
     <Router>
+      <SimpleSignupPrompt />
       <Routes>
         <Route
           path="/"
@@ -284,7 +285,6 @@ const [navHeight, setNavHeight] = useState(56); // fallback, not 1400!
               <div className='w-full'>
               <StickyNav/>
               </div>
-              <SimpleSignupPrompt />
               <Suspense fallback={<div className="text-center py-6 text-blue-600">Loading...</div>}>
                 {/* Install Prompt Component */}
                 <div>

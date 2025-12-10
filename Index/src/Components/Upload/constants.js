@@ -34,7 +34,7 @@ export const artCategories = {
       "Stone Carving",
 
       // Other
-      "Other"
+      // "Other"
     ],
     tags: [
       // 🎨 Styles

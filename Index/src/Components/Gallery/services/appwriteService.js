@@ -133,7 +133,7 @@ export const fetchAppwriteMedia = async (filter, lastId = null, options = {}) =>
         // Get file URL with error handling
         let url;
         try {
-          url = storage.getFileView(BUCKET_ID, doc.fileId);
+          url = storage.getFilePreview(BUCKET_ID, doc.fileId);
           
           // For videos, try to get a preview thumbnail if available
           if (doc.fileType === 'video') {

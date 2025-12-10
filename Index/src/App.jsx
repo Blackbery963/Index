@@ -77,7 +77,6 @@ import Notification from './Settings/Notification.jsx';
 
 import ChatbotUI from './Chatbot/ChatbotUI.jsx';
 
-
 // The commecial part starts from here 
 import ArtStore from './Arteva/ArtStore/ArtStore.jsx';
 import OrderHistory from './Arteva/Commercial/OrderHistory.jsx';

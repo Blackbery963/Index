@@ -545,6 +545,9 @@
 // }
 
 // src/pages/GalleryPage.jsx
+
+
+
 import React, { useEffect, useState, useCallback } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import {
@@ -574,6 +577,7 @@ const userCache = new Map();
 export default function GalleryPage() {
   const { categoryName } = useParams();
   const { backgrounds, loading: bgLoading } = useCategoryBackgrounds();
+
 
   // Category resolver
   const resolveCategoryKey = useCallback((name) => {

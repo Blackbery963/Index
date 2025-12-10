@@ -439,6 +439,8 @@
 // }
 
 
+
+
 // services/artworkService.js
 import { databases, storage } from '../../appwriteConfig';
 import { Query } from 'appwrite';

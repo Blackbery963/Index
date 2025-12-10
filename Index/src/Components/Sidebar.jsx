@@ -255,7 +255,7 @@ const StickyNav = () => {
       </aside>
 
       {/* Mobile Bottom Nav */}
-      <nav className="sm:hidden fixed bottom-1 left-1/2 -translate-x-1/2 h-16 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 z-50 rounded-lg shadow-lg w-[98%] max-w-md more-menu-container">
+      <nav className="sm:hidden fixed bottom-1 left-1/2 -translate-x-1/2 h-16 bg-white/95 dark:bg-zinc-950/95 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 z-50 rounded-lg shadow-lg w-[98%] max-w-md more-menu-container">
         <div className="flex justify-around items-center h-full px-2">
           {mainNavItems.slice(0, 4).map((item) => (
             <Link

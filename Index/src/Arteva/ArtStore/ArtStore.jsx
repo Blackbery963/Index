@@ -396,7 +396,7 @@ const MobileMenu = ({ isMenuOpen, setIsMenuOpen, searchQuery, setSearchQuery }) 
 const HeroSection = ({ scaleHero }) => (
   <motion.section
     style={{ scale: scaleHero }}
-    className="relative h-[80vh] flex items-center justify-center overflow-hidden"
+    className="relative h-[60vh] flex items-center justify-center overflow-hidden"
   >
     <div className="absolute inset-0 z-0">
       <div className="absolute inset-0 z-10 bg-gradient-to-t from-gray-50/80 dark:from-gray-950 to-transparent" />
@@ -432,7 +432,7 @@ const HeroSection = ({ scaleHero }) => (
       >
         Discover rare artworks from global creators, verified on the blockchain.
       </motion.p>
-      <div className="flex flex-wrap gap-4 justify-center">
+      {/* <div className="flex flex-wrap gap-4 justify-center">
         <Link to={"/Arteva/ArtMarketplace"}>
           <motion.button
             whileHover={{ scale: 1.05, boxShadow: '0 4px 15px rgba(79, 70, 229, 0.3)' }}
@@ -451,7 +451,7 @@ const HeroSection = ({ scaleHero }) => (
             Meet Artists
           </motion.button>
         </Link>
-      </div>
+      </div> */}
     </motion.div>
   </motion.section>
 );

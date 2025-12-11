@@ -151,3 +151,11 @@ const ProductDetails = ({ product, isOpen, onClose, onAddToCart }) => {
 };
 
 export default ProductDetails;
+
+
+
+
+
+
+
+

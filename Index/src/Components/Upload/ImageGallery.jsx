@@ -472,7 +472,6 @@ const ImageGallery = ({
     </div>
   );
 
-
   return (
     <div className="w-full max-w-5xl mb-10 px-4">
 
@@ -512,7 +511,7 @@ const ImageGallery = ({
       )}
 
       {/* ---------------------------------------------------------
-        GALLERY GRID
+        GALLERY GRID     
       --------------------------------------------------------- */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
 

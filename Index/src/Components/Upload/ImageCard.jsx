@@ -5,7 +5,6 @@ import {
   IoImages,
   IoPricetag,
 } from "react-icons/io5";
-
 const config = {
   bucketId: import.meta.env.VITE_APPWRITE_BUCKET_ID,
 };

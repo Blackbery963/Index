@@ -9,7 +9,7 @@ const CommunityActions = () => {
       icon: Users,
       title: "Join a Community",
       description: "Discover tribes that share your passion. Connect, collaborate, and grow with like-minded artists.",
-      link: "/community/ExploreCommunity",
+      link: "/Community/Resources/CommunityHub",
       buttonText: "Explore Groups",
       gradient: "from-blue-500 to-violet-500",
       shadow: "shadow-blue-500/20"

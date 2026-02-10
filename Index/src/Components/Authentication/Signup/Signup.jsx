@@ -1,622 +1,14 @@
-// import React, { useState } from 'react';
-// import { Link, useNavigate } from 'react-router-dom';
-// import { toast, ToastContainer } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
-// import { motion } from 'framer-motion';
-// import { FaUser, FaEnvelope, FaPhone, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
-// import { Client, Account, ID } from 'appwrite';
-// import backgroundImage from './Image/pexels-eberhardgross-31979793.jpg'
-// import { databases, Permission, Role } from '../../../appwriteConfig';
-
-// const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
-// const USER_COLLECTION_ID = import.meta.env.VITE_APPWRITE_USERS_COLLECTION_ID;
-
-// // Initialize Appwrite Client
-// const client = new Client()
-//   .setEndpoint(import.meta.env.VITE_APPWRITE_ENDPOINT)
-//   .setProject(import.meta.env.VITE_APPWRITE_PROJECT_ID);
-
-// const account = new Account(client);
-
-// const Signup = () => {
-//   const navigate = useNavigate();
-//   const [formData, setFormData] = useState({
-//     name: '',
-//     email: '',
-//     phone: '',
-//     password: '',
-//     confirmPassword: '',
-//     agreeToTerms: false,
-//   });
-//   const [errors, setErrors] = useState({
-//     name: '',
-//     email: '',
-//     phone: '',
-//     password: '',
-//     confirmPassword: '',
-//     agreeToTerms: '',
-//   });
-//   const [isLoading, setIsLoading] = useState(false);
-//   const [showPassword, setShowPassword] = useState(false);
-
-//   const validateField = (name, value, formData) => {
-//     if (name === 'name') {
-//       return !value.trim() ? 'Name is required' : '';
-//     }
-//     if (name === 'email') {
-//       if (!value.trim()) return 'Email is required';
-//       return !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ? 'Invalid email format' : '';
-//     }
-//     if (name === 'phone') {
-//       if (value && !/^\+?[\d\s-]{10,}$/.test(value)) return 'Invalid phone number';
-//       return '';
-//     }
-  
-//   if (name === 'password') {
-//   if (!value) return 'Password is required';
-//   if (value.length < 12) return 'Minimum 12 characters';
-
-//   // const strongPasswordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/;
-//   const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{12,}$/;
-
-//   return !strongPasswordRegex.test(value)
-//     ? 'Password must be at least 12 characters and include uppercase, lowercase, number, and special characters'
-//     : '';
-// }
-
-//     if (name === 'confirmPassword') {
-//       return value !== formData.password ? 'Passwords do not match' : '';
-//     }
-//     if (name === 'agreeToTerms') {
-//       return !value ? 'You must agree to the terms' : '';
-//     }
-//     return '';
-//   };
-
-//   const handleChange = (e) => {
-//     const { name, value, type, checked } = e.target;
-//     const newValue = type === 'checkbox' ? checked : value;
-//     setFormData((prev) => ({ ...prev, [name]: newValue }));
-//     setErrors((prev) => ({ ...prev, [name]: validateField(name, newValue, { ...formData, [name]: newValue }) }));
-//   };
-
-
-// //   const handleSubmit = async (e) => {
-// //     e.preventDefault();
-// //     setIsLoading(true);
-
-// //     // Validate all fields
-//     // const newErrors = {
-//     //   name: validateField('name', formData.name, formData),
-//     //   email: validateField('email', formData.email, formData),
-//     //   phone: validateField('phone', formData.phone, formData),
-//     //   password: validateField('password', formData.password, formData),
-//     //   confirmPassword: validateField('confirmPassword', formData.confirmPassword, formData),
-//     //   agreeToTerms: validateField('agreeToTerms', formData.agreeToTerms, formData),
-//     // };
-
-//     // setErrors(newErrors);
-//     // if (Object.values(newErrors).some((error) => error)) {
-//     //   toast.error('Please fix the errors in the form');
-//     //   setIsLoading(false);
-//     //   return;
-//     // }
-
-// //     try {
-// //       const user = await account.create(
-// //         ID.unique(),
-// //         formData.email,
-// //         formData.password,
-// //         formData.name);
-// //       await account.createEmailPasswordSession(formData.email, formData.password);
-       
-      
-// //       const userData = {
-// //       userId: user.$id,
-// //       username: formData.name,
-// //       email: formData.email,
-// //       createdAt: new Date().toISOString()
-// //       };
-
-
-// //       // Store minimal user data in localStorage
-// //        localStorage.setItem('userProfile', JSON.stringify({
-// //        $id: user.$id,
-// //        username: formData.name,
-// //        email: formData.email
-// //        }));
-
-// //       toast.success('Account created successfully!', { autoClose: 3000 });
-// //       navigate('/Account');
-// //       // After successful signup
-   
-
-
-// //       // 1. Store in database (via Appwrite)
-
-// //       try {
-// //         await databases.createDocument(
-// //           DATABASE_ID,
-// //           USER_COLLECTION_ID,
-// //           user.$id,// Using user ID as document ID
-// //           {
-// //           userId: user.$id,
-// //           username: formData.name,
-// //           email: formData.email,
-// //           otp: otp,
-// //           isVerified: false,
-// //           createdAt: new Date().toISOString()
-// //           },
-// //           // userData,
-// //           [
-// //             Permission.read(Role.user(user.$id)),
-// //             Permission.update(Role.user(user.$id)),
-// //             Permission.delete(Role.user(user.$id))
-// //           ]
-// //   );
-
-// //     } catch (dbErr) {
-// //       console.error('Database error:', dbErr);
-// //   toast.error('Account created but failed to store profile.');
-// // }
-
-// //     } catch (err) {
-// //       console.error('Appwrite error:', err);
-// //       const errorMessage =
-// //         err.code === 409 ? 'Email already exists' : err.message || 'Failed to create account';
-// //       toast.error(errorMessage, { autoClose: 3000 });
-// //     } finally {
-// //       setIsLoading(false);
-// //     }
-// //   };     
-
-
-// // In your signup component, update the handleSubmit function:
-// // In your signup component, update the handleSubmit function:
-
-// const handleSubmit = async (e) => {
-//   e.preventDefault();
-//   setIsLoading(true);
-
-//   // ... validation code remains the same ...
-//       const newErrors = {
-//       name: validateField('name', formData.name, formData),
-//       email: validateField('email', formData.email, formData),
-//       phone: validateField('phone', formData.phone, formData),
-//       password: validateField('password', formData.password, formData),
-//       confirmPassword: validateField('confirmPassword', formData.confirmPassword, formData),
-//       agreeToTerms: validateField('agreeToTerms', formData.agreeToTerms, formData),
-//     };
-
-//     setErrors(newErrors);
-//     if (Object.values(newErrors).some((error) => error)) {
-//       toast.error('Please fix the errors in the form');
-//       setIsLoading(false);
-//       return;
-//     }
-
-//   try {
-//     const user = await account.create(
-//       ID.unique(),
-//       formData.email,
-//       formData.password,
-//       formData.name
-//     );
-    
-//     // Create session but don't navigate to account page yet
-//     await account.createEmailPasswordSession(formData.email, formData.password);
-    
-//     // Store minimal user data in localStorage
-//     localStorage.setItem('userProfile', JSON.stringify({
-//       $id: user.$id,
-//       username: formData.name,
-//       email: formData.email,
-//       isVerified: false // Mark as not verified yet
-//     }));
-
-//     // Store user data in database with verification field
-//     try {
-//       await databases.createDocument(
-//         DATABASE_ID,
-//         USER_COLLECTION_ID,
-//         user.$id,
-//         {
-//           userId: user.$id,
-//           username: formData.name,
-//           email: formData.email,
-//           phone: formData.phone || '',
-//           isVerified: false, // Important: mark as not verified
-//           verificationCode: null, // Will be set when we send the email
-//           createdAt: new Date().toISOString()
-//         },
-//         [
-//           Permission.read(Role.user(user.$id)),
-//           Permission.update(Role.user(user.$id)),
-//           Permission.delete(Role.user(user.$id))
-//         ]
-//       );
-//     } catch (dbErr) {
-//       console.error('Database error:', dbErr);
-//       toast.error('Account created but failed to store profile.');
-//     }
-
-//     // Redirect to verification page with user info
-//     navigate('/Authentication/Verification/EmailVerification', { 
-//       state: { 
-//         email: formData.email, 
-//         userId: user.$id 
-//       } 
-//     });
-    
-//     toast.success('Account created! Please check your email for verification code.', { autoClose: 5000 });
-
-//   } catch (err) {
-//     console.error('Appwrite error:', err);
-//     const errorMessage =
-//       err.code === 409 ? 'Email already exists' : err.message || 'Failed to create account';
-//     toast.error(errorMessage, { autoClose: 3000 });
-//   } finally {
-//     setIsLoading(false);
-//   }
-// };
-  
-  
-//   const containerVariants = {
-//     hidden: { opacity: 0 },
-//     visible: { opacity: 1, transition: { staggerChildren: 0.2 } },
-//   };
-
-//   const fieldVariants = {
-//     hidden: { opacity: 0, y: 20 },
-//     visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
-//   };
-
-//   const textContainerVariants = {
-//     hidden: { opacity: 0 },
-//     visible: { opacity: 1, transition: { staggerChildren: 0.3 } },
-//   };
-
-//   const spanVariants = {
-//     hidden: { opacity: 0, y: 20 },
-//     visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
-//   };
-
-//   return (
-//     <div
-//       className="min-h-screen flex items-center justify-center p-4 sm:p-6 bg-gray-100 dark:bg-gray-900"
-//       style={{
-//         backgroundImage: `url(${backgroundImage || 'https://via.placeholder.com/1920x1080'})`,
-//         backgroundSize: 'cover',
-//         backgroundPosition: 'center',
-//         backgroundAttachment: 'fixed',
-//       }}
-//     >
-//       <motion.div
-//         initial={{ opacity: 0, scale: 0.95 }}
-//         animate={{ opacity: 1, scale: 1 }}
-//         transition={{ duration: 0.6, ease: 'easeOut' }}
-//         className="w-full max-w-4xl lg:max-w-[80vw] flex flex-col lg:flex-row rounded-2xl overflow-hidden shadow-2xl border border-gray-200 dark:border-gray-700"
-//       >
-//         {/* Left Side - Greeting Section */}
-//         <motion.div
-//           initial={{ opacity: 0, x: -50 }}
-//           animate={{ opacity: 1, x: 0 }}
-//           transition={{ duration: 0.8, delay: 0.2 }}
-//           className="w-full lg:w-1/2 h-[40vh] lg:h-[85vh] bg-white/50 dark:bg-gray-800/50 backdrop-blur-md flex flex-col items-center justify-center p-6 sm:p-8 lg:p-12 relative"
-//         >
-//           <h1 className="text-xl sm:text-2xl lg:text-4xl font-bold text-[#1f7d53] mb-4 font-Eagle absolute top-3 left-4">
-//             Painters' Diary
-//           </h1>
-//           <div className="text-center">
-//             <h1 className="text-3xl sm:text-4xl lg:text-5xl text-gray-800 dark:text-white mb-4 flex flex-col font-['Quicksand']">
-//               <span>The Canvas</span>
-//               <span className="font-bold">Eagerly Awaits Your</span>
-//               <span>First Stroke</span>
-//             </h1>
-//             <motion.h6
-//               className="text-sm sm:text-lg md:text-xl xl:text-2xl italic text-gray-800 dark:text-gray-200 bg-white/40 dark:bg-gray-800/40 backdrop-blur-sm border border-white/20 shadow-sm font-['Quicksand'] flex flex-col items-center justify-center px-4 sm:px-6 md:px-8 lg:px-10 py-3 sm:py-4 md:py-5 lg:py-6 rounded-lg leading-relaxed"
-//               variants={textContainerVariants}
-//               initial="hidden"
-//               animate="visible"
-//             >
-//               <motion.span variants={spanVariants}>Join our creative community to</motion.span>
-//               <motion.span variants={spanVariants}>share your artistic journey</motion.span>
-//               <motion.span variants={spanVariants}>with like-minded painters.</motion.span>
-//             </motion.h6>
-//           </div>
-//         </motion.div>
-
-//         {/* Right Side - Signup Form */}
-//         <motion.div
-//           initial={{ opacity: 0, x: 50 }}
-//           animate={{ opacity: 1, x: 0 }}
-//           transition={{ duration: 0.8, delay: 0.2 }}
-//           className="w-full lg:w-1/2 h-auto lg:h-[85vh] bg-gradient-to-b from-[#1f7d53]/95 to-[#145c3e]/95 backdrop-blur-lg flex flex-col items-center justify-center p-6 sm:p-8 lg:p-12 relative"
-//         >
-//           <div className="absolute inset-0 opacity-10 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/canvas.png')]"></div>
-//           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-6 sm:mb-8 lg:mb-10 font-['Playfair_Display']">
-//             Create Your Masterpiece
-//           </h1>
-//           <motion.form
-//             onSubmit={handleSubmit}
-//             className="w-full max-w-sm lg:max-w-md space-y-5 lg:space-y-6"
-//             variants={containerVariants}
-//             initial="hidden"
-//             animate="visible"
-//           >
-//             <motion.div variants={fieldVariants}>
-//               <label htmlFor="name" className="text-lg lg:text-xl font-semibold font-['Playfair_Display'] text-white mb-2 block">
-//                 Name
-//               </label>
-//               <div className="relative flex items-center">
-//                 <div className='absolute left-3 top-1/2 transform -translate-y-1/2 z-10'>
-//                   <FaUser className="h-6 w-6 text-white drop-shadow-sm" />
-//                 </div>
-//                 <motion.input
-//                   whileFocus={{ scale: 1.02, boxShadow: '0 0 10px rgba(255, 255, 255, 0.3)' }}
-//                   transition={{ duration: 0.2 }}
-//                   type="text"
-//                   id="name"
-//                   name="name"
-//                   value={formData.name}
-//                   onChange={handleChange}
-//                   placeholder="Your Name"
-//                   className={`w-full pl-12 pr-4 py-3 rounded-lg bg-white/20 backdrop-blur-md border ${errors.name ? 'border-red-500' : 'border-white/50'} text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/80 shadow-md`}
-//                   required
-//                   disabled={isLoading}
-//                   aria-invalid={errors.name ? 'true' : 'false'}
-//                   aria-describedby={errors.name ? 'name-error' : undefined}
-//                 />
-//               </div>
-//               {errors.name && (
-//                 <p id="name-error" className="text-red-300 text-sm mt-1 font-['Quicksand']">{errors.name}</p>
-//               )}
-//             </motion.div>
-
-//             <motion.div variants={fieldVariants}>
-//               <label htmlFor="email" className="text-lg lg:text-xl font-semibold font-['Playfair_Display'] text-white mb-2 block">
-//                 Email Address
-//               </label>
-//               <div className="relative flex items-center">
-//                 <div className='absolute left-3 top-1/2 transform -translate-y-1/2 z-10'>
-//                  <FaEnvelope className=" h-6 w-6 text-white drop-shadow-sm" />
-//                 </div>
-//                 <motion.input
-//                   whileFocus={{ scale: 1.02, boxShadow: '0 0 10px rgba(255, 255, 255, 0.3)' }}
-//                   transition={{ duration: 0.2 }}
-//                   type="email"
-//                   id="email"
-//                   name="email"
-//                   value={formData.email}
-//                   onChange={handleChange}
-//                   placeholder="Your Email"
-//                   className={`w-full pl-12 pr-4 py-3 rounded-lg bg-white/20 backdrop-blur-md border ${errors.email ? 'border-red-500' : 'border-white/50'} text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/80 shadow-md`}
-//                   required
-//                   disabled={isLoading}
-//                   aria-invalid={errors.email ? 'true' : 'false'}
-//                   aria-describedby={errors.email ? 'email-error' : undefined}
-//                 />
-//               </div>
-//               {errors.email && (
-//                 <p id="email-error" className="text-red-300 text-sm mt-1 font-['Quicksand']">{errors.email}</p>
-//               )}
-//             </motion.div>
-
-//             <motion.div variants={fieldVariants}>
-//               <label htmlFor="phone" className="text-lg lg:text-xl font-semibold font-['Playfair_Display'] text-white mb-2 block">
-//                 Phone Number
-//               </label>
-//               <div className="relative flex items-center">
-//                 <div className='absolute left-3 top-1/2 transform -translate-y-1/2 z-10'>
-//                 <FaPhone className=" h-6 w-6 text-white drop-shadow-sm" />
-//                 </div>
-//                 <motion.input
-//                   whileFocus={{ scale: 1.02, boxShadow: '0 0 10px rgba(255, 255, 255, 0.3)' }}
-//                   transition={{ duration: 0.2 }}
-//                   type="tel"
-//                   id="phone"
-//                   name="phone"
-//                   value={formData.phone}
-//                   onChange={handleChange}
-//                   placeholder="Your Phone Number"
-//                   className={`w-full pl-12 pr-4 py-3 rounded-lg bg-white/20 backdrop-blur-md border ${errors.phone ? 'border-red-500' : 'border-white/50'} text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/80 shadow-md`}
-//                   disabled={isLoading}
-//                   aria-invalid={errors.phone ? 'true' : 'false'}
-//                   aria-describedby={errors.phone ? 'phone-error' : undefined}
-//                 />
-//               </div>
-//               {errors.phone && (
-//                 <p id="phone-error" className="text-red-300 text-sm mt-1 font-['Quicksand']">{errors.phone}</p>
-//               )}
-//             </motion.div>
-
-//             <motion.div variants={fieldVariants}>
-//               <label htmlFor="password" className="text-lg lg:text-xl font-semibold font-['Playfair_Display'] text-white mb-2 block">
-//                 Password
-//               </label>
-//               <div className="relative flex items-center">
-//                 <div className='absolute left-3 top-1/2 transform -translate-y-1/2 z-10'>
-//                   <FaLock className=" h-6 w-6 text-white drop-shadow-sm" />
-//                 </div>
-//                 <motion.input
-//                   whileFocus={{ scale: 1.02, boxShadow: '0 0 10px rgba(255, 255, 255, 0.3)' }}
-//                   transition={{ duration: 0.2 }}
-//                   type={showPassword ? 'text' : 'password'}
-//                   id="password"
-//                   name="password"
-//                   value={formData.password}
-//                   onChange={handleChange}
-//                   placeholder="Create a Password"
-//                   className={`w-full pl-12 pr-10 py-3 rounded-lg bg-white/20 backdrop-blur-md border ${errors.password ? 'border-red-500' : 'border-white/50'} text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/80 shadow-md`}
-//                   required
-//                   disabled={isLoading}
-//                   aria-invalid={errors.password ? 'true' : 'false'}
-//                   aria-describedby={errors.password ? 'password-error' : undefined}
-//                 />
-//                 <button
-//                   type="button"
-//                   onClick={() => setShowPassword(!showPassword)}
-//                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white"
-//                   aria-label={showPassword ? 'Hide password' : 'Show password'}
-//                 >
-//                   {showPassword ? <FaEyeSlash /> : <FaEye />}
-//                 </button>
-//               </div>
-//               {errors.password && (
-//                 <p id="password-error" className="text-red-300 text-sm mt-1 font-['Quicksand']">{errors.password}</p>
-//               )}
-//             </motion.div>
-
-//             <motion.div variants={fieldVariants}>
-//               <label htmlFor="confirmPassword" className="text-lg lg:text-xl font-semibold font-['Playfair_Display'] text-white mb-2 block">
-//                 Confirm Password
-//               </label>
-//               <div className="relative flex items-center">
-//                 <div className='absolute left-3 top-1/2 transform -translate-y-1/2 z-10'>
-//                   <FaLock className=" h-6 w-6 text-white drop-shadow-sm" />
-//                 </div>
-//                 <motion.input
-//                   whileFocus={{ scale: 1.02, boxShadow: '0 0 10px rgba(255, 255, 255, 0.3)' }}
-//                   transition={{ duration: 0.2 }}
-//                   type={showPassword ? 'text' : 'password'}
-//                   id="confirmPassword"
-//                   name="confirmPassword"
-//                   value={formData.confirmPassword}
-//                   onChange={handleChange}
-//                   placeholder="Confirm Password"
-//                   className={`w-full pl-12 pr-10 py-3 rounded-lg bg-white/20 backdrop-blur-md border ${errors.confirmPassword ? 'border-red-500' : 'border-white/50'} text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/80 shadow-md`}
-//                   required
-//                   disabled={isLoading}
-//                   aria-invalid={errors.confirmPassword ? 'true' : 'false'}
-//                   aria-describedby={errors.confirmPassword ? 'confirmPassword-error' : undefined}
-//                 />
-//                 <button
-//                   type="button"
-//                   onClick={() => setShowPassword(!showPassword)}
-//                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white"
-//                   aria-label={showPassword ? 'Hide confirm password' : 'Show confirm password'}
-//                 >
-//                   {showPassword ? <FaEyeSlash /> : <FaEye />}
-//                 </button>
-//               </div>
-//               {errors.confirmPassword && (
-//                 <p id="confirmPassword-error" className="text-red-300 text-sm mt-1 font-['Quicksand']">{errors.confirmPassword}</p>
-//               )}
-//             </motion.div>
-
-//             <motion.div variants={fieldVariants} className="flex items-center">
-//               <input
-//                 id="agreeToTerms"
-//                 name="agreeToTerms"
-//                 type="checkbox"
-//                 checked={formData.agreeToTerms}
-//                 onChange={handleChange}
-//                 className="w-4 h-4 rounded focus:ring-white text-[#1f7d53] bg-white/20 border-white/50"
-//                 disabled={isLoading}
-//                 aria-describedby={errors.agreeToTerms ? 'terms-error' : undefined}
-//               />
-//               <label htmlFor="agreeToTerms" className="ml-2 text-sm lg:text-base text-white font-['GreatVibes']">
-//                 I agree to the{' '}
-//                 <Link to="/Legal/Terms_Conditions" className="font-semibold hover:underline text-white/80">
-//                   terms of service
-//                 </Link>{' '}
-//                 and{' '}
-//                 <Link to="/Legal/Privacy_Policy" className="font-semibold hover:underline text-white/80">
-//                   privacy policy
-//                 </Link>
-//               </label>
-//             </motion.div>
-//             {errors.agreeToTerms && (
-//               <p id="terms-error" className="text-red-300 text-sm mt-1 font-['Quicksand']">{errors.agreeToTerms}</p>
-//             )}
-
-//             <motion.button
-//               whileHover={{
-//                 scale: 1.05,
-//                 boxShadow: '0 8px 25px rgba(255, 255, 255, 0.3)',
-//                 backgroundImage: 'linear-gradient(to right, #a7f3d0, #1f7d53)',
-//               }}
-//               whileTap={{ scale: 0.95 }}
-//               type="submit"
-//               disabled={isLoading}
-//               className={`w-full bg-gradient-to-r from-green-300 to-[#1f7d53] text-white py-3 lg:py-4 px-4 rounded-lg font-bold font-['Quicksand'] relative overflow-hidden transition-all ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-//             >
-//               <span className="relative z-10 flex items-center justify-center">
-//                 {isLoading ? (
-//                   <>
-//                     <svg
-//                       className="animate-spin -ml-1 mr-2 h-5 w-5 text-white"
-//                       xmlns="http://www.w3.org/2000/svg"
-//                       fill="none"
-//                       viewBox="0 0 24 24"
-//                     >
-//                       <circle
-//                         className="opacity-25"
-//                         cx="12"
-//                         cy="12"
-//                         r="10"
-//                         stroke="currentColor"
-//                         strokeWidth="4"
-//                       ></circle>
-//                       <path
-//                         className="opacity-75"
-//                         fill="currentColor"
-//                         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-//                       ></path>
-//                     </svg>
-//                     Creating Account...
-//                   </>
-//                 ) : (
-//                   'SIGN UP'
-//                 )}
-//               </span>
-//               <motion.span
-//                 className="absolute bottom-0 left-0 w-full h-1 bg-white/50 transform origin-left"
-//                 initial={{ scaleX: 0 }}
-//                 whileHover={{ scaleX: 1 }}
-//                 transition={{ duration: 0.3 }}
-//               />
-//             </motion.button>
-
-//             <motion.div variants={fieldVariants} className="text-center text-white mt-4 font-['Quicksand']">
-//               Already a member?{' '}
-//               <Link to="/login" className="font-bold hover:underline text-white/80">
-//                 Log in
-//               </Link>
-//             </motion.div>
-//           </motion.form>
-//         </motion.div>
-//       </motion.div>
-//       <ToastContainer
-//         position="top-right"
-//         autoClose={3000}
-//         hideProgressBar={false}
-//         newestOnTop={false}
-//         closeOnClick
-//         rtl={false}
-//         pauseOnFocusLoss
-//         draggable
-//         pauseOnHover
-//         theme="colored"
-//       />
-//     </div>
-//   );
-// }
-
-// export default Signup;
-
-
-
-
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { motion } from 'framer-motion';
-import { User, Mail, Phone, Lock, Eye, EyeOff, Paintbrush } from 'lucide-react';
+import { User, Mail, Phone, Lock, Eye, EyeOff, Paintbrush, ArrowRight, Sparkles } from 'lucide-react';
 import { Client, Account, ID } from 'appwrite';
 import backgroundImage from './Image/pexels-eberhardgross-31979793.jpg';
 import { databases, Permission, Role } from '../../../appwriteConfig';
+// import logo from './../../file_0000000038dc61f89085a4fc680c94b6 (1)_20250814_101526.jpg           '
+import logo from "../../../../file_0000000038dc61f89085a4fc680c94b6 (1)_20250814_101526.jpg"
 
 const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
 const USER_COLLECTION_ID = import.meta.env.VITE_APPWRITE_USERS_COLLECTION_ID;
@@ -637,21 +29,13 @@ const Signup = () => {
     confirmPassword: '',
     agreeToTerms: false,
   });
-  const [errors, setErrors] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    password: '',
-    confirmPassword: '',
-    agreeToTerms: '',
-  });
+  const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
+  // --- Validation & Submit Logic (Same as before) ---
   const validateField = (name, value, formData) => {
-    if (name === 'name') {
-      return !value.trim() ? 'Name is required' : '';
-    }
+    if (name === 'name') return !value.trim() ? 'Name is required' : '';
     if (name === 'email') {
       if (!value.trim()) return 'Email is required';
       return !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ? 'Invalid email format' : '';
@@ -660,22 +44,16 @@ const Signup = () => {
       if (value && !/^\+?[\d\s-]{10,}$/.test(value)) return 'Invalid phone number';
       return '';
     }
-  
     if (name === 'password') {
       if (!value) return 'Password is required';
       if (value.length < 12) return 'Minimum 12 characters';
       const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{12,}$/;
       return !strongPasswordRegex.test(value)
-        ? 'Password must include uppercase, lowercase, number, and special characters'
+        ? 'Must include uppercase, lowercase, number, & symbol'
         : '';
     }
-
-    if (name === 'confirmPassword') {
-      return value !== formData.password ? 'Passwords do not match' : '';
-    }
-    if (name === 'agreeToTerms') {
-      return !value ? 'You must agree to the terms' : '';
-    }
+    if (name === 'confirmPassword') return value !== formData.password ? 'Passwords do not match' : '';
+    if (name === 'agreeToTerms') return !value ? 'You must agree to the terms' : '';
     return '';
   };
 
@@ -701,19 +79,13 @@ const Signup = () => {
 
     setErrors(newErrors);
     if (Object.values(newErrors).some((error) => error)) {
-      toast.error('Please fix the errors in the form');
+      toast.error('Please fix the errors');
       setIsLoading(false);
       return;
     }
 
     try {
-      const user = await account.create(
-        ID.unique(),
-        formData.email,
-        formData.password,
-        formData.name
-      );
-      
+      const user = await account.create(ID.unique(), formData.email, formData.password, formData.name);
       await account.createEmailPasswordSession(formData.email, formData.password);
       
       localStorage.setItem('userProfile', JSON.stringify({
@@ -725,8 +97,8 @@ const Signup = () => {
 
       try {
         await databases.createDocument(
-          DATABASE_ID,
-          USER_COLLECTION_ID,
+          DATABASE_ID, 
+          USER_COLLECTION_ID, 
           user.$id,
           {
             userId: user.$id,
@@ -737,651 +109,288 @@ const Signup = () => {
             verificationCode: null,
             createdAt: new Date().toISOString()
           },
-          [
-            Permission.read(Role.user(user.$id)),
-            Permission.update(Role.user(user.$id)),
-            Permission.delete(Role.user(user.$id))
-          ]
+          [Permission.read(Role.user(user.$id)), Permission.update(Role.user(user.$id)), Permission.delete(Role.user(user.$id))]
         );
       } catch (dbErr) {
         console.error('Database error:', dbErr);
-        toast.error('Account created but failed to store profile.');
       }
 
-      navigate('/Authentication/Verification/EmailVerification', { 
-        state: { 
-          email: formData.email, 
-          userId: user.$id 
-        } 
-      });
-      
-      toast.success('Account created! Please check your email for verification code.', { autoClose: 5000 });
+      navigate('/Authentication/Verification/EmailVerification', { state: { email: formData.email, userId: user.$id } });
+      toast.success('Account created!');
 
     } catch (err) {
       console.error('Appwrite error:', err);
-      const errorMessage =
-        err.code === 409 ? 'Email already exists' : err.message || 'Failed to create account';
-      toast.error(errorMessage, { autoClose: 3000 });
+      toast.error(err.code === 409 ? 'Email already exists' : err.message || 'Failed to create account');
     } finally {
       setIsLoading(false);
     }
   };
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
-  };
-
-  const fieldVariants = {
-    hidden: { opacity: 0, y: 10 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' } },
+  // --- Animation ---
+  const contentVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gray-100 dark:bg-gray-900">
-      <div 
-        className="fixed inset-0 bg-cover bg-center bg-no-repeat z-0"
-        style={{
-          backgroundImage: `url(${backgroundImage || 'https://via.placeholder.com/1920x1080'})`,
-        }}
-      >
-        <div className="absolute inset-0 bg-black/40 backdrop-blur-[1px]"></div>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 font-['Quicksand'] relative overflow-x-hidden lg:overflow-hidden lg:flex">
+      <ToastContainer position="top-center" theme="colored" autoClose={3000} />
+
+      {/* ==============================================
+          SECTION 1: MOBILE BACKGROUND (lg:hidden)
+          The "Parallax Header" for mobile only
+         ============================================== */}
+      <div className="lg:hidden absolute top-0 left-0 w-full h-[35vh] z-0">
+        <div 
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url(${backgroundImage || 'https://via.placeholder.com/800x600'})` }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-transparent" />
+        
+        {/* Mobile Brand Overlay */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center pb-12 text-white">
+          {/* <motion.div 
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2 }}
+            className="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/20 mb-3"
+          >
+            <Paintbrush className="w-8 h-8 text-white" />
+          </motion.div> */}
+          <div className="bg-[#1f7d53] p-1 rounded-lg h-10 w-10 flex items-center justify-center overflow-hidden">
+              {/* <Paintbrush className="w-6 h-6" /> */}
+              <img src={logo} alt="" className=' rounded-lg' />
+            </div>
+          <motion.h1 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="text-2xl font-bold font-Eagle tracking-wide shadow-black drop-shadow-lg "
+          >
+            Painters' Diary
+          </motion.h1>
+        </div>
       </div>
 
-      {/* Desktop Layout */}
-      <div className="hidden lg:block w-full max-w-6xl mx-auto z-10 relative">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="flex flex-col lg:flex-row rounded-2xl overflow-hidden shadow-2xl border border-white/20 bg-white/10 backdrop-blur-lg"
-        >
-          {/* Left Side - Brand & Welcome */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.7, delay: 0.1 }}
-            className="w-full lg:w-2/5 p-8 lg:p-12 flex flex-col justify-center relative overflow-hidden"
-          >
-            <div className="absolute inset-0 opacity-5 bg-[url('https://www.transparenttextures.com/patterns/canvas.png')]"></div>
-            
-            <div className="text-center lg:text-left mb-8 lg:mb-12">
-              <motion.h1 
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="text-3xl font-bold text-white font-Eagle flex items-center justify-center lg:justify-start gap-3"
-              >
-                <Paintbrush className="text-[#1f7d53]" />
-                Painters' Diary
-              </motion.h1>
+      {/* ==============================================
+          SECTION 2: DESKTOP SIDEBAR (hidden lg:block)
+          The "Split Screen" Image for Desktop only
+         ============================================== */}
+      <div className="hidden lg:flex lg:w-1/2 relative bg-gray-950 overflow-hidden">
+        <div 
+          className="absolute inset-0 bg-cover bg-center opacity-60 transition-transform duration-[20s] hover:scale-105"
+          style={{ backgroundImage: `url(${backgroundImage || 'https://via.placeholder.com/1920x1080'})` }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
+        
+        <div className="relative z-10 w-full p-16 flex flex-col justify-between h-full text-white">
+          <div className="flex items-center gap-3">
+            <div className="bg-[#1f7d53] p-1 rounded-lg h-10 w-10 flex items-center justify-center overflow-hidden">
+              {/* <Paintbrush className="w-6 h-6" /> */}
+              <img src={logo} alt="" className=' rounded-lg' />
             </div>
-
-            <div className="text-center lg:text-left space-y-6">
-              <motion.h1 
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-                className="text-4xl lg:text-5xl text-white font-bold leading-tight font-['Quicksand']"
-              >
-                Begin Your <span className="text-[#1f7d53]">Artistic</span> Journey
-              </motion.h1>
-              
-              <motion.p 
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-                className="text-xl text-white/90 leading-relaxed font-['Quicksand']"
-              >
-                Join our creative community to share your artistic journey with like-minded painters. Your canvas awaits its first masterpiece.
-              </motion.p>
-
-              <motion.div 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.5 }}
-                className="space-y-3 text-white/80 text-base"
-              >
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-[#1f7d53] rounded-full"></div>
-                  <span>Share your artwork with the community</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-[#1f7d53] rounded-full"></div>
-                  <span>Connect with fellow artists</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-[#1f7d53] rounded-full"></div>
-                  <span>Track your creative progress</span>
-                </div>
-              </motion.div>
-            </div>
-          </motion.div>
-
-          {/* Right Side - Signup Form */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.7, delay: 0.1 }}
-            className="w-full lg:w-3/5 p-8 lg:p-12 bg-gradient-to-br from-[#1f7d53]/95 to-[#145c3e]/95 backdrop-blur-lg"
-          >
-            <div className="max-w-2xl mx-auto">
-              <motion.div 
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="text-center mb-8"
-              >
-                <h2 className="text-4xl font-bold text-white font-Playfair mb-3">
-                  Create Account
-                </h2>
-                <p className="text-white/80 font-['Quicksand']">
-                  Join thousands of artists in our creative space
-                </p>
-              </motion.div>
-
-              <motion.form
-                onSubmit={handleSubmit}
-                className="space-y-5"
-                variants={containerVariants}
-                initial="hidden"
-                animate="visible"
-              >
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <motion.div variants={fieldVariants}>
-                    <label htmlFor="name" className="text-white font-semibold mb-2 block font-['Quicksand']">
-                      Full Name
-                    </label>
-                    <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
-                        <div className="bg-white/50 rounded-l-lg p-2 shadow-sm border-r border-white/20">
-                          <User className="h-5 w-5 text-white drop-shadow-sm" />
-                        </div>
-                      </div>
-                      <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        placeholder="Your full name"
-                        className={`w-full pl-16 pr-4 py-3 rounded-lg bg-white/15 border ${
-                          errors.name ? 'border-red-400' : 'border-white/30'
-                        } text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all backdrop-blur-sm`}
-                        required
-                        disabled={isLoading}
-                      />
-                    </div>
-                    {errors.name && (
-                      <p className="text-red-200 text-sm mt-1 font-['Quicksand']">{errors.name}</p>
-                    )}
-                  </motion.div>
-
-                  <motion.div variants={fieldVariants}>
-                    <label htmlFor="email" className="text-white font-semibold mb-2 block font-['Quicksand']">
-                      Email Address
-                    </label>
-                    <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
-                        <div className="bg-white/50 rounded-l-lg p-2 shadow-sm border-r border-white/20">
-                          <Mail className="h-5 w-5 text-white drop-shadow-sm" />
-                        </div>
-                      </div>
-                      <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        placeholder="your.email@example.com"
-                        className={`w-full pl-16 pr-4 py-3 rounded-lg bg-white/15 border ${
-                          errors.email ? 'border-red-400' : 'border-white/30'
-                        } text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all backdrop-blur-sm`}
-                        required
-                        disabled={isLoading}
-                      />
-                    </div>
-                    {errors.email && (
-                      <p className="text-red-200 text-sm mt-1 font-['Quicksand']">{errors.email}</p>
-                    )}
-                  </motion.div>
-                </div>
-
-                <motion.div variants={fieldVariants}>
-                  <label htmlFor="phone" className="text-white font-semibold mb-2 block font-['Quicksand']">
-                    Phone Number <span className="text-white/60 text-sm font-normal">(Optional)</span>
-                  </label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
-                      <div className="bg-white/50 rounded-l-lg p-2 shadow-sm border-r border-white/20">
-                        <Phone className="h-5 w-5 text-white drop-shadow-sm" />
-                      </div>
-                    </div>
-                    <input
-                      type="tel"
-                      id="phone"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleChange}
-                      placeholder="+1 (555) 123-4567"
-                      className={`w-full pl-16 pr-4 py-3 rounded-lg bg-white/15 border ${
-                        errors.phone ? 'border-red-400' : 'border-white/30'
-                      } text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all backdrop-blur-sm`}
-                      disabled={isLoading}
-                    />
-                  </div>
-                  {errors.phone && (
-                    <p className="text-red-200 text-sm mt-1 font-['Quicksand']">{errors.phone}</p>
-                  )}
-                </motion.div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <motion.div variants={fieldVariants}>
-                    <label htmlFor="password" className="text-white font-semibold mb-2 block font-['Quicksand']">
-                      Password
-                    </label>
-                    <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
-                        <div className="bg-white/50 rounded-l-lg p-2 shadow-sm border-r border-white/20">
-                          <Lock className="h-5 w-5 text-white drop-shadow-sm" />
-                        </div>
-                      </div>
-                      <input
-                        type={showPassword ? 'text' : 'password'}
-                        id="password"
-                        name="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        placeholder="Create strong password"
-                        className={`w-full pl-16 pr-12 py-3 rounded-lg bg-white/15 border ${
-                          errors.password ? 'border-red-400' : 'border-white/30'
-                        } text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all backdrop-blur-sm`}
-                        required
-                        disabled={isLoading}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/70 hover:text-white transition-colors z-10"
-                      >
-                        {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                      </button>
-                    </div>
-                    {errors.password && (
-                      <p className="text-red-200 text-sm mt-1 font-['Quicksand']">{errors.password}</p>
-                    )}
-                  </motion.div>
-
-                  <motion.div variants={fieldVariants}>
-                    <label htmlFor="confirmPassword" className="text-white font-semibold mb-2 block font-['Quicksand']">
-                      Confirm Password
-                    </label>
-                    <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
-                        <div className="bg-white/50 rounded-l-lg p-2 shadow-sm border-r border-white/20">
-                          <Lock className="h-5 w-5 text-white drop-shadow-sm" />
-                        </div>
-                      </div>
-                      <input
-                        type={showPassword ? 'text' : 'password'}
-                        id="confirmPassword"
-                        name="confirmPassword"
-                        value={formData.confirmPassword}
-                        onChange={handleChange}
-                        placeholder="Confirm your password"
-                        className={`w-full pl-16 pr-12 py-3 rounded-lg bg-white/15 border ${
-                          errors.confirmPassword ? 'border-red-400' : 'border-white/30'
-                        } text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all backdrop-blur-sm`}
-                        required
-                        disabled={isLoading}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/70 hover:text-white transition-colors z-10"
-                      >
-                        {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                      </button>
-                    </div>
-                    {errors.confirmPassword && (
-                      <p className="text-red-200 text-sm mt-1 font-['Quicksand']">{errors.confirmPassword}</p>
-                    )}
-                  </motion.div>
-                </div>
-
-                <motion.div variants={fieldVariants} className="flex items-start space-x-3 pt-2">
-                  <input
-                    id="agreeToTerms"
-                    name="agreeToTerms"
-                    type="checkbox"
-                    checked={formData.agreeToTerms}
-                    onChange={handleChange}
-                    className="w-4 h-4 rounded focus:ring-2 focus:ring-white/50 text-[#1f7d53] bg-white/20 border-white/50 mt-1"
-                    disabled={isLoading}
-                  />
-                  <label htmlFor="agreeToTerms" className="text-white text-sm flex-1 font-['Quicksand']">
-                    I agree to the{' '}
-                    <Link to="/Legal/Terms_Conditions" className="font-semibold hover:underline text-white">
-                      terms of service
-                    </Link>{' '}
-                    and{' '}
-                    <Link to="/Legal/Privacy_Policy" className="font-semibold hover:underline text-white">
-                      privacy policy
-                    </Link>
-                  </label>
-                </motion.div>
-                {errors.agreeToTerms && (
-                  <p className="text-red-200 text-sm font-['Quicksand']">{errors.agreeToTerms}</p>
-                )}
-
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  type="submit"
-                  disabled={isLoading}
-                  className={`w-full bg-white text-[#1f7d53] py-4 px-6 rounded-lg font-bold font-['Quicksand'] text-lg transition-all ${
-                    isLoading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-100 hover:shadow-lg'
-                  }`}
-                >
-                  {isLoading ? (
-                    <div className="flex items-center justify-center gap-2">
-                      <div className="animate-spin rounded-full h-5 w-5 border-2 border-[#1f7d53] border-t-transparent"></div>
-                      Creating Your Account...
-                    </div>
-                  ) : (
-                    'Create Account'
-                  )}
-                </motion.button>
-
-                <motion.div variants={fieldVariants} className="text-center pt-4">
-                  <p className="text-white font-['Quicksand']">
-                    Already have an account?{' '}
-                    <Link to="/login" className="font-bold hover:underline text-white">
-                      Sign in here
-                    </Link>
-                  </p>
-                </motion.div>
-              </motion.form>
-            </div>
-          </motion.div>
-        </motion.div>
-      </div>
-
-      {/* Mobile Layout */}
-      <div className="block lg:hidden w-full max-w-md z-10">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.4 }}
-          className="bg-white/10 backdrop-blur-lg rounded-lg shadow-2xl border border-white/20 overflow-hidden"
-        >
-          {/* Mobile Header */}
-          <div className="bg-gradient-to-r from-[#1f7d53] to-[#145c3e] p-6 text-center">
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="flex items-center justify-center gap-3 mb-3"
-            >
-              <Paintbrush className="h-8 w-8 text-white" />
-              <h1 className="text-2xl font-bold text-white font-Eagle">Painters' Diary</h1>
-            </motion.div>
-            <p className="text-white/90 text-sm font-['Quicksand']">
-              Join our creative community
-            </p>
+            <span className="text-xl font-bold tracking-wide font-Eagle">Painters' Diary</span>
           </div>
 
-          {/* Mobile Form Section */}
-          <div className="p-4 bg-white/5 backdrop-blur-lg">
-            {/* <motion.h2 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.1 }}
-              className="text-2xl font-bold text-white text-center mb-6 font-['Playfair_Display']"
-            >
-              Create Account
-            </motion.h2> */}
+          <div className="max-w-md">
+            <h1 className="text-5xl font-bold leading-tight mb-6">
+              Turn your <span className="text-[#1f7d53]">imagination</span> into reality.
+            </h1>
+            <p className="text-lg text-gray-300 leading-relaxed">
+              Join a community of creators. Track your progress, share your masterpieces, and find inspiration every day.
+            </p>
+          </div>
+          
+          <div className="text-sm text-gray-400">
+            © 2025 Painters' Diary. All rights reserved.
+          </div>
+        </div>
+      </div>
 
-            <motion.form
-              onSubmit={handleSubmit}
-              className="space-y-4"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2 }}
-            >
-              {/* Name Field */}
-              <div>
-                <label htmlFor="name" className="text-white font-medium mb-2 block font-['Quicksand']">
-                  Full Name
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
-                    <div className="bg-white/50 rounded-l-lg p-2 shadow-sm border-r border-white/20">
-                      <User className="h-5 w-5 text-white drop-shadow-sm" />
-                    </div>
-                  </div>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    placeholder="Enter your full name"
-                    className={`w-full pl-16 pr-4 py-3 rounded-lg bg-white/15 border ${
-                      errors.name ? 'border-red-400' : 'border-white/30'
-                    } text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent transition-all backdrop-blur-sm`}
-                    required
-                    disabled={isLoading}
-                  />
+      {/* ==============================================
+          SECTION 3: FORM CONTENT (Shared Logic)
+          Adapts container style based on breakpoint
+         ============================================== */}
+      <div className="w-full lg:w-1/2 flex flex-col relative z-10">
+        
+        {/* Mobile Spacer (pushes sheet down) */}
+        <div className="h-[28vh] lg:hidden" />
+
+        {/* MAIN CONTAINER 
+            Mobile: Rounded top sheet, shadow-up, bg-white
+            Desktop: Full height, centered, no shadow, transparent/white
+        */}
+        <motion.div 
+          variants={contentVariants}
+          initial="hidden"
+          animate="visible"
+          className="flex-1 bg-white dark:bg-gray-950 rounded-t-[1.5rem] lg:rounded-none shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.3)] lg:shadow-none p-6 sm:p-10 lg:p-20 flex flex-col justify-center"
+        >
+          <div className="w-full max-w-lg mx-auto">
+            
+            {/* Header Text */}
+            <div className="mb-8 lg:mb-10 text-center lg:text-left">
+              {/* Mobile Handle Bar */}
+              <div className="lg:hidden w-12 h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full mx-auto mb-6" /> 
+              
+              <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white flex items-center justify-center lg:justify-start gap-2">
+                Create Account <Sparkles className="w-5 h-5 text-[#1f7d53] hidden lg:block" />
+              </h2>
+              <p className="mt-2 text-gray-500 dark:text-gray-400 text-sm lg:text-base">
+                Join the community and start tracking your art.
+              </p>
+            </div>
+
+            {/* Form */}
+            <form onSubmit={handleSubmit} className="space-y-4 lg:space-y-5">
+              
+              {/* Name */}
+              <div className="relative group">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <User className="h-5 w-5 text-gray-400 group-focus-within:text-[#1f7d53] transition-colors" />
                 </div>
-                {errors.name && (
-                  <p className="text-red-200 text-sm mt-1 font-['Quicksand']">{errors.name}</p>
-                )}
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  placeholder="Full Name"
+                  className={`block w-full pl-11 pr-4 py-3.5 bg-gray-50 dark:bg-gray-800 border ${errors.name ? 'border-red-400' : 'border-transparent lg:border-gray-200 dark:lg:border-gray-700'} rounded-2xl lg:rounded-xl text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:bg-white dark:focus:bg-gray-900 focus:ring-2 focus:ring-[#1f7d53]/20 focus:border-[#1f7d53] transition-all duration-200`}
+                />
+                {errors.name && <p className="absolute right-2 top-3.5 text-xs text-red-500 font-medium">{errors.name}</p>}
               </div>
 
-              {/* Email Field */}
-              <div>
-                <label htmlFor="email" className="text-white font-medium mb-2 block font-['Quicksand']">
-                  Email Address
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
-                    <div className="bg-white/50 rounded-l-lg p-2 shadow-sm border-r border-white/20">
-                      <Mail className="h-5 w-5 text-white drop-shadow-sm" />
-                    </div>
-                  </div>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    placeholder="your.email@example.com"
-                    className={`w-full pl-16 pr-4 py-3 rounded-lg bg-white/15 border ${
-                      errors.email ? 'border-red-400' : 'border-white/30'
-                    } text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent transition-all backdrop-blur-sm`}
-                    required
-                    disabled={isLoading}
-                  />
+              {/* Email */}
+              <div className="relative group">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <Mail className="h-5 w-5 text-gray-400 group-focus-within:text-[#1f7d53] transition-colors" />
                 </div>
-                {errors.email && (
-                  <p className="text-red-200 text-sm mt-1 font-['Quicksand']">{errors.email}</p>
-                )}
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="Email Address"
+                  className={`block w-full pl-11 pr-4 py-3.5 bg-gray-50 dark:bg-gray-800 border ${errors.email ? 'border-red-400' : 'border-transparent lg:border-gray-200 dark:lg:border-gray-700'} rounded-2xl lg:rounded-xl text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:bg-white dark:focus:bg-gray-900 focus:ring-2 focus:ring-[#1f7d53]/20 focus:border-[#1f7d53] transition-all duration-200`}
+                />
+                {errors.email && <p className="absolute right-2 top-3.5 text-xs text-red-500 font-medium">{errors.email}</p>}
               </div>
 
-              {/* Phone Field */}
-              <div>
-                <label htmlFor="phone" className="text-white font-medium mb-2 block font-['Quicksand']">
-                  Phone Number <span className="text-white/60 text-sm font-normal">(Optional)</span>
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
-                    <div className="bg-white/50 rounded-l-lg p-2 shadow-sm border-r border-white/20">
-                      <Phone className="h-5 w-5 text-white drop-shadow-sm" />
-                    </div>
-                  </div>
-                  <input
-                    type="tel"
-                    id="phone"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    placeholder="+1 (555) 123-4567"
-                    className={`w-full pl-16 pr-4 py-3 rounded-lg bg-white/15 border ${
-                      errors.phone ? 'border-red-400' : 'border-white/30'
-                    } text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent transition-all backdrop-blur-sm`}
-                    disabled={isLoading}
-                  />
+              {/* Phone */}
+              <div className="relative group">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <Phone className="h-5 w-5 text-gray-400 group-focus-within:text-[#1f7d53] transition-colors" />
                 </div>
-                {errors.phone && (
-                  <p className="text-red-200 text-sm mt-1 font-['Quicksand']">{errors.phone}</p>
-                )}
+                <input
+                  type="tel"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  placeholder="Phone (Optional)"
+                  className={`block w-full pl-11 pr-4 py-3.5 bg-gray-50 dark:bg-gray-800 border ${errors.phone ? 'border-red-400' : 'border-transparent lg:border-gray-200 dark:lg:border-gray-700'} rounded-2xl lg:rounded-xl text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:bg-white dark:focus:bg-gray-900 focus:ring-2 focus:ring-[#1f7d53]/20 focus:border-[#1f7d53] transition-all duration-200`}
+                />
               </div>
 
-              {/* Password Field */}
-              <div>
-                <label htmlFor="password" className="text-white font-medium mb-2 block font-['Quicksand']">
-                  Password
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
-                    <div className="bg-white/50 rounded-l-lg p-2 shadow-sm border-r border-white/20">
-                      <Lock className="h-5 w-5 text-white drop-shadow-sm" />
-                    </div>
+              {/* Passwords */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="relative group">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <Lock className="h-5 w-5 text-gray-400 group-focus-within:text-[#1f7d53] transition-colors" />
                   </div>
                   <input
                     type={showPassword ? 'text' : 'password'}
-                    id="password"
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
-                    placeholder="Create strong password"
-                    className={`w-full pl-16 pr-12 py-3 rounded-lg bg-white/15 border ${
-                      errors.password ? 'border-red-400' : 'border-white/30'
-                    } text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent transition-all backdrop-blur-sm`}
-                    required
-                    disabled={isLoading}
+                    placeholder="Password"
+                    className={`block w-full pl-11 pr-10 py-3.5 bg-gray-50 dark:bg-gray-800 border ${errors.password ? 'border-red-400' : 'border-transparent lg:border-gray-200 dark:lg:border-gray-700'} rounded-2xl lg:rounded-xl text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:bg-white dark:focus:bg-gray-900 focus:ring-2 focus:ring-[#1f7d53]/20 focus:border-[#1f7d53] transition-all duration-200`}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/70 hover:text-white transition-colors z-10"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 p-1"
                   >
-                    {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
                 </div>
-                {errors.password && (
-                  <p className="text-red-200 text-sm mt-1 font-['Quicksand']">{errors.password}</p>
-                )}
-              </div>
 
-              {/* Confirm Password Field */}
-              <div>
-                <label htmlFor="confirmPassword" className="text-white font-medium mb-2 block font-['Quicksand']">
-                  Confirm Password
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
-                    <div className="bg-white/50 rounded-l-lg p-2 shadow-sm border-r border-white/20">
-                      <Lock className="h-5 w-5 text-white drop-shadow-sm" />
-                    </div>
+                <div className="relative group">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <Lock className="h-5 w-5 text-gray-400 group-focus-within:text-[#1f7d53] transition-colors" />
                   </div>
                   <input
                     type={showPassword ? 'text' : 'password'}
-                    id="confirmPassword"
                     name="confirmPassword"
                     value={formData.confirmPassword}
                     onChange={handleChange}
-                    placeholder="Confirm your password"
-                    className={`w-full pl-16 pr-12 py-3 rounded-lg bg-white/15 border ${
-                      errors.confirmPassword ? 'border-red-400' : 'border-white/30'
-                    } text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent transition-all backdrop-blur-sm`}
-                    required
-                    disabled={isLoading}
+                    placeholder="Confirm"
+                    className={`block w-full pl-11 pr-4 py-3.5 bg-gray-50 dark:bg-gray-800 border ${errors.confirmPassword ? 'border-red-400' : 'border-transparent lg:border-gray-200 dark:lg:border-gray-700'} rounded-2xl lg:rounded-xl text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:bg-white dark:focus:bg-gray-900 focus:ring-2 focus:ring-[#1f7d53]/20 focus:border-[#1f7d53] transition-all duration-200`}
                   />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/70 hover:text-white transition-colors z-10"
-                  >
-                    {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                  </button>
                 </div>
-                {errors.confirmPassword && (
-                  <p className="text-red-200 text-sm mt-1 font-['Quicksand']">{errors.confirmPassword}</p>
-                )}
               </div>
-
-              {/* Terms Agreement */}
-              <div className="flex items-start space-x-3 pt-2">
-                <input
-                  id="agreeToTerms"
-                  name="agreeToTerms"
-                  type="checkbox"
-                  checked={formData.agreeToTerms}
-                  onChange={handleChange}
-                  className="w-4 h-4 rounded focus:ring-2 focus:ring-white/50 text-[#1f7d53] bg-white/20 border-white/50 mt-1"
-                  disabled={isLoading}
-                />
-                <label htmlFor="agreeToTerms" className="text-white text-sm flex-1 font-['Quicksand']">
-                  I agree to the{' '}
-                  <Link to="/Legal/Terms_Conditions" className="font-semibold text-white hover:underline">
-                    terms of service
-                  </Link>{' '}
-                  and{' '}
-                  <Link to="/Legal/Privacy_Policy" className="font-semibold text-white hover:underline">
-                    privacy policy
-                  </Link>
-                </label>
-              </div>
-              {errors.agreeToTerms && (
-                <p className="text-red-200 text-sm font-['Quicksand']">{errors.agreeToTerms}</p>
+              {/* Password Errors Display */}
+              {(errors.password || errors.confirmPassword) && (
+                 <div className="text-xs text-red-500 px-2">
+                   {errors.password && <p>{errors.password}</p>}
+                   {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
+                 </div>
               )}
+
+              {/* Terms */}
+              <label className="flex items-start gap-3 p-1 cursor-pointer group">
+                <div className="relative flex items-center mt-0.5">
+                  <input
+                    type="checkbox"
+                    name="agreeToTerms"
+                    checked={formData.agreeToTerms}
+                    onChange={handleChange}
+                    className="peer h-5 w-5 cursor-pointer appearance-none rounded-md border border-gray-300 dark:border-gray-600 transition-all checked:border-[#1f7d53] checked:bg-[#1f7d53]"
+                  />
+                  <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white opacity-0 transition-opacity peer-checked:opacity-100">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M10 3L4.5 8.5L2 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </div>
+                </div>
+                <span className="text-sm text-gray-500 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-gray-200 transition-colors">
+                  I agree to the <Link to="/Legal/Terms_Conditions" className="text-[#1f7d53] font-semibold hover:underline">Terms</Link> & <Link to="/Legal/Privacy_Policy" className="text-[#1f7d53] font-semibold hover:underline">Privacy Policy</Link>
+                </span>
+              </label>
+              {errors.agreeToTerms && <p className="text-xs text-red-500 ml-1">{errors.agreeToTerms}</p>}
 
               {/* Submit Button */}
               <motion.button
+                whileHover={{ scale: 1.01 }}
                 whileTap={{ scale: 0.98 }}
                 type="submit"
                 disabled={isLoading}
-                className={`w-full bg-white text-[#1f7d53] py-3 px-5 rounded-lg font-bold font-['Quicksand'] text-lg transition-all ${
-                  isLoading ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-lg'
+                className={`w-full py-4 rounded-2xl lg:rounded-xl font-bold text-white shadow-lg shadow-[#1f7d53]/30 flex items-center justify-center gap-3 transition-all ${
+                  isLoading ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#1f7d53] hover:bg-[#186642] hover:shadow-[#1f7d53]/40'
                 }`}
               >
                 {isLoading ? (
-                  <div className="flex items-center justify-center gap-2">
-                    <div className="animate-spin rounded-full h-5 w-5 border-2 border-[#1f7d53] border-t-transparent"></div>
-                    Creating Account...
-                  </div>
+                  <div className="h-5 w-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                 ) : (
-                  'Create Account'
+                  <>Create Account <ArrowRight className="w-5 h-5" /></>
                 )}
               </motion.button>
+            </form>
 
-              {/* Login Link */}
-              <div className="text-center pt-4">
-                <p className="text-white font-['Quicksand']">
-                  Already have an account?{' '}
-                  <Link to="/login" className="font-semibold text-white hover:underline">
-                    Sign in
-                  </Link>
-                </p>
-              </div>
-            </motion.form>
+            {/* Footer */}
+            <div className="mt-8 text-center">
+              <p className="text-gray-500 dark:text-gray-400 text-sm">
+                Already have an account?{' '}
+                <Link to="/login" className="text-[#1f7d53] font-bold hover:underline">
+                  Sign in
+                </Link>
+              </p>
+            </div>
+            
+            {/* Extra bottom spacing for mobile scroll */}
+            <div className="h-8 lg:hidden" />
           </div>
         </motion.div>
       </div>
-
-      <ToastContainer
-        position="top-center"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-      />
     </div>
   );
 };

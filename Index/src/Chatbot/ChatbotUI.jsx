@@ -338,7 +338,7 @@ const ChatbotUI = () => {
 
   if (!isOpen) {
     return (
-      <div className="fixed lg:bottom-8 bottom-20 lg:right-8 right-4 z-50">
+      <div className="fixed lg:bottom-24 bottom-32 lg:right-8 right-4 z-50">
         {hasNotification && (
           <div className="absolute -top-1 -right-1 z-10">
             <span className="flex h-4 w-4">

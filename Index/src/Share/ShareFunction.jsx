@@ -188,6 +188,7 @@ import { RiTelegram2Line } from "react-icons/ri";
 import { toast } from "react-toastify";
 import { recordShare, getShareCount } from "../Share/shareService";
 import { account } from "../appwriteConfig";
+import { Send } from "lucide-react";
 
 /**
  * ShareBottomSheet
@@ -312,10 +313,10 @@ const ShareBottomSheet = ({ artwork, triggerClassName = "" }) => {
       {/* Trigger Button */}
       <button
         onClick={() => setOpen(true)}
-        className={`flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition ${triggerClassName}`}
+        className={`flex items-center gap-2 px-2 py-1 rounded-full transition ${triggerClassName}`}
         aria-label="Share"
       >
-        <RiTelegram2Line className="text-gray-700 dark:text-gray-300" size={18} />
+        <Send className="text-gray-700 dark:text-gray-300" size={18} />
         {shareCount > 0 && <span className="text-xs text-gray-500 dark:text-gray-400">{shareCount}</span>}
       </button>
 

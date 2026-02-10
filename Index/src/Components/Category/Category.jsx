@@ -239,10 +239,10 @@ export default function Category() {
   );
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 py-8 px-4 transition-colors duration-300">
+    <div className="min-h-screen bg-white dark:bg-zinc-950 py-8 px-4 transition-colors duration-300">
       {/* Fixed Back Button */}
       <Link to="/">
-        <button className="fixed top-6 left-6 z-50 p-3 rounded-full bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-all hover:scale-110 rounded-full">
+        <button className="fixed top-6 left-6 z-50 p-3 bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-all hover:scale-110 rounded-full">
           <Faback className="w-6 h-6 text-gray-700 dark:text-gray-200" />
         </button>
       </Link>

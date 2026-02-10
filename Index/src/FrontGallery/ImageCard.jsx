@@ -1,451 +1,379 @@
-// import React from 'react';
-// import { 
-//   Heart, 
-//   MessageCircle, 
-//   Share2, 
-//   Bookmark, 
-//   MoreHorizontal, 
-//   TrendingUp,
-//   Eye,
-//   Download
-// } from 'lucide-react';
-// import { motion } from 'framer-motion';
-// import { MdSearch } from "react-icons/md";
-// import { HiOutlineViewfinderCircle } from "react-icons/hi2";
-// import LikeButton from '../EngagementService/likeButton';
-// import ShareButton from '../Share/ShareFunction';
-// import DownloadService from '../Downloads/downloadService';
-// import FollowButton from '../Follow/FollowButton';
-
-// const ImageCard = ({ 
-//   image, 
-//   onImageClick, 
-//   likedImages, 
-//   savedImages, 
-//   onLike, 
-//   onSave, 
-//   formatTimestamp,
-//   viewMode = 'feed'
-// }) => {
-//   // Validate image object
-//   if (!image) {
-//     console.error('ImageCard: No image object provided');
-//     return null;
-//   }
-
-//   // Log image structure for debugging
-//   if (!image.src && !image.url && !image.imageUrl) {
-//     console.warn('ImageCard: Image missing src/url property', {
-//       imageId: image.id,
-//       availableProps: Object.keys(image),
-//       imageObject: image
-//     });
-//   }
-
-//   const isLiked = likedImages?.has(image.id);
-//   const isSaved = savedImages?.has(image.id);
-//   const likeCount = (image.likes || 0) + (isLiked ? 1 : 0);
-
-//   // Get image source with fallbacks
-//   const getImageSrc = () => {
-//     return image.src || 
-//            image.url || 
-//            image.imageUrl || 
-//            image.imageURL ||
-//            image.image ||
-//            image.thumbnail ||
-//            '';
-//   };
-
-//   const imageSrc = getImageSrc();
-
-//   const handleLike = (e) => {
-//     e.stopPropagation();
-//     onLike?.(image.id, image);
-//   };
-
-//   const handleSave = (e) => {
-//     e.stopPropagation();
-//     onSave?.(image.id, image);
-//   };
-
-//   const handleClick = () => {
-//     // Enhanced logging for debugging
-//     console.group('🖼️ ImageCard Click Debug');
-//     console.log('Image ID:', image.id);
-//     console.log('Image Source:', imageSrc);
-//     console.log('Image Title:', image.title);
-//     console.log('Full Image Object:', image);
-//     console.log('Available Properties:', Object.keys(image));
-//     console.groupEnd();
-
-//     // Ensure we pass the complete image object
-//     if (onImageClick) {
-//       onImageClick(image);
-//     } else {
-//       console.warn('onImageClick handler not provided');
-//     }
-//   };
-
-//   // Error state if no image source
-//   if (!imageSrc) {
-//     return (
-//       <div className="bg-red-50 dark:bg-red-900/20 rounded-lg p-4 border border-red-200 dark:border-red-800">
-//         <p className="text-red-600 dark:text-red-400 text-sm">
-//           Image source missing for: {image.title || 'Unknown'}
-//         </p>
-//         <details className="mt-2 text-xs">
-//           <summary className="cursor-pointer">Debug Info</summary>
-//           <pre className="mt-2 p-2 bg-red-100 dark:bg-red-900/30 rounded overflow-auto">
-//             {JSON.stringify(image, null, 2)}
-//           </pre>
-//         </details>
-//       </div>
-//     );
-//   }
-
-//   // Different layouts based on view mode
-//   const getCardLayout = () => {
-//     switch (viewMode) {
-//       case 'grid':
-//         return (
-//           <motion.div
-//             initial={{ opacity: 0, scale: 0.9 }}
-//             animate={{ opacity: 1, scale: 1 }}
-//             transition={{ duration: 0.3 }}
-//             className="bg-white dark:bg-gray-900 rounded-sm shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-200/50 dark:border-gray-700/50 group cursor-pointer"
-//             onClick={handleClick}
-//           >
-//             {/* Image Container */}
-//             <div className="relative aspect-square overflow-hidden">
-//               <img
-//                 src={imageSrc}
-//                 alt={image.title || 'Artwork'}
-//                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-//                 loading="lazy"
-//                 onError={(e) => {
-//                   console.error('Failed to load image:', imageSrc);
-//                   e.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="400"%3E%3Crect fill="%23ddd" width="400" height="400"/%3E%3Ctext fill="%23999" x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle"%3EImage not found%3C/text%3E%3C/svg%3E';
-//                 }}
-//               />
-              
-//               {/* Trending Badge */}
-//               {image.trending > 5 && (
-//                 <div className="absolute top-3 left-3 bg-gradient-to-r from-orange-500 to-red-500 text-white text-xs px-3 py-1.5 rounded-full font-semibold flex items-center gap-1 shadow-lg">
-//                   <TrendingUp className="w-3 h-3" />
-//                   Trending
-//                 </div>
-//               )}
-
-//               {/* Overlay Actions */}
-//               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
-//                 <div className="flex items-center gap-2 bg-white/90 dark:bg-gray-800/90 backdrop-blur-lg rounded-2xl p-3 shadow-lg">
-//                   <MdSearch className="w-5 h-5 text-gray-700 dark:text-gray-300" />
-//                   <span className="text-sm font-medium text-gray-700 dark:text-gray-300">View</span>
-//                 </div>
-//               </div>
-
-//               {/* Quick Actions */}
-//               <div className="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-//                 {/* <button 
-//                   onClick={handleSave}
-//                   className={`p-2 rounded-full backdrop-blur-lg transition-all ${
-//                     isSaved 
-//                       ? 'bg-blue-500 text-white shadow-lg' 
-//                       : 'bg-white/90 dark:bg-gray-800/90 text-gray-700 dark:text-gray-300 hover:bg-blue-500 hover:text-white'
-//                   }`}
-//                 >
-//                   <Bookmark className={`w-4 h-4 ${isSaved ? 'fill-current' : ''}`} />
-//                 </button> */}
-//                 <button className="p-2 rounded-full bg-white/90 dark:bg-gray-800/90 text-gray-700 dark:text-gray-300 backdrop-blur-lg hover:bg-green-500 hover:text-white transition-all">
-//                   <Download className="w-4 h-4" />
-//                 </button>
-//               </div>
-//             </div>
-
-//             {/* Content - Minimal for Grid */}
-//             <div className="p-4">
-//               <h3 className="font-bold text-gray-900 dark:text-white text-sm mb-1 line-clamp-1">
-//                 {image.title || 'Untitled'}
-//               </h3>
-//               <p className="text-xs text-gray-600 dark:text-gray-400 mb-2 line-clamp-1">
-//                 by {image.artist || 'Unknown Artist'}
-//               </p>
-              
-//               <div className="flex items-center justify-between">
-//               <LikeButton targetId={image.id || image.$id} />
-//               </div>
-//             </div>
-//           </motion.div>
-//         );
-//       default: // Feed view
-//         return (
-//           <motion.div
-//             initial={{ opacity: 0, y: 20 }}
-//             animate={{ opacity: 1, y: 0 }}
-//             transition={{ duration: 0.4 }}
-//             className="bg-white dark:bg-gray-900 rounded-sm shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200/50 dark:border-gray-700/50 group cursor-pointer"
-//             onClick={handleClick}
-//           >
-//             {/* Header */}
-//             <div className="flex items-center justify-between p-4 border-b border-gray-100 dark:border-gray-800">
-//               <div className="flex items-center gap-3">
-//                 <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-semibold shadow-lg">
-//                   {(image.artist || 'A')[0].toUpperCase()}
-//                 </div>
-//                 <div>
-//                   <p className="font-semibold text-gray-900 dark:text-white">
-//                     {image.artist || 'Unknown Artist'}
-//                   </p>
-//                   <p className="text-sm text-gray-500 dark:text-gray-400">
-//                     {formatTimestamp?.(image.timestamp) || 'Recently'}
-//                   </p>
-//                 </div>
-//               </div>
-//               <FollowButton targetUserId={image.userId} variant='ghost' />
-//             </div>
-
-//             {/* Image Container */}
-//             <div className="relative">
-//               <img
-//                 src={imageSrc}
-//                 alt={image.title || 'Artwork'}
-//                 className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-[1.02]"
-//                 loading="lazy"
-//                 onError={(e) => {
-//                   console.error('Failed to load image:', imageSrc);
-//                   e.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="800" height="600"%3E%3Crect fill="%23ddd" width="800" height="600"/%3E%3Ctext fill="%23999" x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-size="20"%3EImage not found%3C/text%3E%3C/svg%3E';
-//                 }}
-//               />
-              
-//               {/* Trending Badge */}
-//               {image.trending > 5 && (
-//                 <div className="absolute top-4 left-4 bg-gradient-to-r from-orange-500 to-red-500 text-white text-sm px-3 py-1.5 rounded-full font-semibold flex items-center gap-2 shadow-lg">
-//                   <TrendingUp className="w-4 h-4" />
-//                   Trending
-//                 </div>
-//               )}
-
-//               {/* View Overlay */}
-//               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
-//                 <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-lg rounded-lg p-2 shadow-lg flex items-center gap-3">
-//                   <HiOutlineViewfinderCircle className="w-6 h-6 text-gray-700 dark:text-gray-300" />
-//                 </div>
-//               </div>
-
-//               {/* Quick Actions */}
-//               {/* <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-//                 <button 
-//                   onClick={handleSave}
-//                   className={`p-3 rounded-xl backdrop-blur-lg transition-all ${
-//                     isSaved 
-//                       ? 'bg-blue-500 text-white shadow-lg' 
-//                       : 'bg-white/90 dark:bg-gray-800/90 text-gray-700 dark:text-gray-300 hover:bg-blue-500 hover:text-white'
-//                   }`}
-//                 >
-//                   <Bookmark className={`w-5 h-5 ${isSaved ? 'fill-current' : ''}`} />
-//                 </button>
-//               </div> */}
-//             </div>
-
-//             {/* Content */}
-//             <div className="p-4">
-//               <div className="mb-3">
-//                 <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2">
-//                   {image.title || 'Untitled Artwork'}
-//                 </h3>
-//                 <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed line-clamp-2">
-//                   {image.description || 'No description available.'}
-//                 </p>
-//               </div>
-              
-//               {/* Tags */}
-//               {image.tags && image.tags.length > 0 && (
-//                 <div className="flex flex-wrap gap-2 mb-4">
-//                   {image.tags.slice(0, 4).map((tag, index) => (
-//                     <span 
-//                       key={`${tag}-${index}`}
-//                       className="px-3 py-1.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-sm rounded-full font-medium transition-colors hover:bg-purple-100 dark:hover:bg-purple-900/30 hover:text-purple-700 dark:hover:text-purple-300"
-//                     >
-//                       #{tag}
-//                     </span>
-//                   ))}
-//                 </div>
-//               )}
-
-//               {/* Engagement Stats */}
-//               <div className="flex items-center justify-between border-t border-gray-100 dark:border-gray-800">
-//                 <div className="flex items-center gap-2">
-//                     <div className=' mt-2'><LikeButton targetId={image.id || image.$id} /></div>
-//                   <ShareButton artwork={image} variant="popup"/>
-//                   <DownloadService artwork={image}/>
-//                 </div>
-                
-                
-//                 <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-//                   <Eye className="w-4 h-4" />
-//                   <span>{image.views || 0} views</span>
-//                 </div>
-//               </div>
-//             </div>
-//           </motion.div>
-//         );
-//     }
-//   };
-
-//   return getCardLayout();
-// };
-
-// export default ImageCard;
-
-import React from "react";
-import { Eye } from "lucide-react";
-import { motion } from "framer-motion";
+import React, { useState, useRef, useEffect } from "react";
+import {
+  Eye,
+  EllipsisVertical,
+  Flag,
+  Bookmark,
+  SquarePlus,
+  SquareX,
+  EyeClosed,
+  ChevronRight,
+  Shield,
+  AlertTriangle,
+  AlertCircle,
+  UserX,
+  Copyright,
+  MessageCircle,
+  Send,
+  Sparkles,
+  X,
+  Download,
+  MessageSquareText
+} from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import LikeButton from "../EngagementService/likeButton";
 import ShareButton from "../Share/ShareFunction";
 import DownloadService from "../Downloads/downloadService";
 import FollowButton from "../Follow/FollowButton";
 
+// --- CONSTANTS ---
+const REPORT_REASONS = [
+  { id: "hate_speech", title: "Hate Speech", icon: AlertTriangle, severity: "high" },
+  { id: "explicit", title: "Explicit Content", icon: Shield, severity: "high" },
+  { id: "violence", title: "Violence", icon: AlertTriangle, severity: "high" },
+  { id: "scam", title: "Scam/Fraud", icon: AlertCircle, severity: "high" },
+  { id: "impersonation", title: "Impersonation", icon: UserX, severity: "medium" },
+  { id: "copyright", title: "Copyright", icon: Copyright, severity: "medium" },
+];
+
+const MOCK_COMMENTS = [];
+
+const CREATIVE_PROMPTS = [
+  "What emotion does this spark?",
+  "Masterpiece or mess?",
+  "Rate this 1-10...",
+  "First word that comes to mind?"
+];
+
 const OutlinedImageCard = ({ image, onImageClick, formatTimestamp }) => {
-  const imgSrc =
-    image?.src ||
-    image?.url ||
-    image?.imageUrl ||
-    image?.image ||
-    image?.thumbnail ||
-    "";
+  // --- STATE ---
+  const [menuState, setMenuState] = useState('closed'); 
+  const [showComments, setShowComments] = useState(false);
+  const [commentText, setCommentText] = useState("");
+  const [expanded, setExpanded] = useState(false);
+  const [comments, setComments] = useState(MOCK_COMMENTS);
+  const [randomPrompt] = useState(CREATIVE_PROMPTS[Math.floor(Math.random() * CREATIVE_PROMPTS.length)]);
+
+  const imgSrc = image?.src || image?.url || "";
+  
+  // --- REFS ---
+  // We use a specific ref for the MENU, not the whole card.
+  // This ensures that clicking the Image or Footer closes the menu smoothly.
+  const menuRef = useRef(null);
+
+  // Close menu when clicking outside the Menu container
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // If menu is open AND click is NOT inside the menuRef, close it.
+      if (menuState !== 'closed' && menuRef.current && !menuRef.current.contains(event.target)) {
+        setMenuState('closed');
+      }
+    };
+
+    // Use 'mousedown' for faster reaction, or 'click' for safer event bubbling.
+    // mousedown feels snappier for UI closing.
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [menuState]);
+
+  if (!imgSrc) return null;
+
+  // --- HANDLERS ---
+  const handlePost = (e) => {
+    e.preventDefault();
+    if (!commentText.trim()) return;
+    setComments([...comments, { id: Date.now(), user: "You", text: commentText, time: "Now", isNew: true }]);
+    setCommentText("");
+  };
+
+  const handleReport = (reasonId) => {
+    console.log("Report submitted:", reasonId);
+    alert("Report submitted.");
+    setMenuState('closed');
+  };
+
+  const latestComment = comments.length > 0 ? comments[comments.length - 1] : null;
+
+  // --- MENU CONFIG ---
+  const mainMenuItems = [
+    { label: "Interested", icon: SquarePlus, action: () => console.log("Interested") },
+    { label: "Not Interested", icon: SquareX, action: () => console.log("Not Interested") },
+    { label: "Save", icon: Bookmark, action: () => console.log("Saved") },
+    { label: "Hide", icon: EyeClosed, action: () => console.log("Hidden") },
+    { label: "Report", icon: Flag, action: () => setMenuState('report'), destructive: true, hasSubMenu: true },
+  ];
 
   return (
-    <motion.div
-      onClick={() => onImageClick?.(image)}
-      initial={{ opacity: 0, y: 15 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-      className="
-        w-full rounded-sm
-        border border-gray-300 dark:border-gray-700
-        p-2
-        bg-transparent
-        cursor-pointer
-      "
-    >
-
-      {/* ─────────────────────────────── */}
-      {/* TOP BOX - User + Follow */}
-      {/* ─────────────────────────────── */}
-      <div
-        className="
-          border border-gray-300 dark:border-gray-700
-          rounded-md px-4 py-3
-          mb-2
-        "
+    <div className="relative group w-full mb-6">
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="w-full flex flex-col gap-2 select-none p-1 relative"
       >
-        <div className="flex items-center justify-between">
-
-          {/* USER INFO */}
-          <div className="flex items-center gap-3">
-            <div
-              className="
-                w-10 h-10 rounded-full
-                bg-gray-200 dark:bg-gray-700
-                flex items-center justify-center
-                text-gray-700 dark:text-gray-200
-                font-semibold
-              "
-            >
-              {(image?.artist || "A")[0]}
+        
+        {/* ================= HEADER ================= */}
+        <div className="flex items-center justify-between p-3 bg-gray-100 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-800 rounded-lg shadow-sm z-20 relative">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-md text-zinc-600 flex items-center justify-center text-xs font-bold border-2 border-zinc-200 dark:border-zinc-700 shadow-sm">
+              {(image?.artist || "A")[0].toUpperCase()}
             </div>
-
-            <div>
-              <p className="font-semibold text-gray-900 dark:text-gray-100 text-sm">
-                {image?.artist || "Unknown Artist"}
-              </p>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
-                {formatTimestamp?.(image?.timestamp) || "Recently"}
-              </p>
+            <div className="flex flex-col">
+              <span className="text-sm font-bold leading-none text-zinc-800 dark:text-zinc-100">{image?.artist || "Unknown"}</span>
+              <span className="text-[10px] text-zinc-500 mt-0.5">{formatTimestamp?.(image?.timestamp) || "Just Now"}</span>
             </div>
           </div>
+          
+          <div className="flex items-center gap-2">
+            <FollowButton targetUserId={image?.userId} variant="ghost" size="sm" />
+            
+            <div className="h-4 w-px bg-zinc-300 dark:bg-zinc-700 mx-1" />
 
-          <FollowButton targetUserId={image?.userId} variant="ghost" />
+            {/* --- MENU CONTAINER (Ref Attached Here) --- */}
+            <div className="relative" ref={menuRef}>
+                <button 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setMenuState(menuState === 'closed' ? 'main' : 'closed');
+                  }}
+                  className={`p-1.5 rounded-md transition-colors ${menuState !== 'closed' ? 'bg-zinc-200 dark:bg-zinc-800' : 'hover:bg-zinc-200 dark:hover:bg-zinc-800'}`}
+                >
+                  <EllipsisVertical size={16} className="text-zinc-600 dark:text-zinc-400" />
+                </button>
+
+                {/* ================= MENU POPUP ================= */}
+                <AnimatePresence>
+                  {menuState !== 'closed' && (
+                    <motion.div
+                      key="menu-dropdown" // Key is vital for smooth exit!
+                      initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                      transition={{ duration: 0.2, ease: "easeOut" }} // Snappy but smooth
+                      className="absolute top-full right-0 mt-2 z-50 w-56 origin-top-right"
+                    >
+                      <div className="bg-white/95 dark:bg-zinc-900/95 backdrop-blur-xl rounded-xl shadow-xl border border-zinc-200 dark:border-zinc-700 overflow-hidden ring-1 ring-black/5">
+                        
+                        {/* 1. Report Header */}
+                        {menuState === 'report' && (
+                          <div className="flex items-center gap-2 px-3 py-2 border-b border-zinc-100 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-800/50 ">
+                            <button onClick={() => setMenuState('main')} className="p-1 hover:bg-zinc-200 dark:hover:bg-zinc-700 rounded-full transition-colors">
+                               <ChevronRight size={14} className="rotate-180 text-zinc-500" />
+                            </button>
+                            <span className="text-xs font-bold text-zinc-700 dark:text-zinc-200">Report Content</span>
+                          </div>
+                        )}
+
+                        {/* 2. Main Menu */}
+                        {menuState === 'main' && (
+                          <div className="py-1">
+                            {mainMenuItems.map((item, idx) => {
+                              const Icon = item.icon;
+                              return (
+                                <button
+                                  key={idx}
+                                  onClick={(e) => { 
+                                      e.stopPropagation(); // Prevent closing immediately
+                                      item.action(); 
+                                      if (!item.hasSubMenu) setMenuState('closed'); 
+                                  }}
+                                  className={`w-full text-left px-4 py-2.5 text-xs font-medium flex items-center justify-between group transition-colors ${item.destructive ? 'text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20' : 'text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800'}`}
+                                >
+                                  <div className="flex items-center gap-2.5"><Icon size={14} className={item.destructive ? "text-red-500" : "text-zinc-400 dark:text-zinc-500"} />{item.label}</div>
+                                  {item.hasSubMenu && <ChevronRight size={12} className="text-zinc-300" />}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        )}
+
+                        {/* 3. Report Reasons */}
+                        {menuState === 'report' && (
+                          <div className="py-1 max-h-60 overflow-y-auto hide-scrollbar">
+                            {REPORT_REASONS.map((reason) => (
+                              <button key={reason.id} onClick={() => handleReport(reason.id)} className="w-full text-left px-4 py-2.5 text-xs text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 flex items-center gap-2.5 border-b border-dashed border-zinc-100 dark:border-zinc-800 last:border-0">
+                                  <reason.icon size={14} className={reason.severity === 'high' ? "text-orange-500" : "text-zinc-400"} /><span>{reason.title}</span>
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+            </div>
+            {/* --- END MENU CONTAINER --- */}
+
+          </div>
         </div>
-      </div>
 
-      {/* ─────────────────────────────── */}
-      {/* MIDDLE BOX - Image */}
-      {/* ─────────────────────────────── */}
-      <div
-        className="
-          border border-gray-300 dark:border-gray-700
-          rounded-md overflow-hidden
-          mb-2
-        "
-      >
-        <img
-          src={imgSrc}
-          alt={image?.title}
-          className="w-full object-cover"
-          loading="lazy"
-          onError={(e) => {
-            e.target.src =
-              "data:image/svg+xml,%3Csvg width='400' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='400' height='300' fill='%23ddd'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle' fill='%23888' font-size='16'%3EImage Not Found%3C/text%3E%3C/svg%3E";
-          }}
-        />
-      </div>
 
-      {/* ─────────────────────────────── */}
-      {/* BOTTOM BOX - Title, Desc, Tags, Actions */}
-      {/* ─────────────────────────────── */}
-      <div
-        className="
-          border border-gray-300 dark:border-gray-700
-          rounded-md px-4 py-3
-        "
-      >
-        {/* TITLE */}
-        <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-lg mb-1">
-          {image?.title || "Untitled Artwork"}
-        </h3>
-
-        {/* DESCRIPTION */}
-        <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 leading-relaxed">
-          {image?.description || "No description provided."}
-        </p>
-
-        {/* TAGS */}
-        {image?.tags?.length > 0 && (
-          <div className="flex gap-2 flex-wrap mb-3">
-            {image.tags.slice(0, 4).map((tag, i) => (
-              <span
-                key={i}
-                className="
-                  px-3 py-1 text-sm
-                  rounded-full font-medium
-                  border border-gray-300 dark:border-gray-700
-                  text-gray-700 dark:text-gray-300
-                "
-              >
-                #{tag}
-              </span>
-            ))}
+        {/* ================= IMAGE AREA ================= */}
+        <div className="relative w-full rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900 overflow-hidden isolate z-10">
+          <div onClick={() => onImageClick?.(image)} className="cursor-pointer">
+             <img src={imgSrc} alt={image?.title} className="w-full h-auto object-cover block" loading="lazy" />
           </div>
-        )}
+          <div className="absolute bottom-2 right-2 px-2 py-1 rounded-full bg-black/40 backdrop-blur-md text-white flex gap-1 text-[10px] font-bold border border-white/10 shadow-sm pointer-events-none">
+            <Eye size={12} className="mt-[1px]"/> {image.views || 0}
+          </div>
 
-        {/* ACTIONS + VIEWS */}
-        <div className="flex items-center justify-between border-t border-gray-100 dark:border-gray-800">
-                <div className="flex items-center gap-2">
-                    <div className=' mt-2'><LikeButton targetId={image.id || image.$id} /></div>
-                  <ShareButton artwork={image} variant="popup"/>
-                  <DownloadService artwork={image}/>
+          {/* --- COMPACT COMMENTS OVERLAY --- */}
+          <AnimatePresence>
+            {showComments && (
+              <motion.div
+                key="comments-drawer"
+                initial={{ y: "100%" }}
+                animate={{ y: "0%" }}
+                exit={{ y: "100%" }}
+                transition={{ duration: 0.35, ease: [0.32, 0.72, 0, 1] }}
+                style={{ willChange: "transform" }}
+                className="absolute inset-x-0 bottom-0 z-40 h-[75%] max-h-[320px] bg-white/95 dark:bg-zinc-950/95 backdrop-blur-xl border-t border-zinc-200 dark:border-zinc-700 rounded-t-xl shadow-2xl flex flex-col"
+              >
+                {/* Header */}
+                <div className="flex items-center justify-between px-3 py-2 border-b border-zinc-200 dark:border-zinc-800">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Discussion</span>
+                  <button onClick={() => setShowComments(false)} className="p-1 rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-800 text-zinc-500 transition-colors">
+                    <X size={14} />
+                  </button>
                 </div>
-                
-                
-                <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-                  <Eye className="w-4 h-4" />
-                  <span>{image.views || 0} views</span>
+
+                {/* Comments List */}
+                <div className="flex-1 overflow-y-auto p-3 space-y-3">
+                  {comments.length === 0 ? (
+                    <div className="h-full flex flex-col items-center justify-center opacity-50">
+                      <MessageCircle size={22} className="mb-2 text-zinc-300" />
+                      <p className="text-xs text-zinc-400">Quiet in here…</p>
+                    </div>
+                  ) : (
+                    comments.map((c) => (
+                      <div key={c.id} className="flex flex-col animate-in fade-in slide-in-from-bottom-2 duration-300">
+                        <div className="flex justify-between items-baseline">
+                          <span className="text-[11px] font-bold text-zinc-800 dark:text-zinc-200">{c.user}</span>
+                          <span className="text-[9px] text-zinc-400">{c.time}</span>
+                        </div>
+                        <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-snug">{c.text}</p>
+                      </div>
+                    ))
+                  )}
                 </div>
-              </div>
-      </div>
-    </motion.div>
+
+                {/* Input Area */}
+                <div className="p-2 border-t border-zinc-200 dark:border-zinc-800">
+                  <form onSubmit={handlePost} className="flex items-center gap-2">
+                    <input
+                      type="text"
+                      value={commentText}
+                      onChange={(e) => setCommentText(e.target.value)}
+                      placeholder="Type something…"
+                      className="flex-1 bg-zinc-100 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 rounded-md px-3 py-1.5 text-xs focus:ring-1 focus:ring-blue-500 placeholder:text-zinc-400 outline-none transition-all"
+                    />
+                    <button type="submit" disabled={!commentText.trim()} className="p-1.5 rounded-md bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 transition-all">
+                      <Send size={12} />
+                    </button>
+                  </form>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+
+        {/* ================= FOOTER ================= */}
+         <div className="bg-white dark:bg-zinc-950 
+  border border-zinc-200 dark:border-zinc-800 
+  rounded-lg shadow-sm px-3 py-2">
+
+  {/* Title + Actions (same row) */}
+  <div className="flex items-center justify-between gap-3">
+    <h3 className="text-[15px] font-semibold text-zinc-900 dark:text-zinc-50 leading-snug line-clamp-2 flex-1">
+      {image?.title || "Untitled"}
+    </h3>
+
+    {/* Actions */}
+    <div className="flex items-center gap-3 shrink-0 pt-0.5">
+      <LikeButton targetId={image.id} />
+      <button
+        onClick={() => setShowComments(!showComments)}
+        className="text-zinc-600 dark:text-zinc-400 hover:text-blue-500 transition"
+      >
+        <MessageCircle size={18} />
+      </button>
+      <ShareButton artwork={image} variant="icon" size={18} />
+      <DownloadService artwork={image} size={18} />
+    </div>
+  </div>
+
+  {/* Divider */}
+  <div className="h-px bg-zinc-100 dark:bg-zinc-800 my-2" />
+
+  {/* Description (Expandable) */}
+  <motion.div
+    layout
+    transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+    className="text-[12px] text-zinc-600 dark:text-zinc-400 leading-snug"
+  >
+    <p className={expanded ? "" : "line-clamp-2"}>
+      {image?.description || "No description available."}
+    </p>
+
+    {image?.description?.length > 120 && (
+      <button
+        onClick={() => setExpanded(!expanded)}
+        className="mt-1 text-[11px] font-medium text-blue-500 hover:underline"
+      >
+        {expanded ? "Show less" : "...more"}
+      </button>
+    )}
+  </motion.div>
+
+  {/* Tags */}
+  {image?.tags?.length > 0 && (
+    <div className="flex flex-wrap gap-1.5 mt-2">
+      {image.tags.slice(0, 4).map((tag, i) => (
+        <span
+          key={i}
+          className="
+            text-[12px] font-medium
+            px-2 py-0.5 rounded-full
+            text-purple-600 dark:text-purple-300
+            bg-purple-50 dark:bg-purple-900/20
+          "
+        >
+          # {tag}
+        </span>
+      ))}
+    </div>
+  )}
+
+  {/* Comment Prompt (tight & calm) */}
+  {!showComments && (
+    <button
+      onClick={() => setShowComments(true)}
+      className="mt-2 text-left w-full"
+    >
+      {comments.length > 0 ? (
+        <div className="text-xs flex gap-1.5 items-center">
+          <span className="font-medium text-zinc-800 dark:text-zinc-200">
+            {latestComment.user}
+          </span>
+          <span className="text-zinc-500 dark:text-zinc-400 line-clamp-1">
+            {latestComment.text}
+          </span>
+        </div>
+      ) : (
+        <div className="text-[12px] w-full  text-zinc-400  flex items-center gap-1.5 hover:text-blue-500 transition rounded-full border dark:border-zinc-600  py-1 px-2 ">
+          <Sparkles size={10} />
+          {randomPrompt}
+        </div>
+      )}
+    </button>
+
+  )}
+</div>
+
+       
+
+      </motion.div>
+    </div>
   );
 };
 

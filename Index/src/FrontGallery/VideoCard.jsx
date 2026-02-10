@@ -1,492 +1,3 @@
-// import React, { useState, useRef } from 'react';
-// import { 
-//   Heart, 
-//   MessageCircle, 
-//   Share2, 
-//   Bookmark, 
-//   MoreHorizontal, 
-//   TrendingUp,
-//   Eye,
-//   Download,
-//   Play,
-//   Pause,
-//   Volume2,
-//   VolumeX
-// } from 'lucide-react';
-// import { motion } from 'framer-motion';
-// import { MdSearch } from "react-icons/md";
-// import { HiOutlineViewfinderCircle } from "react-icons/hi2";
-// import FollowButton from '../Follow/FollowButton';
-// import LikeButton from '../EngagementService/likeButton';
-// import ShareButton from '../Share/ShareFunction';
-// import DownloadService from '../Downloads/downloadService';
-
-// const VideoCard = ({ 
-//   video, 
-//   onVideoClick, 
-//   likedVideos, 
-//   savedVideos, 
-//   onLike, 
-//   onSave, 
-//   formatTimestamp,
-//   viewMode = 'feed'
-// }) => {
-//   // Validate video object
-//   if (!video) {
-//     console.error('VideoCard: No video object provided');
-//     return null;
-//   }
-
-//   const videoRef = useRef(null);
-//   const [isPlaying, setIsPlaying] = useState(false);
-//   const [isMuted, setIsMuted] = useState(true);
-//   const [isHovered, setIsHovered] = useState(false);
-//   const [showControls, setShowControls] = useState(false);
-//   const [currentTime, setCurrentTime] = useState(0);
-//   const [duration, setDuration] = useState(0);
-
-//   const isLiked = likedVideos?.has(video.id);
-//   const isSaved = savedVideos?.has(video.id);
-//   const likeCount = (video.likes || 0) + (isLiked ? 1 : 0);
-
-//   // Get video source with fallbacks
-//   const getVideoSrc = () => {
-//     return video.src || 
-//            video.url || 
-//            video.videoUrl || 
-//            video.videoURL ||
-//            video.mediaUrl ||
-//            '';
-//   };
-
-//   const videoSrc = getVideoSrc();
-
-//   // Video event handlers
-//   const handlePlayPause = (e) => {
-//     e.stopPropagation();
-//     if (videoRef.current) {
-//       if (isPlaying) {
-//         videoRef.current.pause();
-//       } else {
-//         videoRef.current.play();
-//       }
-//       setIsPlaying(!isPlaying);
-//     }
-//   };
-
-//   const handleMuteToggle = (e) => {
-//     e.stopPropagation();
-//     if (videoRef.current) {
-//       videoRef.current.muted = !isMuted;
-//       setIsMuted(!isMuted);
-//     }
-//   };
-
-//   const handleTimeUpdate = () => {
-//     if (videoRef.current) {
-//       setCurrentTime(videoRef.current.currentTime);
-//       setDuration(videoRef.current.duration || 0);
-//     }
-//   };
-
-//   const handleLoadedMetadata = () => {
-//     if (videoRef.current) {
-//       setDuration(videoRef.current.duration);
-//     }
-//   };
-
-//   const handleVideoClick = () => {
-//     console.group('🎥 VideoCard Click Debug');
-//     console.log('Video ID:', video.id);
-//     console.log('Video Source:', videoSrc);
-//     console.log('Video Title:', video.title);
-//     console.log('Full Video Object:', video);
-//     console.groupEnd();
-
-//     if (onVideoClick) {
-//       onVideoClick(video);
-//     }
-//   };
-
-//   const handleLike = (e) => {
-//     e.stopPropagation();
-//     onLike?.(video.id, video);
-//   };
-
-//   const handleSave = (e) => {
-//     e.stopPropagation();
-//     onSave?.(video.id, video);
-//   };
-
-//   const formatTime = (seconds) => {
-//     if (!seconds) return '0:00';
-//     const mins = Math.floor(seconds / 60);
-//     const secs = Math.floor(seconds % 60);
-//     return `${mins}:${secs.toString().padStart(2, '0')}`;
-//   };
-
-//   const progress = duration ? (currentTime / duration) * 100 : 0;
-
-//   // Error state if no video source
-//   if (!videoSrc) {
-//     return (
-//       <div className="bg-red-50 dark:bg-red-900/20 rounded-lg p-4 border border-red-200 dark:border-red-800">
-//         <p className="text-red-600 dark:text-red-400 text-sm">
-//           Video source missing for: {video.title || 'Unknown'}
-//         </p>
-//         <details className="mt-2 text-xs">
-//           <summary className="cursor-pointer">Debug Info</summary>
-//           <pre className="mt-2 p-2 bg-red-100 dark:bg-red-900/30 rounded overflow-auto">
-//             {JSON.stringify(video, null, 2)}
-//           </pre>
-//         </details>
-//       </div>
-//     );
-//   }
-
-//   // Different layouts based on view mode
-//   const getCardLayout = () => {
-//     switch (viewMode) {
-//       case 'grid':
-//         return (
-//           <motion.div
-//             initial={{ opacity: 0, scale: 0.9 }}
-//             animate={{ opacity: 1, scale: 1 }}
-//             transition={{ duration: 0.3 }}
-//             className="bg-white dark:bg-gray-900 rounded-sm shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-200/50 dark:border-gray-700/50 group cursor-pointer"
-//             onClick={handleVideoClick}
-//             onMouseEnter={() => setIsHovered(true)}
-//             onMouseLeave={() => setIsHovered(false)}
-//           >
-//             {/* Video Container */}
-//             <div className="relative aspect-square overflow-hidden bg-black">
-//               <video
-//                 ref={videoRef}
-//                 src={videoSrc}
-//                 className="w-full h-full object-cover"
-//                 muted={isMuted}
-//                 loop
-//                 playsInline
-//                 onTimeUpdate={handleTimeUpdate}
-//                 onLoadedMetadata={handleLoadedMetadata}
-//                 onPlay={() => setIsPlaying(true)}
-//                 onPause={() => setIsPlaying(false)}
-//                 poster={video.thumbnail} // You can store thumbnails in your Appwrite collection
-//               />
-              
-//               {/* Video Overlay */}
-//               <div 
-//                 className={`absolute inset-0 bg-black/40 transition-opacity duration-300 ${
-//                   isHovered || showControls ? 'opacity-100' : 'opacity-0'
-//                 }`}
-//                 onMouseEnter={() => setShowControls(true)}
-//                 onMouseLeave={() => setShowControls(false)}
-//               >
-//                 {/* Play/Pause Button */}
-//                 <button
-//                   onClick={handlePlayPause}
-//                   className="absolute inset-0 w-full h-full flex items-center justify-center"
-//                 >
-//                   <div className="bg-white/20 backdrop-blur-lg rounded-full p- transition-transform hover:scale-110">
-//                     {isPlaying ? (
-//                       <Pause className="w-4 h-4 text-white" />
-//                     ) : (
-//                       <Play className="w-4 h-4 text-white ml-1" />
-//                     )}
-//                   </div>
-//                 </button>
-
-//                 {/* Video Controls */}
-//                 <div 
-//                   className={`absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 transition-opacity duration-300 ${
-//                     showControls ? 'opacity-100' : 'opacity-0'
-//                   }`}
-//                 >
-//                   {/* Progress Bar */}
-//                   <div className="w-full bg-white/30 rounded-full h-1 mb-3">
-//                     <div 
-//                       className="bg-white h-1 rounded-full transition-all duration-100"
-//                       style={{ width: `${progress}%` }}
-//                     />
-//                   </div>
-
-//                   <div className="flex items-center justify-between">
-//                     <div className="flex items-center gap-3">
-//                       <button 
-//                         onClick={handlePlayPause}
-//                         className="text-white hover:text-gray-300 transition-colors"
-//                       >
-//                         {isPlaying ? (
-//                           <Pause className="w-4 h-4" />
-//                         ) : (
-//                           <Play className="w-4 h-4" />
-//                         )}
-//                       </button>
-                      
-//                       <button 
-//                         onClick={handleMuteToggle}
-//                         className="text-white hover:text-gray-300 transition-colors"
-//                       >
-//                         {isMuted ? (
-//                           <VolumeX className="w-4 h-4" />
-//                         ) : (
-//                           <Volume2 className="w-4 h-4" />
-//                         )}
-//                       </button>
-                      
-//                       <span className="text-white text-xs font-medium">
-//                         {formatTime(currentTime)} / {formatTime(duration)}
-//                       </span>
-//                     </div>
-
-//                     <button 
-//                       onClick={handleSave}
-//                       className={`p-2 rounded-full transition-all ${
-//                         isSaved 
-//                           ? 'bg-blue-500 text-white' 
-//                           : 'bg-white/20 text-white hover:bg-white/30'
-//                       }`}
-//                     >
-//                       <Bookmark className={`w-4 h-4 ${isSaved ? 'fill-current' : ''}`} />
-//                     </button>
-//                   </div>
-//                 </div>
-//               </div>
-
-//               {/* Video Badge */}
-//               <div className="absolute top-3 left-3 bg-red-500 text-white text-xs px-2 py-1 rounded-full font-semibold flex items-center gap-1 shadow-lg">
-//                 <Play className="w-3 h-3" />
-//                 Video
-//               </div>
-
-//               {/* Trending Badge */}
-//               {video.trending > 5 && (
-//                 <div className="absolute top-3 right-3 bg-gradient-to-r from-orange-500 to-red-500 text-white text-xs px-3 py-1.5 rounded-full font-semibold flex items-center gap-1 shadow-lg">
-//                   <TrendingUp className="w-3 h-3" />
-//                   Trending
-//                 </div>
-//               )}
-//             </div>
-
-//             {/* Content - Minimal for Grid */}
-//             <div className="p-4">
-//               <h3 className="font-bold text-gray-900 dark:text-white text-sm mb-1 line-clamp-1">
-//                 {video.title || 'Untitled Video'}
-//               </h3>
-//               <p className="text-xs text-gray-600 dark:text-gray-400 mb-2 line-clamp-1">
-//                 by {video.artist || 'Unknown Creator'}
-//               </p>
-              
-//               <div className="flex items-center justify-between">
-//                 <button 
-//                   onClick={handleLike}
-//                   className={`flex items-center gap-1 transition-all ${
-//                     isLiked ? 'text-red-500 scale-110' : 'text-gray-600 dark:text-gray-400 hover:text-red-500'
-//                   }`}
-//                 >
-//                   <Heart className={`w-4 h-4 ${isLiked ? 'fill-current' : ''}`} />
-//                   <span className="text-xs font-medium">{likeCount}</span>
-//                 </button>
-                
-//                 <span className="text-xs text-gray-500 dark:text-gray-400">
-//                   {formatTimestamp?.(video.timestamp) || 'Recently'}
-//                 </span>
-//               </div>
-//             </div>
-//           </motion.div>
-//         );
-
-//       default: // Feed view
-//         return (
-//           <motion.div
-//             initial={{ opacity: 0, y: 20 }}
-//             animate={{ opacity: 1, y: 0 }}
-//             transition={{ duration: 0.4 }}
-//             className="bg-white dark:bg-gray-900 rounded-sm shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200/50 dark:border-gray-700/50 group cursor-pointer"
-//             onClick={handleVideoClick}
-//             onMouseEnter={() => setIsHovered(true)}
-//             onMouseLeave={() => setIsHovered(false)}
-//           >
-//             {/* Header */}
-//             <div className="flex items-center justify-between p-4 border-b border-gray-100 dark:border-gray-800">
-//               <div className="flex items-center gap-3">
-//                 <div className="w-10 h-10 bg-gradient-to-br from-red-500 to-pink-500 rounded-full flex items-center justify-center text-white font-semibold shadow-lg">
-//                   {(video.artist || 'V')[0].toUpperCase()}
-//                 </div>
-//                 <div>
-//                   <p className="font-semibold text-gray-900 dark:text-white">
-//                     {video.artist || 'Unknown Creator'}
-//                   </p>
-//                   <p className="text-sm text-gray-500 dark:text-gray-400">
-//                     {formatTimestamp?.(video.timestamp) || 'Recently'}
-//                   </p>
-//                 </div>
-//               </div>
-//               <FollowButton targetUserId={video.id} variant='ghost'/>
-//             </div>
-
-//             {/* Video Container */}
-//             <div className="relative bg-black">
-//               <video
-//                 ref={videoRef}
-//                 src={videoSrc}
-//                 className="w-full h-auto max-h-[600px] object-contain"
-//                 muted={isMuted}
-//                 loop
-//                 playsInline
-//                 onTimeUpdate={handleTimeUpdate}
-//                 onLoadedMetadata={handleLoadedMetadata}
-//                 poster={video.thumbnail}
-//               />
-              
-//               {/* Video Controls Overlay */}
-//               <div 
-//                 className={`absolute inset-0 bg-black/40 transition-opacity duration-300 ${
-//                   isHovered || showControls ? 'opacity-100' : 'opacity-0'
-//                 }`}
-//                 onMouseEnter={() => setShowControls(true)}
-//                 onMouseLeave={() => setShowControls(false)}
-//               >
-//                 {/* Central Play/Pause Button */}
-//                 <button
-//                   onClick={handlePlayPause}
-//                   className="absolute inset-0 w-full h-full flex items-center justify-center"
-//                 >
-//                   <div className="bg-white/20 backdrop-blur-lg rounded-full p-2 transition-transform hover:scale-110">
-//                     {isPlaying ? (
-//                       <Pause className="w-4 h-4 text-white" />
-//                     ) : (
-//                       <Play className="w-4 h-4 text-white ml-1" />
-//                     )}
-//                   </div>
-//                 </button>
-
-//                 {/* Bottom Controls Bar */}
-//                 <div 
-//                   className={`absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 transition-opacity duration-300 ${
-//                     showControls ? 'opacity-100' : 'opacity-0'
-//                   }`}
-//                 >
-//                   {/* Progress Bar */}
-//                   <div className="w-full bg-white/30 rounded-full h-2 mb-3 cursor-pointer">
-//                     <div 
-//                       className="bg-white h-2 rounded-full transition-all duration-100"
-//                       style={{ width: `${progress}%` }}
-//                     />
-//                   </div>
-
-//                   <div className="flex items-center justify-between">
-//                     <div className="flex items-center gap-4">
-//                       <button 
-//                         onClick={handlePlayPause}
-//                         className="text-white hover:text-gray-300 transition-colors"
-//                       >
-//                         {isPlaying ? (
-//                           <Pause className="w-5 h-5" />
-//                         ) : (
-//                           <Play className="w-5 h-5" />
-//                         )}
-//                       </button>
-                      
-//                       <button 
-//                         onClick={handleMuteToggle}
-//                         className="text-white hover:text-gray-300 transition-colors"
-//                       >
-//                         {isMuted ? (
-//                           <VolumeX className="w-5 h-5" />
-//                         ) : (
-//                           <Volume2 className="w-5 h-5" />
-//                         )}
-//                       </button>
-                      
-//                       <span className="text-white text-sm font-medium">
-//                         {formatTime(currentTime)} / {formatTime(duration)}
-//                       </span>
-//                     </div>
-
-//                     <div className="flex items-center gap-2">
-//                       <button 
-//                         onClick={handleSave}
-//                         className={`p-2 rounded-xl transition-all ${
-//                           isSaved 
-//                             ? 'bg-blue-500 text-white shadow-lg' 
-//                             : 'bg-white/20 text-white hover:bg-white/30'
-//                         }`}
-//                       >
-//                         <Bookmark className={`w-5 h-5 ${isSaved ? 'fill-current' : ''}`} />
-//                       </button>
-//                     </div>
-//                   </div>
-//                 </div>
-//               </div>
-
-//               {/* Video Badge */}
-//               <div className="absolute top-4 left-4 bg-red-500 text-white text-sm px-3 py-1.5 rounded-full font-semibold flex items-center gap-2 shadow-lg">
-//                 <Play className="w-4 h-4" />
-//                 Video
-//               </div>
-
-//               {/* Trending Badge */}
-//               {video.trending > 5 && (
-//                 <div className="absolute top-4 right-4 bg-gradient-to-r from-orange-500 to-red-500 text-white text-sm px-3 py-1.5 rounded-full font-semibold flex items-center gap-2 shadow-lg">
-//                   <TrendingUp className="w-4 h-4" />
-//                   Trending
-//                 </div>
-//               )}
-//             </div>
-
-//             {/* Content */}
-//             <div className="p-4">
-//               <div className="mb-3">
-//                 <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2">
-//                   {video.title || 'Untitled Video'}
-//                 </h3>
-//                 <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed line-clamp-2">
-//                   {video.description || 'No description available.'}
-//                 </p>
-//               </div>
-              
-//               {/* Tags */}
-//               {video.tags && video.tags.length > 0 && (
-//                 <div className="flex flex-wrap gap-2 mb-4">
-//                   {video.tags.slice(0, 4).map((tag, index) => (
-//                     <span 
-//                       key={`${tag}-${index}`}
-//                       className="px-3 py-1.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-sm rounded-full font-medium transition-colors hover:bg-red-100 dark:hover:bg-red-900/30 hover:text-red-700 dark:hover:text-red-300"
-//                     >
-//                       #{tag}
-//                     </span>
-//                   ))}
-//                 </div>
-//               )}
-
-              // {/* Engagement Stats */}
-              // <div className="flex items-center justify-between pt-3 border-t border-gray-100 dark:border-gray-800">
-              //   {/* <div className="flex items-center gap-4"> */}
-              //     <div className="flex items-center gap-2">
-              //       <div className=' mt-2'><LikeButton targetId={video.id || video.$id} /></div>
-              //     <ShareButton artwork={video} />
-              //     <DownloadService artwork={video}/>
-              //   {/* </div> */}
-              //   </div>
-                
-              //   <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-              //     <Eye className="w-4 h-4" />
-              //     <span>{video.views || 0} views</span>
-              //   </div>
-              // </div>
-//             </div>
-//           </motion.div>
-//         );
-//     }
-//   };
-
-//   return getCardLayout();
-// };
-
-// export default VideoCard;
-
-
 import React, { useEffect, useRef, useState } from "react";
 import {
   Play,
@@ -494,80 +5,134 @@ import {
   Volume2,
   VolumeX,
   Eye,
+  Flag,
   Bookmark,
+  EllipsisVertical,
+  SquarePlus,
+  SquareX,
+  EyeClosed,
+  ChevronRight,
+  Shield,
+  AlertTriangle,
+  AlertCircle,
+  UserX,
+  Copyright,
+  MessageSquareText,
+  Send,
+  Sparkles,
+  X,
+  MessageCircle
 } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import FollowButton from "../Follow/FollowButton";
 import LikeButton from "../EngagementService/likeButton";
 import ShareButton from "../Share/ShareFunction";
 import DownloadService from "../Downloads/downloadService";
 
+// --- CONSTANTS ---
+const REPORT_REASONS = [
+  { id: "hate_speech", title: "Hate Speech", icon: AlertTriangle, severity: "high" },
+  { id: "explicit", title: "Explicit Content", icon: Shield, severity: "high" },
+  { id: "violence", title: "Violence", icon: AlertTriangle, severity: "high" },
+  { id: "scam", title: "Scam/Fraud", icon: AlertCircle, severity: "high" },
+  { id: "impersonation", title: "Impersonation", icon: UserX, severity: "medium" },
+  { id: "copyright", title: "Copyright", icon: Copyright, severity: "medium" },
+];
+
+const MOCK_COMMENTS = [];
+
+const CREATIVE_PROMPTS = [
+  "What emotion does this spark?",
+  "Masterpiece or mess?",
+  "Rate this 1-10...",
+  "First word that comes to mind?"
+];
+
+let globalMuteState = true; 
+const muteListeners = new Set();
+
+const toggleGlobalMute = (newState) => {
+  globalMuteState = newState;
+  muteListeners.forEach((listener) => listener(globalMuteState));
+};
+
 const VideoCard = ({
   video,
   onVideoClick,
-  likedVideos,
-  savedVideos,
-  onLike,
-  onSave,
   formatTimestamp,
-  viewMode = "feed",
 }) => {
-  if (!video) return null;
-
-  const containerRef = useRef(null);
-  const videoRef = useRef(null);
-
+  // --- STATE ---
+  const [menuState, setMenuState] = useState('closed');
+  const [showComments, setShowComments] = useState(false);
+  const [commentText, setCommentText] = useState("");
+  const [expanded, setExpanded] = useState(false);
+  const [comments, setComments] = useState(MOCK_COMMENTS);
+  const [randomPrompt] = useState(CREATIVE_PROMPTS[Math.floor(Math.random() * CREATIVE_PROMPTS.length)]);
+  
+  const [isMuted, setIsMuted] = useState(globalMuteState);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isMuted, setIsMuted] = useState(true);
   const [isVisible, setIsVisible] = useState(false);
   const [showControls, setShowControls] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  
+  // --- REFS ---
+  const containerRef = useRef(null);
+  const videoRef = useRef(null);
+  const menuRef = useRef(null);
+  const commentsEndRef = useRef(null);
 
-  const videoSrc =
-    video?.src ||
-    video?.url ||
-    video?.videoUrl ||
-    video?.videoURL ||
-    video?.mediaUrl ||
-    "";
+  if (!video) return null;
+  const videoSrc = video?.src || video?.url || video?.videoUrl || video?.videoURL || video?.mediaUrl || "";
 
-  // autoplay / auto-pause when card enters viewport
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuState !== 'closed' && menuRef.current && !menuRef.current.contains(event.target)) {
+        setMenuState('closed');
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [menuState]);
+
+  // Subscribe to Global Mute Changes
+  useEffect(() => {
+    const handleMuteChange = (newState) => {
+      setIsMuted(newState);
+      if (videoRef.current) videoRef.current.muted = newState;
+    };
+    muteListeners.add(handleMuteChange);
+    if (videoRef.current) videoRef.current.muted = globalMuteState;
+    return () => muteListeners.delete(handleMuteChange);
+  }, []);
+
+  // Intersection Observer
   useEffect(() => {
     const io = new IntersectionObserver(
       (entries) => {
         const e = entries[0];
-        if (e.isIntersecting) {
-          setIsVisible(true);
-        } else {
-          setIsVisible(false);
-        }
+        setIsVisible(e.isIntersecting);
       },
       { threshold: 0.6 }
     );
-
     if (containerRef.current) io.observe(containerRef.current);
     return () => io.disconnect();
   }, []);
 
+  // Handle Visibility
   useEffect(() => {
     if (!videoRef.current) return;
+    videoRef.current.muted = globalMuteState;
     if (isVisible) {
-      // try play quietly
-      videoRef.current
-        .play()
-        .then(() => {
-          setIsPlaying(true);
-        })
-        .catch(() => {
-          setIsPlaying(false);
-        });
+      videoRef.current.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
     } else {
       videoRef.current.pause();
       setIsPlaying(false);
     }
   }, [isVisible]);
 
+  // --- HANDLERS ---
   const handlePlayPause = (e) => {
     e?.stopPropagation();
     if (!videoRef.current) return;
@@ -582,9 +147,7 @@ const VideoCard = ({
 
   const handleMuteToggle = (e) => {
     e?.stopPropagation();
-    if (!videoRef.current) return;
-    videoRef.current.muted = !isMuted;
-    setIsMuted(!isMuted);
+    toggleGlobalMute(!globalMuteState);
   };
 
   const handleTimeUpdate = () => {
@@ -593,185 +156,362 @@ const VideoCard = ({
     setDuration(videoRef.current.duration || 0);
   };
 
+  const handlePost = (e) => {
+    e.preventDefault();
+    if (!commentText.trim()) return;
+    setComments([...comments, { id: Date.now(), user: "You", text: commentText, time: "Now", isNew: true }]);
+    setCommentText("");
+  };
+
+  const handleReport = (reasonId) => {
+    console.log("Report submitted:", reasonId);
+    alert("Report submitted.");
+    setMenuState('closed');
+  };
+
   const formatTime = (s) => {
     if (!s && s !== 0) return "0:00";
     const m = Math.floor(s / 60);
-    const sec = Math.floor(s % 60)
-      .toString()
-      .padStart(2, "0");
+    const sec = Math.floor(s % 60).toString().padStart(2, "0");
     return `${m}:${sec}`;
   };
 
-  // Outer card + 3 inner bordered boxes
-  return (
-    <motion.div
-      ref={containerRef}
-      onClick={() => onVideoClick?.(video)}
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.28 }}
-      className="
-        w-full rounded-sm
-        border border-gray-300 dark:border-gray-700
-        p-2 bg-transparent
-        transition-shadow shadow-sm hover:shadow-md
-        cursor-pointer
-      "
-    >
-      {/* TOP BOX: header */}
-      <div
-        className="
-          border border-gray-200 dark:border-gray-700
-          rounded-md px-4 py-3 mb-3
-          flex items-center justify-between gap-3
-        "
-      >
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-pink-500 flex items-center justify-center text-white font-semibold">
-            {(video?.artist || "V")[0].toUpperCase()}
-          </div>
+  const latestComment = comments.length > 0 ? comments[comments.length - 1] : null;
 
-          <div>
-            <p className="text-sm font-semibold text-gray-900 dark:text-white">
-              {video?.artist || "Unknown Creator"}
-            </p>
-            <p className="text-xs text-gray-500 dark:text-gray-400">
-              {formatTimestamp?.(video?.timestamp) || "Recently"}
-            </p>
+  // --- MENU CONFIG ---
+  const mainMenuItems = [
+    { label: "Interested", icon: SquarePlus, action: () => console.log("Interested") },
+    { label: "Not Interested", icon: SquareX, action: () => console.log("Not Interested") },
+    { label: "Save", icon: Bookmark, action: () => console.log("Saved") },
+    { label: "Hide", icon: EyeClosed, action: () => console.log("Hidden") },
+    { label: "Report", icon: Flag, action: () => setMenuState('report'), destructive: true, hasSubMenu: true },
+  ];
+
+  return (
+    <div className="relative group w-full mb-6">
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="w-full flex flex-col gap-2 select-none p-1 relative"
+      >
+        
+        {/* ================= HEADER (Same as ImageCard) ================= */}
+        <div className="flex items-center justify-between p-3 bg-gray-100 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-800 rounded-lg shadow-sm z-20 relative">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-md flex items-center justify-center text-xs font-bold border-2 dark:text-zinc-300 text-zinc-600 border-zinc-200 dark:border-zinc-700 shadow-sm">
+              {(video?.artist || "V")[0].toUpperCase()}
+            </div>
+            <div className="flex flex-col">
+              <span className="text-sm font-bold leading-none text-zinc-800 dark:text-zinc-100">{video?.artist || "Unknown"}</span>
+              <span className="text-[10px] text-zinc-500 mt-0.5">{formatTimestamp?.(video?.timestamp) || "Just Now"}</span>
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-2">
+            <FollowButton targetUserId={video?.userId} variant="ghost" size="sm" />
+            
+            <div className="h-4 w-px bg-zinc-300 dark:bg-zinc-700 mx-1" />
+
+            {/* --- MENU CONTAINER --- */}
+            <div className="relative" ref={menuRef}>
+                <button 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setMenuState(menuState === 'closed' ? 'main' : 'closed');
+                  }}
+                  className={`p-1.5 rounded-md transition-colors ${menuState !== 'closed' ? 'bg-zinc-200 dark:bg-zinc-800' : 'hover:bg-zinc-200 dark:hover:bg-zinc-800'}`}
+                >
+                  <EllipsisVertical size={16} className="text-zinc-600 dark:text-zinc-400" />
+                </button>
+
+                {/* ================= MENU POPUP ================= */}
+                <AnimatePresence>
+                  {menuState !== 'closed' && (
+                    <motion.div
+                      key="menu-dropdown"
+                      initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                      transition={{ duration: 0.2, ease: "easeIn" }}
+                      className="absolute top-full right-0 mt-2 z-50 w-56 origin-top-right"
+                    >
+                      <div className="bg-white/95 dark:bg-zinc-900/95 backdrop-blur-xl rounded-xl shadow-xl border border-zinc-200 dark:border-zinc-700 overflow-hidden ring-1 ring-black/5">
+                        
+                        {/* 1. Report Header */}
+                        {menuState === 'report' && (
+                          <div className="flex items-center gap-2 px-3 py-2 border-b border-zinc-100 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-800/50 ">
+                            <button onClick={() => setMenuState('main')} className="p-1 hover:bg-zinc-200 dark:hover:bg-zinc-700 rounded-full transition-colors">
+                               <ChevronRight size={14} className="rotate-180 text-zinc-500" />
+                            </button>
+                            <span className="text-xs font-bold text-zinc-700 dark:text-zinc-200">Report Content</span>
+                          </div>
+                        )}
+
+                        {/* 2. Main Menu */}
+                        {menuState === 'main' && (
+                          <div className="py-1">
+                            {mainMenuItems.map((item, idx) => {
+                              const Icon = item.icon;
+                              return (
+                                <button
+                                  key={idx}
+                                  onClick={(e) => { 
+                                      e.stopPropagation();
+                                      item.action(); 
+                                      if (!item.hasSubMenu) setMenuState('closed'); 
+                                  }}
+                                  className={`w-full text-left px-4 py-2.5 text-xs font-medium flex items-center justify-between group transition-colors ${item.destructive ? 'text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20' : 'text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800'}`}
+                                >
+                                  <div className="flex items-center gap-2.5"><Icon size={14} className={item.destructive ? "text-red-500" : "text-zinc-400 dark:text-zinc-500"} />{item.label}</div>
+                                  {item.hasSubMenu && <ChevronRight size={12} className="text-zinc-300" />}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        )}
+
+                        {/* 3. Report Reasons */}
+                        {menuState === 'report' && (
+                          <div className="py-1 max-h-60 overflow-y-auto hide-scrollbar">
+                            {REPORT_REASONS.map((reason) => (
+                              <button key={reason.id} onClick={() => handleReport(reason.id)} className="w-full text-left px-4 py-2.5 text-xs text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 flex items-center gap-2.5 border-b border-dashed border-zinc-100 dark:border-zinc-800 last:border-0">
+                                  <reason.icon size={14} className={reason.severity === 'high' ? "text-orange-500" : "text-zinc-400"} /><span>{reason.title}</span>
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+            </div>
+            {/* --- END MENU CONTAINER --- */}
+
           </div>
         </div>
 
-        <FollowButton targetUserId={video?.userId || video?.id} variant="ghost" />
-      </div>
-
-      {/* MIDDLE BOX: video player */}
-      <div
-        className="
-          border border-gray-200 dark:border-gray-700
-          rounded-md overflow-hidden mb-3 relative
-          p-0
-        "
-        onMouseEnter={() => setShowControls(true)}
-        onMouseLeave={() => setShowControls(false)}
-      >
-        {/* video element */}
-        <video
-          ref={videoRef}
-          src={videoSrc}
-          poster={video?.thumbnail}
-          // muted={isMuted}
-          loop
-          playsInline
-          onTimeUpdate={handleTimeUpdate}
-          onLoadedMetadata={() => setDuration(videoRef.current?.duration || 0)}
-          className="w-full max-h-[520px] object-contain bg-black"
-        />
-
-        {/* translucent centered play/pause (visible on hover) */}
-        <button
-          onClick={handlePlayPause}
-          className={`
-            absolute inset-0 flex items-center justify-center
-            transition-opacity duration-200
-            ${showControls || !isPlaying ? "opacity-100" : "opacity-0"}
-          `}
+        {/* ================= VIDEO AREA ================= */}
+        <div 
+          ref={containerRef}
+          className="relative w-full rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900 overflow-hidden isolate z-10"
+          onMouseEnter={() => setShowControls(true)}
+          onMouseLeave={() => setShowControls(false)}
         >
-          <div className="bg-black/40 backdrop-blur-sm rounded-full p-3">
-            {isPlaying ? (
-              <Pause className="w-6 h-6 text-white" />
-            ) : (
-              <Play className="w-6 h-6 text-white" />
-            )}
-          </div>
-        </button>
+          <video
+            ref={videoRef}
+            src={videoSrc}
+            poster={video?.thumbnail}
+            loop
+            playsInline
+            onTimeUpdate={handleTimeUpdate}
+            onLoadedMetadata={() => setDuration(videoRef.current?.duration || 0)}
+            className="w-full h-auto object-cover bg-black cursor-pointer"
+            onClick={() => onVideoClick?.(video)}
+          />
 
-        {/* mute toggle button */}
-        <button
-          onClick={handleMuteToggle}
-          className="absolute bottom-3 right-3 p-2 rounded-full bg-black/40 text-white"
-        >
-          {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
-        </button>
-
-        {/* small bottom controls when hovered */}
-        <div
-          className={`
-            absolute bottom-0 left-0 right-0 px-3 pb-3 pt-2
-            bg-gradient-to-t from-black/45 to-transparent
-            transition-opacity duration-200
-            ${showControls ? "opacity-100" : "opacity-0"}
-          `}
-          onClick={(e) => e.stopPropagation()}
-        >
-          {/* progress */}
-          <div className="w-full bg-white/20 rounded-full h-1 overflow-hidden mb-2">
-            <div
-              className="h-1 bg-white rounded-full transition-all"
-              style={{ width: `${duration ? (currentTime / duration) * 100 : 0}%` }}
-            />
+          {/* Views counter */}
+          <div className="absolute bottom-2 right-2 px-2 py-1 rounded-full bg-black/40 backdrop-blur-md text-white flex gap-1 text-[10px] font-bold border border-white/10 shadow-sm pointer-events-none">
+            <Eye size={12} className="mt-[1px]"/> {video.views || 0}
           </div>
 
-          <div className="flex items-center justify-between text-white text-xs">
-            <div className="flex items-center gap-3">
-              <button onClick={handlePlayPause} className="flex items-center gap-2">
-                {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
-                <span>{isPlaying ? "Pause" : "Play"}</span>
-              </button>
+          {/* Mute button */}
+          <button
+            onClick={handleMuteToggle}
+            className="absolute top-2 right-2 p-1.5 rounded-md bg-black/40 backdrop-blur-md border border-white/10 text-white z-20 hover:bg-black/60 transition-colors"
+          >
+            {isMuted ? <VolumeX size={12} /> : <Volume2 size={12} />}
+          </button>
 
-              <div className="text-xs font-medium">
-                {formatTime(currentTime)} / {formatTime(duration)}
+          {/* Play/Pause overlay */}
+          <button
+            onClick={handlePlayPause}
+            className={`absolute inset-0 flex items-center justify-center transition-opacity duration-200 z-10 ${
+              showControls || !isPlaying ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            <div className="bg-black/40 backdrop-blur-sm rounded-full p-3">
+              {isPlaying ? (
+                <Pause className="w-6 h-6 text-white" />
+              ) : (
+                <Play className="w-6 h-6 text-white" />
+              )}
+            </div>
+          </button>
+
+          {/* Progress bar */}
+          <div 
+            className={`absolute bottom-0 left-0 right-0 transition-opacity duration-200 ${
+              showControls ? "opacity-100" : "opacity-0"
+            }`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="w-full bg-black/40 backdrop-blur-sm px-3 pb-3 pt-2">
+              <div className="w-full bg-white/20 rounded-full h-1 overflow-hidden mb-2">
+                <div
+                  className="h-1 bg-white rounded-full transition-all"
+                  style={{ width: `${duration ? (currentTime / duration) * 100 : 0}%` }}
+                />
+              </div>
+              <div className="flex items-center justify-between text-white text-[10px] font-medium">
+                <span>{formatTime(currentTime)}</span>
+                <span>{formatTime(duration)}</span>
               </div>
             </div>
           </div>
-        </div>
-      </div>
 
-      {/* BOTTOM BOX: metadata */}
-      <div
-        className="
-          border border-gray-200 dark:border-gray-700
-          rounded-md px-4 py-3
-        "
-      >
-        <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-1">
-          {video?.title || "Untitled Video"}
-        </h3>
-
-        <p className="text-sm text-gray-600 dark:text-gray-300 mb-3 leading-relaxed line-clamp-3">
-          {video?.description || "No description available."}
-        </p>
-
-        {/* tags */}
-        {video?.tags?.length > 0 && (
-          <div className="flex flex-wrap gap-2 mb-3">
-            {video.tags.slice(0, 4).map((tag, i) => (
-              <span
-                key={i}
-                className="px-3 py-1 text-sm rounded-full border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300"
+          {/* --- COMPACT COMMENTS OVERLAY (Same as ImageCard) --- */}
+          <AnimatePresence>
+            {showComments && (
+              <motion.div
+                key="comments-drawer"
+                initial={{ y: "100%" }}
+                animate={{ y: "0%" }}
+                exit={{ y: "100%" }}
+                transition={{ duration: 0.35, ease: [0.32, 0.72, 0, 1] }}
+                style={{ willChange: "transform" }}
+                className="absolute inset-x-0 bottom-0 z-40 h-[75%] max-h-[320px] bg-white/95 dark:bg-zinc-950/95 backdrop-blur-xl border-t border-zinc-200 dark:border-zinc-700 rounded-t-xl shadow-2xl flex flex-col"
               >
-                #{tag}
-              </span>
-            ))}
-          </div>
-        )}
+                {/* Header */}
+                <div className="flex items-center justify-between px-3 py-2 border-b border-zinc-200 dark:border-zinc-800">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Discussion</span>
+                  <button onClick={() => setShowComments(false)} className="p-1 rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-800 text-zinc-500 transition-colors">
+                    <X size={14} />
+                  </button>
+                </div>
 
-        {/* engagement row */}
-              <div className="flex items-center justify-between pt-2 border-t border-gray-100 dark:border-gray-800">
-                {/* <div className="flex items-center gap-4"> */}
-                  <div className="flex items-center gap-2">
-                    <div className=' mt-2'><LikeButton targetId={video.id || video.$id} /></div>
-                  <ShareButton artwork={video} />
-                  <DownloadService artwork={video}/>
-                {/* </div> */}
+                {/* Comments List */}
+                <div className="flex-1 overflow-y-auto p-3 space-y-3">
+                  {comments.length === 0 ? (
+                    <div className="h-full flex flex-col items-center justify-center opacity-50">
+                      <MessageCircle size={22} className="mb-2 text-zinc-300" />
+                      <p className="text-xs text-zinc-400">Quiet in here…</p>
+                    </div>
+                  ) : (
+                    comments.map((c) => (
+                      <div key={c.id} className="flex flex-col animate-in fade-in slide-in-from-bottom-2 duration-300">
+                        <div className="flex justify-between items-baseline">
+                          <span className="text-[11px] font-bold text-zinc-800 dark:text-zinc-200">{c.user}</span>
+                          <span className="text-[9px] text-zinc-400">{c.time}</span>
+                        </div>
+                        <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-snug">{c.text}</p>
+                      </div>
+                    ))
+                  )}
                 </div>
-                
-                <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-                  <Eye className="w-4 h-4" />
-                  <span>{video.views || 0} views</span>
+
+                {/* Input Area */}
+                <div className="p-2 border-t border-zinc-200 dark:border-zinc-800">
+                  <form onSubmit={handlePost} className="flex items-center gap-2">
+                    <input
+                      type="text"
+                      value={commentText}
+                      onChange={(e) => setCommentText(e.target.value)}
+                      placeholder="Type something…"
+                      className="flex-1 bg-zinc-100 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 rounded-md px-3 py-1.5 text-xs focus:ring-1 focus:ring-blue-500 placeholder:text-zinc-400 outline-none transition-all"
+                    />
+                    <button type="submit" disabled={!commentText.trim()} className="p-1.5 rounded-md bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 transition-all">
+                      <Send size={12} />
+                    </button>
+                  </form>
                 </div>
-              </div>
-      </div>
-    </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* ================= FOOTER (Same as ImageCard) ================= */}
+        <div className="bg-white dark:bg-zinc-950 
+          border border-zinc-200 dark:border-zinc-800 
+          rounded-lg shadow-sm px-3 py-2">
+
+          {/* Title + Actions (same row) */}
+          <div className="flex items-center justify-between gap-3">
+            <h3 className="text-[15px] font-semibold text-zinc-900 dark:text-zinc-50 leading-snug line-clamp-2 flex-1">
+              {video?.title || "Untitled Video"}
+            </h3>
+
+            {/* Actions */}
+            <div className="flex items-center gap-3 shrink-0 pt-0.5">
+              <LikeButton targetId={video.id} />
+              <button
+                onClick={() => setShowComments(!showComments)}
+                className="text-zinc-600 dark:text-zinc-400 hover:text-blue-500 transition"
+              >
+                <MessageCircle size={18} />
+              </button>
+              <ShareButton artwork={video} variant="icon" size={18} />
+              {/* <DownloadService artwork={video} size={18} /> */}
+            </div>
+          </div>
+
+          {/* Divider */}
+          <div className="h-px bg-zinc-100 dark:bg-zinc-800 my-2" />
+
+          {/* Description (Expandable) */}
+          <motion.div
+            layout
+            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            className="text-[12px] text-zinc-600 dark:text-zinc-400 leading-snug"
+          >
+            <p className={expanded ? "" : "line-clamp-2"}>
+              {video?.description || "No description available."}
+            </p>
+
+            {video?.description?.length > 120 && (
+              <button
+                onClick={() => setExpanded(!expanded)}
+                className="mt-1 text-[11px] font-medium text-blue-500 hover:underline"
+              >
+                {expanded ? "Show less" : "...more"}
+              </button>
+            )}
+          </motion.div>
+
+          {/* Tags */}
+          {video?.tags?.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 mt-2">
+              {video.tags.slice(0, 4).map((tag, i) => (
+                <span
+                  key={i}
+                  className="
+                    text-[12px] font-medium
+                    px-2 py-0.5 rounded-full
+                    text-purple-600 dark:text-purple-300
+                    bg-purple-50 dark:bg-purple-900/20
+                  "
+                >
+                  # {tag}
+                </span>
+              ))}
+            </div>
+          )}
+
+          {/* Comment Prompt (tight & calm) */}
+          {!showComments && (
+            <button
+              onClick={() => setShowComments(true)}
+              className="mt-2 text-left w-full"
+            >
+              {comments.length > 0 ? (
+                <div className="text-xs flex gap-1.5 items-center">
+                  <span className="font-medium text-zinc-800 dark:text-zinc-200">
+                    {latestComment.user}
+                  </span>
+                  <span className="text-zinc-500 dark:text-zinc-400 line-clamp-1">
+                    {latestComment.text}
+                  </span>
+                </div>
+              ) : (
+                <div className="text-[12px] w-full text-zinc-400 flex items-center gap-1.5 hover:text-blue-500 transition rounded-full border dark:border-zinc-600 py-1 px-2">
+                  <Sparkles size={10} />
+                  {randomPrompt}
+                </div>
+              )}
+            </button>
+          )}
+        </div>
+      </motion.div>
+    </div>
   );
 };
 

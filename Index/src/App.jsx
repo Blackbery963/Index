@@ -64,7 +64,7 @@ import CreateCommunityPage from './Community/Create-Community.jsx';
 import ExploreCommunity from './Community/ExploreCommunity.jsx';
 import CommunityDashboard from './Community/CommunityDashboard.jsx';
 import WeeklyChallenge from './Community/CommunityChallenges/WeeklyChallenge.jsx';
-import MonthlyChallenge from './Community/CommunityChallenges/MonthlyChallenge.jsx';
+import MonthlyChallenge from './Community/CommunityChallenges/ChallengeHub.jsx';
 import VotingGallery from './Community/CommunityChallenges/VotingGallery.jsx';
 import ResourceHub from './Community/Resources/ResourceHub.jsx';
 import ResourceUpload from './Community/Resources/ResourceUpload.jsx';
@@ -82,22 +82,24 @@ import ArtStore from './Arteva/ArtStore/ArtStore.jsx';
 import OrderHistory from './Arteva/Commercial/OrderHistory.jsx';
 import Cart from './Settings/Cart.jsx';
 import Order from './Settings/Order.jsx';
-import ArtMarketplace from './Arteva/ArtMarketPlace.jsx';
+// import ArtMarketplace from './Arteva/ArtMarketPlace.jsx';
 
 // the community section
 import MyCommunity from './Community/MyCommunity.jsx';
 import DailyChallenge from './Components/DialyChallenge.jsx';
 import ResearchPapersPage from './Components/ResearchPaperPage.jsx';
 import AboutHandmade from './Company/About/AboutHandmade.jsx';
-import CreateNewChallenge from './Community/CommunityDashboard/CreateNewChallenge.jsx';
+import CreateNewChallenge from './Community/CommunityChallenges/CreateNewChallenge.jsx';
 import MemberDiscoveryPage from './Community/DiscoverNewMember/MemberDiscoveryPage.jsx';
+import CommunityHub from './Community/Resources/CommunityHub.jsx';
+import HomeHub from './Community/Resources/HomeHub.jsx';
 // Temporary Share View
 import TemporaryShareView from './Share/TemporaryShareView.jsx';
 
 // Homemade Online Status Indicator
-import HandmadePaintingsGallery from './Components/Homemade_Crafts/HandmadePaintingsGallery.jsx';
-import DecorCraftsGallery from './Components/Homemade_Crafts/DecorCraftsGallery.jsx';
-import CulturalCreationsGallery from './Components/Homemade_Crafts/CulturalCreationsGallery.jsx';
+// import HandmadePaintingsGallery from './Components/Homemade_Crafts/HandmadePaintingsGallery.jsx';
+// import DecorCraftsGallery from './Components/Homemade_Crafts/DecorCraftsGallery.jsx';
+// import CulturalCreationsGallery from './Components/Homemade_Crafts/CulturalCreationsGallery.jsx';
 // Games
 
 // import PixelPainter from './Games/PixelPainter.jsx';
@@ -117,9 +119,25 @@ import { AuthProvider } from './Components/Authentication/AuthContext.jsx';
 // Echo
 import EchoApp from './Echos/Components/EchoApp.jsx';
 // front gallery
+
 // import MainGalleryPage from './FrontGallery/MainGalleryPage.jsx';
 
 import GalleryPage from './Sub-Components/GalleryPage.jsx';
+import SettingsPage from './Settings/Settings.jsx';
+import SearchPage from './Settings/Search.jsx';
+import ChatApp from './Settings/Chat.jsx';
+import OfflinePage from './Settings/OfflinePage.jsx';
+import Preloader from './Settings/Preloader.jsx';
+import Chat2xyz from './Settings/chat2xyz.jsx';
+import UploadPage from './Components/Account/Dashboard/Upload.jsx';
+import StudioManager from './Components/Account/Dashboard/StudioManager.jsx';
+import PremiumStoryRail from './Story/PrmiumStoryRail.jsx';
+import UnifiedGalleryFeed from './FrontGallery/UnifiedGalleryFeed.jsx';
+import CookiePolicy from './Legal/Cookies.jsx';
+import TwoFactorVerify from './Settings/TwoFactorSetup.jsx';
+import WeeklyPinCheck from './Settings/WeeklyPinCheck.jsx';
+import MyEntries from './Community/CommunityChallenges/MyEntries.jsx';
+
 
 const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
 const COLLECTION_ID = import.meta.env.VITE_APPWRITE_METADATA_COLLECTION_ID;
@@ -277,8 +295,11 @@ const [navHeight, setNavHeight] = useState(56); // fallback, not 1400!
         <Route
           path="/"
           element={
-            <div className="relative flex items-center justify-center flex-col overflow-x-hidden bg-gray-100 dark:bg-[#000705]">
-              <ChatbotUI/>
+            <div className="relative flex items-center justify-center flex-col overflow-x-hidden bg-gray-100 dark:bg-[#000705] ">
+              {/* dark:bg-[#000705] */}
+              {/* <ChatbotUI/> */}
+              <Chat2xyz/>
+              {/* <ChatApp/> */}
               <Header />
               <HeroSection/>
               <div className='w-full'>
@@ -290,7 +311,8 @@ const [navHeight, setNavHeight] = useState(56); // fallback, not 1400!
                 <InstallPrompt />
                 <FeedbackPrompt />
                 </div>
-              <EchoApp/>
+              {/* <EchoApp/> */}
+              <PremiumStoryRail/>
 
                 {/* <TopNav/> */}
                 <main className="w-full flex flex-col gap-y-4">
@@ -298,8 +320,9 @@ const [navHeight, setNavHeight] = useState(56); // fallback, not 1400!
                 <div data-aos="fade-right" data-aos-delay="200" className="w-full will-change-transform will-change-opacity">
                   {/* <Collection/> */}
                  {/* <ImageCollectionUI/> */}
-                 <ImprovedCollection/>
+                 {/* <ImprovedCollection/> */}
                  {/* <MainGalleryPage/> */}
+                 <UnifiedGalleryFeed/>
                 </div>
                 
                 {/* <UnifiedFeed/> */}
@@ -339,7 +362,7 @@ const [navHeight, setNavHeight] = useState(56); // fallback, not 1400!
                 </div> */}
                 {/* <MixedMediaLanding/> */}
                 <div data-aos="fade-right" data-aos-delay="1000" className="w-full will-change-transform will-change-opacity">
-                  <Footer />
+                  {/* <Footer /> */}
                 </div>
                 </main>
               </Suspense>
@@ -382,6 +405,7 @@ const [navHeight, setNavHeight] = useState(56); // fallback, not 1400!
         <Route path="/Legal/Terms_Conditions" element={<Terms_Conditions />} />
         <Route path="/Legal/License" element={<License />} />
         <Route path='/Product/Security' element={<Security/>}/>
+        <Route path='/Legal/Cookies' element={<CookiePolicy/>}/>
   
         <Route path="/cart" element={<Cart />} />
         <Route path='/History' element={<History/>}/>
@@ -389,28 +413,29 @@ const [navHeight, setNavHeight] = useState(56); // fallback, not 1400!
         <Route path='/Company/About/AboutHandmade' element={<AboutHandmade/>}/>
         
         {/* the community  section  */}
-        <Route path="/community" element={<Community />} />
+        <Route path="/community" element={<HomeHub />} />
         <Route path="/community/CreateCommunity" element={<CreateCommunityPage />} />
-        <Route path='/community/ExploreCommunity' element={<ExploreCommunity/>}/>
+        {/* <Route path='/community/hub' element={<ExploreCommunity/>}/> */}
         <Route path='/community/:slug' element={<CommunityDashboard/>}/>
         <Route path='/community/communitychallenges/weeklychallenge' element={<WeeklyChallenge/>}/>
-        <Route path='/community/communitychallenges/monthlychallenge' element={<MonthlyChallenge/>}/>
+        <Route path='/community/challenges/hub' element={<MonthlyChallenge/>}/>
         <Route path='/community/communitychallenges/votinggallery' element={<VotingGallery/>}/>
-        <Route path='/Community/Resources/ResourceHub' element={<ResourceHub/>}/>
+        <Route path='/Community/Resources/Hub' element={<ResourceHub/>}/>
         <Route path='/Community/Resources/ResourceUpload' element={<ResourceUpload/>}/>
         <Route path='/Community/CommunityChallenges/ChallengeUpload' element={<ChallengeUpload/>}/>
         <Route path='/community/MyCommunity' element={<MyCommunity/>}/>
         <Route path='/Community/CommunityDashboard/CreateNewChallenge' element={<CreateNewChallenge/>}/>
         <Route path='/Community/DiscoverNewMember/MemberDiscoveryPage' element={<MemberDiscoveryPage/>}/>
+        <Route path='/Community/Hub' element={<CommunityHub/>}/>
         
         {/* The routing of the sub-components */}
         <Route path="/gallery" element={<Gallery />} />
         <Route path='/gallery/:id' element={<Gallery />} />
 
         {/* Homemade Crafts Gallery */}
-        <Route path="/Components/Homemade_Crafts/HandmadePaintingsGallery" element={<HandmadePaintingsGallery />} />
+        {/* <Route path="/Components/Homemade_Crafts/HandmadePaintingsGallery" element={<HandmadePaintingsGallery />} />
         <Route path='/Components/Homemade_Crafts/DecorCraftsGallery' element={<DecorCraftsGallery/>}/>
-        <Route path='/Components/Homemade_Crafts/CulturalCreationGallery' element={<CulturalCreationsGallery/>}/>
+        <Route path='/Components/Homemade_Crafts/CulturalCreationGallery' element={<CulturalCreationsGallery/>}/> */}
         {/* discovering artists  */}
         <Route path='/Artist/discoverartists' element={<UserDiscoveryPage/>}/>
         <Route path='/Artists/DiscoverUsers' element={<DiscoverUsers/>}/>
@@ -422,7 +447,7 @@ const [navHeight, setNavHeight] = useState(56); // fallback, not 1400!
         {/* the routing of commercial section */}
         <Route path='/Arteva/ArtStore' element = {<ArtStore/>}/>
         <Route path='/Arteva/Commercial/OrderHistory' element = {<OrderHistory/>}/>
-        <Route path='/Arteva/ArtMarketplace' element={<ArtMarketplace />} />
+        {/* <Route path='/Arteva/ArtMarketplace' element={<ArtMarketplace />} /> */}
         {/* Temporary Share View */}
         <Route path="/share/:token" element={<TemporaryShareView />} />
         {/* Games */}
@@ -437,7 +462,17 @@ const [navHeight, setNavHeight] = useState(56); // fallback, not 1400!
         )}
         {/* for short videos */}
         <Route path='/moments' element={<ShortVideos/>}/>
-
+        <Route path='/Settings/Settings' element={<SettingsPage/>}/>
+        <Route path='/Search' element={<SearchPage/>}/>
+        <Route path='/chat' element={<ChatApp/>}/>
+        <Route path='/offline' element={<OfflinePage/>}/>
+        <Route path='/preloader' element={<Preloader/>}/>
+        <Route path='/UploadPage' element={<UploadPage/>}/>
+        <Route path='/studio-manager' element={<StudioManager/>}/>
+        <Route path='/settings/two-factor-auth' element={<TwoFactorVerify/>}/>
+        <Route path='/check-password' element={<WeeklyPinCheck/>}/>
+        <Route path='/Community/Challenges/MyEntries' element={<MyEntries/>}/>
+        <Route path='/Community/Challenges/Create' element={<CreateNewChallenge/>}/>
       </Routes>
     </Router>
     </AuthProvider>

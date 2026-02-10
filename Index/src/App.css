@@ -562,3 +562,18 @@ input[type="range"]::-webkit-slider-thumb {
 * {
   transition: all 0.2s ease-in-out;
 }
+
+
+
+@keyframes slow-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-slow-spin {
+  animation: slow-spin 12s linear infinite;
+}

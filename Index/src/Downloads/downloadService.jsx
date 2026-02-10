@@ -4,6 +4,7 @@ import { FiDownload } from "react-icons/fi";
 import { downloadImage } from "./downloadImage";
 import { databases } from "../appwriteConfig";
 import { MdOutlineFileDownload } from "react-icons/md";
+import { Download } from "lucide-react";
 
 const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
 const METADATA_COLLECTION_ID = import.meta.env.VITE_APPWRITE_METADATA_COLLECTION_ID;
@@ -39,16 +40,16 @@ useEffect(() => {
 }, [artwork.$id]);
 
   return (
-    <div className="artwork-card flex items-center space-x-2">
+    <div className="artwork-card flex items-center gap-1.5">
       {/* ... other content ... */}
       <button 
         onClick={handleDownload}
-        className="download-btn text-gray-500 dark:text-gray-400 hover:text-blue-800 transition"
+        className="download-btn text-gray-500 dark:text-gray-400 hover:text-blue-800 transition px-2 py-1"
         title="Download"
       >
-        <FiDownload size={18} className="text-gray-600 dark:text-gray-300" />
+        <Download size={18} className="text-gray-700 dark:text-gray-300" />
       </button>
-      <span className="text-gray-500 dark:text-gray-400">{downloadCount}</span>
+      {/* <span className="text-gray-500 dark:text-gray-400">{downloadCount}</span> */}
     </div>
   );
 };
